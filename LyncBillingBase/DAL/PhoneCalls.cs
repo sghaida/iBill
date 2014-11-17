@@ -83,7 +83,7 @@ namespace LyncBillingBase.DAL
             List<PhoneCalls> phoneCalls;
 
             string databaseFunction = Enums.GetDescription(Enums.DatabaseFunctionsNames.Get_ChargeableCalls_ForUser);
-            PhoneCallsComparer linqDistinctComparer = new PhoneCallsComparer();
+            //PhoneCallsComparer linqDistinctComparer = new PhoneCallsComparer();
 
             //Initialize function parameters and then query the database
             List<object> functionaParams = new List<object>() { primarySipAccount };
@@ -107,22 +107,22 @@ namespace LyncBillingBase.DAL
     }
 
     //The phonecalls version of the IEqualityComparer, used with LINQ's Distinct function
-    class PhoneCallsComparer : IEqualityComparer<PhoneCalls>
-    {
-        public bool Equals(PhoneCalls firstCall, PhoneCalls secondCall)
-        {
-            return (
-                firstCall.SourceUserUri == secondCall.SourceUserUri &&
-                firstCall.SessionIdTime == secondCall.SessionIdTime &&
-                firstCall.SessionIdSeq == secondCall.SessionIdSeq
-            );
-        }
+    //class PhoneCallsComparer : IEqualityComparer<PhoneCalls>
+    //{
+    //    public bool Equals(PhoneCalls firstCall, PhoneCalls secondCall)
+    //    {
+    //        return (
+    //            firstCall.SourceUserUri == secondCall.SourceUserUri &&
+    //            firstCall.SessionIdTime == secondCall.SessionIdTime &&
+    //            firstCall.SessionIdSeq == secondCall.SessionIdSeq
+    //        );
+    //    }
 
-        public int GetHashCode(PhoneCalls call)
-        {
-            string hashcode = call.SourceUserUri.ToString() + call.SessionIdTime + call.SessionIdSeq;
-            return hashcode.GetHashCode();
-        }
-    }
+    //    public int GetHashCode(PhoneCalls call)
+    //    {
+    //        string hashcode = call.SourceUserUri.ToString() + call.SessionIdTime + call.SessionIdSeq;
+    //        return hashcode.GetHashCode();
+    //    }
+    //}
 
 }
