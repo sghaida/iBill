@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LyncBillingBase.CONF
+namespace LyncBillingBase.Conf
 {
     public class PhoneCallsTableElement : ConfigurationElement
     {

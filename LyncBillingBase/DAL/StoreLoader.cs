@@ -1,4 +1,4 @@
-﻿using LyncBillingBase.CONF;
+﻿using LyncBillingBase.Conf;
 using System;
 using System.Collections.Generic;
 using System.Linq;

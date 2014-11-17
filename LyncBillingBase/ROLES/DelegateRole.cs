@@ -1,14 +1,14 @@
 ﻿using LyncBillingBase.DAL;
-using LyncBillingBase.LIBS;
+using LyncBillingBase.Libs;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LyncBillingBase.HELPERS;
+using LyncBillingBase.Helpers;
 
-namespace LyncBillingBase.ROLES
+namespace LyncBillingBase.Roles
 {
     public class DelegateRole
     {
