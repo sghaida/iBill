@@ -24,7 +24,7 @@ namespace LyncBillingBase.Roles
             List<Roles> Roles = new List<Roles>();
             try
             {
-                dt = DBRoutines.SELECT(Enums.GetDescription(Enums.GatewaysDetails.TableName), columns, wherePart, limits);
+                //dt = DBRoutines.SELECT(Enums.GetDescription(Enums.GatewaysDetails.TableName), columns, wherePart, limits);
                 Roles = dt.ToList<Roles>();
             }
             catch (Exception ex)

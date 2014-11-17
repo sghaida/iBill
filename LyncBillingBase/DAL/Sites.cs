@@ -31,7 +31,7 @@ namespace LyncBillingBase.DAL
             //Exception-handling
             try
             {
-                dt = DBRoutines.SELECT(Enums.GetDescription(Enums.Sites.TableName), columns, wherePart, limits);
+                //dt = DBRoutines.SELECT(Enums.GetDescription(Enums.Sites.TableName), columns, wherePart, limits);
 
               
 
