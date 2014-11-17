@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4D303F14-08ED-4F92-B7E1-377569A8D7EB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LyncBillingBase</RootNamespace>
+    <AssemblyName>LyncBillingBase</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="itextsharp" />
+    <Reference Include="itextsharp.pdfa" />
+    <Reference Include="itextsharp.xtra" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CONF\BillableCallTypesSection.cs" />
+    <Compile Include="CONF\PDFReportColumnsDescriptions.cs" />
+    <Compile Include="CONF\PDFReportsPropertiesSection.cs" />
+    <Compile Include="CONF\PhoneCallsTablesSection.cs" />
+    <Compile Include="DAL\Announcements.cs" />
+    <Compile Include="DAL\BundledAccounts.cs" />
+    <Compile Include="DAL\CallMarkerStatus.cs" />
+    <Compile Include="DAL\CallTypes.cs" />
+    <Compile Include="DAL\Countries.cs" />
+    <Compile Include="DAL\Departments.cs" />
+    <Compile Include="DAL\DialingPrefixsRates.cs" />
+    <Compile Include="DAL\DIDs.cs" />
+    <Compile Include="DAL\Enums.cs" />
+    <Compile Include="DAL\ExceptionsList.cs" />
+    <Compile Include="DAL\Extensions.cs" />
+    <Compile Include="DAL\Gateways.cs" />
+    <Compile Include="DAL\GatewaysDetails.cs" />
+    <Compile Include="DAL\GatewaysRates.cs" />
+    <Compile Include="DAL\MailTemplates.cs" />
+    <Compile Include="DAL\MarkingStatus.cs" />
+    <Compile Include="DAL\MatchingExtention.cs" />
+    <Compile Include="DAL\Misc.cs" />
+    <Compile Include="DAL\MonitoringServersInfo.cs" />
+    <Compile Include="DAL\NumberingPlan.cs" />
+    <Compile Include="DAL\NumberingPlanNGN.cs" />
+    <Compile Include="DAL\Persistence.cs" />
+    <Compile Include="DAL\PhoneBook.cs" />
+    <Compile Include="DAL\PhoneCalls.cs" />
+    <Compile Include="DAL\PhoneCallsExceptions.cs" />
+    <Compile Include="DAL\Pools.cs" />
+    <Compile Include="DAL\Rates.cs" />
+    <Compile Include="DAL\RatesNGN.cs" />
+    <Compile Include="DAL\Rates_International.cs" />
+    <Compile Include="DAL\Rates_National.cs" />
+    <Compile Include="DAL\SharedAccounts.cs" />
+    <Compile Include="DAL\Sites.cs" />
+    <Compile Include="DAL\SitesDepartments.cs" />
+    <Compile Include="DAL\StoreLoader.cs" />
+    <Compile Include="DAL\Users.cs" />
+    <Compile Include="DAL\UserSession.cs" />
+    <Compile Include="DAL\UsersImporter.cs" />
+    <Compile Include="LIBS\ADLib.cs" />
+    <Compile Include="LIBS\DBLib.cs" />
+    <Compile Include="LIBS\HelperFunctions.cs" />
+    <Compile Include="LIBS\JsonTranslator.cs" />
+    <Compile Include="LIBS\LoadConfigs.cs" />
+    <Compile Include="LIBS\Mailer.cs" />
+    <Compile Include="LIBS\PDFLib.cs" />
+    <Compile Include="LIBS\SpecialDateTime.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\DepartmentCallsSummary.cs" />
+    <Compile Include="Reports\DetailedReport.cs" />
+    <Compile Include="Reports\GatewayCallsSummary.cs" />
+    <Compile Include="Reports\SiteCallsSummary.cs" />
+    <Compile Include="Reports\SummaryReport.cs" />
+    <Compile Include="Reports\TopDestinationCountries.cs" />
+    <Compile Include="Reports\TopDestinationNumbers.cs" />
+    <Compile Include="Reports\UserCallsSummary.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LyncBillingBase.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
