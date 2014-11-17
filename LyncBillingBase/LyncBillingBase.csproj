@@ -64,6 +64,7 @@
     <Compile Include="DAL\Gateways.cs" />
     <Compile Include="DAL\GatewaysDetails.cs" />
     <Compile Include="DAL\GatewaysRates.cs" />
+    <Compile Include="DAL\IDBTable.cs" />
     <Compile Include="DAL\MailTemplates.cs" />
     <Compile Include="DAL\MarkingStatus.cs" />
     <Compile Include="DAL\MatchingExtention.cs" />
