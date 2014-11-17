@@ -60,6 +60,8 @@
     <Compile Include="DAL\DIDs.cs" />
     <Compile Include="DAL\Enums.cs" />
     <Compile Include="DAL\ExceptionsList.cs" />
+    <Compile Include="HELPERS\IsAllowNullAttribute.cs" />
+    <Compile Include="HELPERS\TableNameAttribute.cs" />
     <Compile Include="HELPERS\Extensions.cs" />
     <Compile Include="DAL\Gateways.cs" />
     <Compile Include="DAL\GatewaysDetails.cs" />
