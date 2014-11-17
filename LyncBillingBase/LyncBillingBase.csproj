@@ -60,7 +60,7 @@
     <Compile Include="DAL\DIDs.cs" />
     <Compile Include="DAL\Enums.cs" />
     <Compile Include="DAL\ExceptionsList.cs" />
-    <Compile Include="DAL\Extensions.cs" />
+    <Compile Include="HELPERS\Extensions.cs" />
     <Compile Include="DAL\Gateways.cs" />
     <Compile Include="DAL\GatewaysDetails.cs" />
     <Compile Include="DAL\GatewaysRates.cs" />
@@ -90,7 +90,7 @@
     <Compile Include="DAL\UsersImporter.cs" />
     <Compile Include="LIBS\ADLib.cs" />
     <Compile Include="LIBS\DBLib.cs" />
-    <Compile Include="LIBS\HelperFunctions.cs" />
+    <Compile Include="HELPERS\HelperFunctions.cs" />
     <Compile Include="LIBS\JsonTranslator.cs" />
     <Compile Include="LIBS\LoadConfigs.cs" />
     <Compile Include="LIBS\Mailer.cs" />

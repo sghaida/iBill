@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using LyncBillingBase.HELPERS;
 
 namespace LyncBillingBase.LIBS
 {
@@ -124,7 +125,7 @@ namespace LyncBillingBase.LIBS
                     //Format the cell text if it's the case of Duration
                     if (ReportColumnsDescriptionsSection.GetDescription(column.ColumnName) == "Duration" && cellText != "N/A")
                     {
-                        entryCell = new PdfPCell(new Phrase(SpecialDateTime.ConvertSecondsToReadable(Convert.ToInt32(cellText)), bodyFontSmall));
+                        entryCell = new PdfPCell(new Phrase(Convert.ToInt32(cellText).ConvertSecondsToReadable(), bodyFontSmall));
                     }
                     else
                     {
@@ -171,7 +172,7 @@ namespace LyncBillingBase.LIBS
                         {
                             if (ReportColumnsDescriptionsSection.GetDescription(column) == "Duration")
                             {
-                                entryCell = new PdfPCell(new Phrase(SpecialDateTime.ConvertSecondsToReadable(Convert.ToInt32(r[column])), bodyFontSmall));
+                                entryCell = new PdfPCell(new Phrase(Convert.ToInt32(r[column]).ConvertSecondsToReadable(), bodyFontSmall));
                             }
                             else
                             {
@@ -242,7 +243,7 @@ namespace LyncBillingBase.LIBS
                             //Format the cell text if it's the case of Duration
                             if (ReportColumnsDescriptionsSection.GetDescription(column.ColumnName) == "Duration" && cellText != "N/A")
                             {
-                                entryCell = new PdfPCell(new Phrase(SpecialDateTime.ConvertSecondsToReadable(Convert.ToInt32(cellText)), bodyFontSmall));
+                                entryCell = new PdfPCell(new Phrase(Convert.ToInt32(cellText).ConvertSecondsToReadable(), bodyFontSmall));
                             }
                             else
                             {
@@ -335,7 +336,7 @@ namespace LyncBillingBase.LIBS
             pdfTable.AddCell(new Phrase(string.Empty, bodyFont));
             pdfTable.AddCell(new Phrase("Personal", bodyFont));
             pdfTable.AddCell(new Phrase(Decimal.Round(userSummary.PersonalCallsCost, 2).ToString(), bodyFontSmall));
-            pdfTable.AddCell(new Phrase(SpecialDateTime.ConvertSecondsToReadable(userSummary.PersonalCallsDuration).ToString(), bodyFontSmall));
+            pdfTable.AddCell(new Phrase(userSummary.PersonalCallsDuration.ConvertSecondsToReadable().ToString(), bodyFontSmall));
             pdfTable.CompleteRow();  
 
             //Business Calls Totals
@@ -343,7 +344,7 @@ namespace LyncBillingBase.LIBS
             pdfTable.AddCell(new Phrase(string.Empty, bodyFont));
             pdfTable.AddCell(new Phrase("Business", bodyFont));
             pdfTable.AddCell(new Phrase(Decimal.Round(userSummary.BusinessCallsCost, 2).ToString(), bodyFontSmall));
-            pdfTable.AddCell(new Phrase(SpecialDateTime.ConvertSecondsToReadable(userSummary.BusinessCallsDuration).ToString(), bodyFontSmall));
+            pdfTable.AddCell(new Phrase(userSummary.BusinessCallsDuration.ConvertSecondsToReadable().ToString(), bodyFontSmall));
             pdfTable.CompleteRow();
 
             //Unallocated Calls Totals
@@ -351,7 +352,7 @@ namespace LyncBillingBase.LIBS
             pdfTable.AddCell(new Phrase(string.Empty, bodyFont));
             pdfTable.AddCell(new Phrase("Unallocated", bodyFont));
             pdfTable.AddCell(new Phrase(Decimal.Round(userSummary.UnmarkedCallsCost, 2).ToString(), bodyFontSmall));
-            pdfTable.AddCell(new Phrase(SpecialDateTime.ConvertSecondsToReadable(userSummary.UnmarkedCallsDuration).ToString(), bodyFontSmall));
+            pdfTable.AddCell(new Phrase(userSummary.UnmarkedCallsDuration.ConvertSecondsToReadable().ToString(), bodyFontSmall));
             pdfTable.CompleteRow();
 
             document.Add(pdfTable);
@@ -491,7 +492,7 @@ namespace LyncBillingBase.LIBS
                     {
                         if (ReportColumnsDescriptionsSection.GetDescription(column) == Enums.GetDescription(Enums.PhoneCallSummary.Duration))
                         {
-                            entryCell = new PdfPCell(new Phrase(SpecialDateTime.ConvertSecondsToReadable(Convert.ToInt32(r[column])), bodyFontSmall));
+                            entryCell = new PdfPCell(new Phrase(Convert.ToInt32(r[column]).ConvertSecondsToReadable(), bodyFontSmall));
                         }
                         else
                         {
@@ -725,7 +726,7 @@ namespace LyncBillingBase.LIBS
                             //Format the cell text if it's the case of Duration
                             if (ReportColumnsDescriptionsSection.GetDescription(column) == Enums.GetDescription(Enums.PhoneCallSummary.Duration) && cellText != "N/A")
                             {
-                                entryCell = new PdfPCell(new Phrase(SpecialDateTime.ConvertSecondsToReadable(Convert.ToInt32(cellText)), bodyFontSmall));
+                                entryCell = new PdfPCell(new Phrase(Convert.ToInt32(cellText).ConvertSecondsToReadable(),  bodyFontSmall));
                             }
                             else
                             {

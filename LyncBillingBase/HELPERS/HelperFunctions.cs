@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace LyncBillingBase.LIBS
+namespace LyncBillingBase.HELPERS
 {
-    public class HelperFunctions
+    public static class HelperFunctions
     {
         public static bool GetResolvedConnecionIPAddress(string serverNameOrURL, out string resolvedIPAddress)
         {
@@ -88,7 +88,7 @@ namespace LyncBillingBase.LIBS
             }
         }
 
-        public static object ReturnZeroIfNull(object value)
+        public static object ReturnZeroIfNull(this object value)
         {
             if (value == System.DBNull.Value)
                 return 0;
@@ -98,7 +98,7 @@ namespace LyncBillingBase.LIBS
                 return value;
         }
 
-        public static object ReturnEmptyIfNull(object value)
+        public static object ReturnEmptyIfNull(this object value)
         {
             if (value == System.DBNull.Value)
                 return string.Empty;
@@ -108,7 +108,7 @@ namespace LyncBillingBase.LIBS
                 return value;
         }
 
-        public static object ReturnFalseIfNull(object value)
+        public static object ReturnFalseIfNull(this object value)
         {
             if (value == System.DBNull.Value)
                 return false;
@@ -118,7 +118,7 @@ namespace LyncBillingBase.LIBS
                 return value;
         }
 
-        public static object ReturnDateTimeMinIfNull(object value)
+        public static object ReturnDateTimeMinIfNull(this object value)
         {
             if (value == System.DBNull.Value)
                 return DateTime.MinValue;
@@ -128,7 +128,7 @@ namespace LyncBillingBase.LIBS
                 return value;
         }
 
-        public static object ReturnNullIfDBNull(object value)
+        public static object ReturnNullIfDBNull(this object value)
         {
             if (value == System.DBNull.Value)
                 return '\0';
@@ -163,7 +163,7 @@ namespace LyncBillingBase.LIBS
             }
         }
 
-        public static string FormatUserTelephoneNumber(string telephoneNumber)
+        public static string FormatUserTelephoneNumber(this string telephoneNumber)
         {
             string result = string.Empty;
 
@@ -182,12 +182,81 @@ namespace LyncBillingBase.LIBS
             return result;
         }
 
-        public static bool IsValidEmail(string emailAddress)
+        public static bool IsValidEmail(this string emailAddress)
         {
             string pattern = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
 
             return Regex.IsMatch(emailAddress, pattern);
         }
+
+        public static string ConvertDate(this DateTime datetTime, bool excludeHoursAndMinutes = false)
+        {
+            if (datetTime != DateTime.MinValue || datetTime != null)
+            {
+                if (excludeHoursAndMinutes == true)
+                    return datetTime.ToString("yyyy-MM-dd");
+                else
+                    return datetTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            }
+            else
+                return null;
+        }
+
+        public static string ConvertSecondsToReadable(this int secondsParam)
+        {
+            int hours = Convert.ToInt32(Math.Floor((double)(secondsParam / 3600)));
+            int minutes = Convert.ToInt32(Math.Floor((double)(secondsParam - (hours * 3600)) / 60));
+            int seconds = secondsParam - (hours * 3600) - (minutes * 60);
+
+            string hours_str = hours.ToString();
+            string mins_str = minutes.ToString();
+            string secs_str = seconds.ToString();
+
+            if (hours < 10)
+            {
+                hours_str = "0" + hours_str;
+            }
+
+            if (minutes < 10)
+            {
+                mins_str = "0" + mins_str;
+            }
+            if (seconds < 10)
+            {
+                secs_str = "0" + secs_str;
+            }
+
+            return hours_str + ':' + mins_str + ':' + secs_str;
+        }
+
+
+        public static string ConvertSecondsToReadable(this long secondsParam)
+        {
+            int hours = Convert.ToInt32(Math.Floor((double)(secondsParam / 3600)));
+            int minutes = Convert.ToInt32(Math.Floor((double)(secondsParam - (hours * 3600)) / 60));
+            int seconds = Convert.ToInt32(secondsParam - (hours * 3600) - (minutes * 60));
+
+            string hours_str = hours.ToString();
+            string mins_str = minutes.ToString();
+            string secs_str = seconds.ToString();
+
+            if (hours < 10)
+            {
+                hours_str = "0" + hours_str;
+            }
+
+            if (minutes < 10)
+            {
+                mins_str = "0" + mins_str;
+            }
+            if (seconds < 10)
+            {
+                secs_str = "0" + secs_str;
+            }
+
+            return hours_str + ':' + mins_str + ':' + secs_str;
+        }
+
 
     }
 }
