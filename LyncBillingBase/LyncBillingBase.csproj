@@ -76,7 +76,6 @@
     <Compile Include="DAL\MonitoringServersInfo.cs" />
     <Compile Include="DAL\NumberingPlan.cs" />
     <Compile Include="DAL\NumberingPlanNGN.cs" />
-    <Compile Include="DAL\Persistence.cs" />
     <Compile Include="DAL\PhoneBook.cs" />
     <Compile Include="DAL\PhoneCalls.cs" />
     <Compile Include="DAL\PhoneCallsExceptions.cs" />
@@ -85,13 +84,11 @@
     <Compile Include="DAL\RatesNGN.cs" />
     <Compile Include="DAL\Rates_International.cs" />
     <Compile Include="DAL\Rates_National.cs" />
-    <Compile Include="DAL\SharedAccounts.cs" />
     <Compile Include="DAL\Sites.cs" />
     <Compile Include="DAL\SitesDepartments.cs" />
     <Compile Include="DAL\StoreLoader.cs" />
     <Compile Include="DAL\Users.cs" />
     <Compile Include="DAL\UserSession.cs" />
-    <Compile Include="DAL\UsersImporter.cs" />
     <Compile Include="Libs\ADLib.cs" />
     <Compile Include="Libs\DBLib.cs" />
     <Compile Include="Helpers\HelperFunctions.cs" />
