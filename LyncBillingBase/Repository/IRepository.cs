@@ -13,7 +13,7 @@ namespace LyncBillingBase.Repository
         bool Delete(T dataObject);
 
         T GetById(long id);
-        IQueryable<T> GetAll();
+        IQueryable<T> Get(List<string> fields = null, Dictionary<string, object> where = null, int limit = 0);
         IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate);
     }
 }
