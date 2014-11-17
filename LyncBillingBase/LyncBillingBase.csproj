@@ -46,10 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CONF\BillableCallTypesSection.cs" />
-    <Compile Include="CONF\PDFReportColumnsDescriptions.cs" />
-    <Compile Include="CONF\PDFReportsPropertiesSection.cs" />
-    <Compile Include="CONF\PhoneCallsTablesSection.cs" />
+    <Compile Include="Conf\BillableCallTypesSection.cs" />
+    <Compile Include="Conf\PDFReportColumnsDescriptions.cs" />
+    <Compile Include="Conf\PDFReportsPropertiesSection.cs" />
+    <Compile Include="Conf\PhoneCallsTablesSection.cs" />
     <Compile Include="DAL\Announcements.cs" />
     <Compile Include="DAL\BundledAccounts.cs" />
     <Compile Include="DAL\CallMarkerStatus.cs" />
@@ -60,13 +60,15 @@
     <Compile Include="DAL\DIDs.cs" />
     <Compile Include="DAL\Enums.cs" />
     <Compile Include="DAL\ExceptionsList.cs" />
-    <Compile Include="HELPERS\IsAllowNullAttribute.cs" />
-    <Compile Include="HELPERS\TableNameAttribute.cs" />
-    <Compile Include="HELPERS\Extensions.cs" />
+    <Compile Include="Helpers\IsIdFieldAttribute.cs" />
+    <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="Helpers\IsAllowNullAttribute.cs" />
+    <Compile Include="Helpers\TableNameAttribute.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="DAL\Gateways.cs" />
     <Compile Include="DAL\GatewaysDetails.cs" />
     <Compile Include="DAL\GatewaysRates.cs" />
-    <Compile Include="DAL\IDBTable.cs" />
+    <Compile Include="Repository\Repository.cs" />
     <Compile Include="DAL\MailTemplates.cs" />
     <Compile Include="DAL\MarkingStatus.cs" />
     <Compile Include="DAL\MatchingExtention.cs" />
@@ -90,14 +92,14 @@
     <Compile Include="DAL\Users.cs" />
     <Compile Include="DAL\UserSession.cs" />
     <Compile Include="DAL\UsersImporter.cs" />
-    <Compile Include="LIBS\ADLib.cs" />
-    <Compile Include="LIBS\DBLib.cs" />
-    <Compile Include="HELPERS\HelperFunctions.cs" />
-    <Compile Include="LIBS\JsonTranslator.cs" />
-    <Compile Include="LIBS\LoadConfigs.cs" />
-    <Compile Include="LIBS\Mailer.cs" />
-    <Compile Include="LIBS\PDFLib.cs" />
-    <Compile Include="LIBS\SpecialDateTime.cs" />
+    <Compile Include="Libs\ADLib.cs" />
+    <Compile Include="Libs\DBLib.cs" />
+    <Compile Include="Helpers\HelperFunctions.cs" />
+    <Compile Include="Libs\JsonTranslator.cs" />
+    <Compile Include="Libs\LoadConfigs.cs" />
+    <Compile Include="Libs\Mailer.cs" />
+    <Compile Include="Libs\PDFLib.cs" />
+    <Compile Include="Libs\SpecialDateTime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\DepartmentCallsSummary.cs" />
     <Compile Include="Reports\DetailedReport.cs" />
@@ -107,11 +109,11 @@
     <Compile Include="Reports\TopDestinationCountries.cs" />
     <Compile Include="Reports\TopDestinationNumbers.cs" />
     <Compile Include="Reports\UserCallsSummary.cs" />
-    <Compile Include="ROLES\DelegateRole.cs" />
-    <Compile Include="ROLES\DelegeeAccountInfo.cs" />
-    <Compile Include="ROLES\DepartmentHeadRole.cs" />
-    <Compile Include="ROLES\Roles.cs" />
-    <Compile Include="ROLES\SystemRole.cs" />
+    <Compile Include="Roles\DelegateRole.cs" />
+    <Compile Include="Roles\DelegeeAccountInfo.cs" />
+    <Compile Include="Roles\DepartmentHeadRole.cs" />
+    <Compile Include="Roles\Roles.cs" />
+    <Compile Include="Roles\SystemRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LyncBillingBase.dll.config">

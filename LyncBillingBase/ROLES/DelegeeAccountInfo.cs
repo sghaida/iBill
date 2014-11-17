@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LyncBillingBase.ROLES
+namespace LyncBillingBase.Roles
 {
     public class DelegeeAccountInfo
     {

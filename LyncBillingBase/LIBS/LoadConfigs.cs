@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LyncBillingBase.LIBS
+namespace LyncBillingBase.Libs
 {
     public class LoadConfigs
     {

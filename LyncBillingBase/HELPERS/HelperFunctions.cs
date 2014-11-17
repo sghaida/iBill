@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace LyncBillingBase.HELPERS
+namespace LyncBillingBase.Helpers
 {
     public static class HelperFunctions
     {
@@ -256,7 +256,5 @@ namespace LyncBillingBase.HELPERS
 
             return hours_str + ':' + mins_str + ':' + secs_str;
         }
-
-
     }
 }

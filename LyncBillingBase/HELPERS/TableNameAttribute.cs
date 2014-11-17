@@ -4,25 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LyncBillingBase.HELPERS
+namespace LyncBillingBase.Helpers
 {
     [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
     class TableNameAttribute : System.Attribute
     {
-        public TableNameAttribute(String Descrition)
+        public string Description { private set; get; }
+
+        public TableNameAttribute(string Description) 
         {
-            this.description = Description;
+            this.Description = Description;
         }
-        
-        protected String description;
-        
-        public String Description 
-        {
-            get 
-            {
-                return this.description;
-                 
-            }            
-        }    
+
     }
 }

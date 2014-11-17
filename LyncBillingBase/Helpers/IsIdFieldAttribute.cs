@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace LyncBillingBase.Helpers
 {
-
-    [System.AttributeUsage(System.AttributeTargets.Property)]
-    class IsAllowNullAttribute : Attribute
+    class IsIdFieldAttribute : Attribute
     {
-
-        public IsAllowNullAttribute(){}
-            
+        public IsIdFieldAttribute() 
+        {
+        }
     }
 }

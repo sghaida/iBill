@@ -1,6 +1,6 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
-using LyncBillingBase.CONF;
+using LyncBillingBase.Conf;
 using LyncBillingBase.DAL;
 using LyncBillingBase.Reports;
 using System;
@@ -11,9 +11,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using LyncBillingBase.HELPERS;
+using LyncBillingBase.Helpers;
 
-namespace LyncBillingBase.LIBS
+namespace LyncBillingBase.Libs
 {
     public class PDFLib
     {
