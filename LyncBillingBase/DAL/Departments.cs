@@ -24,7 +24,7 @@ namespace LyncBillingBase.DAL
 
             try
             {
-                dt = DBRoutines.SELECT(Enums.GetDescription(Enums.Departments.TableName), columns, whereConditions, limit);
+               // dt = DBRoutines.SELECT(Enums.GetDescription(Enums.Departments.TableName), columns, whereConditions, limit);
 
                 departmentsList = dt.ToList<Departments>();
             }

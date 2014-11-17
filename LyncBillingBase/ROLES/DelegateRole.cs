@@ -30,10 +30,12 @@ namespace LyncBillingBase.Roles
         public string DelegeeDepartmentName { get; set; }
         public string DelegeeSiteName { get; set; }
 
-        //These are for lookup use only in the application
+        ////These are for lookup use only in the application
         public static int UserDelegeeTypeID { get { return Convert.ToInt32(Enums.GetValue(Enums.DelegateTypes.UserDelegeeType)); } }
         public static int DepartmentDelegeeTypeID { get { return Convert.ToInt32(Enums.GetValue(Enums.DelegateTypes.DepartemntDelegeeType)); ; } }
         public static int SiteDelegeeTypeID { get { return Convert.ToInt32(Enums.GetValue(Enums.DelegateTypes.SiteDelegeeType)); ; } }
+
+        
 
         private static DBLib DBRoutines = new DBLib();
 

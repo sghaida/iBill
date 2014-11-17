@@ -191,6 +191,19 @@ namespace LyncBillingBase.DAL
             NormalUser
         }
 
+        public enum DelegateTypes 
+        {
+            [DefaultValue(1)]
+            [Description("Users-Delegee")]
+            UserDelegeeType,
+            [DefaultValue(2)]
+            [Description("Departments-Delegee")]
+            DepartemntDelegeeType,
+            [DefaultValue(3)]
+            [Description("Sites-Delegee")]
+            SiteDelegeeType
+        }
+
         public enum PhoneCallSummary
         {
             [Description("")]
