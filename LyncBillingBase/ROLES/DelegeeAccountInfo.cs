@@ -19,9 +19,7 @@ namespace LyncBillingBase.ROLES
 
         //Users Delegate Role related
         public Users DelegeeUserAccount { get; set; }
-        public string DelegeeUserPhonecallsPerPage { set; get; }
         public List<PhoneCalls> DelegeeUserPhonecalls { get; set; }
-        public List<PhoneCalls> DelegeeUserPhonecallsHistory { get; set; }
         public Dictionary<string, PhoneBook> DelegeeUserAddressbook { set; get; }
     }
 }

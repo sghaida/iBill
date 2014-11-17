@@ -36,7 +36,8 @@ namespace LyncBillingBase.DAL
             var dtlFieldNames = dataTable.Columns.Cast<DataColumn>().
                 Select(item => new { 
                     Name = item.ColumnName, 
-                    Type=item.DataType 
+                    Type=item.DataType,
+                    isnull = item.AllowDBNull
                 }).ToList();
 
             foreach (DataRow dataRow in dataTable.AsEnumerable().ToList())
