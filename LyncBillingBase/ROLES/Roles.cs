@@ -22,16 +22,7 @@ namespace LyncBillingBase.Roles
         {
             DataTable dt = new DataTable();
             List<Roles> Roles = new List<Roles>();
-            try
-            {
-                //dt = DBRoutines.SELECT(Enums.GetDescription(Enums.GatewaysDetails.TableName), columns, wherePart, limits);
-                Roles = dt.ToList<Roles>();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
+           
             return Roles;
 
         }
@@ -84,27 +75,7 @@ namespace LyncBillingBase.Roles
         public static int InsertRole(Roles role)
         {
             int rowID = 0;
-            Dictionary<string, object> columnsValues = new Dictionary<string, object>(); ;
-
-            if (role != null)
-            {
-                //Set Part
-                if (!string.IsNullOrEmpty(role.RoleName))
-                    columnsValues.Add(Enums.GetDescription(Enums.Roles.RoleName), role.RoleName);
-
-                if (!string.IsNullOrEmpty(role.RoleDescription))
-                    columnsValues.Add(Enums.GetDescription(Enums.Roles.RoleDescription), role.RoleDescription);
-
-                //Execute Insert
-                try
-                {
-                    rowID = DBRoutines.INSERT(Enums.GetDescription(Enums.Roles.TableName), columnsValues, Enums.GetDescription(Enums.Roles.RoleID));
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
+           
 
             return rowID;
         }
@@ -116,26 +87,6 @@ namespace LyncBillingBase.Roles
 
             Dictionary<string, object> setPart = new Dictionary<string, object>();
 
-            if (role != null)
-            {
-                //Set Part
-                if (!string.IsNullOrEmpty(role.RoleName))
-                    setPart.Add(Enums.GetDescription(Enums.Roles.RoleName), role.RoleName);
-
-                if (!string.IsNullOrEmpty(role.RoleDescription))
-                    setPart.Add(Enums.GetDescription(Enums.Roles.RoleDescription), role.RoleDescription);
-
-                //Execute Update
-                try
-                {
-                    status = DBRoutines.UPDATE(Enums.GetDescription(Enums.Roles.TableName), setPart, Enums.GetDescription(Enums.Roles.RoleID), role.RoleID);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-
             return status;
         }
 
@@ -146,7 +97,7 @@ namespace LyncBillingBase.Roles
 
             try
             {
-                status = DBRoutines.DELETE(Enums.GetDescription(Enums.Roles.TableName), Enums.GetDescription(Enums.Roles.RoleID), role.RoleID);
+                //status = DBRoutines.DELETE(Enums.GetDescription(Enums.Roles.TableName), Enums.GetDescription(Enums.Roles.RoleID), role.RoleID);
             }
             catch(Exception ex)
             {
