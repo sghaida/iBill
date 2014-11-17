@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LyncBillingBase.HELPERS;
 
 namespace LyncBillingBase.ROLES
 {

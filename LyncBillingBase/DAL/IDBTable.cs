@@ -21,12 +21,12 @@ namespace LyncBillingBase.DAL
 
             if (obj != null)
             {
-                //Set Part
-                if (!string.IsNullOrEmpty(obj.RoleName))
-                    columnsValues.Add(Enums.GetDescription(Enums.Roles.RoleName), obj.RoleName);
+                ////Set Part
+                //if (!string.IsNullOrEmpty(obj.RoleName))
+                //    columnsValues.Add(Enums.GetDescription(Enums.Roles.RoleName), obj.RoleName);
 
-                if (!string.IsNullOrEmpty(obj.RoleDescription))
-                    columnsValues.Add(Enums.GetDescription(Enums.Roles.RoleDescription), obj.RoleDescription);
+                //if (!string.IsNullOrEmpty(obj.RoleDescription))
+                //    columnsValues.Add(Enums.GetDescription(Enums.Roles.RoleDescription), obj.RoleDescription);
 
                 //Execute Insert
                 try
