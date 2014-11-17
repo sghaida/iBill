@@ -8,5 +8,7 @@ namespace LyncBillingBase.DAL
 {
     class UserSession
     {
+        private static List<UserSession> usersSessions = new List<UserSession>();
+        private List<DelegateRole> userDelegees = new List<DelegateRole>();
     }
 }

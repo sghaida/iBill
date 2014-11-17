@@ -104,6 +104,11 @@
     <Compile Include="Reports\TopDestinationCountries.cs" />
     <Compile Include="Reports\TopDestinationNumbers.cs" />
     <Compile Include="Reports\UserCallsSummary.cs" />
+    <Compile Include="ROLES\DelegateRole.cs" />
+    <Compile Include="ROLES\DelegeeAccountInfo.cs" />
+    <Compile Include="ROLES\DepartmentHeadRole.cs" />
+    <Compile Include="ROLES\Roles.cs" />
+    <Compile Include="ROLES\SystemRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LyncBillingBase.dll.config">
