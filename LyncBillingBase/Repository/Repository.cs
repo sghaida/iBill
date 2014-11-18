@@ -49,14 +49,21 @@ namespace LyncBillingBase.Repository
         /// <returns>TableName attribute value (string), if exists.</returns>
         private string tryReadTableNameAttributeValue()
         {
-            var tableName = typeof(T).GetCustomAttributes(typeof(TableNameAttribute));
+            IEnumerable<Attribute> tableName;
+            string errorMessage = string.Empty;
+            
+            //Format an exception messgae
+            errorMessage = String.Format("Database Table name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name);
 
-            if (tableName != null || tableName.Count() > 0)
+            //Get the table name attribute
+            tableName = typeof(T).GetCustomAttributes(typeof(TableNameAttribute));
+
+            if (tableName != null && tableName.Count() > 0)
             {
                 return ((TableNameAttribute)tableName.First()).Name; 
             }
 
-            throw new Exception("Table Name was not provided for class \"" + typeof(T).GetType().Name + "\". Kindly add the [TableName(...)] Attribute to the class.");
+            throw new Exception(errorMessage);
         }
 
         /// <summary>
@@ -65,14 +72,21 @@ namespace LyncBillingBase.Repository
         /// <returns>IDField attribute value (string), if exists.</returns>
         private string tryReadIDFieldAttributeValue()
         {
-            var IDField = Properties.Find(item => item.IsIDField == true);
+            DbTableProperty IDField;
+            string errorMessage = string.Empty;
+
+            //Format the exception message
+            errorMessage = String.Format("No ID field is defined. Kindly annotate the ID property in class \"{0}\" with the [IsIDField] Attribute.", typeof(T).Name);
+
+            //Get the IDField DbTableProperty attribute
+            IDField = Properties.Find(item => item.IsIDField == true);
 
             if (IDField != null)
             {
-                this.IDFieldName = IDField.ColumnName;
+                return IDField.ColumnName;
             }
 
-            throw new Exception("No ID field is defined. Kindly annotate the ID property in class \"" + typeof(T).GetType().Name + "\" with the [IsIDField] Attribute.");
+            throw new Exception(errorMessage);
         }
 
         /// <summary>
@@ -82,13 +96,17 @@ namespace LyncBillingBase.Repository
         /// <returns>List of DbTableProperty objects, if the class has DbColumn Properties.</returns>
         private List<DbTableProperty> tryReadClassDbProperties()
         {
-            var objProperties = typeof(T).GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            string errorMessage = string.Empty;
 
-            if (objProperties != null || objProperties.Count() > 0)
+            //Format exceptiom message
+            errorMessage = String.Format("Couldn't find any class property marked with the [DbColumn] Attribute in the class \"{0}\". Kindly revise the class definition.", typeof(T).Name);
+
+            var objProperties = typeof(T).GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null).ToList();
+
+            if (objProperties != null && objProperties.Count() > 0)
             {
                 return (
-                    objProperties.Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null)
-                        .Select(item => new DbTableProperty
+                    objProperties.Select(item => new DbTableProperty
                         {
                             ColumnName = item.GetCustomAttribute<DbColumnAttribute>().Name,
                             IsIDField = item.GetCustomAttribute<IsIDFieldAttribute>() != null ? item.GetCustomAttribute<IsIDFieldAttribute>().Status : false,
@@ -100,7 +118,7 @@ namespace LyncBillingBase.Repository
                 );
             }
 
-            throw new Exception("Couldn't find any class property marked with the [DbColumn] Attribute in the class \"" + typeof(T).GetType().Name + "\". Kindly revise the class definition.");
+            throw new Exception(errorMessage);
         }
 
 
@@ -112,9 +130,9 @@ namespace LyncBillingBase.Repository
             //Get the Table Name and List of Class Attributes
             try
             {
+                this.Properties = tryReadClassDbProperties();
                 this.TableName = tryReadTableNameAttributeValue();
                 this.IDFieldName = tryReadIDFieldAttributeValue();
-                this.Properties = tryReadClassDbProperties();
             }
             catch (Exception ex)
             {

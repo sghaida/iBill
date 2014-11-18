@@ -12,7 +12,7 @@ namespace LyncBillingBase.DAL
     {
         [IsIDField]
         [DbColumn("markerId")]
-        public int ID { get; }
+        public int ID { get; set; }
 
         [DbColumn("phoneCallsTable")]
         public string PhoneCallsTable { get; set; }

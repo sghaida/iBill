@@ -13,7 +13,7 @@ namespace LyncBillingBase.DAL
     {
         [IsIDField]
         [DbColumn("ID")]
-        public int ID { get; }
+        public int ID { get; set; }
 
         [DbColumn("Announcement")]
         public string Announcement { get; set; }
