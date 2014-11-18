@@ -141,7 +141,8 @@ namespace LyncBillingBase.Repository
             {
                 throw ex;
             }
-        } 
+        }
+
 
         public int Insert(T dataObject)
         {
@@ -189,8 +190,6 @@ namespace LyncBillingBase.Repository
 
                 try
                 {
-                  
-                   
                     rowID = DBRoutines.INSERT(tableName: TableName, columnsValues: columnsValues, idFieldName: IDFieldName);
                 }
                 catch (Exception ex)
@@ -202,6 +201,7 @@ namespace LyncBillingBase.Repository
 
             return rowID;  
         }
+
 
         public bool Delete(T dataObject)
         {
@@ -227,26 +227,22 @@ namespace LyncBillingBase.Repository
                     long.TryParse(dataObjectAttrValue.ToString(),out ID);
 
                     return DBRoutines.DELETE(tableName: TableName, idFieldName: IDFieldName, ID: ID);
-                }
-                
-            }
-
+                }//end-inner-if-else
+            }//end-outer-if-else
         }
         
+
         public bool Update(T dataObject)
         {
             throw new NotImplementedException();
         }
 
+
         public T GetById(long id)
         {
-            
+            string errorMessage = string.Empty;
 
-            if (id == null || id==0)
-            {
-                throw new Exception("The ID Field is either null or empty " + typeof(T).Name);
-            }
-            else
+            if (id != null && id > 0)
             {
                 DataTable dt =  DBRoutines.SELECT(TableName,IDFieldName,id);
 
@@ -260,21 +256,45 @@ namespace LyncBillingBase.Repository
                 }
             }
 
+            errorMessage = String.Format("The ID Field is either null or zero. Kindly pass a valid ID. Class name: \"{0}\".", typeof(T).Name);
+
+            throw new Exception(errorMessage);
         }
+
 
         public IQueryable<T> Get(Expression<Func<T, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<T> Get(Dictionary<string, object> where, int limit = 25)
+
+        public IQueryable<T> Get(Dictionary<string, object> whereCondition, int limit = 25)
         {
-            throw new NotImplementedException();
+            string errorMessage = string.Empty;
+            List<string> allColumns = null;
+
+            if (whereCondition != null && whereCondition.Count > 0)
+            {
+                DataTable dt = DBRoutines.SELECT(TableName, allColumns, whereCondition, limit);
+
+                return dt.ConvertToList<T>() as IQueryable<T>;
+            }
+
+            errorMessage = String.Format("The \"whereConditions\" parameter is either null or empty. Kindly pass a valid \"whereConditions\" parameter. Class name: \"{0}\".", typeof(T).Name);
+
+            throw new Exception(errorMessage);
         }
+
 
         public IQueryable<T> GetAll()
         {
-            throw new NotImplementedException();
+            int maximumLimit = 0;
+            List<string> allColumns = null;
+            Dictionary<string, object> whereConditions = null;
+
+            DataTable dt = DBRoutines.SELECT(TableName, allColumns, whereConditions, maximumLimit);
+
+            return dt.ConvertToList<T>() as IQueryable<T>;
         }
 
     }
