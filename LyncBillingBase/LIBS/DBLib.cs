@@ -26,7 +26,7 @@ namespace LyncBillingBase.Libs
         }
 
         //SELECT with SQL query
-        public DataTable SELECT(string sqlQuery, string customConnectionString = null)
+        public DataTable SELECTFROMSQL(string sqlQuery, string customConnectionString = null)
         {
             DataTable dt = new DataTable();
             OleDbDataReader dr;
@@ -37,6 +37,44 @@ namespace LyncBillingBase.Libs
                 conn = DBInitializeConnection(customConnectionString);
             else
                 conn = DBInitializeConnection(ConnectionString_Lync);
+
+            //Execute SQL Query
+            OleDbCommand comm = new OleDbCommand(sqlQuery, conn);
+
+
+            try
+            {
+                conn.Open();
+                dr = comm.ExecuteReader();
+                dt.Load(dr);
+            }
+            catch (Exception ex)
+            {
+                System.ArgumentException argEx = new System.ArgumentException("Exception", "ex", ex);
+                throw argEx;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return dt;
+        }
+
+
+        public DataTable SELECT(string tableName, string wherePart, string customConnectionString = null) 
+        {
+            DataTable dt = new DataTable();
+            OleDbDataReader dr;
+            OleDbConnection conn;
+
+            //Initialize connections
+            if (!string.IsNullOrEmpty(customConnectionString))
+                conn = DBInitializeConnection(customConnectionString);
+            else
+                conn = DBInitializeConnection(ConnectionString_Lync);
+
+            string sqlQuery = string.Format("SELECT * FROM {0} WHERE {1}",tableName,wherePart);
 
             //Execute SQL Query
             OleDbCommand comm = new OleDbCommand(sqlQuery, conn);
