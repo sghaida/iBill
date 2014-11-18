@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LyncBillingBase.DAL
 {
-    class DialingPrefixsRates
+    public class DialingPrefixRate
     {
         public Int64 RateID { set; get; }
         public Int64 DialingPrefix { set; get; }

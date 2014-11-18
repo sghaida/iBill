@@ -16,15 +16,15 @@ namespace LyncBillingBase.DAL
         public static List<int> ListOfMobileLinesIDs;
         public static List<int> ListOfNGNIDs;
 
-        public static List<Sites> LISTOFSITES;
-        public static List<Users> LISTOFUSERS;
+        public static List<Site> LISTOFSITES;
+        public static List<User> LISTOFUSERS;
 
         public static List<NumberingPlan> numberingPlan;
         public static List<NumberingPlanNGN> numberingPlanNGN;
 
-        public static List<GatewaysRates> gatewayRates;
+        public static List<GatewayRate> gatewayRates;
 
-        public static List<Gateways> gateways;
+        public static List<Gateway> gateways;
         public static List<string> ListofGatewaysNames;
 
         public static Dictionary<int, List<RatesNGN>> ngnRatesPerGateway;
@@ -32,11 +32,11 @@ namespace LyncBillingBase.DAL
 
         public static Dictionary<int, List<Rates_International>> ratesPerGatway;
 
-        public static List<DIDs> dids;
+        public static List<DID> dids;
 
-        public static List<CallTypes> callTypes;
+        public static List<CallType> callTypes;
 
-        public static List<ExceptionsList> ListOfExceptions;
+        public static List<PhoneCallExclusion> ListOfExceptions;
 
         public static Dictionary<string, Dictionary<string, List<Rates_National>>> nationalRates;
     }

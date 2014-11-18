@@ -8,7 +8,7 @@ using LyncBillingBase.Helpers;
 namespace LyncBillingBase.DAL
 {
     [TableName("MailTemplates")]
-    public class MailTemplates
+    public class MailTemplate
     {
         [IsIDField]
         [DbColumn("TemplateID")]

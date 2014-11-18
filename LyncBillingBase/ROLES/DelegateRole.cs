@@ -22,9 +22,9 @@ namespace LyncBillingBase.Roles
 
         //These are logical representation of data, they don't belong to the table
         public string DelegeeDisplayName { get; set; }
-        public Users DelegeeUser { get; set; }
-        public Sites DelegeeSite { get; set; }
-        public SitesDepartments DelegeeDepartment { get; set; }
+        public User DelegeeUser { get; set; }
+        public Site DelegeeSite { get; set; }
+        public SiteDepartment DelegeeDepartment { get; set; }
 
         //The following are also logical representation of data, they are used to quickly lookup names from the Ext.NET views
         public string DelegeeDepartmentName { get; set; }

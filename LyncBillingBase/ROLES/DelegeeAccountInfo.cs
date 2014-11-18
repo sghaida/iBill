@@ -12,14 +12,14 @@ namespace LyncBillingBase.Roles
         public int DelegeeTypeID { get; set; }
 
         //Sites Delegate Role related
-        public Sites DelegeeSiteAccount { get; set; }
+        public Site DelegeeSiteAccount { get; set; }
 
         //Departent Delegate Role related
-        public SitesDepartments DelegeeDepartmentAccount { get; set; }
+        public SiteDepartment DelegeeDepartmentAccount { get; set; }
 
         //Users Delegate Role related
-        public Users DelegeeUserAccount { get; set; }
-        public List<PhoneCalls> DelegeeUserPhonecalls { get; set; }
-        public Dictionary<string, PhoneBook> DelegeeUserAddressbook { set; get; }
+        public User DelegeeUserAccount { get; set; }
+        public List<PhoneCall> DelegeeUserPhonecalls { get; set; }
+        public Dictionary<string, PhoneBookContact> DelegeeUserAddressbook { set; get; }
     }
 }
