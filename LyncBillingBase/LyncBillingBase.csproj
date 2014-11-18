@@ -61,12 +61,13 @@
     <Compile Include="DAL\DIDs.cs" />
     <Compile Include="DAL\Enums.cs" />
     <Compile Include="DAL\ExceptionsList.cs" />
-    <Compile Include="Helpers\AllowIDInsertAttribute.cs" />
-    <Compile Include="Helpers\AllowNullAttribute.cs" />
     <Compile Include="Helpers\FunctionName.cs" />
     <Compile Include="Helpers\DbColumnAttribute.cs" />
-    <Compile Include="Helpers\IsIdFieldAttribute.cs" />
+    <Compile Include="Helpers\AllowIDInsertAttribute.cs" />
+    <Compile Include="Helpers\IsIDFieldAttribute.cs" />
+    <Compile Include="Repository\DataStorage.cs" />
     <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="Helpers\AllowNullAttribute.cs" />
     <Compile Include="Helpers\TableNameAttribute.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="DAL\Gateways.cs" />

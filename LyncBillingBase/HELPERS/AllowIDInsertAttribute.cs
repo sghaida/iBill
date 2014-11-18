@@ -11,9 +11,9 @@ namespace LyncBillingBase.Helpers
     /// </summary>
     
     [System.AttributeUsage(System.AttributeTargets.Property)]
-    class AllowIDInsertAttribute : Attribute
+    public class AllowIDInsertAttribute : Attribute
     {
-        public bool Status { private set; public get; }
+        public bool Status { get; private set; }
 
         public AllowIDInsertAttribute(bool status = true)
         {
