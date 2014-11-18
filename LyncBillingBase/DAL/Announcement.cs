@@ -10,14 +10,14 @@ namespace LyncBillingBase.DAL
 {
     [Serializable]
     [TableName("Announcements")]
-    public class Announcements
+    public class Announcement
     {
         [IsIDField]
         [DbColumn("ID")]
         public int ID { get; set; }
 
         [DbColumn("Announcement")]
-        public string Announcement { get; set; }
+        public string AnnouncementBody { get; set; }
 
         [DbColumn("PublishOn")]
         public DateTime PublishOn { get; set; }
@@ -29,10 +29,5 @@ namespace LyncBillingBase.DAL
         [AllowNull]
         [DbColumn("ForSite")]
         public int ForSite { get; set; }
-
-        public Announcements() { }
-    
     }
-
-    
 }
