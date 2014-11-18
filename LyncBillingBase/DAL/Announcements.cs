@@ -8,6 +8,7 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
+    [Serializable]
     [TableName("Announcements")]
     public class Announcements
     {
@@ -28,5 +29,10 @@ namespace LyncBillingBase.DAL
         [AllowNull]
         [DbColumn("ForSite")]
         public int ForSite { get; set; }
+
+        public Announcements() { }
+    
     }
+
+    
 }

@@ -80,7 +80,7 @@ namespace LyncBillingBase.DAL
         public static List<PhoneCalls> GetPhoneCalls(string primarySipAccount, List<string> bundledAccounts = null, Dictionary<string, object> wherePart = null, int limits = 0)
         {
             DataTable dt;
-            List<PhoneCalls> phoneCalls;
+            List<PhoneCalls> phoneCalls = new List<PhoneCalls>();
 
             string databaseFunction = Enums.GetDescription(Enums.DatabaseFunctionsNames.Get_ChargeableCalls_ForUser);
             //PhoneCallsComparer linqDistinctComparer = new PhoneCallsComparer();
@@ -91,7 +91,7 @@ namespace LyncBillingBase.DAL
             try
             {
                 dt = DBRoutines.SELECT_FROM_FUNCTION(databaseFunction, functionaParams, wherePart);
-                phoneCalls = dt.ToList<PhoneCalls>();
+                //phoneCalls = dt.ConvertToList<PhoneCalls>();
                 
             }
             catch (Exception ex)

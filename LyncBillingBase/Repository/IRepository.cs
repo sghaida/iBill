@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LyncBillingBase.Repository
 {
-    interface IRepository<T>
+    interface IRepository<T> where T: class, new()
     {
         /// <summary>
         /// 
