@@ -11,7 +11,6 @@ namespace LyncBillingBase.DAL
     public class CallTypes
     {
         [IsIDField]
-        [AllowIDInsert]
         [DbColumn("id")]
         public int ID { get; set; }
 
