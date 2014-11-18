@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using LyncBillingBase.Helpers;
 using System.Reflection;
 using System.Linq.Expressions;
+using System.Data.Common;
+using System.Data;
+using System.Data.Linq;
 
 
 namespace LyncBillingBase.Repository
@@ -137,7 +140,7 @@ namespace LyncBillingBase.Repository
             return rowID;  
         }
 
-        public bool Delete(T dataObject, Dictionary<string, object> where = null)
+        public bool Delete(T dataObject)
         {
             long ID= 0;
 
@@ -174,9 +177,15 @@ namespace LyncBillingBase.Repository
 
             //Base Delete Statement
             sqlStatment.Append(string.Format("Delete from {0} where ", TableName));
-            
 
+            var ev = new CustomExpressionVisitor();
 
+          
+
+            ev.Visit(predicate.Body);
+
+            string whereClause = ev.Translate(predicate);
+             
             ParameterExpression param = (ParameterExpression)predicate.Parameters[0];
             BinaryExpression operation = (BinaryExpression)predicate.Body;
             ExpressionType nodeType = operation.NodeType;
@@ -188,16 +197,12 @@ namespace LyncBillingBase.Repository
         }
 
 
-        public bool Update(T dataObject, Dictionary<string, object> where = null)
+        public bool Update(T dataObject)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(T dataObject, Expression<Func<T, bool>> predicate = null)
-        {
-            throw new NotImplementedException();
-        }
-
+      
         public T GetById(long id)
         {
             throw new NotImplementedException();
@@ -209,6 +214,16 @@ namespace LyncBillingBase.Repository
         }
 
         public IQueryable<T> Get(Expression<Func<T, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<T> Get(Dictionary<string, object> where, int limit = 25)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<T> GetAll()
         {
             throw new NotImplementedException();
         }

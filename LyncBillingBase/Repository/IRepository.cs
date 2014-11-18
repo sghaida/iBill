@@ -8,23 +8,20 @@ namespace LyncBillingBase.Repository
 {
     interface IRepository<T>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataObject"></param>
+        /// <returns></returns>
         int Insert(T dataObject);
 
-        /// <summary>
-        /// Update the data based on a dictionary values as a condition
-        /// </summary>
-        /// <param name="dataObject">Object to be updated</param>
-        /// <param name="where">Dictionary<string,object> Represents the where part that should be executed</param>
-        /// <returns>bool Status</returns>
-        bool Update(T dataObject, Dictionary<string, object> where = null);
-        
         /// <summary>
         /// Update the data based on a predict expression 
         /// </summary>
         /// <param name="dataObject">Object to be updated</param>
         /// <param name="predicate">Expression<Func<T, bool>> predicate specify the expression that should be evaluated</param>
         /// <returns></returns>
-        bool Update(T dataObject, Expression<Func<T, bool>> predicate = null);
+        bool Update(T dataObject);
        
         /// <summary>
         /// Delete Data from the repository
@@ -32,17 +29,17 @@ namespace LyncBillingBase.Repository
         /// <param name="dataObject">the object you wish to delete</param>
         /// <param name="where">Dictionary<string,object> Represents the where part that should be executed</param>
         /// <returns>bool status</returns>
-        bool Delete(T dataObject, Dictionary<string, object> where = null);
-
+        bool Delete(T dataObject);
 
         /// <summary>
-        /// Delete from Repo Based on Predecate expression 
+        /// 
         /// </summary>
-        /// <param name="predicate">Expression<Func<T, bool>> that you want to evaluate</param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        bool Delete(T dataObject, Expression<Func<T, bool>> predicate = null);
-
         T GetById(long id);
+        
+
+
         /// <summary>
         /// Gets the data from repository 
         /// </summary>
@@ -50,7 +47,7 @@ namespace LyncBillingBase.Repository
         /// <param name="where">Dictionary<string,object> Represents the where part that should be executed</param>
         /// <param name="limit">Number of T objects to be populated</param>
         /// <returns>IQueryable<T>  Results</returns>
-        IQueryable<T> Get(List<string> fields = null, Dictionary<string, object> where = null, int limit = 0);
+        IQueryable<T> Get(Dictionary<string, object> where, int limit = 25);
         
         /// <summary>
         /// Gets the data from the repository and filter it based on the specified predicate expression
@@ -58,5 +55,11 @@ namespace LyncBillingBase.Repository
         /// <param name="predicate">Expression<Func<T, bool>> predicate specify the expression that should be evaluated</param>
         /// <returns>IQueryable<T>  Results</returns>
         IQueryable<T> Get(Expression<Func<T, bool>> predicate);
+
+        /// <summary>
+        /// Get all the data from the Repo
+        /// </summary>
+        /// <returns></returns>
+        IQueryable<T> GetAll();
     }
 }
