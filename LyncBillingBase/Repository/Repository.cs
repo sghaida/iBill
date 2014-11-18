@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LyncBillingBase.Helpers;
 using System.Reflection;
+using System.Linq.Expressions;
 
 
 namespace LyncBillingBase.Repository
@@ -24,9 +25,11 @@ namespace LyncBillingBase.Repository
         private static DBLib DBRoutines = new DBLib();
 
         public string TableName { private set; get; }
+        
+        public string IDField { private set; get; }
+        
         public List<DBTableProperty> Properties { private set; get; }
         
-
         public Repository() 
         {
             //Get the Table Name
@@ -61,14 +64,24 @@ namespace LyncBillingBase.Repository
                     }).ToList<DBTableProperty>();
 
             }
+
+            var IDField = Properties.Find(item => item.IsIDField == true);
+
+            if (IDField == null)
+            {
+                throw new Exception("No ID field is defined. kindly annotitate " + typeof(T).GetType().Name + " ID property with [IsIdField]");
+            }
+            else 
+            {
+                this.IDField = IDField.Name;
+            }
         } 
 
         public int Insert(T dataObject)
         {
             int rowID = 0;
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
-            var IDField = Properties.Find(item => item.IsIDField == true);
-
+          
             if (dataObject != null)
             {
                 foreach (var property in Properties)
@@ -110,12 +123,9 @@ namespace LyncBillingBase.Repository
 
                 try
                 {
-                    if (IDField == null) 
-                    {
-                        throw new Exception("No ID field is defined. kindly annotitate " + dataObject.GetType().Name + " ID property with [IsIdField]");
-                    }
-
-                    rowID = DBRoutines.INSERT(TableName, columnsValues, IDField.Name);
+                  
+                   
+                    rowID = DBRoutines.INSERT(tableName: TableName, columnsValues: columnsValues, idFieldName: IDField);
                 }
                 catch (Exception ex)
                 {
@@ -127,13 +137,63 @@ namespace LyncBillingBase.Repository
             return rowID;  
         }
 
+        public bool Delete(T dataObject, Dictionary<string, object> where = null)
+        {
+            long ID= 0;
 
-        public bool Update(T dataObject)
+            var dataObjectAttr = dataObject.GetType().GetProperty(IDField);
+
+            if (dataObjectAttr == null)
+            {
+                throw new Exception("There is no available ID field. kindly annotate " + dataObject.GetType().Name);
+            }
+            else 
+            {
+                var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                if(dataObjectAttrValue == null)
+                {
+                    throw new Exception("There is no available ID field is presented but not set kindly set the value of the ID field Object for the following class: " + dataObject.GetType().Name);
+                }
+                else
+                {
+                    
+                    long.TryParse(dataObjectAttrValue.ToString(),out ID);
+
+                    return DBRoutines.DELETE(tableName: TableName, idFieldName: IDField, ID: ID);
+                }
+                
+            }
+
+        }
+
+        public bool Delete(T dataObject, Expression<Func<T, bool>> predicate = null)
+        {
+
+            StringBuilder sqlStatment = new StringBuilder();
+
+            //Base Delete Statement
+            sqlStatment.Append(string.Format("Delete from {0} where ", TableName));
+            
+
+
+            ParameterExpression param = (ParameterExpression)predicate.Parameters[0];
+            BinaryExpression operation = (BinaryExpression)predicate.Body;
+            ExpressionType nodeType = operation.NodeType;
+            Expression left = operation.Left;
+            Expression right = operation.Right;
+
+            return false;
+
+        }
+
+
+        public bool Update(T dataObject, Dictionary<string, object> where = null)
         {
             throw new NotImplementedException();
         }
 
-        public bool Delete(T dataObject)
+        public bool Update(T dataObject, Expression<Func<T, bool>> predicate = null)
         {
             throw new NotImplementedException();
         }
@@ -143,12 +203,12 @@ namespace LyncBillingBase.Repository
             throw new NotImplementedException();
         }
 
-        public IQueryable<T> GetAll()
+        public IQueryable<T> Get(List<string> fields = null, Dictionary<string, object> where = null, int limit = 0)
         {
             throw new NotImplementedException();
         }
-        
-        public IQueryable<T> SearchFor(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+
+        public IQueryable<T> Get(Expression<Func<T, bool>> predicate)
         {
             throw new NotImplementedException();
         }
