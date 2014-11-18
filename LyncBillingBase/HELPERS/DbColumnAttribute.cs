@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace LyncBillingBase.Helpers
 {
+    /// <summary>
+    /// This attribute tells the Repository that it's associated property resembles a Database Column and with a specific name.
+    /// </summary>
+    
+    [System.AttributeUsage(System.AttributeTargets.Property)]
     public class DbColumnAttribute : Attribute
     {
-        string Name { get; private set; }
+        public string Name { private set; public get; }
 
         public DbColumnAttribute(string name)
         {
