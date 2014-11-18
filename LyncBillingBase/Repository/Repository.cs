@@ -17,7 +17,7 @@ using System.IO;
 
 namespace LyncBillingBase.Repository
 {
-    public class Repository<T> : IRepository<T> where T : class,new()
+    public class Repository<T> : IRepository<T> where T : class, new()
     {
         /**
          * Helper classes
