@@ -18,10 +18,10 @@ namespace LyncBillingBase.DAL
         public string Announcement { get; set; }
         
         [IsAllowNull]
-        public string ForRole { get; set; }
+        public int ForRole { get; set; }
         
         [IsAllowNull]
-        public string ForSite { get; set; }
+        public int ForSite { get; set; }
         
         public DateTime PublishOn { get; set; }
     }

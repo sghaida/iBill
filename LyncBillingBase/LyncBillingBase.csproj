@@ -60,6 +60,7 @@
     <Compile Include="DAL\DIDs.cs" />
     <Compile Include="DAL\Enums.cs" />
     <Compile Include="DAL\ExceptionsList.cs" />
+    <Compile Include="Helpers\FunctionName.cs" />
     <Compile Include="Helpers\IsIdFieldAttribute.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Helpers\IsAllowNullAttribute.cs" />
