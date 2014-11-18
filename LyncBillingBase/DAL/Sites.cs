@@ -11,31 +11,36 @@ namespace LyncBillingBase.DAL
 {
     public class Sites
     {
+        [DbColumnAttribute("SiteID")]
         public int SiteID { get; set; }
+
+        [DbColumnAttribute("SiteName")]
         public string SiteName { get; set; }
+
+        [DbColumnAttribute("CountryCode")]
         public string CountryCode { get; set; }
+
+        [DbColumnAttribute("Description")]
         public string Description { get; set; }
 
-        //This is a logical representation of data, it doesn't belong to the table.
         public string CountryName { get; set; }
 
         private static DBLib DBRoutines = new DBLib();
 
         public static List<Sites> GetAllSites(List<string> columns = null, Dictionary<string, object> wherePart = null, int limits = 0)
         {
-            Sites site;
             DataTable dt = new DataTable();
             List<Sites> sites = new List<Sites>();
-
 
             //Exception-handling
             try
             {
-                //dt = DBRoutines.SELECT(Enums.GetDescription(Enums.Sites.TableName), columns, wherePart, limits);
+                sites = dt.ToList<Sites>();
 
-              
+                if(sites.Count > 0)
+                    sites = sites.OrderBy(item => item.SiteName).ToList();
 
-                return sites.OrderBy(item => item.SiteName).ToList();
+                return sites;
             }
             catch (Exception ex)
             {
