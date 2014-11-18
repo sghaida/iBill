@@ -10,11 +10,14 @@ using System.Linq.Expressions;
 using System.Data.Common;
 using System.Data;
 using System.Data.Linq;
+using LyncBillingBase.DAL;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 
 namespace LyncBillingBase.Repository
 {
-    public class Repository<T> : IRepository<T>
+    public class Repository<T> : IRepository<T> where T : class,new()
     {
         /**
          * Helper classes
@@ -208,7 +211,7 @@ namespace LyncBillingBase.Repository
 
             if (dataObjectAttr == null)
             {
-                throw new Exception("There is no available ID field. kindly annotate " + dataObject.GetType().Name);
+                throw new Exception("There is no available ID field. kindly annotate " + typeof(T).Name);
             }
             else 
             {
@@ -216,7 +219,7 @@ namespace LyncBillingBase.Repository
 
                 if(dataObjectAttrValue == null)
                 {
-                    throw new Exception("There is no available ID field is presented but not set kindly set the value of the ID field Object for the following class: " + dataObject.GetType().Name);
+                    throw new Exception("There is no available ID field is presented but not set kindly set the value of the ID field Object for the following class: " + typeof(T).Name);
                 }
                 else
                 {
@@ -237,7 +240,26 @@ namespace LyncBillingBase.Repository
 
         public T GetById(long id)
         {
-            throw new NotImplementedException();
+            
+
+            if (id == null || id==0)
+            {
+                throw new Exception("The ID Field is either null or empty " + typeof(T).Name);
+            }
+            else
+            {
+                DataTable dt =  DBRoutines.SELECT(TableName,IDFieldName,id);
+
+                if (dt.Rows.Count == 0)
+                {
+                    return (T)Activator.CreateInstance(typeof(T));
+                }
+                else 
+                {
+                    return dt.ConvertToList<T>().FirstOrDefault<T>()??null; 
+                }
+            }
+
         }
 
         public IQueryable<T> Get(Expression<Func<T, bool>> predicate)
@@ -254,5 +276,7 @@ namespace LyncBillingBase.Repository
         {
             throw new NotImplementedException();
         }
+
     }
+
 }

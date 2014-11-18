@@ -35,10 +35,10 @@ namespace LyncBillingBase.DAL
             //Exception-handling
             try
             {
-                sites = dt.ToList<Sites>();
+                //sites = dt.ConvertToList<Sites>();
 
-                if(sites.Count > 0)
-                    sites = sites.OrderBy(item => item.SiteName).ToList();
+                //if(sites.Count > 0)
+                //    sites = sites.OrderBy(item => item.SiteName).ToList();
 
                 return sites;
             }
