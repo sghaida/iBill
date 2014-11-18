@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    public class Rates
+    [TableName("Rates")]
+    public class Rate
     {
         public int RateID { get; set; }
         public string CountryCode { get; set; }

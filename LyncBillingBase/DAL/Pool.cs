@@ -7,14 +7,14 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    [TableName("CallTypes")]
-    public class CallTypes
+    [TableName("Pools")]
+    public class Pool
     {
         [IsIDField]
-        [DbColumn("id")]
-        public int ID { get; set; }
+        [DbColumn("PoolID")]
+        public int ID { set; get; }
 
-        [DbColumn("CallType")]
-        public string CallType { get; set; }
+        [DbColumn("PoolFQDN")]
+        public string FQDN { set; get; }
     }
 }

@@ -10,10 +10,10 @@ using LyncBillingBase.Helpers;
 
 
 namespace LyncBillingBase.DAL
-{ 
-    public class PhoneCalls
+{
+    public class PhoneCall
     {
-        public PhoneCalls() { }
+        public PhoneCall() { }
 
         private static DBLib DBRoutines = new DBLib();
 
@@ -77,10 +77,10 @@ namespace LyncBillingBase.DAL
             get { return decimal.Round(this._Marker_CallCost, 2); }
         }
 
-        public static List<PhoneCalls> GetPhoneCalls(string primarySipAccount, List<string> bundledAccounts = null, Dictionary<string, object> wherePart = null, int limits = 0)
+        public static List<PhoneCall> GetPhoneCalls(string primarySipAccount, List<string> bundledAccounts = null, Dictionary<string, object> wherePart = null, int limits = 0)
         {
             DataTable dt;
-            List<PhoneCalls> phoneCalls = new List<PhoneCalls>();
+            List<PhoneCall> phoneCalls;
 
             string databaseFunction = Enums.GetDescription(Enums.DatabaseFunctionsNames.Get_ChargeableCalls_ForUser);
             //PhoneCallsComparer linqDistinctComparer = new PhoneCallsComparer();
@@ -91,7 +91,7 @@ namespace LyncBillingBase.DAL
             try
             {
                 dt = DBRoutines.SELECT_FROM_FUNCTION(databaseFunction, functionaParams, wherePart);
-                //phoneCalls = dt.ConvertToList<PhoneCalls>();
+                phoneCalls = dt.ToList<PhoneCall>();
                 
             }
             catch (Exception ex)

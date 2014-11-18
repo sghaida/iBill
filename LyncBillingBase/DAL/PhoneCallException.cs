@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    public class PhoneCallsExceptions
+    [Obsolete]
+    [TableName("PhoneCallsExceptions")]
+    public class PhoneCallException
     {
         public int ID { get; set; }
         public string UserUri { get; set; }

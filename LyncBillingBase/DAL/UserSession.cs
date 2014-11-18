@@ -13,7 +13,7 @@ namespace LyncBillingBase.DAL
         private List<DelegateRole> userDelegees = new List<DelegateRole>();
 
         //Normal user data
-        public Users NormalUserInfo { get; set; }
+        public User NormalUserInfo { get; set; }
         public string TelephoneNumber { set; get; }
         public string IPAddress { set; get; }
         public string UserAgent { set; get; }
@@ -32,9 +32,9 @@ namespace LyncBillingBase.DAL
 
         //Phone Calls and Phone Book Related
         public string PhonecallsPerPage { set; get; }
-        public List<PhoneCalls> Phonecalls { set; get; }
-        public List<PhoneCalls> PhonecallsHistory { set; get; }
-        public Dictionary<string, PhoneBook> Addressbook { set; get; }
+        public List<PhoneCall> Phonecalls { set; get; }
+        public List<PhoneCall> PhonecallsHistory { set; get; }
+        public Dictionary<string, PhoneBookContact> Addressbook { set; get; }
 
         //Generic Users SystemRoles
         public bool IsDeveloper { set; get; }
@@ -55,7 +55,7 @@ namespace LyncBillingBase.DAL
 
         public UserSession()
         {
-            NormalUserInfo = new Users();
+            NormalUserInfo = new User();
             TelephoneNumber = string.Empty;
             IPAddress = string.Empty;
             UserAgent = string.Empty;
@@ -68,9 +68,9 @@ namespace LyncBillingBase.DAL
 
             //Initialized other containers
             PhonecallsPerPage = string.Empty;
-            Phonecalls = new List<PhoneCalls>();
-            PhonecallsHistory = new List<PhoneCalls>();
-            Addressbook = new Dictionary<string, PhoneBook>();
+            Phonecalls = new List<PhoneCall>();
+            PhonecallsHistory = new List<PhoneCall>();
+            Addressbook = new Dictionary<string, PhoneBookContact>();
 
             //By default the roles are set to false unless initialized as otherwise!
             IsDeveloper = false;

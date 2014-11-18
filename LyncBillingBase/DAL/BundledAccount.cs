@@ -8,7 +8,7 @@ using LyncBillingBase.Helpers;
 namespace LyncBillingBase.DAL
 {
     [TableName("BundledAccounts")]
-    public class BundledAccounts
+    public class BundledAccount
     {
         [IsIDField]
         [DbColumn("ID")]
@@ -20,6 +20,17 @@ namespace LyncBillingBase.DAL
         [DbColumn("AssociatedSipAccount")]
         public List<string> AssociatedSipAccounts { get; set; }
 
-        public Users PrimaryUserAccount { get; set; }
+        public User PrimaryUserAccount { get; set; }
+
+
+
+        /***
+         * Custom Functions
+         */
+        public static List<string> GetAssociatedSipAccounts(string primarySipAccount)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
