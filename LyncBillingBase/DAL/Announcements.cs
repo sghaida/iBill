@@ -11,22 +11,22 @@ namespace LyncBillingBase.DAL
     [TableName("Announcements")]
     public class Announcements
     {
-        [IsIdField]
-        [DbColumnAttribute("ID")]
-        public int ID { get; set; }
+        [IsIDField]
+        [DbColumn("ID")]
+        public int ID { get; }
 
-        [DbColumnAttribute("Announcement")]
+        [DbColumn("Announcement")]
         public string Announcement { get; set; }
-        
-        [IsAllowNull]
-        [DbColumnAttribute("ForRole")]
-        public int ForRole { get; set; }
-        
-        [IsAllowNull]
-        [DbColumnAttribute("ForSite")]
-        public int ForSite { get; set; }
 
-        [DbColumnAttribute("PublishOn")]
+        [DbColumn("PublishOn")]
         public DateTime PublishOn { get; set; }
+
+        [AllowNull]
+        [DbColumn("ForRole")]
+        public int ForRole { get; set; }
+
+        [AllowNull]
+        [DbColumn("ForSite")]
+        public int ForSite { get; set; }
     }
 }

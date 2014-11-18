@@ -6,10 +6,17 @@ using System.Threading.Tasks;
 
 namespace LyncBillingBase.Helpers
 {
-    class IsIdFieldAttribute : Attribute
+    /// <summary>
+    /// This attribute tells the Repository that it's associated property resembles a Database Table ID Column.
+    /// </summary>
+    
+    class IsIDFieldAttribute : Attribute
     {
-        public IsIdFieldAttribute() 
+        public bool Status { public get; private set; }
+
+        public IsIDFieldAttribute(bool status = true) 
         {
+            this.Status = status;
         }
     }
 }
