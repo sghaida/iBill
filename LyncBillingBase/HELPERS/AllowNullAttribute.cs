@@ -11,9 +11,9 @@ namespace LyncBillingBase.Helpers
     /// </summary>
     
     [System.AttributeUsage(System.AttributeTargets.Property)]
-    class AllowNullAttribute : Attribute
+    public class AllowNullAttribute : Attribute
     {
-        public bool Status { private set; public get; }
+        public bool Status { get; private set; }
 
         public AllowNullAttribute(bool status = true)
         {

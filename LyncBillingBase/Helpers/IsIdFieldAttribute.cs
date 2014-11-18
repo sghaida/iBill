@@ -9,10 +9,11 @@ namespace LyncBillingBase.Helpers
     /// <summary>
     /// This attribute tells the Repository that it's associated property resembles a Database Table ID Column.
     /// </summary>
-    
-    class IsIDFieldAttribute : Attribute
+
+    [System.AttributeUsage(System.AttributeTargets.Property)]
+    public class IsIDFieldAttribute : Attribute
     {
-        public bool Status { public get; private set; }
+        public bool Status { get; private set; }
 
         public IsIDFieldAttribute(bool status = true) 
         {
