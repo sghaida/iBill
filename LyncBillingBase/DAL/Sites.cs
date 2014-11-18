@@ -11,16 +11,16 @@ namespace LyncBillingBase.DAL
 {
     public class Sites
     {
-        [DbColumnAttribute("SiteID")]
+        [DbColumn("SiteID")]
         public int SiteID { get; set; }
 
-        [DbColumnAttribute("SiteName")]
+        [DbColumn("SiteName")]
         public string SiteName { get; set; }
 
-        [DbColumnAttribute("CountryCode")]
+        [DbColumn("CountryCode")]
         public string CountryCode { get; set; }
 
-        [DbColumnAttribute("Description")]
+        [DbColumn("Description")]
         public string Description { get; set; }
 
         public string CountryName { get; set; }

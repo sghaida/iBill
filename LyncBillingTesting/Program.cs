@@ -22,19 +22,11 @@ namespace LyncBillingTesting
             ann.Announcement = "tezi tezi";
             ann.ForRole = 2;
             ann.ForSite = 2;
-
             ann.PublishOn = DateTime.Now;
-
+            
             ann.ID = dbContext.Insert(ann);
-            
-            dbContext.Delete(ann);
 
-            Expression<Func<Announcements, bool>> func1 = (item) => ((item.ForRole == 2) && (item.ForSite == 2) && (item.Announcement == "tezi tezi") || (item.ID==1));
-            dbContext.Delete(ann, func1);
-
-            
-
-
+            //Expression<Func<Announcements, bool>> func1 = (item) => ((item.ForRole == 2) && (item.ForSite == 2) && (item.Announcement == "tezi tezi") || (item.ID==1));
         }
     }
 }

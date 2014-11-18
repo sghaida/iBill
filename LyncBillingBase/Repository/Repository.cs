@@ -56,7 +56,7 @@ namespace LyncBillingBase.Repository
                 return ((TableNameAttribute)tableName.First()).Name; 
             }
 
-            throw new Exception("Table Name was not provided for " + typeof(T).GetType().Name + ". Kindly add [TableName(...)] attribute to the class.");
+            throw new Exception("Table Name was not provided for class \"" + typeof(T).GetType().Name + "\". Kindly add the [TableName(...)] Attribute to the class.");
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace LyncBillingBase.Repository
                 this.IDFieldName = IDField.ColumnName;
             }
 
-            throw new Exception("No ID field is defined. Kindly annotate " + typeof(T).GetType().Name + " ID property with [IsIdField] attribute.");
+            throw new Exception("No ID field is defined. Kindly annotate the ID property in class \"" + typeof(T).GetType().Name + "\" with the [IsIDField] Attribute.");
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace LyncBillingBase.Repository
                 );
             }
 
-            throw new Exception("Cant find valid properties in " + typeof(T).GetType().Name);
+            throw new Exception("Couldn't find any class property marked with the [DbColumn] Attribute in the class \"" + typeof(T).GetType().Name + "\". Kindly revise the class definition.");
         }
 
 
