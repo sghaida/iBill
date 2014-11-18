@@ -294,7 +294,7 @@ namespace LyncBillingBase.Repository
 
             DataTable dt = DBRoutines.SELECT(TableName, allColumns, whereConditions, maximumLimit);
 
-            return dt.ConvertToList<T>() as IQueryable<T>;
+            return dt.ConvertToList<T>().AsQueryable<T>();
         }
 
     }

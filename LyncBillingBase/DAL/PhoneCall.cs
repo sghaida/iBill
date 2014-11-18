@@ -77,33 +77,6 @@ namespace LyncBillingBase.DAL
             get { return decimal.Round(this._Marker_CallCost, 2); }
         }
 
-        public static List<PhoneCall> GetPhoneCalls(string primarySipAccount, List<string> bundledAccounts = null, Dictionary<string, object> wherePart = null, int limits = 0)
-        {
-            DataTable dt;
-            List<PhoneCall> phoneCalls;
-
-            string databaseFunction = Enums.GetDescription(Enums.DatabaseFunctionsNames.Get_ChargeableCalls_ForUser);
-            //PhoneCallsComparer linqDistinctComparer = new PhoneCallsComparer();
-
-            //Initialize function parameters and then query the database
-            List<object> functionaParams = new List<object>() { primarySipAccount };
-
-            try
-            {
-                dt = DBRoutines.SELECT_FROM_FUNCTION(databaseFunction, functionaParams, wherePart);
-                phoneCalls = dt.ToList<PhoneCall>();
-                
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            if (limits > 0)
-                return phoneCalls.GetRange(0, limits);
-            else
-                return phoneCalls;
-        }
     }
 
     //The phonecalls version of the IEqualityComparer, used with LINQ's Distinct function
