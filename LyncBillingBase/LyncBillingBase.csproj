@@ -36,7 +36,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Linq" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -62,9 +61,8 @@
     <Compile Include="DAL\Enums.cs" />
     <Compile Include="DAL\ExceptionsList.cs" />
     <Compile Include="Helpers\FunctionName.cs" />
+    <Compile Include="Helpers\DbColumnAttribute.cs" />
     <Compile Include="Helpers\IsIdFieldAttribute.cs" />
-    <Compile Include="Repository\CustomExpressionVisitor.cs" />
-    <Compile Include="Repository\Evaluator.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Helpers\IsAllowNullAttribute.cs" />
     <Compile Include="Helpers\TableNameAttribute.cs" />
