@@ -13,7 +13,7 @@ namespace LyncBillingBase.Helpers
     [System.AttributeUsage(System.AttributeTargets.Property)]
     public class DbColumnAttribute : Attribute
     {
-        public string Name { private set; public get; }
+        public string Name { get; private set; }
 
         public DbColumnAttribute(string name)
         {

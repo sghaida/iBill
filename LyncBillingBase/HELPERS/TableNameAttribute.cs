@@ -11,9 +11,9 @@ namespace LyncBillingBase.Helpers
     /// </summary>
     
     [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
-    class TableNameAttribute : System.Attribute
+    public class TableNameAttribute : System.Attribute
     {
-        public string Name { private set; public get; }
+        public string Name { get; private set; }
 
         public TableNameAttribute(string name) 
         {
