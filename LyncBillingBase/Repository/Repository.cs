@@ -170,32 +170,6 @@ namespace LyncBillingBase.Repository
 
         }
 
-        public bool Delete(T dataObject, Expression<Func<T, bool>> predicate = null)
-        {
-
-            StringBuilder sqlStatment = new StringBuilder();
-
-            //Base Delete Statement
-            sqlStatment.Append(string.Format("Delete from {0} where ", TableName));
-
-            var ev = new CustomExpressionVisitor();
-
-          
-
-            ev.Visit(predicate.Body);
-
-            string whereClause = ev.Translate(predicate);
-             
-            ParameterExpression param = (ParameterExpression)predicate.Parameters[0];
-            BinaryExpression operation = (BinaryExpression)predicate.Body;
-            ExpressionType nodeType = operation.NodeType;
-            Expression left = operation.Left;
-            Expression right = operation.Right;
-
-            return false;
-
-        }
-
 
         public bool Update(T dataObject)
         {
@@ -204,11 +178,6 @@ namespace LyncBillingBase.Repository
 
       
         public T GetById(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<T> Get(List<string> fields = null, Dictionary<string, object> where = null, int limit = 0)
         {
             throw new NotImplementedException();
         }
