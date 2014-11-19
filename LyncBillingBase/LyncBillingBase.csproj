@@ -65,7 +65,9 @@
     <Compile Include="Helpers\DbColumnAttribute.cs" />
     <Compile Include="Helpers\AllowIDInsertAttribute.cs" />
     <Compile Include="Helpers\IsIDFieldAttribute.cs" />
+    <Compile Include="Repository\CustomExpressionVisitor.cs" />
     <Compile Include="Repository\DataStorage.cs" />
+    <Compile Include="Repository\Evaluator.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Helpers\AllowNullAttribute.cs" />
     <Compile Include="Helpers\TableNameAttribute.cs" />
