@@ -43,6 +43,8 @@ namespace LyncBillingBase.Repository
         public string IDFieldName { private set; get; }
         public List<DbTableProperty> Properties { private set; get; }
 
+        private string errorMessage = string.Empty;
+
         /***
          * Private functions.
          */
@@ -53,7 +55,6 @@ namespace LyncBillingBase.Repository
         private string tryReadTableNameAttributeValue()
         {
             IEnumerable<Attribute> tableName;
-            string errorMessage = string.Empty;
             
             //Format an exception messgae
             errorMessage = String.Format("Database Table name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name);
@@ -76,8 +77,7 @@ namespace LyncBillingBase.Repository
         private string tryReadIDFieldAttributeValue()
         {
             DbTableProperty IDField;
-            string errorMessage = string.Empty;
-
+            
             //Format the exception message
             errorMessage = String.Format("No ID field is defined. Kindly annotate the ID property in class \"{0}\" with the [IsIDField] Attribute.", typeof(T).Name);
 
@@ -99,8 +99,7 @@ namespace LyncBillingBase.Repository
         /// <returns>List of DbTableProperty objects, if the class has DbColumn Properties.</returns>
         private List<DbTableProperty> tryReadClassDbProperties()
         {
-            string errorMessage = string.Empty;
-
+             
             //Format exceptiom message
             errorMessage = String.Format("Couldn't find any class property marked with the [DbColumn] Attribute in the class \"{0}\". Kindly revise the class definition.", typeof(T).Name);
 
@@ -234,7 +233,61 @@ namespace LyncBillingBase.Repository
 
         public bool Update(T dataObject)
         {
-            throw new NotImplementedException();
+            Dictionary<string, object> columnsValues = new Dictionary<string, object>();
+            bool status = false;
+
+            if (dataObject != null)
+            {
+                foreach (var property in Properties)
+                {
+                    var dataObjectAttr = dataObject.GetType().GetProperty(property.ColumnName);
+
+                    //Don't insert ID Fields into the Database
+                    if(property.IsIDField == true)
+                    {
+                        continue;
+                    }
+
+                    //Continue handling the properties
+                    if (property.AllowNull == false && dataObjectAttr != null)
+                    {
+                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                        if (dataObjectAttrValue != null)
+                        {
+                            columnsValues.Add(property.ColumnName, Convert.ChangeType(dataObjectAttrValue, property.FieldType));
+                        }
+                        else
+                        {
+                            throw new Exception("The Property " + property.ColumnName + " in the " + dataObject.GetType().Name + " Table is not allowed to be null kindly annotate the property with [IsAllowNull]");
+                        }
+                    }
+                    else
+                    {
+                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                        if (dataObjectAttrValue != null)
+                        {
+                            columnsValues.Add(property.ColumnName, Convert.ChangeType(dataObjectAttrValue, property.FieldType));
+                        }
+                    }
+                    //end-inner-if
+
+                }//end-foreach
+
+                try
+                {
+                    status = DBRoutines.UPDATE(tableName:TableName,columnsValues:columnsValues,wherePart:null);
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex.InnerException;
+                }
+
+            }//end-outer-if
+
+            return status;  
         }
 
 
@@ -264,7 +317,32 @@ namespace LyncBillingBase.Repository
 
         public IQueryable<T> Get(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            DataTable dt = new DataTable();
+
+            if (predicate == null) 
+            {
+                errorMessage =string.Format("There is no defined Predicate. {0} ",typeof(T).Name);
+                
+                throw new Exception(errorMessage);
+            }
+            else 
+            {
+                CustomExpressionVisitor ev = new CustomExpressionVisitor();
+                
+                string whereClause = ev.Translate(predicate);
+
+                if (string.IsNullOrEmpty(whereClause))
+                {
+                    dt = DBRoutines.SELECT(TableName);
+                }
+                else 
+                {
+                    dt = DBRoutines.SELECT(TableName, whereClause);
+                }
+            }
+
+            return dt.ConvertToList<T>().AsQueryable<T>();
+            
         }
 
 
