@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LyncBillingBase.DAL.Functions
 {
-    class ChargableCallsPerSite : PhoneCall
+    class ChargeableCallsPerGateway : PhoneCall
     {
     }
 }
