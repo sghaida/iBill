@@ -59,31 +59,31 @@
     <Compile Include="DAL\Department.cs" />
     <Compile Include="DAL\DialingPrefixRate.cs" />
     <Compile Include="DAL\DID.cs" />
+    <Compile Include="DA\CustomExpressionVisitor.cs" />
+    <Compile Include="DA\DbTableFields.cs" />
+    <Compile Include="DA\DistributedDataAccess.cs" />
+    <Compile Include="DA\DataAccess.cs" />
+    <Compile Include="DA\PhoneCallDataMapper.cs" />
+    <Compile Include="DA\Evaluator.cs" />
+    <Compile Include="DA\IDataAccess.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="DAL\Functions\ChargeableCallsPerGateway.cs" />
-    <Compile Include="DAL\Functions\ChargeableCallsPerSite.cs" />
-    <Compile Include="DAL\Functions\ChargeableCallsPerUser.cs" />
     <Compile Include="DAL\PhoneCallExclusion.cs" />
     <Compile Include="Helpers\DbColumnAttribute.cs" />
     <Compile Include="Helpers\AllowIDInsertAttribute.cs" />
     <Compile Include="Helpers\FunctionsParametersAttribute.cs" />
     <Compile Include="Helpers\IsIDFieldAttribute.cs" />
-    <Compile Include="Repository\CustomExpressionVisitor.cs" />
     <Compile Include="Repository\DataStorage.cs" />
-    <Compile Include="Repository\Evaluator.cs" />
-    <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Helpers\AllowNullAttribute.cs" />
     <Compile Include="Helpers\DataSourceAttribute.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="DAL\Gateway.cs" />
     <Compile Include="DAL\GatewayDetail.cs" />
-    <Compile Include="DAL\GatewayRate.cs" />
-    <Compile Include="Repository\Repository.cs" />
+    <Compile Include="LookupTables\GatewayRate.cs" />
     <Compile Include="DAL\MailTemplate.cs" />
     <Compile Include="DAL\MarkingStatus.cs" />
     <Compile Include="DAL\MatchingExtention.cs" />
     <Compile Include="DAL\Misc.cs" />
-    <Compile Include="DAL\MonitoringServerInfo.cs" />
+    <Compile Include="LookupTables\MonitoringServerInfo.cs" />
     <Compile Include="DAL\NumberingPlan.cs" />
     <Compile Include="DAL\NumberingPlanNGN.cs" />
     <Compile Include="DAL\PhoneBook.cs" />
@@ -127,9 +127,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DAL\Procedures\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

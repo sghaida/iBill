@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using LyncBillingBase.Helpers;
 
-namespace LyncBillingBase.DAL
+namespace LyncBillingBase.LookupTables
 {
-    [DataSource(DataSourceName = "MonitoringServersInfo", DataSource = Enums.DataSources.DBTable)]
+    [DataSource(Name = "MonitoringServersInfo", SourceType = Enums.DataSources.DBTable)]
     public class MonitoringServerInfo
     {
         [IsIDField]

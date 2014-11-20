@@ -22,7 +22,7 @@ namespace LyncBillingBase.DAL
         public static List<NumberingPlan> numberingPlan;
         public static List<NumberingPlanNGN> numberingPlanNGN;
 
-        public static List<GatewayRate> gatewayRates;
+        //public static List<GatewayRate> gatewayRates;
 
         public static List<Gateway> gateways;
         public static List<string> ListofGatewaysNames;

@@ -411,6 +411,7 @@ namespace LyncBillingBase
 
         public enum DataSources
         {
+            Default,
             DBFunction,
             DBTable,
             DBStoreProcedure
