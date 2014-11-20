@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LyncBillingBase.Helpers;
 using LyncBillingBase.DAL;
 using System.Threading;
+using LyncBillingBase.DAL.Functions;
 
 namespace LyncBillingBase.Repository
 {
@@ -14,6 +15,7 @@ namespace LyncBillingBase.Repository
         /***
          * DataStorage Repositories
          */
+        public Repository<PhoneCall> PhoneCalls = new Repository<PhoneCall>();
         public Repository<Announcement> Announcements = new Repository<Announcement>();
         public Repository<BundledAccount> BundledAccounts = new Repository<BundledAccount>();
         public Repository<CallMarkerStatus> CallMarkersStatus = new Repository<CallMarkerStatus>();
@@ -40,6 +42,9 @@ namespace LyncBillingBase.Repository
         public Repository<Site> Sites = new Repository<Site>();
         public Repository<SiteDepartment> SitesDepartments = new Repository<SiteDepartment>();
         public Repository<User> Users = new Repository<User>();
+
+        //DB Functions
+        public Repository<ChargableCallsPerUser> ChargableCallsPerUSer = new Repository<ChargableCallsPerUser>();
 
         // NOT LOADED ON PURPOSE
         // public Repository<PhoneCall> PhoneCalls = new Repository<PhoneCall>();
