@@ -44,7 +44,7 @@ namespace LyncBillingBase.Repository
         public Repository<User> Users = new Repository<User>();
 
         //DB Functions
-        public Repository<ChargableCallsPerUser> ChargableCallsPerUSer = new Repository<ChargableCallsPerUser>();
+        public Repository<ChargeableCallsPerUser> ChargeableCallsPerUSer = new Repository<ChargeableCallsPerUser>();
 
         // NOT LOADED ON PURPOSE
         // public Repository<PhoneCall> PhoneCalls = new Repository<PhoneCall>();

@@ -9,7 +9,7 @@ using LyncBillingBase.Helpers;
 namespace LyncBillingBase.DAL
 {
     [Serializable]
-    [TableName("Announcements")]
+    [DataSource(DataSourceName = "Announcements", DataSource = Enums.DataSources.DBTable)]
     public class Announcement
     {
         [IsIDField]

@@ -8,7 +8,7 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    [TableName("Countries")]
+    [DataSource(DataSourceName = "Countries", DataSource = Enums.DataSources.DBTable)]
     public class Country
     {
         //TODO: ADD ID COLUMN AND CLASS PROPERTY

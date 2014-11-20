@@ -7,7 +7,7 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    [TableName("MailTemplates")]
+    [DataSource(DataSourceName = "MailTemplates", DataSource = Enums.DataSources.DBTable)]
     public class MailTemplate
     {
         [IsIDField]
