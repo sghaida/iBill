@@ -10,17 +10,17 @@ namespace LyncBillingBase.Helpers
     class FunctionsParametersAttribute : Attribute
     {
         private string _ParamerterName;
-        private int _position;
+        private int _Position;
 
         public string ParamerterName 
         {
             get { return this._ParamerterName; }
             set { this._ParamerterName = value; }
         }
-        public int position 
+        public int Position 
         {
-            get { return this._position; }
-            set { this._position = value; }
+            get { return this._Position; }
+            set { this._Position = value; }
         }
 
 
