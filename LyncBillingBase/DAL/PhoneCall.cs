@@ -15,62 +15,126 @@ namespace LyncBillingBase.DAL
     {
         public PhoneCall() { }
 
-        private static DBLib DBRoutines = new DBLib();
-
-        //Common and wanted 
-        public string ChargingParty { set; get; }
+        [DbColumn("SessionIdTime")] 
         public string SessionIdTime { set; get; }
+
+        [DbColumn("SessionIdSeq")] 
+        public int SessionIdSeq { get; set; }
+
+        [DbColumn("ResponseTime")] 
+        public string ResponseTime { set; get; }
+
+        [DbColumn("SessionEndTime")] 
+        public string SessionEndTime { set; get; }
+
+        [DbColumn("ChargingParty")] 
+        public string ChargingParty { set; get; }
+
+        [DbColumn("DestinationNumberUri")] 
         public string DestinationNumberUri { set; get; }
+
+        [DbColumn("Marker_CallToCountry")] 
         public string Marker_CallToCountry { set; get; }
+
+        [DbColumn("Marker_CallType")] 
         public string Marker_CallType { set; get; }
+
+        [DbColumn("Duration")] 
         public decimal Duration { set; get; }
 
+        [DbColumn("UI_UpdatedByUser")] 
         public string UI_UpdatedByUser { set; get; }
+
+        [DbColumn("UI_MarkedOn")] 
         public string UI_MarkedOn { set; get; }
+
+        [DbColumn("UI_CallType")] 
         public string UI_CallType { set; get; }
+
+        [DbColumn("UI_AssignedByUser")] 
         public string UI_AssignedByUser { set; get; }
+
+        [DbColumn("UI_AssignedToUser")] 
         public string UI_AssignedToUser { set; get; }
+
+        [DbColumn("UI_AssignedOn")] 
         public DateTime UI_AssignedOn { set; get; }
 
+        [DbColumn("AC_DisputeStatus")] 
         public string AC_DisputeStatus { set; get; }
+
+        [DbColumn("AC_DisputeResolvedOn")] 
         public DateTime AC_DisputeResolvedOn { set; get; }
+
+        [DbColumn("AC_IsInvoiced")] 
         public string AC_IsInvoiced { set; get; }
+
+        [DbColumn("AC_InvoiceDate")] 
         public DateTime AC_InvoiceDate { set; get; }
 
-        /***
-         * FRONTEND UNWATED
-         */
-        //public int SessionIdSeq { get; set; }
-        //public string ResponseTime { set; get; }
-        //public string SessionEndTime { set; get; }
-        //public string SourceUserUri { set; get; }
-        //public string SourceNumberUri { set; get; }
-        //public string DestinationUserUri { get; set; }
-        //public string FromMediationServer { set; get; }
-        //public string ToMediationServer { set; get; }
-        //public string FromGateway { set; get; }
-        //public string ToGateway { set; get; }
-        //public string SourceUserEdgeServer { set; get; }
-        //public string DestinationUserEdgeServer { set; get; }
-        //public string ServerFQDN { set; get; }
-        //public string PoolFQDN { set; get; }
-        //public string OnBehalf { set; get; }
-        //public string ReferredBy { set; get; }
-        //public string CalleeURI { get; set; }
-        //public long Marker_CallFrom { set; get; }
-        //public long Marker_CallTo { set; get; }
-        //public int Marker_CallTypeID { set; get; }
+        [DbColumn("SourceUserUri")] 
+        public string SourceUserUri { set; get; }
 
-        /***
-         * BACKEND UNWANTED
-         */
-        //public string PhoneBookName { set; get; }
+        [DbColumn("SourceNumberUri")] 
+        public string SourceNumberUri { set; get; }
+
+        [DbColumn("DestinationUserUri")] 
+        public string DestinationUserUri { get; set; }
+
+        [DbColumn("FromMediationServer")] 
+        public string FromMediationServer { set; get; }
+
+        [DbColumn("ToMediationServer")] 
+        public string ToMediationServer { set; get; }
+
+        [DbColumn("FromGateway")] 
+        public string FromGateway { set; get; }
+
+        [DbColumn("ToGateway")] 
+        public string ToGateway { set; get; }
+
+        [DbColumn("SourceUserEdgeServer")] 
+        public string SourceUserEdgeServer { set; get; }
+
+        [DbColumn("DestinationUserEdgeServer")] 
+        public string DestinationUserEdgeServer { set; get; }
+
+        [DbColumn("ServerFQDN")] 
+        public string ServerFQDN { set; get; }
+
+        [DbColumn("PoolFQDN")] 
+        public string PoolFQDN { set; get; }
+
+        [DbColumn("OnBehalf")] 
+        public string OnBehalf { set; get; }
+
+        [DbColumn("ReferredBy")] 
+        public string ReferredBy { set; get; }
+
+        [DbColumn("CalleeURI")] 
+        public string CalleeURI { get; set; }
+
+        [DbColumn("marker_CallFrom")] 
+        public long Marker_CallFrom { set; get; }
+
+        [DbColumn("Marker_CallTo")] 
+        public long Marker_CallTo { set; get; }
+
+        [DbColumn("Marker_CallTypeID")] 
+        public int Marker_CallTypeID { set; get; }
+
+        [DbColumn("SessionIdTime")] 
+        public string PhoneCallsTableName { get; set; }
+
+        [DbColumn("SessionIdTime")] 
+        public string PhoneBookName { set; get; }
 
         //This is used to tell where to find and update this PhoneCalls
-        //public string PhoneCallsTableName { get; set; }
+        
 
         private decimal _Marker_CallCost;
 
+        [DbColumn("Marker_CallCost")] 
         public decimal Marker_CallCost
         {
             set { this._Marker_CallCost = value; }
