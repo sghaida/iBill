@@ -7,7 +7,7 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    [TableName("CallMarkerStatus")]
+    [DataSource(DataSourceName = "CallMarkerStatus", DataSource = Enums.DataSources.DBTable)]
     public class CallMarkerStatus
     {
         [IsIDField]

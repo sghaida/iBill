@@ -52,7 +52,7 @@ namespace LyncBillingBase.Repository
         /// Tries to read the TableName attribute value if it exists; if it doesn't it throws and exception
         /// </summary>
         /// <returns>TableName attribute value (string), if exists.</returns>
-        private string tryReadTableNameAttributeValue()
+        private string tryReadDataSourceAttributeValue()
         {
             IEnumerable<Attribute> tableName;
             
@@ -60,15 +60,19 @@ namespace LyncBillingBase.Repository
             errorMessage = String.Format("Database Table name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name);
 
             //Get the table name attribute
-            tableName = typeof(T).GetCustomAttributes(typeof(TableNameAttribute));
+            tableName = typeof(T).GetCustomAttributes(typeof(DataSourceAttribute));
 
             if (tableName != null && tableName.Count() > 0)
             {
-                return ((TableNameAttribute)tableName.First()).Name; 
+                return ((DataSourceAttribute)tableName.First()).Name;
             }
+            else 
+         
 
             throw new Exception(errorMessage);
         }
+
+      
 
         /// <summary>
         /// Tries to read the IDField property attribute value if it exists; if it doesn't it throws and exception
@@ -133,7 +137,7 @@ namespace LyncBillingBase.Repository
             try
             {
                 this.Properties = tryReadClassDbProperties();
-                this.TableName = tryReadTableNameAttributeValue();
+                this.TableName = tryReadDataSourceAttributeValue();
                 this.IDFieldName = tryReadIDFieldAttributeValue();
             }
             catch (Exception ex)

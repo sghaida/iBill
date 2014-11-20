@@ -7,7 +7,7 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    [TableName("BundledAccounts")]
+    [DataSource(DataSourceName = "BundledAccounts", DataSource = Enums.DataSources.DBTable)]
     public class BundledAccount
     {
         [IsIDField]
