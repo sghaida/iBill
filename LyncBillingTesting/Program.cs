@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using LyncBillingBase.DAL;
 using LyncBillingBase.Helpers;
 using LyncBillingBase.Repository;
-using LyncBillingBase.DAL.Functions;
+
 
 
 namespace LyncBillingTesting
@@ -19,8 +19,7 @@ namespace LyncBillingTesting
         {
             var _dbStorage = DataStorage.Instance;
 
-            List<ChargeableCallsPerUser> data = _dbStorage.ChargeableCallsPerUSer.GetAll().ToList();
-
+            List<PhoneCall> phoneCalls = _dbStorage.PhoneCalls.GetAll().ToList();
         }
     }
 }

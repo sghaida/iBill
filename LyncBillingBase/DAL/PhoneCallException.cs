@@ -9,7 +9,7 @@ using LyncBillingBase.Helpers;
 namespace LyncBillingBase.DAL
 {
     [Obsolete]
-    [DataSource(DataSourceName = "PhoneCallsExceptions", DataSource = Enums.DataSources.DBTable)]
+    [DataSource(Name = "PhoneCallsExceptions", SourceType = Enums.DataSources.DBTable)]
     public class PhoneCallException
     {
         public int ID { get; set; }
