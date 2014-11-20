@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LyncBillingBase.Helpers;
+using LyncBillingBase.Repository;
 
 namespace LyncBillingBase.DAL
 {
@@ -48,5 +49,6 @@ namespace LyncBillingBase.DAL
         public DateTime CreatedAt { get; set; }
         
         public string FullName { get; set; }
+
     }
 }

@@ -18,9 +18,6 @@ namespace LyncBillingTesting
         {
             var _dbStorage = DataStorage.Instance;
 
-            List<User> users = _dbStorage.Users.GetAll().ToList<User>();
-
-            string x = string.Empty;
         }
     }
 }
