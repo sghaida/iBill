@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace LyncBillingBase.DAL.Functions
 {
     [FunctionName("Get_ChargeableCalls_ForUser")]
-    class ChargableCallsPerUser : PhoneCall
+    class ChargeableCallsPerUser : PhoneCall
     {
         [FunctionsParameters(ParamerterName = "ChargingParty", Position=1)]
         string ChargingParty { set; get; } 
