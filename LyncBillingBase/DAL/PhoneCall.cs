@@ -15,6 +15,7 @@ namespace LyncBillingBase.DAL
     {
         public PhoneCall() { }
 
+        [IsIDField]
         [DbColumn("SessionIdTime")] 
         public string SessionIdTime { set; get; }
 

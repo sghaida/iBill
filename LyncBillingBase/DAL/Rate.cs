@@ -7,7 +7,7 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    [TableName("Rates")]
+    [DataSource(Name = "Rates", SourceType = Enums.DataSources.DBTable)]
     public class Rate
     {
         public int RateID { get; set; }

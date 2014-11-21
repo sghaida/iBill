@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.ComponentModel;
 
-namespace LyncBillingBase.DAL
+namespace LyncBillingBase
 {
     public static class Enums
     {
@@ -407,6 +407,14 @@ namespace LyncBillingBase.DAL
             ToDate,
             [Description("InvoiceDate")]
             InvoiceDate
+        }
+
+        public enum DataSources
+        {
+            Default,
+            DBFunction,
+            DBTable,
+            DBStoreProcedure
         }
 
         /// <summary>

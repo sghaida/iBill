@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LyncBillingBase;
+
 
 namespace LyncBillingBase.Helpers
 {
@@ -11,14 +13,26 @@ namespace LyncBillingBase.Helpers
     /// </summary>
     
     [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
-    public class TableNameAttribute : System.Attribute
+    public class DataSourceAttribute : System.Attribute
     {
-        public string Name { get; private set; }
+        private Enums.DataSources _SourceType;
+        private string _Name;
 
-        public TableNameAttribute(string name) 
+        public Enums.DataSources SourceType
         {
-            this.Name = name;
+            get { return this._SourceType; }
+            set { this._SourceType = value;  }
         }
 
+        public string Name
+        {
+            get { return this._Name; }
+            set { this._Name = value; }
+        }
+
+        public DataSourceAttribute() { }
+
     }
+
+   
 }

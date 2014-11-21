@@ -7,7 +7,7 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    [TableName("ExceptionsList")]
+    [DataSource(Name = "ExceptionsList", SourceType = Enums.DataSources.DBTable)]
     public class PhoneCallExclusion
     {
         [IsIDField]
