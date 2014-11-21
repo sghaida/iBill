@@ -7,7 +7,7 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    [DataSource(Name = "Pools", SourceType = Enums.DataSources.DBTable)]
+    [DataSource(Name = "Pools", SourceType = Enums.DataSourceType.DBTable)]
     public class Pool
     {
         [IsIDField]

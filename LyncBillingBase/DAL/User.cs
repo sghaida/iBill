@@ -8,7 +8,7 @@ using LyncBillingBase.Repository;
 
 namespace LyncBillingBase.DAL
 {
-    [DataSource(Name = "ActiveDirectoryUsers", SourceType = Enums.DataSources.DBTable)]
+    [DataSource(Name = "ActiveDirectoryUsers", SourceType = Enums.DataSourceType.DBTable)]
     public class User
     {
         [IsIDField]

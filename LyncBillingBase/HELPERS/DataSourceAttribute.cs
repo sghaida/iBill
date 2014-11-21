@@ -17,9 +17,9 @@ namespace LyncBillingBase.Helpers
     {
         public string Name { get; set; }
 
-        public Enums.DataSources SourceType { get; set; }
+        public Enums.DataSourceType SourceType { get; set; }
 
-        public Enums.AccessTypes AccessType { get; set; }
+        public Enums.DataSoyurceAccessType AccessType { get; set; }
 
         public DataSourceAttribute() { }
 

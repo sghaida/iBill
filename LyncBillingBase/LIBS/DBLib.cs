@@ -61,7 +61,6 @@ namespace LyncBillingBase.Libs
             return dt;
         }
 
-
         public DataTable SELECT(string tableName, string wherePart, string customConnectionString = null) 
         {
             DataTable dt = new DataTable();
@@ -757,6 +756,31 @@ namespace LyncBillingBase.Libs
             //return numberOfRowsAffected;
         }
 
+        /// <summary>
+        /// Insert by EXECUTING NATIVE SQL QUERY
+        /// </summary>
+        /// <param name="SQL"></param>
+        /// <returns></returns>
+        public int INSERT(string SQL) 
+        {
+            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbCommand comm = new OleDbCommand(SQL, conn);
+
+            int recordID = 0;
+            try
+            {
+                conn.Open();
+                recordID = Convert.ToInt32(comm.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+                System.ArgumentException argEx = new System.ArgumentException("Exception", "ex", ex);
+                throw argEx;
+            }
+            finally { conn.Close(); conn.Dispose(); }
+
+            return recordID;
+        }
 
         /// <summary>
         /// Construct Generic INSERT Statement
@@ -885,6 +909,31 @@ namespace LyncBillingBase.Libs
             finally { conn.Close(); }
 
             return recordID;
+        }
+
+        /// <summary>
+        /// Update by EXECUTING NATIVE SQL QUERY
+        /// </summary>
+        /// <param name="SQL"></param>
+        /// <returns></returns>
+        public bool UPDATE(string SQL) 
+        {
+            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbCommand comm = new OleDbCommand(SQL, conn);
+            comm.CommandTimeout = 360;
+
+            try
+            {
+                conn.Open();
+                comm.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.ArgumentException argEx = new System.ArgumentException("Exception", "ex", ex);
+                throw argEx;
+            }
+            finally { conn.Close(); }
         }
 
         /// <summary>
@@ -1187,6 +1236,29 @@ namespace LyncBillingBase.Libs
             }
         }
 
+        /// <summary>
+        /// Delete by EXECUTING NATIVE SQL QUERY
+        /// </summary>
+        /// <param name="SQL"></param>
+        /// <returns></returns>
+        public bool DELETE(string SQL) 
+        {
+            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbCommand comm = new OleDbCommand(SQL, conn);
+
+            try
+            {
+                conn.Open();
+                comm.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.ArgumentException argEx = new System.ArgumentException("Exception", "ex", ex);
+                throw argEx;
+            }
+            finally { conn.Close(); }
+        }
         /// <summary>
         /// Construct Generic DELETE Statement
         /// </summary>

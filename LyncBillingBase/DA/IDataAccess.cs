@@ -14,7 +14,7 @@ namespace LyncBillingBase.DA
         /// </summary>
         /// <param name="dataObject"></param>
         /// <returns></returns>
-        int Insert(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
+        int Insert(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
 
         /// <summary>
         /// Update the data based on a predict expression 
@@ -22,7 +22,7 @@ namespace LyncBillingBase.DA
         /// <param name="dataObject">Object to be updated</param>
         /// <param name="predicate">Expression<Func<T, bool>> predicate specify the expression that should be evaluated</param>
         /// <returns></returns>
-        bool Update(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
+        bool Update(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
 
         /// <summary>
         /// Delete Data from the repository
@@ -30,14 +30,14 @@ namespace LyncBillingBase.DA
         /// <param name="dataObject">the object you wish to delete</param>
         /// <param name="where">Dictionary<string,object> Represents the where part that should be executed</param>
         /// <returns>bool status</returns>
-        bool Delete(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
+        bool Delete(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        T GetById(long id, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
+        T GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
 
         /// <summary>
         /// Gets the data from repository 
@@ -46,20 +46,34 @@ namespace LyncBillingBase.DA
         /// <param name="where">Dictionary<string,object> Represents the where part that should be executed</param>
         /// <param name="limit">Number of T objects to be populated</param>
         /// <returns>IQueryable<T>  Results</returns>
-        IQueryable<T> Get(Dictionary<string, object> where, int limit = 25, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
+        IQueryable<T> Get(Dictionary<string, object> where, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
 
         /// <summary>
         /// Gets the data from the repository and filter it based on the specified predicate expression
         /// </summary>
         /// <param name="predicate">Expression<Func<T, bool>> predicate specify the expression that should be evaluated</param>
         /// <returns>IQueryable<T>  Results</returns>
-        IQueryable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
+        IQueryable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
 
         /// <summary>
         /// Get all the data from the Repo
         /// </summary>
         /// <returns></returns>
-        IQueryable<T> GetAll(string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
+        IQueryable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
+
+
+        #region Native SQL Execute Commands
+        
+        IQueryable<T> GetAll(string sql);
+
+        int Insert(string sql);
+
+        bool Update(string sql);
+
+        bool Delete(string sql);
+
+        #endregion
+
 
     }
 }

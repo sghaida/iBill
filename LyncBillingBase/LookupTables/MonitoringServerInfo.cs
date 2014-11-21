@@ -7,7 +7,7 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.LookupTables
 {
-    [DataSource(Name = "MonitoringServersInfo", SourceType = Enums.DataSources.DBTable, AccessType = Enums.AccessTypes.Distributed)]
+    [DataSource(Name = "MonitoringServersInfo", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSoyurceAccessType.SingleSource)]
     public class MonitoringServerInfo
     {
         [IsIDField]

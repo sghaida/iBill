@@ -17,11 +17,21 @@ namespace LyncBillingTesting
 {
     class Program
     {
+        public  static string tolower(string text)
+        {
+            return text.ToLower();
+        }
+
         public static void Main(string[] args)
         {
             var _dbStorage = DataStorage.Instance;
 
-            List<PhoneCall> phoneCalls = _dbStorage.PhoneCalls.GetAll().ToList();
+            Expression<Func<PhoneCall, bool>> expr = (item) => item.ChargingParty == "sghaida@ccc.gr" as string && item.SourceUserUri=="sghaida@ccc.gr";
+            
+            List<PhoneCall> phoneCalls = _dbStorage.PhoneCalls.Get(expr, "PhoneCalls2010").ToList();
+
+
+          
         }
     }
 }
