@@ -24,8 +24,6 @@ namespace LyncBillingBase.DA
         /// <returns></returns>
         bool Update(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
 
-        bool update(string sqlStatement);
-
         /// <summary>
         /// Delete Data from the repository
         /// </summary>
@@ -34,16 +32,12 @@ namespace LyncBillingBase.DA
         /// <returns>bool status</returns>
         bool Delete(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
 
-        bool Delete(string sqlStatemnet);
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         T GetById(long id, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
-
-
 
         /// <summary>
         /// Gets the data from repository 
@@ -61,15 +55,11 @@ namespace LyncBillingBase.DA
         /// <returns>IQueryable<T>  Results</returns>
         IQueryable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
 
-        IQueryable<T> Get(string sqlStatemnet);
-
         /// <summary>
         /// Get all the data from the Repo
         /// </summary>
         /// <returns></returns>
         IQueryable<T> GetAll(string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default);
-
-        
 
     }
 }
