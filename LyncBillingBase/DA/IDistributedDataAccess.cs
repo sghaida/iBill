@@ -8,14 +8,12 @@ namespace LyncBillingBase.DA
 {
     public interface IDistributedDataAccess<T> where T : class, new()
     {
+        int Insert(string SQL);
 
-        public int Insert(string SQL);
+        bool Update(string SQL);
 
-        public bool Update(string SQL);
+        bool Delete(string SQL);
 
-        public bool Delete(string SQL);
-
-        public IQueryable<T> Get(string SQL);
-
+        IQueryable<T> Get(string SQL);
     }
 }

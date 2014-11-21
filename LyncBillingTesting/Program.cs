@@ -19,7 +19,7 @@ namespace LyncBillingTesting
         {
             var _dbStorage = DataStorage.Instance;
 
-            List<PhoneCall> phoneCalls = _dbStorage.PhoneCalls.GetAll().ToList();
+            //List<PhoneCall> phoneCalls = _dbStorage.PhoneCalls.GetAll().ToList();
         }
     }
 }
