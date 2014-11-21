@@ -13,14 +13,79 @@ using LyncBillingBase.Libs;
 
 namespace LyncBillingBase.DA
 {
-    public class DistributedDataAccess<T> :DataAccess<T>, IDistributedDataAccess<T> where T:class, new()
+    public class DistributedDataAccess<T> : DataAccess<T>, IDistributedDataAccess<T> where T: class, new()
     {
-        public DistributedDataAccess()
-        {
+        private DBLib DBRoutines = new DBLib();
 
+        private string IDFieldName { set; get; }
+        private List<DbTableField> DataProperties { set; get; }
+
+
+        /// <summary>
+        /// Tries to read the Class Db Properties, which are the properties marked with DbColumn Attribute. It tries to resolve the other attribute values, if they exist, 
+        /// otherwise, it assigns the default values.
+        /// </summary>
+        /// <returns>List of DbTableProperty objects, if the class has DbColumn DataProperties.</returns>
+        private List<DbTableField> tryReadClassDbProperties()
+        {
+            var objDataProperties = typeof(T).GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).
+                                                        Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null).
+                                                        ToList();
+
+            if (objDataProperties != null && objDataProperties.Count() > 0)
+            {
+                return (
+                    objDataProperties.Select(item => new DbTableField
+                    {
+                        ColumnName = item.GetCustomAttribute<DbColumnAttribute>().Name,
+                        IsIDField = item.GetCustomAttribute<IsIDFieldAttribute>() != null ? item.GetCustomAttribute<IsIDFieldAttribute>().Status : false,
+                        AllowNull = item.GetCustomAttribute<AllowNullAttribute>() != null ? item.GetCustomAttribute<AllowNullAttribute>().Status : false,
+                        AllowIDInsert = item.GetCustomAttribute<AllowIDInsertAttribute>() != null ? item.GetCustomAttribute<AllowIDInsertAttribute>().Status : false,
+                        FieldType = item.PropertyType
+                    })
+                        .ToList<DbTableField>()
+                );
+            }
+
+            throw new Exception(String.Format("Couldn't find any class property marked with the [DbColumn] Attribute in the class \"{0}\". Kindly revise the class definition.", typeof(T).Name));
         }
 
-        public List<string> GetTablesList()
+        /// <summary>
+        /// Tries to read the IDField property attribute value if it exists; if it doesn't it throws and exception
+        /// </summary>
+        /// <returns>IDField attribute value (string), if exists.</returns>
+        private string tryReadIDFieldAttributeValue()
+        {
+            DbTableField IDField;
+
+            //Get the IDField DbTableProperty attribute
+            IDField = DataProperties.Find(item => item.IsIDField == true);
+
+            if (IDField != null)
+            {
+                return IDField.ColumnName;
+            }
+            else
+            {
+                throw new Exception(String.Format("No ID field is defined. Kindly annotate the ID property in class \"{0}\" with the [IsIDField] Attribute.", typeof(T).Name));
+            }
+        }
+
+
+        public DistributedDataAccess()
+        {
+            try
+            {
+                this.DataProperties = tryReadClassDbProperties();
+                this.IDFieldName = tryReadIDFieldAttributeValue();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public virtual List<string> GetTablesList()
         {
             throw new NotImplementedException();
         }
@@ -37,9 +102,19 @@ namespace LyncBillingBase.DA
 
         public IQueryable<T> GetAll()
         {
+            DataTable dt;
+            List<T> results = new List<T>();
+
             var tables = GetTablesList();
 
-            throw new NotImplementedException();
+            foreach (var tableName in tables)
+            {
+                dt = DBRoutines.SELECT(tables.First(), null, null, 25);
+                
+                results = results.Concat(dt.ConvertToList<T>()).ToList<T>();
+            }
+
+            return results.AsQueryable<T>();
         }
 
         new public int Insert(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 

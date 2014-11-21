@@ -50,7 +50,7 @@ namespace LyncBillingBase.Repository
         // NOT LOADED ON PURPOSE
         // public Repository<PhoneCall> PhoneCalls = new Repository<PhoneCall>();
 
-        //public PhoneCallDataMapper PhoneCalls = new PhoneCallDataMapper();
+        public PhoneCallDataMapper PhoneCalls = new PhoneCallDataMapper();
 
 
         /***

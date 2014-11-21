@@ -122,7 +122,7 @@ namespace LyncBillingBase.DAL
         public long Marker_CallTo { set; get; }
 
         [DbColumn("Marker_CallTypeID")] 
-        public int Marker_CallTypeID { set; get; }
+        public long Marker_CallTypeID { set; get; }
 
         [DbColumn("SessionIdTime")] 
         public string PhoneCallsTableName { get; set; }
