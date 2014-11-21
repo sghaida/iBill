@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using LyncBillingBase.Helpers;
 
-namespace LyncBillingBase.DAL
+namespace LyncBillingBase.LookupTables
 {
-    [TableName("GatewaysRates")]
+    [DataSource(Name = "GatewaysRates", SourceType = Enums.DataSources.DBTable)]
     public class GatewayRate
     {
         [IsIDField]

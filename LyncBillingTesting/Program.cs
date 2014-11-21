@@ -10,6 +10,7 @@ using LyncBillingBase.Helpers;
 using LyncBillingBase.Repository;
 
 
+
 namespace LyncBillingTesting
 {
     class Program
@@ -18,6 +19,7 @@ namespace LyncBillingTesting
         {
             var _dbStorage = DataStorage.Instance;
 
+            List<PhoneCall> phoneCalls = _dbStorage.PhoneCalls.GetAll().ToList();
         }
     }
 }
