@@ -5,32 +5,60 @@ using System.Text;
 using System.Threading.Tasks;
 using LyncBillingBase.DAL;
 using LyncBillingBase.LookupTables;
+using System.Linq.Expressions;
 
 namespace LyncBillingBase.DA
 {
-    public class PhoneCallDataMapper : DistributedDataAccess<PhoneCall>
+    public class PhoneCallDataMapper : DataAccess<PhoneCall>
     {
-        DataAccess<MonitoringServerInfo> servers;
+        private DataAccess<MonitoringServerInfo> monInfoDA = new DataAccess<MonitoringServerInfo>();
+        //private DataAccess<PhoneCall> phoneCallDA = new DataAccess<PhoneCall>();
+
+        private List<string> dbTables = new List<string>();
 
         public PhoneCallDataMapper() : base()
         {
-            servers = new DataAccess<MonitoringServerInfo>();
+            dbTables = monInfoDA.GetAll().Select(item => item.PhoneCallsTable).ToList<string>();
+   
         }
 
-        public override List<string> GetTablesList()
+        public int Insert(PhoneCall dataObject, string dataSourceName = null) 
         {
-            //List<string> tables = new List<string>();
-
-            //tables.Add("PhoneCalls2010");
-            //tables.Add("PhoneCalls2013");
-
-            //return tables;
-
-            var serversData = servers.GetAll().ToList();
-            var phoneCallsTables = serversData.Select<MonitoringServerInfo, string>(server => server.PhoneCallsTable).ToList<string>();
-
-            return phoneCallsTables;
+            return base.Insert(dataObject,dataSourceName);
         }
+
+        public bool Update(PhoneCall dataObject, string dataSourceName = null) 
+        {
+            return base.Update(dataObject,dataSourceName);
+        }
+
+        public PhoneCall GetById(long id, string dataSourceName) 
+        {
+            return base.GetById(id, dataSourceName);
+        }
+
+        public IQueryable<PhoneCall> Get(Dictionary<string, object> where, string dataSourceName, int limit = 25) 
+        {
+            return base.Get(where, limit, dataSourceName);
+        }
+
+        public IQueryable<PhoneCall> Get(Expression<Func<PhoneCall, bool>> predicate, string dataSourceName)
+        {
+            return base.Get(predicate, dataSourceName);
+        }
+
+        public bool Delete(PhoneCall dataObject, string dataSourceName)
+        {
+            return base.Delete(dataObject);
+        }
+
+        public IQueryable<PhoneCall> GetAll(string dataSourceName) 
+        {
+            return base.GetAll(dataSourceName);
+        }
+
+
+        
     
     }
 

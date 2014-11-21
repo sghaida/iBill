@@ -11,7 +11,7 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DAL
 {
-    [DataSource(Name = "MonitoringServersInfo", SourceType = Enums.DataSources.DBTable, AccessType = Enums.AccessTypes.Distributed)]
+    [DataSource(Name = "MonitoringServersInfo", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSoyurceAccessType.Distributed)]
     public class PhoneCall
     {
         public PhoneCall() { }

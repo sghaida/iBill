@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LyncBillingBase.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace LyncBillingBase.DAL
 {
+    [DataSource(Name = "Rates", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSoyurceAccessType.Distributed)]
     public class Rates_National
     {
         public int RateID { get; set; }

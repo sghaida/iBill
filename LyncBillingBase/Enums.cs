@@ -409,16 +409,16 @@ namespace LyncBillingBase
             InvoiceDate
         }
 
-        public enum DataSources
+        public enum DataSourceType
         {
             Default,
-            DBFunction,
             DBTable,
-            DBStoreProcedure
+            WS
         }
 
-        public enum AccessTypes
+        public enum DataSoyurceAccessType
         {
+            Default,
             SingleSource,
             Distributed
         }

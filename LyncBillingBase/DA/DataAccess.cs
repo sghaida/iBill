@@ -22,7 +22,8 @@ namespace LyncBillingBase.DA
          * Public instance variables
          */
         private string dsName { set; get; }
-        private Enums.DataSources dsType { set; get; }
+        private Enums.DataSoyurceAccessType dsAccessType { get; set; }
+        private Enums.DataSourceType dsType { set; get; }
         private string IDFieldName { set; get; }
         private List<DbTableField> Properties { set; get; }
 
@@ -43,8 +44,10 @@ namespace LyncBillingBase.DA
             // This mean that the Class is unstructured Class and it could be related to table/function or procedure or not.
             if (dataSourceAtt.Count() == 0) 
             {
-                dsType = Enums.DataSources.Default;
-                dsName = "";
+                dsType = Enums.DataSourceType.Default;
+                dsAccessType = Enums.DataSoyurceAccessType.SingleSource;
+                dsName = typeof(T).Name;
+
             }
             else if(dataSourceAtt.Count() == 1) 
             {
@@ -57,10 +60,18 @@ namespace LyncBillingBase.DA
 
                 dsType = ((DataSourceAttribute)dataSourceAtt.First()).SourceType;
 
-                if (dsType == Enums.DataSources.Default)
+                if (dsType == Enums.DataSourceType.Default)
                 {
                     throw new Exception(String.Format("DataSource Name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name));
                 }
+
+                dsAccessType = ((DataSourceAttribute)dataSourceAtt.First()).AccessType;
+
+                if (dsAccessType == Enums.DataSoyurceAccessType.Default)
+                {
+                    throw new Exception(String.Format("DataSource Name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name));
+                }
+
             }
         }
 
@@ -79,7 +90,7 @@ namespace LyncBillingBase.DA
             {
                 return IDField.ColumnName;
             }
-            else if (string.IsNullOrEmpty(dsName) && dsType == Enums.DataSources.Default)
+            else if (string.IsNullOrEmpty(dsName) && dsType == Enums.DataSourceType.Default)
             {
                 return string.Empty;
             }
@@ -119,7 +130,7 @@ namespace LyncBillingBase.DA
             throw new Exception(String.Format("Couldn't find any class property marked with the [DbColumn] Attribute in the class \"{0}\". Kindly revise the class definition.", typeof(T).Name));
         }
 
-        private Dictionary<int,string> tryReadClassDBFunctionParameters(T dataObject) 
+        private Dictionary<int, string> tryReadClassDBFunctionParameters(T dataObject) 
         {
             Dictionary<int, string> tmpParam = new Dictionary<int,string> ();
             var objProperties = typeof(T).GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).
@@ -159,7 +170,7 @@ namespace LyncBillingBase.DA
         }
 
 
-        public int Insert(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default)
+        public int Insert(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             int rowID = 0;
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
@@ -218,7 +229,7 @@ namespace LyncBillingBase.DA
         }
 
 
-        public bool Delete(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default)
+        public bool Delete(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             long ID= 0;
 
@@ -247,7 +258,7 @@ namespace LyncBillingBase.DA
         }
 
 
-        public bool Update(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default)
+        public bool Update(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
             bool status = false;
@@ -307,7 +318,7 @@ namespace LyncBillingBase.DA
         }
 
 
-        public T GetById(long id, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default)
+        public T GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             string errorMessage = string.Empty;
 
@@ -331,7 +342,7 @@ namespace LyncBillingBase.DA
         }
 
 
-        public IQueryable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default)
+        public IQueryable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             DataTable dt = new DataTable();
 
@@ -343,17 +354,33 @@ namespace LyncBillingBase.DA
             }
             else 
             {
+                
                 CustomExpressionVisitor ev = new CustomExpressionVisitor();
                 
                 string whereClause = ev.Translate(predicate);
 
-                if (string.IsNullOrEmpty(whereClause))
+                if (string.IsNullOrEmpty(dataSourceName))
                 {
-                    dt = DBRoutines.SELECT(dsName);
+
+                    if (string.IsNullOrEmpty(whereClause))
+                    {
+                        dt = DBRoutines.SELECT(dsName);
+                    }
+                    else
+                    {
+                        dt = DBRoutines.SELECT(dsName, whereClause);
+                    }
                 }
                 else 
                 {
-                    dt = DBRoutines.SELECT(dsName, whereClause);
+                    if (string.IsNullOrEmpty(whereClause))
+                    {
+                        dt = DBRoutines.SELECT(dataSourceName);
+                    }
+                    else
+                    {
+                        dt = DBRoutines.SELECT(dataSourceName, whereClause);
+                    }
                 }
             }
 
@@ -362,7 +389,7 @@ namespace LyncBillingBase.DA
         }
 
 
-        public IQueryable<T> Get(Dictionary<string, object> whereCondition, int limit = 25, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default)
+        public IQueryable<T> Get(Dictionary<string, object> whereCondition, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             string errorMessage = string.Empty;
             List<string> allColumns = null;
@@ -380,7 +407,7 @@ namespace LyncBillingBase.DA
         }
 
 
-        public IQueryable<T> GetAll(string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default)
+        public IQueryable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             int maximumLimit = 0;
             List<string> allColumns = null;
@@ -388,30 +415,48 @@ namespace LyncBillingBase.DA
             
             DataTable dt  = new DataTable();
 
-            if (dsType == Enums.DataSources.DBTable) 
+            if (dsType == Enums.DataSourceType.DBTable)
             {
-                dt = DBRoutines.SELECT(dsName, allColumns, whereConditions, maximumLimit);
+                if (string.IsNullOrEmpty(dataSourceName))
+                {
+                    dt = DBRoutines.SELECT(dsName, allColumns, whereConditions, maximumLimit);
+                }
+                else { dt = DBRoutines.SELECT(dataSourceName, allColumns, whereConditions, maximumLimit); }
             }
 
             return (dt.ConvertToList<T>()).AsQueryable<T>();
+
+        }
+
+        public IQueryable<T> GetAll(string sql)
+        {
+            DataTable dt = DBRoutines.SELECTFROMSQL(sql);
+
+            return dt.ConvertToList<T>().AsQueryable<T>();
+        }
+
+        public int Insert(string sql)
+        {
+            int id = DBRoutines.INSERT(sql);
             
+            return id;
         }
 
-
-
-        public bool update(string sqlStatement)
+        public bool Update(string sql)
         {
-            throw new NotImplementedException();
+            bool status = DBRoutines.UPDATE(sql);
+
+            return status;
         }
 
-        public bool Delete(string sqlStatemnet)
+        public bool Delete(string sql)
         {
-            throw new NotImplementedException();
+            bool status = DBRoutines.DELETE(sql);
+
+            return status;
         }
 
-        public IQueryable<T> Get(string sqlStatemnet)
-        {
-            throw new NotImplementedException();
-        }
     }
+
+      
 }

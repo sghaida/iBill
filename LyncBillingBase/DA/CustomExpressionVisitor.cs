@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +15,8 @@ namespace LyncBillingBase.DA
         private string _orderBy = string.Empty;
         private int? _skip = null;
         private int? _take = null;
+        private string _toUpper = string.Empty;
+        private string _toLower = string.Empty;
         private string _whereClause = string.Empty;
 
         public int? Skip
@@ -37,6 +40,22 @@ namespace LyncBillingBase.DA
             get
             {
                 return _orderBy;
+            }
+        }
+
+        public string ToUpper
+        {
+            get
+            {
+                return _toUpper;
+            }
+        }
+
+        public string ToLower
+        {
+            get
+            {
+                return _toLower;
             }
         }
 
@@ -113,9 +132,33 @@ namespace LyncBillingBase.DA
                     return this.Visit(nextExpression);
                 }
             }
+            else if (m.Method.Name == "ToLower") 
+            {
+                if (this.ParseToLowerExpression(m, "LOWER"))
+                {
+
+                    Expression nextExpression = m;
+                    return this.Visit(nextExpression);
+                    
+                }
+            }
+            else if (m.Method.Name == "ToUpper")
+            {   
+                if (this.ParseToUpperExpression(m, "UPPER"))
+                {
+                    Expression nextExpression = m;
+                    return this.Visit(nextExpression);
+                }
+            }
+            else if (m.Method.Name == "ToDateTime") 
+            {
+                m.Method.Invoke(null,null);
+            }
 
             throw new NotSupportedException(string.Format("The method '{0}' is not supported", m.Method.Name));
         }
+
+       
 
         protected override Expression VisitUnary(UnaryExpression u)
         {
@@ -126,6 +169,9 @@ namespace LyncBillingBase.DA
                     this.Visit(u.Operand);
                     break;
                 case ExpressionType.Convert:
+                    this.Visit(u.Operand);
+                    break;
+                case ExpressionType.TypeAs:
                     this.Visit(u.Operand);
                     break;
                 default:
@@ -319,6 +365,36 @@ namespace LyncBillingBase.DA
 
             return false;
         }
+
+        private bool ParseToUpperExpression(MethodCallExpression expression, string toUpper)
+        {
+            UnaryExpression unary = (UnaryExpression)expression.Arguments[1];
+            LambdaExpression lambdaExpression = (LambdaExpression)unary.Operand;
+
+            MemberExpression body = lambdaExpression.Body as MemberExpression;
+
+            if (body != null)
+            {
+                _toUpper = string.Format("({0}{1})", toUpper,body);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseToLowerExpression(MethodCallExpression expression, string toLower)
+        {
+            var member = ((MemberExpression)expression.Object).Member.Name;
+           
+
+            _toLower = string.Format("{0}({1})", toLower,member);
+                
+            return true;
+           
+        }
+
+      
 
 
         //protected override Expression VisitConstant(ConstantExpression node)
