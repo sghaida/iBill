@@ -1,9 +1,0 @@
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingTesting\bin\Debug\LyncBillingBase.dll.config
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingTesting\bin\Debug\LyncBillingTesting.exe.config
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingTesting\bin\Debug\LyncBillingTesting.exe
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingTesting\bin\Debug\LyncBillingTesting.pdb
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingTesting\bin\Debug\LyncBillingBase.dll
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingTesting\bin\Debug\LyncBillingBase.pdb
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingTesting\obj\Debug\LyncBillingTesting.csprojResolveAssemblyReference.cache
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingTesting\obj\Debug\LyncBillingTesting.exe
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingTesting\obj\Debug\LyncBillingTesting.pdb

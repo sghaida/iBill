@@ -396,6 +396,22 @@ namespace LyncBillingBase.DA
             return (new DataTable().ConvertToList<T>()).AsQueryable<T>();
             
         }
-    
+
+
+
+        public bool update(string sqlStatement)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(string sqlStatemnet)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<T> Get(string sqlStatemnet)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
