@@ -63,6 +63,7 @@
     <Compile Include="DA\DbTableFields.cs" />
     <Compile Include="DA\DistributedDataAccess.cs" />
     <Compile Include="DA\DataAccess.cs" />
+    <Compile Include="DA\IDistributedDataAccess.cs" />
     <Compile Include="DA\PhoneCallDataMapper.cs" />
     <Compile Include="DA\Evaluator.cs" />
     <Compile Include="DA\IDataAccess.cs" />
