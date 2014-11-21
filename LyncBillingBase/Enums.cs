@@ -417,6 +417,12 @@ namespace LyncBillingBase
             DBStoreProcedure
         }
 
+        public enum AccessTypes
+        {
+            SingleSource,
+            Distributed
+        }
+
         /// <summary>
         /// Gets the Name of DB table Field
         /// </summary>

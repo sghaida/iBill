@@ -15,20 +15,11 @@ namespace LyncBillingBase.Helpers
     [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
     public class DataSourceAttribute : System.Attribute
     {
-        private Enums.DataSources _SourceType;
-        private string _Name;
+        public string Name { get; set; }
 
-        public Enums.DataSources SourceType
-        {
-            get { return this._SourceType; }
-            set { this._SourceType = value;  }
-        }
+        public Enums.DataSources SourceType { get; set; }
 
-        public string Name
-        {
-            get { return this._Name; }
-            set { this._Name = value; }
-        }
+        public Enums.AccessTypes AccessType { get; set; }
 
         public DataSourceAttribute() { }
 
