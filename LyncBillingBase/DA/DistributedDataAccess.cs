@@ -15,7 +15,16 @@ namespace LyncBillingBase.DA
 {
     public class DistributedDataAccess<T> :DataAccess<T>, IDistributedDataAccess<T> where T:class, new()
     {
-        
+        public DistributedDataAccess()
+        {
+
+        }
+
+        public List<string> GetTablesList()
+        {
+            throw new NotImplementedException();
+        }
+
         public int Insert(string SQL)
         {
             throw new NotImplementedException();
@@ -28,15 +37,12 @@ namespace LyncBillingBase.DA
 
         public IQueryable<T> GetAll()
         {
+            var tables = GetTablesList();
+
             throw new NotImplementedException();
         }
 
-        public DistributedDataAccess() 
-        {
-            
-        }
-
-        int Insert(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
+        new public int Insert(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
         {
             if (dataSourceName == null && dataSource != Enums.DataSources.Default)
             {
@@ -48,7 +54,7 @@ namespace LyncBillingBase.DA
             }
         }
 
-        public bool Delete(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
+        new public bool Delete(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
         {
             if (dataSourceName == null && dataSource != Enums.DataSources.Default)
             {
@@ -60,7 +66,7 @@ namespace LyncBillingBase.DA
             }
         }
 
-        public bool Update(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
+        new public bool Update(T dataObject, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
         {
             if (dataSourceName == null && dataSource != Enums.DataSources.Default)
             {
@@ -72,7 +78,7 @@ namespace LyncBillingBase.DA
             }
         }
 
-        public T GetById(long id, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
+        new public T GetById(long id, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
         {
             if (dataSourceName == null && dataSource != Enums.DataSources.Default)
             {
@@ -84,7 +90,7 @@ namespace LyncBillingBase.DA
             }
         }
 
-        public IQueryable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
+        new public IQueryable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
         {
             if (dataSourceName == null && dataSource != Enums.DataSources.Default)
             {
@@ -96,7 +102,7 @@ namespace LyncBillingBase.DA
             }
         }
 
-        public IQueryable<T> Get(Dictionary<string, object> whereCondition, int limit = 25, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
+        new public IQueryable<T> Get(Dictionary<string, object> whereCondition, int limit = 25, string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
         {
             if (dataSourceName == null && dataSource != Enums.DataSources.Default)
             {
@@ -108,7 +114,7 @@ namespace LyncBillingBase.DA
             }
         }
 
-        public IQueryable<T> GetAll(string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
+        new public IQueryable<T> GetAll(string dataSourceName = null, Enums.DataSources dataSource = Enums.DataSources.Default) 
         {
             if (dataSourceName == null && dataSource != Enums.DataSources.Default)
             {
