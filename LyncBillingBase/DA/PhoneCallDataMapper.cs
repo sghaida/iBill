@@ -7,11 +7,12 @@ using LyncBillingBase.DAL;
 
 namespace LyncBillingBase.DA
 {
-    public class PhoneCallDataMapper
+    public class PhoneCallDataMapper<T> : DistributedDataAccess<T> where T: class, new()
     {
         DistributedDataAccess<PhoneCall> PhoneCallsAccessor = new DistributedDataAccess<PhoneCall>();
 
-        public override List<string> GetListOfTables()
+
+        public override List<string> GetTablesList()
         {
             List<string> tables = new List<string>();
 
