@@ -4,23 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LyncBillingBase.DAL;
+using LyncBillingBase.LookupTables;
 
 namespace LyncBillingBase.DA
 {
-    public class PhoneCallDataMapper<T> : DistributedDataAccess<T> where T: class, new()
+    public class PhoneCallDataMapper : DistributedDataAccess<PhoneCall>
     {
-        DistributedDataAccess<PhoneCall> PhoneCallsAccessor = new DistributedDataAccess<PhoneCall>();
+        DataAccess<MonitoringServerInfo> servers;
 
-
-        public List<string> GetTablesList()
+        public PhoneCallDataMapper() : base()
         {
-            List<string> tables = new List<string>();
-
-            tables.Add("PhoneCalls2010");
-            tables.Add("PhoneCalls2013");
-            tables.Add("PhoneCalls2015");
-
-            return tables;
+            servers = new DataAccess<MonitoringServerInfo>();
         }
+
+        public override List<string> GetTablesList()
+        {
+            //List<string> tables = new List<string>();
+
+            //tables.Add("PhoneCalls2010");
+            //tables.Add("PhoneCalls2013");
+
+            //return tables;
+
+            var serversData = servers.GetAll().ToList();
+            var phoneCallsTables = serversData.Select<MonitoringServerInfo, string>(server => server.PhoneCallsTable).ToList<string>();
+
+            return phoneCallsTables;
+        }
+    
     }
+
 }

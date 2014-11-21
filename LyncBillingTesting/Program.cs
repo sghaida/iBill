@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
+using LyncBillingBase.DA;
 using LyncBillingBase.DAL;
+using LyncBillingBase.LookupTables;
 using LyncBillingBase.Helpers;
 using LyncBillingBase.Repository;
 
@@ -19,7 +21,7 @@ namespace LyncBillingTesting
         {
             var _dbStorage = DataStorage.Instance;
 
-            //List<PhoneCall> phoneCalls = _dbStorage.PhoneCalls.GetAll().ToList();
+            List<PhoneCall> phoneCalls = _dbStorage.PhoneCalls.GetAll().ToList();
         }
     }
 }

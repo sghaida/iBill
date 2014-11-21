@@ -21,10 +21,10 @@ namespace LyncBillingBase.DA
         /**
          * Public instance variables
          */
-        public string dsName { private set; get; }
-        public string IDFieldName { private set; get; }
-        public Enums.DataSources dsType { private set; get; }
-        public List<DbTableField> Properties { private set; get; }
+        private string dsName { set; get; }
+        private Enums.DataSources dsType { set; get; }
+        private string IDFieldName { set; get; }
+        private List<DbTableField> Properties { set; get; }
 
         private string errorMessage = string.Empty;
 
@@ -392,8 +392,8 @@ namespace LyncBillingBase.DA
             {
                 dt = DBRoutines.SELECT(dsName, allColumns, whereConditions, maximumLimit);
             }
-            
-            return (new DataTable().ConvertToList<T>()).AsQueryable<T>();
+
+            return (dt.ConvertToList<T>()).AsQueryable<T>();
             
         }
 

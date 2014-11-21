@@ -10,6 +10,15 @@ using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.Helpers
 {
+    // Helper class for the ConverToList<T> function
+    public class ObjectPropertyInfoField
+    {
+        public PropertyInfo Property { get; set; }
+        public string DataFieldName { get; set; }
+        public Type DataFieldType { get; set; }
+    }
+
+
     public static class Extensions
     {
         /// <summary>
@@ -21,71 +30,86 @@ namespace LyncBillingBase.Helpers
         public static List<T> ConvertToList<T>(this DataTable dataTable) where T : class ,new()
         {
             var dataList = new List<T>();
+            
+            // List of class property infos
+            List<PropertyInfo> propertyInfoFields = new List<PropertyInfo>();
+
+            //List of T object data fields (DbColumnAttribute Values), and types.
+            List<ObjectPropertyInfoField> objectFields = new List<ObjectPropertyInfoField>();
 
             //Define what attributes to be read from the class
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
 
-            //Read Attribute Names and Types
-            var objFieldNames = typeof(T).GetProperties(flags).Cast<PropertyInfo>().
-                Select(item => new 
-                { 
-                    Name = item.Name, 
-                    Type = Nullable.GetUnderlyingType(item.PropertyType) ?? item.PropertyType 
-                }).ToList();
+            // Initialize the property info fields list
+            propertyInfoFields = typeof(T).GetProperties(flags)
+                .Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null)
+                .Cast<PropertyInfo>()
+                .ToList();
+            
+            // Initialize the object data fields  list
+            foreach(var item in propertyInfoFields)
+            {
+                objectFields.Add(new ObjectPropertyInfoField {
+                    Property = item,
+                    DataFieldName = item.GetCustomAttribute<DbColumnAttribute>().Name,
+                    DataFieldType = Nullable.GetUnderlyingType(item.PropertyType) ?? item.PropertyType
+                });
+            }
 
             //Read Datatable column names and types
-            var dtlFieldNames = dataTable.Columns.Cast<DataColumn>().
-                Select(item => new { 
+            var dtlFieldNames = dataTable.Columns.Cast<DataColumn>()
+                .Select(item => new { 
                     Name = item.ColumnName, 
-                    Type=item.DataType 
+                    Type = item.DataType 
                 }).ToList();
 
+            //Begin data table processing
             foreach (DataRow dataRow in dataTable.AsEnumerable().ToList())
             {
                 var classObj = new T();
                
                 foreach (var dtField in dtlFieldNames)
                 {
-                    PropertyInfo propertyInfos = classObj.GetType().GetProperty(dtField.Name);
+                    var dataField = objectFields.Find(item => item.DataFieldName == dtField.Name);
 
-                    var field = objFieldNames.Find(x => x.Name == dtField.Name);
-
-                    if (field != null)
+                    if (dataField != null)
                     {
+                        // Get the property info object of this field, for easier accessibility
+                        PropertyInfo dataFieldPropertyInfo = dataField.Property;
 
-                        if (propertyInfos.PropertyType == typeof(DateTime))
+                        if (dataFieldPropertyInfo.PropertyType == typeof(DateTime))
                         {
-                            propertyInfos.SetValue(classObj, dataRow[dtField.Name].ReturnDateTimeMinIfNull(), null);
+                            dataFieldPropertyInfo.SetValue(classObj, dataRow[dtField.Name].ReturnDateTimeMinIfNull(), null);
                         }
-                        else if (propertyInfos.PropertyType == typeof(int))
+                        else if (dataFieldPropertyInfo.PropertyType == typeof(int))
                         {
-                            propertyInfos.SetValue(classObj, dataRow[dtField.Name].ReturnZeroIfNull(), null);
+                            dataFieldPropertyInfo.SetValue(classObj, dataRow[dtField.Name].ReturnZeroIfNull(), null);
                         }
-                        else if (propertyInfos.PropertyType == typeof(long))
+                        else if (dataFieldPropertyInfo.PropertyType == typeof(long))
                         {
-                            propertyInfos.SetValue(classObj, dataRow[dtField.Name].ReturnZeroIfNull(), null);
+                            dataFieldPropertyInfo.SetValue(classObj, dataRow[dtField.Name].ReturnZeroIfNull(), null);
                         }
-                        else if (propertyInfos.PropertyType == typeof(decimal))
+                        else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
                         {
-                            propertyInfos.SetValue(classObj, dataRow[dtField.Name].ReturnZeroIfNull(), null);
+                            dataFieldPropertyInfo.SetValue(classObj, dataRow[dtField.Name].ReturnZeroIfNull(), null);
                         }
-                        else if (propertyInfos.PropertyType == typeof(String))
+                        else if (dataFieldPropertyInfo.PropertyType == typeof(String))
                         {
                             if (dataRow[dtField.Name].GetType() == typeof(DateTime))
                             {
-                                propertyInfos.SetValue(classObj, ConvertToDateString(dataRow[dtField.Name]), null);
+                                dataFieldPropertyInfo.SetValue(classObj, ConvertToDateString(dataRow[dtField.Name]), null);
                             }
                             else
                             {
-                                propertyInfos.SetValue(classObj, dataRow[dtField.Name].ReturnEmptyIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(classObj, dataRow[dtField.Name].ReturnEmptyIfNull(), null);
                             }
                         }
-                    }
+                    }//end-if
+                }//end-foreach
 
-                    
-                }
                 dataList.Add(classObj);
             }
+
             return dataList;
         }
 
