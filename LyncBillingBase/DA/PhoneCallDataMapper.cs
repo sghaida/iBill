@@ -12,7 +12,7 @@ namespace LyncBillingBase.DA
         DistributedDataAccess<PhoneCall> PhoneCallsAccessor = new DistributedDataAccess<PhoneCall>();
 
 
-        public override List<string> GetTablesList()
+        public List<string> GetTablesList()
         {
             List<string> tables = new List<string>();
 
