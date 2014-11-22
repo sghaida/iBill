@@ -131,6 +131,9 @@ namespace LyncBillingBase.DAL
         [DbColumn("SessionIdTime")] 
         public string PhoneBookName { set; get; }
 
+        [DbColumn("PhoneCallsTableName")]
+        public string PhoneCallsTable { set; get; }
+
         //This is used to tell where to find and update this PhoneCalls
         
 

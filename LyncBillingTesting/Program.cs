@@ -28,8 +28,9 @@ namespace LyncBillingTesting
 
             Expression<Func<PhoneCall, bool>> expr = (item) => item.ChargingParty == "sghaida@ccc.gr" as string && item.SourceUserUri=="sghaida@ccc.gr";
             
-            List<PhoneCall> phoneCalls = _dbStorage.PhoneCalls.Get(expr, "PhoneCalls2010").ToList();
+            List<PhoneCall> phoneCalls = _dbStorage.PhoneCalls.GetChargableCallsPerUser("sghaida@ccc.gr").ToList();
 
+            List<PhoneCall> siteCalls = _dbStorage.PhoneCalls.GetChargeableCallsForSite("moa").ToList();
 
           
         }

@@ -59,6 +59,7 @@
     <Compile Include="DAL\Department.cs" />
     <Compile Include="DAL\DialingPrefixRate.cs" />
     <Compile Include="DAL\DID.cs" />
+    <Compile Include="DAL\SQL\PhoneCallsSQL.cs" />
     <Compile Include="DA\CustomExpressionVisitor.cs" />
     <Compile Include="DA\DbTableFields.cs" />
     <Compile Include="DA\DataAccess.cs" />

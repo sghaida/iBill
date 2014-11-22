@@ -64,52 +64,53 @@ namespace LyncBillingBase.Helpers
                 }).ToList();
 
             //Begin data table processing
-            foreach (DataRow dataRow in dataTable.AsEnumerable().ToList())
-            {
-                var classObj = new T();
-               
-                foreach (var dtField in dtlFieldNames)
-                {
-                    var dataField = objectFields.Find(item => item.DataFieldName == dtField.Name);
-
-                    if (dataField != null)
+            Parallel.ForEach(dataTable.AsEnumerable().ToList(),
+                (
+                    datarow) =>
                     {
-                        // Get the property info object of this field, for easier accessibility
-                        PropertyInfo dataFieldPropertyInfo = dataField.Property;
+                        var classObj = new T();
 
-                        if (dataFieldPropertyInfo.PropertyType == typeof(DateTime))
+                        foreach (var dtField in dtlFieldNames)
                         {
-                            dataFieldPropertyInfo.SetValue(classObj, dataRow[dtField.Name].ReturnDateTimeMinIfNull(), null);
-                        }
-                        else if (dataFieldPropertyInfo.PropertyType == typeof(int))
-                        {
-                            dataFieldPropertyInfo.SetValue(classObj, dataRow[dtField.Name].ReturnZeroIfNull(), null);
-                        }
-                        else if (dataFieldPropertyInfo.PropertyType == typeof(long))
-                        {
-                            dataFieldPropertyInfo.SetValue(classObj, dataRow[dtField.Name].ReturnZeroIfNull(), null);
-                        }
-                        else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
-                        {
-                            dataFieldPropertyInfo.SetValue(classObj, dataRow[dtField.Name].ReturnZeroIfNull(), null);
-                        }
-                        else if (dataFieldPropertyInfo.PropertyType == typeof(String))
-                        {
-                            if (dataRow[dtField.Name].GetType() == typeof(DateTime))
+                            var dataField = objectFields.Find(item => item.DataFieldName == dtField.Name);
+
+                            if (dataField != null)
                             {
-                                dataFieldPropertyInfo.SetValue(classObj, ConvertToDateString(dataRow[dtField.Name]), null);
-                            }
-                            else
-                            {
-                                dataFieldPropertyInfo.SetValue(classObj, dataRow[dtField.Name].ReturnEmptyIfNull(), null);
+                                // Get the property info object of this field, for easier accessibility
+                                PropertyInfo dataFieldPropertyInfo = dataField.Property;
+
+                                if (dataFieldPropertyInfo.PropertyType == typeof(DateTime))
+                                {
+                                    dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnDateTimeMinIfNull(), null);
+                                }
+                                else if (dataFieldPropertyInfo.PropertyType == typeof(int))
+                                {
+                                    dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnZeroIfNull(), null);
+                                }
+                                else if (dataFieldPropertyInfo.PropertyType == typeof(long))
+                                {
+                                    dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnZeroIfNull(), null);
+                                }
+                                else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
+                                {
+                                    dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnZeroIfNull(), null);
+                                }
+                                else if (dataFieldPropertyInfo.PropertyType == typeof(String))
+                                {
+                                    if (datarow[dtField.Name].GetType() == typeof(DateTime))
+                                    {
+                                        dataFieldPropertyInfo.SetValue(classObj, ConvertToDateString(datarow[dtField.Name]), null);
+                                    }
+                                    else
+                                    {
+                                        dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnEmptyIfNull(), null);
+                                    }
+                                }
                             }
                         }
-                    }//end-if
-                }//end-foreach
-
-                dataList.Add(classObj);
-            }
-
+                        dataList.Add(classObj);
+                });
+           
             return dataList;
         }
 
