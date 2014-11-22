@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LyncBillingBase.DAL;
 using LyncBillingBase.LookupTables;
 using System.Linq.Expressions;
+using LyncBillingBase.DAL.SQL;
 
 namespace LyncBillingBase.DA
 {
@@ -13,6 +14,8 @@ namespace LyncBillingBase.DA
     {
         private DataAccess<MonitoringServerInfo> monInfoDA = new DataAccess<MonitoringServerInfo>();
         //private DataAccess<PhoneCall> phoneCallDA = new DataAccess<PhoneCall>();
+
+        private PhoneCallsSQL sqlAccessor = new PhoneCallsSQL();
 
         private List<string> dbTables = new List<string>();
 
@@ -55,6 +58,20 @@ namespace LyncBillingBase.DA
         public IQueryable<PhoneCall> GetAll(string dataSourceName) 
         {
             return base.GetAll(dataSourceName);
+        }
+
+        public IQueryable<PhoneCall> GetChargableCallsPerUser(string sipAccount) 
+        {
+            string sqlStatemnet = sqlAccessor.ChargableCallsPerUser(dbTables, sipAccount);
+
+            return base.GetAll(sqlStatemnet);
+        }
+
+        public IQueryable<PhoneCall> GetChargeableCallsForSite(string siteName) 
+        {
+            string sqlStatemnet = sqlAccessor.ChargeableCallsForSite(dbTables, siteName);
+
+            return base.GetAll(sqlStatemnet);
         }
 
 
