@@ -1,9 +1,10 @@
-﻿using LyncBillingBase.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {

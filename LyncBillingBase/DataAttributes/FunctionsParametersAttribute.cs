@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LyncBillingBase.Helpers
+namespace LyncBillingBase.DataAttributes
 {
     [System.AttributeUsage(System.AttributeTargets.Property)]
     class FunctionsParametersAttribute : Attribute

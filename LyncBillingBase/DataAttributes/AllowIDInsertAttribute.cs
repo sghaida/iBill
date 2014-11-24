@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LyncBillingBase.Helpers
+namespace LyncBillingBase.DataAttributes
 {
     /// <summary>
     /// This attribute tells the Repository that it's associated property is most probably a Table ID Field that is allowed to be changed and inserted into the corresponding database table.

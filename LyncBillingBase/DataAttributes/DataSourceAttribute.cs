@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LyncBillingBase;
 
-
-namespace LyncBillingBase.Helpers
+namespace LyncBillingBase.DataAttributes
 {
     /// <summary>
     /// This attribute is designed to tell the repository that the class or struct which is decorated with it is resembles a Database Table and sets it's name.
