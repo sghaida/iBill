@@ -51,6 +51,9 @@
     <Compile Include="Conf\PDFReportColumnsDescriptions.cs" />
     <Compile Include="Conf\PDFReportsPropertiesSection.cs" />
     <Compile Include="Conf\PhoneCallsTablesSection.cs" />
+    <Compile Include="DataMappers\GatewaysDataMapper.cs" />
+    <Compile Include="DataMappers\SitesDataMapper.cs" />
+    <Compile Include="DataMappers\SitesDepartmentsDataMapper.cs" />
     <Compile Include="DataModels\Announcement.cs" />
     <Compile Include="DataModels\BundledAccount.cs" />
     <Compile Include="DataModels\CallMarkerStatus.cs" />
@@ -63,7 +66,7 @@
     <Compile Include="DataAccess\CustomExpressionVisitor.cs" />
     <Compile Include="DataAccess\DbTableFields.cs" />
     <Compile Include="DataAccess\DataAccess.cs" />
-    <Compile Include="DataMappers\PhoneCallDataMapper.cs" />
+    <Compile Include="DataMappers\PhoneCallsDataMapper.cs" />
     <Compile Include="DataAccess\Evaluator.cs" />
     <Compile Include="DataAccess\IDataAccess.cs" />
     <Compile Include="Enums.cs" />
@@ -127,9 +130,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="LookupTables\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -17,7 +17,7 @@ namespace LyncBillingBase.DataAttributes
 
         public Enums.DataSourceType SourceType { get; set; }
 
-        public Enums.DataSoyurceAccessType AccessType { get; set; }
+        public Enums.DataSourceAccessType AccessType { get; set; }
 
         public DataSourceAttribute() { }
 

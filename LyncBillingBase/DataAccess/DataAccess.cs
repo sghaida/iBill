@@ -24,7 +24,7 @@ namespace LyncBillingBase.DataAccess
          * Public instance variables
          */
         private string dsName { set; get; }
-        private Enums.DataSoyurceAccessType dsAccessType { get; set; }
+        private Enums.DataSourceAccessType dsAccessType { get; set; }
         private Enums.DataSourceType dsType { set; get; }
         private string IDFieldName { set; get; }
         private List<DbTableField> Properties { set; get; }
@@ -47,7 +47,7 @@ namespace LyncBillingBase.DataAccess
             if (dataSourceAtt.Count() == 0) 
             {
                 dsType = Enums.DataSourceType.Default;
-                dsAccessType = Enums.DataSoyurceAccessType.SingleSource;
+                dsAccessType = Enums.DataSourceAccessType.SingleSource;
                 dsName = typeof(T).Name;
 
             }
@@ -69,7 +69,7 @@ namespace LyncBillingBase.DataAccess
 
                 dsAccessType = ((DataSourceAttribute)dataSourceAtt.First()).AccessType;
 
-                if (dsAccessType == Enums.DataSoyurceAccessType.Default)
+                if (dsAccessType == Enums.DataSourceAccessType.Default)
                 {
                     throw new Exception(String.Format("DataSource Name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name));
                 }
@@ -344,7 +344,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public IQueryable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             DataTable dt = new DataTable();
 
@@ -356,7 +356,6 @@ namespace LyncBillingBase.DataAccess
             }
             else 
             {
-                
                 CustomExpressionVisitor ev = new CustomExpressionVisitor();
                 
                 string whereClause = ev.Translate(predicate);
@@ -386,12 +385,11 @@ namespace LyncBillingBase.DataAccess
                 }
             }
 
-            return dt.ConvertToList<T>().AsQueryable<T>();
-            
+            return dt.ConvertToList<T>();
         }
 
 
-        public IQueryable<T> Get(Dictionary<string, object> whereCondition, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public IEnumerable<T> Get(Dictionary<string, object> whereCondition, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             string errorMessage = string.Empty;
             List<string> allColumns = null;
@@ -400,7 +398,7 @@ namespace LyncBillingBase.DataAccess
             {
                 DataTable dt = DBRoutines.SELECT(dsName, allColumns, whereCondition, limit);
 
-                return dt.ConvertToList<T>() as IQueryable<T>;
+                return dt.ConvertToList<T>();
             }
 
             errorMessage = String.Format("The \"whereConditions\" parameter is either null or empty. Kindly pass a valid \"whereConditions\" parameter. Class name: \"{0}\".", typeof(T).Name);
@@ -409,7 +407,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public IQueryable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public IEnumerable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             int maximumLimit = 0;
             List<string> allColumns = null;
@@ -423,18 +421,21 @@ namespace LyncBillingBase.DataAccess
                 {
                     dt = DBRoutines.SELECT(dsName, allColumns, whereConditions, maximumLimit);
                 }
-                else { dt = DBRoutines.SELECT(dataSourceName, allColumns, whereConditions, maximumLimit); }
+                else
+                {
+                    dt = DBRoutines.SELECT(dataSourceName, allColumns, whereConditions, maximumLimit);
+                }
             }
 
-            return (dt.ConvertToList<T>()).AsQueryable<T>();
+            return dt.ConvertToList<T>();
 
         }
 
-        public IQueryable<T> GetAll(string sql)
+        public IEnumerable<T> GetAll(string sql)
         {
             DataTable dt = DBRoutines.SELECTFROMSQL(sql);
 
-            return dt.ConvertToList<T>().AsQueryable<T>();
+            return dt.ConvertToList<T>();
         }
 
         public int Insert(string sql)

@@ -416,7 +416,7 @@ namespace LyncBillingBase
             WS
         }
 
-        public enum DataSoyurceAccessType
+        public enum DataSourceAccessType
         {
             Default,
             SingleSource,
