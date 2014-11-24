@@ -1,12 +1,13 @@
-﻿using LyncBillingBase.DAL;
-using LyncBillingBase.Libs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using LyncBillingBase.Libs;
 using LyncBillingBase.Helpers;
+using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.Roles
 {
@@ -35,9 +36,6 @@ namespace LyncBillingBase.Roles
         public static int DepartmentDelegeeTypeID { get { return Convert.ToInt32(Enums.GetValue(Enums.DelegateTypes.DepartemntDelegeeType)); ; } }
         public static int SiteDelegeeTypeID { get { return Convert.ToInt32(Enums.GetValue(Enums.DelegateTypes.SiteDelegeeType)); ; } }
 
-        
-
-        private static DBLib DBRoutines = new DBLib();
 
         public static bool IsUserDelegate(string delegateAccount)
         {

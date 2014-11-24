@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-using LyncBillingBase.DA;
-using LyncBillingBase.DAL;
-using LyncBillingBase.LookupTables;
+using LyncBillingBase.DataAccess;
+using LyncBillingBase.DataModels;
+using LyncBillingBase.DataMappers;
 using LyncBillingBase.Helpers;
 using LyncBillingBase.Repository;
 

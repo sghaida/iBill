@@ -1,12 +1,13 @@
-﻿using LyncBillingBase.DAL;
-using LyncBillingBase.Libs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using LyncBillingBase.Helpers;
+using LyncBillingBase.Libs;
+
 
 namespace LyncBillingBase.Roles
 {
@@ -16,15 +17,12 @@ namespace LyncBillingBase.Roles
         public string RoleName { get; set; }
         public string RoleDescription { get; set; }
 
-        private static DBLib DBRoutines = new DBLib();
-
         public static List<Roles> GetRoles(List<string> columns, Dictionary<string, object> wherePart, int limits)
         {
             DataTable dt = new DataTable();
             List<Roles> Roles = new List<Roles>();
            
             return Roles;
-
         }
 
         

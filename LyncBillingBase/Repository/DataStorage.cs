@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
-using LyncBillingBase.DA;
-using LyncBillingBase.DAL;
 using LyncBillingBase.Helpers;
+using LyncBillingBase.DataAccess;
+using LyncBillingBase.DataMappers;
 
 
 namespace LyncBillingBase.Repository
