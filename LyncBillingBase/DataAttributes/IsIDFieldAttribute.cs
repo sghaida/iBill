@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LyncBillingBase.Helpers
+namespace LyncBillingBase.DataAttributes
 {
     /// <summary>
     /// This attribute tells the Repository that it's associated property resembles a Database Table ID Column.

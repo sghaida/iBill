@@ -1,12 +1,13 @@
-﻿using LyncBillingBase.Libs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using LyncBillingBase.Helpers;
+
+using LyncBillingBase.Libs;
+using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.Helpers
 {

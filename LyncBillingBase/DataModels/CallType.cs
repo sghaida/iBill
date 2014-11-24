@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LyncBillingBase.Helpers;
+
+using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
@@ -16,7 +17,6 @@ namespace LyncBillingBase.DataModels
 
         [DbColumn("CallType")]
         public string Name { get; set; }
-
 
         /***
          * Custom functions
