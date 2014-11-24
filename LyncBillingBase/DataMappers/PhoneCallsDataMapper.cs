@@ -8,19 +8,27 @@ using System.Linq.Expressions;
 using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
 
-
 namespace LyncBillingBase.DataMappers
 {
-    public class PhoneCallDataMapper : DataAccess<PhoneCall>
+    public class PhoneCallsDataMapper : DataAccess<PhoneCall>
     {
+        /***
+         * Get the phone calls tables list from the MonitoringServersInfo table
+         */
         private DataAccess<MonitoringServerInfo> monInfoDA = new DataAccess<MonitoringServerInfo>();
-        //private DataAccess<PhoneCall> phoneCallDA = new DataAccess<PhoneCall>();
 
+        /**
+         * The SQL Queries Generator
+         */
         private PhoneCallsSQL sqlAccessor = new PhoneCallsSQL();
 
+        /***
+         * The list of phone calls tables
+         */
         private List<string> dbTables = new List<string>();
 
-        public PhoneCallDataMapper() : base()
+
+        public PhoneCallsDataMapper() : base()
         {
             dbTables = monInfoDA.GetAll().Select(item => item.PhoneCallsTable).ToList<string>();
    
@@ -75,9 +83,6 @@ namespace LyncBillingBase.DataMappers
             return base.GetAll(sqlStatemnet);
         }
 
-
-        
-    
     }
 
 }
