@@ -8,7 +8,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Rates", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSoyurceAccessType.Distributed)]
+    [DataSource(Name = "Rates", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.Distributed)]
     public class Rates_National
     {
         public int RateID { get; set; }

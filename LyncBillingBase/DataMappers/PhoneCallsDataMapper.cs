@@ -49,12 +49,12 @@ namespace LyncBillingBase.DataMappers
             return base.GetById(id, dataSourceName);
         }
 
-        public IQueryable<PhoneCall> Get(Dictionary<string, object> where, string dataSourceName, int limit = 25) 
+        public IEnumerable<PhoneCall> Get(Dictionary<string, object> where, string dataSourceName, int limit = 25) 
         {
             return base.Get(where, limit, dataSourceName);
         }
 
-        public IQueryable<PhoneCall> Get(Expression<Func<PhoneCall, bool>> predicate, string dataSourceName)
+        public IEnumerable<PhoneCall> Get(Expression<Func<PhoneCall, bool>> predicate, string dataSourceName)
         {
             return base.Get(predicate, dataSourceName);
         }
@@ -64,19 +64,19 @@ namespace LyncBillingBase.DataMappers
             return base.Delete(dataObject);
         }
 
-        public IQueryable<PhoneCall> GetAll(string dataSourceName) 
+        public IEnumerable<PhoneCall> GetAll(string dataSourceName) 
         {
             return base.GetAll(dataSourceName);
         }
 
-        public IQueryable<PhoneCall> GetChargableCallsPerUser(string sipAccount) 
+        public IEnumerable<PhoneCall> GetChargableCallsPerUser(string sipAccount) 
         {
             string sqlStatemnet = sqlAccessor.ChargableCallsPerUser(dbTables, sipAccount);
 
             return base.GetAll(sqlStatemnet);
         }
 
-        public IQueryable<PhoneCall> GetChargeableCallsForSite(string siteName) 
+        public IEnumerable<PhoneCall> GetChargeableCallsForSite(string siteName) 
         {
             string sqlStatemnet = sqlAccessor.ChargeableCallsForSite(dbTables, siteName);
 

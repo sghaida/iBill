@@ -8,7 +8,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name="Sites_Departments",SourceType=Enums.DataSourceType.DBTable)]
+    [DataSource(Name = "Sites_Departments", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
     public class SiteDepartment
     {
         [IsIDField]
@@ -20,5 +20,8 @@ namespace LyncBillingBase.DataModels
 
         [DbColumn("DepartmentID")]
         public int DepartmentID { get; set; }
+
+        public string SiteName { get; set; }
+        public string DepartmentName { get; set; }
     }
 }

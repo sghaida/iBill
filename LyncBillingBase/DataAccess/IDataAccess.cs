@@ -46,25 +46,25 @@ namespace LyncBillingBase.DataAccess
         /// <param name="where">Dictionary<string,object> Represents the where part that should be executed</param>
         /// <param name="limit">Number of T objects to be populated</param>
         /// <returns>IQueryable<T>  Results</returns>
-        IQueryable<T> Get(Dictionary<string, object> where, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
+        IEnumerable<T> Get(Dictionary<string, object> where, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
 
         /// <summary>
         /// Gets the data from the repository and filter it based on the specified predicate expression
         /// </summary>
         /// <param name="predicate">Expression<Func<T, bool>> predicate specify the expression that should be evaluated</param>
         /// <returns>IQueryable<T>  Results</returns>
-        IQueryable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
+        IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
 
         /// <summary>
         /// Get all the data from the Repo
         /// </summary>
         /// <returns></returns>
-        IQueryable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
+        IEnumerable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default);
 
 
         #region Native SQL Execute Commands
-        
-        IQueryable<T> GetAll(string sql);
+
+        IEnumerable<T> GetAll(string sql);
 
         int Insert(string sql);
 
