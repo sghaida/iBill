@@ -33,43 +33,21 @@ namespace LyncBillingBase.DataMappers
             {
                 try
                 { 
-                    //Parallel.ForEach(sitesDepartments,
-                    //    (siteDepartment) =>
-                    //    {
-                    //        siteDepartment.SiteName = site.Name;
-                    //        siteDepartment.DepartmentName = (
-                    //            siteDepartment.DepartmentID > 0 && departments.Find(dep => dep.ID == siteDepartment.DepartmentID) != null ? 
-                    //            ((Department)departments.Find(dep => dep.ID == siteDepartment.DepartmentID))?Name : 
-                    //            string.Empty
-                    //        );
-                    //    });
-
-                    //sitesDepartments = (from siteDep in sitesDepartments
-                    //                   join dep in departments on siteDep.DepartmentID equals dep.ID
-                    //                   select new SiteDepartment
-                    //                   {
-                    //                       ID = siteDep.ID,
-                    //                       SiteID = site.ID,
-                    //                       SiteName = site.Name,
-                    //                       DepartmentID = dep.ID,
-                    //                       DepartmentName = dep.Name
-                    //                   }).ToList<SiteDepartment>();
-
-                    return sitesDepartments.ToList<SiteDepartment>();
+                    sitesDepartments = (from siteDep in sitesDepartments
+                                        join dep in departments on siteDep.DepartmentID equals dep.ID
+                                        select new SiteDepartment
+                                        {
+                                            ID = siteDep.ID,
+                                            SiteID = site.ID,
+                                            SiteName = site.Name,
+                                            DepartmentID = dep.ID,
+                                            DepartmentName = dep.Name
+                                        }).ToList<SiteDepartment>();
                 }
                 catch(Exception ex)
                 {
-                    string x = string.Empty;
+                    throw new Exception("A LINQ query error occurred. Couldn't join SiteDepartments with Departments.");
                 }
-                
-                //sitesDepartments = sitesDepartments.AsEnumerable().AsParallel()
-                //    .Select(item =>
-                //    {
-                //        item.DepartmentName = (departments.Find(dep => dep.ID == item.DepartmentID) != null ? (departments.Find(dep => dep.ID == item.DepartmentID)).Name : string.Empty);
-                //        item.SiteName = site.Name;
-                //        return item;
-                //    })
-                //    .ToList<SiteDepartment>();
             }
 
             return sitesDepartments;
