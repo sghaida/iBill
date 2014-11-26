@@ -10,7 +10,7 @@ using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
 {
-    class DepartmentsDataMapper : DataAccess<Department>
+    public class DepartmentsDataMapper : DataAccess<Department>
     {
         //Identity Map
         private List<IdentityMapItem<Department>> IdentityMap = new List<IdentityMapItem<Department>>();
