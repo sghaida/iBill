@@ -17,7 +17,7 @@ namespace LyncBillingBase.DataMappers
 
         public SitesDataMapper Sites = new SitesDataMapper();
         public DepartmentsDataMapper Departments = new DepartmentsDataMapper();
-
+        
         //Get all site-deaprtments
         public IEnumerable<SiteDepartment> GetAll()
         {

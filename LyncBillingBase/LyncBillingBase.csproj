@@ -51,6 +51,9 @@
     <Compile Include="Conf\PDFReportColumnsDescriptions.cs" />
     <Compile Include="Conf\PDFReportsPropertiesSection.cs" />
     <Compile Include="Conf\PhoneCallsTablesSection.cs" />
+    <Compile Include="DataAttributes\DataRelationAttribute.cs" />
+    <Compile Include="DataAttributes\DataMapperAttribute.cs" />
+    <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysDataMapper.cs" />
     <Compile Include="DataMappers\IdentityMapItem.cs" />
     <Compile Include="DataMappers\SitesDataMapper.cs" />
