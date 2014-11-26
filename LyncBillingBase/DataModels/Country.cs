@@ -8,24 +8,26 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Countries", SourceType = Enums.DataSourceType.DBTable)]
+    [DataSource(Name = "NEW_Countries", SourceType = Enums.DataSourceType.DBTable)]
     public class Country
     {
-        //TODO: ADD ID COLUMN AND CLASS PROPERTY
+        [IsIDField]
+        [DbColumn("ID")]
+        public int ID { get; set; }
 
-        [DbColumn("CountryName")]
+        [DbColumn("Name")]
         public string Name { get; set; }
 
-        [DbColumn("CountryCodeISO2")]
-        public string CountryCodeISO2 { get; set; }
+        [DbColumn("ISO2Code")]
+        public string ISO2Code { get; set; }
 
-        [DbColumn("CountryCodeISO3")]
-        public string CountryCodeISO3 { get; set; }
+        [DbColumn("ISO3Code")]
+        public string ISO3Code { get; set; }
 
-        [DbColumn("CurrencyName")]
-        public string CurrencyName { get; set; }
+        [DbColumn("CurrencyID")]
+        public string CurrencyID { get; set; }
 
-        [DbColumn("CurrencyISOName")]
-        public string CurrencyISOName { get; set; }
+        [DataRelation(Name = "Country.CunrrncyID_Currency.ID", SourceDataModel = typeof(Currency), SourceKeyName = "ID", LocalKeyName = "CurrencyID")]
+        public Currency LocalCurrency { get; set; }
     }
 }
