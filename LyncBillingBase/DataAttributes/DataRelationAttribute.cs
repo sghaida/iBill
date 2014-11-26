@@ -15,6 +15,9 @@ namespace LyncBillingBase.DataAttributes
     [System.AttributeUsage(System.AttributeTargets.Property)]
     public class DataRelationAttribute : System.Attribute
     {
+        /// <summary>
+        /// Relation Descriptive Name
+        /// </summary>
         private string _name = string.Empty;
         public string Name
         {
@@ -24,16 +27,26 @@ namespace LyncBillingBase.DataAttributes
                 if (string.IsNullOrEmpty(_name))
                 {
                     //Sample: CountryID_Country.ID
-                    this._name = String.Format("{0}.{1}_{3}", SourceDataModel.Name, SourceKeyName, LocalKeyName);
+                    this._name = String.Format("{0}.{1}_{2}", WithDataModel.Name, OnDataModelKey, ThisKey);
                 }
 
                 return _name;
             }
         }
 
-        public Type SourceDataModel { get; set; }
-        public string SourceKeyName { get; set; }
-        public string LocalKeyName { get; set; }
-        public string IncludeProperties { get; set; }
+        /// <summary>
+        /// The data model type this relation is associated with
+        /// </summary>
+        public Type WithDataModel { get; set; }
+
+        /// <summary>
+        /// The data modle key this relation is defined on
+        /// </summary>
+        public string OnDataModelKey { get; set; }
+
+        /// <summary>
+        /// The class instance field name that shares the relation with the destination data model
+        /// </summary>
+        public string ThisKey { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace LyncBillingBase.DataModels
         [DbColumn("Description")]
         public string Description { get; set; }
 
-        [DataRelation(Name = "SiteID_CountryID", SourceDataModel = typeof(Country), SourceKeyName = "ID", LocalKeyName = "CountryId", IncludeProperties = "Name")]
+        [DataRelation(Name = "SiteID_CountryID", WithDataModel = typeof(Country), OnDataModelKey = "ID", ThisKey = "CountryId")]
         public string CountryId { get; set; }
 
         [DataMapper(RelationName = "SiteID_CountryID", SourceDataModel = typeof(Country), SourceDataAttribute = "Name")]

@@ -18,140 +18,12 @@ namespace LyncBillingBase.DataAccess
         /**
          * Private instance variables
          */
+        private DataSourceSchema<T> Schema;
         private static DBLib DBRoutines = new DBLib();
-
-        /**
-         * Public instance variables
-         */
-        private string dsName { set; get; }
-        private Enums.DataSourceAccessType dsAccessType { get; set; }
-        private Enums.DataSourceType dsType { set; get; }
-        private string IDFieldName { set; get; }
-        private List<DbTableField> Properties { set; get; }
-
-        private string errorMessage = string.Empty;
-
-        /***
-         * Private functions.
-         */
-        /// <summary>
-        /// Tries to read the TableName attribute value if it exists; if it doesn't it throws and exception
-        /// </summary>
-        /// <returns>TableName attribute value (string), if exists.</returns>
-        private void tryReadDataSourceAttributeValue()
-        {
-            //Get the table name attribute
-            IEnumerable<Attribute> dataSourceAtt = typeof(T).GetCustomAttributes(typeof(DataSourceAttribute));
-
-            // This mean that the Class is unstructured Class and it could be related to table/function or procedure or not.
-            if (dataSourceAtt.Count() == 0) 
-            {
-                dsType = Enums.DataSourceType.Default;
-                dsAccessType = Enums.DataSourceAccessType.SingleSource;
-                dsName = typeof(T).Name;
-
-            }
-            else if(dataSourceAtt.Count() == 1) 
-            {
-                dsName = ((DataSourceAttribute)dataSourceAtt.First()).Name;
-
-                if (string.IsNullOrEmpty(dsName))
-                {
-                    throw new Exception(String.Format("DataSource Name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name));
-                }
-
-                dsType = ((DataSourceAttribute)dataSourceAtt.First()).SourceType;
-
-                if (dsType == Enums.DataSourceType.Default)
-                {
-                    throw new Exception(String.Format("DataSource Name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name));
-                }
-
-                dsAccessType = ((DataSourceAttribute)dataSourceAtt.First()).AccessType;
-
-                if (dsAccessType == Enums.DataSourceAccessType.Default)
-                {
-                    throw new Exception(String.Format("DataSource Name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name));
-                }
-
-            }
-        }
-
-        /// <summary>
-        /// Tries to read the IDField property attribute value if it exists; if it doesn't it throws and exception
-        /// </summary>
-        /// <returns>IDField attribute value (string), if exists.</returns>
-        private string tryReadIDFieldAttributeValue()
-        {
-            DbTableField IDField;
-          
-            //Get the IDField DbTableProperty attribute
-            IDField = Properties.Find(item => item.IsIDField == true );
-
-            if (IDField != null)
-            {
-                return IDField.ColumnName;
-            }
-            else if (string.IsNullOrEmpty(dsName) && dsType == Enums.DataSourceType.Default)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                throw new Exception(String.Format("No ID field is defined. Kindly annotate the ID property in class \"{0}\" with the [IsIDField] Attribute.", typeof(T).Name));
-            }
-        }
-
-        /// <summary>
-        /// Tries to read the Class Db Properties, which are the properties marked with DbColumn Attribute. It tries to resolve the other attribute values, if they exist, 
-        /// otherwise, it assigns the default values.
-        /// </summary>
-        /// <returns>List of DbTableProperty objects, if the class has DbColumn Properties.</returns>
-        private List<DbTableField> tryReadClassDbProperties()
-        {
-            
-            var objProperties = typeof(T).GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).
-                                                        Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null).
-                                                        ToList();
-
-            if (objProperties != null && objProperties.Count() > 0)
-            {
-                return (
-                    objProperties.Select(item => new DbTableField
-                        {
-                            ColumnName = item.GetCustomAttribute<DbColumnAttribute>().Name,
-                            IsIDField = item.GetCustomAttribute<IsIDFieldAttribute>() != null ? item.GetCustomAttribute<IsIDFieldAttribute>().Status : false,
-                            AllowNull = item.GetCustomAttribute<AllowNullAttribute>() != null ? item.GetCustomAttribute<AllowNullAttribute>().Status : false,
-                            AllowIDInsert = item.GetCustomAttribute<AllowIDInsertAttribute>() != null ? item.GetCustomAttribute<AllowIDInsertAttribute>().Status : false,
-                            FieldType = item.PropertyType
-                        })
-                        .ToList<DbTableField>()
-                );
-            }
-
-            throw new Exception(String.Format("Couldn't find any class property marked with the [DbColumn] Attribute in the class \"{0}\". Kindly revise the class definition.", typeof(T).Name));
-        }
-
-        private Dictionary<int, string> tryReadClassDBFunctionParameters(T dataObject) 
-        {
-            Dictionary<int, string> tmpParam = new Dictionary<int,string> ();
-            var objProperties = typeof(T).GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).
-                                                        Where(property => property.GetCustomAttribute<DbColumnAttribute>(true) != null).
-                                                        ToList();
-            
-            if (objProperties != null && objProperties.Count() > 0) 
-            {
-               foreach(PropertyInfo property in objProperties)
-                {
-                   int postion = property.GetCustomAttribute<FunctionsParametersAttribute>().Position;
-                   string value =  property.GetCustomAttribute<FunctionsParametersAttribute>().ParamerterName;
-
-                   tmpParam.Add(postion,value);
-                } 
-            }
-            return tmpParam;
-        }       
-
+        
+        private string noDataSourceNameException = String.Format("DataSource Name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name);
+        private string noTableFieldsException = String.Format("Couldn't find any class property marked with the [DbColumn] Attribute in the class \"{0}\". Kindly revise the class definition.", typeof(T).Name);
+        private string noIDFieldsException = String.Format("No class property was marked as an ID Field with the attribute: [IsIDField], in the class: \"{0}\". Kindly revise the class definition.", typeof(T).Name);
 
         /**
          * Repository Constructor
@@ -161,9 +33,20 @@ namespace LyncBillingBase.DataAccess
             //Get the Table Name and List of Class Attributes
             try
             {
-                this.Properties = tryReadClassDbProperties();
-                tryReadDataSourceAttributeValue();
-                this.IDFieldName = tryReadIDFieldAttributeValue();
+                this.Schema = new DataSourceSchema<T>();
+
+                if(string.IsNullOrEmpty(Schema.DataSourceName))
+                {
+                    throw new Exception(noDataSourceNameException);
+                }
+                else if(Schema.DataFields.Where(item => item.TableField != null).ToList().Count() == 0)
+                {
+                    throw new Exception(noTableFieldsException);
+                }
+                else if(string.IsNullOrEmpty(Schema.IDFieldName))
+                {
+                    throw new Exception(noIDFieldsException);
+                }
             }
             catch (Exception ex)
             {
@@ -179,7 +62,9 @@ namespace LyncBillingBase.DataAccess
           
             if (dataObject != null)
             {
-                foreach (var property in Properties)
+                var properties = Schema.DataFields.Select(field => field.TableField).ToList();
+
+                foreach (var property in properties)
                 {
                     var dataObjectAttr = dataObject.GetType().GetProperty(property.ColumnName);
 
@@ -218,7 +103,7 @@ namespace LyncBillingBase.DataAccess
 
                 try
                 {
-                    rowID = DBRoutines.INSERT(tableName: dsName, columnsValues: columnsValues, idFieldName: IDFieldName);
+                    rowID = DBRoutines.INSERT(tableName: Schema.DataSourceName, columnsValues: columnsValues, idFieldName: Schema.IDFieldName);
                 }
                 catch (Exception ex)
                 {
@@ -233,9 +118,9 @@ namespace LyncBillingBase.DataAccess
 
         public virtual bool Delete(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
-            long ID= 0;
+            long ID = 0;
 
-            var dataObjectAttr = dataObject.GetType().GetProperty(IDFieldName);
+            var dataObjectAttr = dataObject.GetType().GetProperty(Schema.IDFieldName);
 
             if (dataObjectAttr == null)
             {
@@ -251,10 +136,9 @@ namespace LyncBillingBase.DataAccess
                 }
                 else
                 {
-                    
                     long.TryParse(dataObjectAttrValue.ToString(),out ID);
 
-                    return DBRoutines.DELETE(tableName: dsName, idFieldName: IDFieldName, ID: ID);
+                    return DBRoutines.DELETE(tableName: Schema.DataSourceName, idFieldName: Schema.IDFieldName, ID: ID);
                 }//end-inner-if-else
             }//end-outer-if-else
         }
@@ -267,7 +151,9 @@ namespace LyncBillingBase.DataAccess
 
             if (dataObject != null)
             {
-                foreach (var property in Properties)
+                var properties = Schema.DataFields.Select(field => field.TableField).ToList();
+
+                foreach (var property in properties)
                 {
                     var dataObjectAttr = dataObject.GetType().GetProperty(property.ColumnName);
 
@@ -306,7 +192,7 @@ namespace LyncBillingBase.DataAccess
 
                 try
                 {
-                    status = DBRoutines.UPDATE(tableName:dsName,columnsValues:columnsValues,wherePart:null);
+                    status = DBRoutines.UPDATE(tableName: Schema.DataSourceName, columnsValues: columnsValues, wherePart: null);
 
                 }
                 catch (Exception ex)
@@ -324,9 +210,9 @@ namespace LyncBillingBase.DataAccess
         {
             string errorMessage = string.Empty;
 
-            if (id != null && id > 0)
+            if (id > 0)
             {
-                DataTable dt =  DBRoutines.SELECT(dsName,IDFieldName,id);
+                DataTable dt =  DBRoutines.SELECT(Schema.DataSourceName, Schema.IDFieldName, id);
 
                 if (dt.Rows.Count == 0)
                 {
@@ -350,7 +236,7 @@ namespace LyncBillingBase.DataAccess
 
             if (predicate == null) 
             {
-                errorMessage =string.Format("There is no defined Predicate. {0} ",typeof(T).Name);
+                var errorMessage = string.Format("There is no defined Predicate. {0} ",typeof(T).Name);
                 
                 throw new Exception(errorMessage);
             }
@@ -365,11 +251,11 @@ namespace LyncBillingBase.DataAccess
 
                     if (string.IsNullOrEmpty(whereClause))
                     {
-                        dt = DBRoutines.SELECT(dsName);
+                        dt = DBRoutines.SELECT(Schema.DataSourceName);
                     }
                     else
                     {
-                        dt = DBRoutines.SELECT(dsName, whereClause);
+                        dt = DBRoutines.SELECT(Schema.DataSourceName, whereClause);
                     }
                 }
                 else 
@@ -396,7 +282,7 @@ namespace LyncBillingBase.DataAccess
 
             if (whereCondition != null && whereCondition.Count > 0)
             {
-                DataTable dt = DBRoutines.SELECT(dsName, allColumns, whereCondition, limit);
+                DataTable dt = DBRoutines.SELECT(Schema.DataSourceName, allColumns, whereCondition, limit);
 
                 return dt.ConvertToList<T>();
             }
@@ -415,11 +301,11 @@ namespace LyncBillingBase.DataAccess
             
             DataTable dt  = new DataTable();
 
-            if (dsType == Enums.DataSourceType.DBTable)
+            if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
             {
                 if (string.IsNullOrEmpty(dataSourceName))
                 {
-                    dt = DBRoutines.SELECT(dsName, allColumns, whereConditions, maximumLimit);
+                    dt = DBRoutines.SELECT(Schema.DataSourceName, allColumns, whereConditions, maximumLimit);
                 }
                 else
                 {
@@ -431,12 +317,14 @@ namespace LyncBillingBase.DataAccess
 
         }
 
+
         public virtual IEnumerable<T> GetAll(string sql)
         {
             DataTable dt = DBRoutines.SELECTFROMSQL(sql);
 
             return dt.ConvertToList<T>();
         }
+
 
         public virtual int Insert(string sql)
         {
@@ -445,12 +333,14 @@ namespace LyncBillingBase.DataAccess
             return id;
         }
 
+
         public virtual bool Update(string sql)
         {
             bool status = DBRoutines.UPDATE(sql);
 
             return status;
         }
+
 
         public virtual bool Delete(string sql)
         {
