@@ -31,9 +31,9 @@ namespace LyncBillingBase.DataMappers
                 lock (IdentityMap[index].MutexLock)
                 {
                     IdentityMap[index].DataObject.Name = site.Name;
-                    IdentityMap[index].DataObject.CountryCode = site.CountryCode;
-                    IdentityMap[index].DataObject.CountryName = site.CountryName;
-                    IdentityMap[index].DataObject.Description = site.Description;
+                    //IdentityMap[index].DataObject.CountryCode = site.CountryCode;
+                    //IdentityMap[index].DataObject.CountryName = site.CountryName;
+                    //IdentityMap[index].DataObject.Description = site.Description;
 
                     IdentityMap[index].Updated = true;
                     IdentityMap[index].DBSynced = false;
