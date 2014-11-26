@@ -51,6 +51,8 @@
     <Compile Include="Conf\PDFReportColumnsDescriptions.cs" />
     <Compile Include="Conf\PDFReportsPropertiesSection.cs" />
     <Compile Include="Conf\PhoneCallsTablesSection.cs" />
+    <Compile Include="DataAccess\DataField.cs" />
+    <Compile Include="DataAccess\DataSourceSchema.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
     <Compile Include="DataAttributes\DataMapperAttribute.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
@@ -68,7 +70,6 @@
     <Compile Include="DataModels\DID.cs" />
     <Compile Include="DataMappers\PhoneCallsSQL.cs" />
     <Compile Include="DataAccess\CustomExpressionVisitor.cs" />
-    <Compile Include="DataAccess\DbTableFields.cs" />
     <Compile Include="DataAccess\DataAccess.cs" />
     <Compile Include="DataMappers\PhoneCallsDataMapper.cs" />
     <Compile Include="DataAccess\Evaluator.cs" />

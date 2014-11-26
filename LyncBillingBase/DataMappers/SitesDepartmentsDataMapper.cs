@@ -33,17 +33,17 @@ namespace LyncBillingBase.DataMappers
             {
                 try
                 {
-                    sitesDepartments = (from siteDep in sitesDepartments
-                                        join site in sites on siteDep.SiteID equals site.ID
-                                        join dep in departments on siteDep.DepartmentID equals dep.ID
-                                        select new SiteDepartment
-                                        {
-                                            ID = siteDep.ID,
-                                            SiteID = site.ID,
-                                            SiteName = site.Name,
-                                            DepartmentID = dep.ID,
-                                            DepartmentName = dep.Name
-                                        }).ToList<SiteDepartment>();
+                    //sitesDepartments = (from siteDep in sitesDepartments
+                    //                    join site in sites on siteDep.SiteID equals site.ID
+                    //                    join dep in departments on siteDep.DepartmentID equals dep.ID
+                    //                    select new SiteDepartment
+                    //                    {
+                    //                        ID = siteDep.ID,
+                    //                        SiteID = site.ID,
+                    //                        SiteName = site.Name,
+                    //                        DepartmentID = dep.ID,
+                    //                        DepartmentName = dep.Name
+                    //                    }).ToList<SiteDepartment>();
                 }
                 catch (Exception ex)
                 {
@@ -73,16 +73,16 @@ namespace LyncBillingBase.DataMappers
             {
                 try
                 { 
-                    sitesDepartments = (from siteDep in sitesDepartments
-                                        join dep in departments on siteDep.DepartmentID equals dep.ID
-                                        select new SiteDepartment
-                                        {
-                                            ID = siteDep.ID,
-                                            SiteID = site.ID,
-                                            SiteName = site.Name,
-                                            DepartmentID = dep.ID,
-                                            DepartmentName = dep.Name
-                                        }).ToList<SiteDepartment>();
+                    //sitesDepartments = (from siteDep in sitesDepartments
+                    //                    join dep in departments on siteDep.DepartmentID equals dep.ID
+                    //                    select new SiteDepartment
+                    //                    {
+                    //                        ID = siteDep.ID,
+                    //                        SiteID = site.ID,
+                    //                        SiteName = site.Name,
+                    //                        DepartmentID = dep.ID,
+                    //                        DepartmentName = dep.Name
+                    //                    }).ToList<SiteDepartment>();
                 }
                 catch(Exception ex)
                 {
