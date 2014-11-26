@@ -15,37 +15,95 @@ namespace LyncBillingBase.DataMappers
         private DataAccess<Department> Departments = new DataAccess<Department>();
         private DataAccess<SiteDepartment> SitesDepartments = new DataAccess<SiteDepartment>();
 
-        //public DataAccess<SiteDepartment> Departments = new DataAccess<SiteDepartment>();
-        //public SitesDepartmentsDataMapper Departments = new SitesDepartmentsDataMapper();
+        //Identity Map
+        private List<IdentityMapItem<Site>> IdentityMap = new List<IdentityMapItem<Site>>();
 
-        //Insert site
-        public int Insert(Site dataObject)
+        //Identity Map Updater functions
+        private void UpdateIdentityMapItem(Site site)
         {
-            return base.Insert(dataObject);
+            var now = DateTime.Now;
+            var cachedVersion = IdentityMap.Find(item => item.DataObject.ID == site.ID);
+
+            if (cachedVersion != null)
+            {
+                int index = IdentityMap.IndexOf(cachedVersion);
+
+                lock (IdentityMap[index].MutexLock)
+                {
+                    IdentityMap[index].DataObject.Name = site.Name;
+                    IdentityMap[index].DataObject.CountryCode = site.CountryCode;
+                    IdentityMap[index].DataObject.CountryName = site.CountryName;
+                    IdentityMap[index].DataObject.Description = site.Description;
+
+                    IdentityMap[index].Updated = true;
+                    IdentityMap[index].DBSynced = false;
+                }
+            }
         }
 
-        //Update site
-        public bool Update(Site dataObject)
+        private void UpdateIdentityMap(ref List<Site> sites)
         {
-            return base.Update(dataObject);
+            var now = DateTime.Now;
+
+            IdentityMap = sites
+                .Select(item => new IdentityMapItem<Site>{
+                    DataObject = item,
+                    AddedOn = now,
+                    Updated = false,
+                    DBSynced = true
+                })
+                .ToList<IdentityMapItem<Site>>();
         }
 
-        //Delete a site
-        public bool Delete(Site dataObject)
+
+        //Get all sites
+        public IEnumerable<Site> GetAll()
         {
-            return base.Delete(dataObject);
+            List<Site> sites = new List<Site>();
+
+            if (IdentityMap.Count > 0)
+            {
+                sites = IdentityMap.Select(item => item.DataObject).ToList<Site>();
+            }
+            else
+            {
+                sites = base.GetAll().ToList<Site>();
+                UpdateIdentityMap(ref sites);
+            }
+
+            return sites;
         }
 
         //Get a site by it's ID
         public Site GetById(long id)
         {
-            return base.GetById(id);
+            Site site;
+
+            if(IdentityMap.Count > 0)
+            {
+                var cachedSite = IdentityMap.Find(item => item.DataObject.ID == id);
+
+                if (cachedSite != null)
+                {
+                    site = cachedSite.DataObject;
+                }
+                else
+                {
+                    site = base.GetById(id);
+                }
+            }
+            else
+            {
+                site = base.GetById(id);
+            }
+
+            return site;
         }
 
         //Get a site that matches a specific set of conditions.
-        public IEnumerable<Site> Get(Dictionary<string, object> where, int limit = 25)
+        public IEnumerable<Site> Get(Dictionary<string, object> whereCondition, int limit = 25)
         {
-            return base.Get(where, limit);
+            return base.Get(whereCondition, limit);
         }
 
         //Get a site that matches a specific search predicate
@@ -54,31 +112,26 @@ namespace LyncBillingBase.DataMappers
             return base.Get(predicate);
         }
 
-        //Get all sites
-        public IEnumerable<Site> GetAll(string dataSourceName)
-        {
-            return base.GetAll(dataSourceName);
-        }
 
-        //Get a site-department by it's id
-        public SiteDepartment GetSiteDepartmentById(long siteDepartmentID)
-        {
-            return SitesDepartments.GetById(siteDepartmentID);
-        }
+        ////Get a site-department by it's id
+        //public SiteDepartment GetSiteDepartmentById(long siteDepartmentID)
+        //{
+        //    return SitesDepartments.GetById(siteDepartmentID);
+        //}
 
-        //Get all site-departments for a site
-        public IEnumerable<SiteDepartment> GetSiteDepartments(long siteID)
-        {
-            Expression<Func<SiteDepartment, bool>> expr = (item) => item.SiteID == siteID;
+        ////Get all site-departments for a site
+        //public IEnumerable<SiteDepartment> GetSiteDepartments(long siteID)
+        //{
+        //    Expression<Func<SiteDepartment, bool>> expr = (item) => item.SiteID == siteID;
 
-            return SitesDepartments.Get(expr);
-        }
+        //    return SitesDepartments.Get(expr);
+        //}
 
-        //Get all site-departments that match a specific predicate
-        public IEnumerable<SiteDepartment> GetSiteDepartments(Expression<Func<SiteDepartment, bool>> predicate)
-        {
-            return SitesDepartments.Get(predicate);
-        }
+        ////Get all site-departments that match a specific predicate
+        //public IEnumerable<SiteDepartment> GetSiteDepartments(Expression<Func<SiteDepartment, bool>> predicate)
+        //{
+        //    return SitesDepartments.Get(predicate);
+        //}
 
     }
 

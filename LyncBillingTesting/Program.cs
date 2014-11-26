@@ -33,12 +33,13 @@ namespace LyncBillingTesting
             //List<PhoneCall> siteCalls = _dbStorage.PhoneCalls.GetChargeableCallsForSite("moa").ToList();
 
             List<Site> allSites = _dbStorage.SitesDepartments.Sites.GetAll().ToList<Site>();
+            List<Department> allDepartments = _dbStorage.SitesDepartments.Departments.GetAll().ToList<Department>();
 
-            Site MOA = allSites.Find(site => site.Name == "MOA");
+            //Site MOA = allSites.Find(site => site.Name == "MOA");
 
-            List<SiteDepartment> siteDepartments = _dbStorage.SitesDepartments.GetDepartmentsForSite(MOA.ID).ToList();
+            List<SiteDepartment> siteDepartments = _dbStorage.SitesDepartments.GetAll().ToList();
 
-            var siteDepartmentsWithEmptyNames = siteDepartments.Where(item => string.IsNullOrEmpty(item.DepartmentName) == true).ToList();
+            //var siteDepartmentsWithEmptyNames = siteDepartments.Where(item => string.IsNullOrEmpty(item.DepartmentName) == true).ToList();
         }
     }
 }

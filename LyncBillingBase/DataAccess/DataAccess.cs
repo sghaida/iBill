@@ -172,7 +172,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public int Insert(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual int Insert(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             int rowID = 0;
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
@@ -231,7 +231,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public bool Delete(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual bool Delete(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             long ID= 0;
 
@@ -260,7 +260,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public bool Update(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual bool Update(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
             bool status = false;
@@ -320,7 +320,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public T GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual T GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             string errorMessage = string.Empty;
 
@@ -344,7 +344,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             DataTable dt = new DataTable();
 
@@ -389,7 +389,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public IEnumerable<T> Get(Dictionary<string, object> whereCondition, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual IEnumerable<T> Get(Dictionary<string, object> whereCondition, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             string errorMessage = string.Empty;
             List<string> allColumns = null;
@@ -407,7 +407,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public IEnumerable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual IEnumerable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             int maximumLimit = 0;
             List<string> allColumns = null;
@@ -431,28 +431,28 @@ namespace LyncBillingBase.DataAccess
 
         }
 
-        public IEnumerable<T> GetAll(string sql)
+        public virtual IEnumerable<T> GetAll(string sql)
         {
             DataTable dt = DBRoutines.SELECTFROMSQL(sql);
 
             return dt.ConvertToList<T>();
         }
 
-        public int Insert(string sql)
+        public virtual int Insert(string sql)
         {
             int id = DBRoutines.INSERT(sql);
             
             return id;
         }
 
-        public bool Update(string sql)
+        public virtual bool Update(string sql)
         {
             bool status = DBRoutines.UPDATE(sql);
 
             return status;
         }
 
-        public bool Delete(string sql)
+        public virtual bool Delete(string sql)
         {
             bool status = DBRoutines.DELETE(sql);
 
