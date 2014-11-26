@@ -14,7 +14,7 @@ namespace LyncBillingBase.DataModels
         //TODO: ADD ID COLUMN AND CLASS PROPERTY
 
         [DbColumn("CountryName")]
-        public string CountryName { get; set; }
+        public string Name { get; set; }
 
         [DbColumn("CountryCodeISO2")]
         public string CountryCodeISO2 { get; set; }
