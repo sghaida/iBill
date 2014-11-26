@@ -63,6 +63,7 @@
     <Compile Include="DataModels\CallMarkerStatus.cs" />
     <Compile Include="DataModels\CallType.cs" />
     <Compile Include="DataModels\Country.cs" />
+    <Compile Include="DataModels\Currency.cs" />
     <Compile Include="DataModels\Department.cs" />
     <Compile Include="DataModels\DialingPrefixRate.cs" />
     <Compile Include="DataModels\DID.cs" />
