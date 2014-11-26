@@ -52,6 +52,7 @@
     <Compile Include="Conf\PDFReportsPropertiesSection.cs" />
     <Compile Include="Conf\PhoneCallsTablesSection.cs" />
     <Compile Include="DataMappers\GatewaysDataMapper.cs" />
+    <Compile Include="DataMappers\IdentityMapItem.cs" />
     <Compile Include="DataMappers\SitesDataMapper.cs" />
     <Compile Include="DataMappers\SitesDepartmentsDataMapper.cs" />
     <Compile Include="DataModels\Announcement.cs" />

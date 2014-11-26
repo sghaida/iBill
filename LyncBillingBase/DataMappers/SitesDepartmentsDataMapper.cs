@@ -12,8 +12,48 @@ namespace LyncBillingBase.DataMappers
 {
     public class SitesDepartmentsDataMapper : DataAccess<SiteDepartment>
     {
-        public DataAccess<Site> Sites = new DataAccess<Site>();
-        public DataAccess<Department> Departments = new DataAccess<Department>();
+        //public DataAccess<Site> Sites = new DataAccess<Site>();
+        //public DataAccess<Department> Departments = new DataAccess<Department>();
+
+        public SitesDataMapper Sites = new SitesDataMapper();
+        public DepartmentsDataMapper Departments = new DepartmentsDataMapper();
+
+        //Get all site-deaprtments
+        public IEnumerable<SiteDepartment> GetAll()
+        {
+            List<Site> sites;
+            List<Department> departments;
+            IEnumerable<SiteDepartment> sitesDepartments;
+
+            sites = Sites.GetAll().ToList<Site>();
+            departments = Departments.GetAll().ToList<Department>();
+            sitesDepartments = base.GetAll().ToList<SiteDepartment>();
+
+            if (sites.Count() > 0 && departments.Count() > 0 && sitesDepartments.Count() > 0)
+            {
+                try
+                {
+                    sitesDepartments = (from siteDep in sitesDepartments
+                                        join site in sites on siteDep.SiteID equals site.ID
+                                        join dep in departments on siteDep.DepartmentID equals dep.ID
+                                        select new SiteDepartment
+                                        {
+                                            ID = siteDep.ID,
+                                            SiteID = site.ID,
+                                            SiteName = site.Name,
+                                            DepartmentID = dep.ID,
+                                            DepartmentName = dep.Name
+                                        }).ToList<SiteDepartment>();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("A LINQ query error occurred. Couldn't join SiteDepartments with Departments.");
+                }
+            }
+
+            return sitesDepartments;
+        }
+
 
         //Get all site-departments for a site
         public IEnumerable<SiteDepartment> GetDepartmentsForSite(long siteID)

@@ -51,6 +51,7 @@ namespace LyncBillingBase.Repository
         // public Repository<PhoneCall> PhoneCalls = new Repository<PhoneCall>();
 
         public PhoneCallsDataMapper PhoneCalls = new PhoneCallsDataMapper();
+        public SitesDataMapper Sites = new SitesDataMapper();
         public SitesDepartmentsDataMapper SitesDepartments = new SitesDepartmentsDataMapper();
 
 
