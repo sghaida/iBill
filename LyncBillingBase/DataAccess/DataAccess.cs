@@ -317,47 +317,81 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> GetAllWithRelations(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default) 
+        public virtual IEnumerable<T> GetAllWithRelations(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
+            string sql = string.Empty;
+            DataTable dt = new DataTable();
+
             int maximumLimit = 0;
             List<string> allColumns = null;
             Dictionary<string, object> whereConditions = null;
 
-            string sql = string.Empty;
-            Dictionary<string, Dictionary<string, string>> tableRelationsMap = new Dictionary<string, Dictionary<string, string>>();
+            //Table Relations Map
+            //To be sent to the DB Lib for SQL Query generation
+            Dictionary<string, Dictionary<string, string>> TableRelationsMap = new Dictionary<string, Dictionary<string, string>>();
 
-            DataTable dt = new DataTable();
+            //TableRelationsList
+            //To be used to looking up the relations and extracting information from them and copying them into the TableRelationsMap
+            List<DbRelation> TableRelationsList = Schema.DataFields.Where(field => field.Relation != null).Select<DataField, DbRelation>(field => field.Relation).ToList<DbRelation>();
 
-            var tableRelations = Schema.DataFields.Where(field => field.Relation != null).Select<DataField, DbRelation>(field => field.Relation).ToList<DbRelation>();
-
-            if (tableRelations.Count() > 0)
+            //Start processing the list of table relations
+            if (TableRelationsList.Count() > 0)
             {
-                foreach(var relation in tableRelations)
+                //Foreach relation in the relations list, process it and construct the big TablesRelationsMap
+                foreach(var relation in TableRelationsList)
                 {
+                    //Create a temporary map for this target table relation
+                    var targetTableRelationKeys = new Dictionary<string, string>();
+
+                    //Get the data model we're in relation with.
                     Type relationType = relation.WithDataModel;
                     
+                    //Build a data source schema for the data model we're in relation with.
                     var generalModelSchemaType = typeof(DataSourceSchema<>);                    
                     var specialModelSchemaType = generalModelSchemaType.MakeGenericType(relationType);
-                    dynamic targetTableSchema = Activator.CreateInstance(specialModelSchemaType);
-                    List<DataField> fields  = targetTableSchema.GetDataFields();
-                                        
-                }
-            }
+                    dynamic targetModelSchema = Activator.CreateInstance(specialModelSchemaType);
 
-            if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
-            {
-                if (string.IsNullOrEmpty(dataSourceName))
-                {
-                    dt = DBRoutines.SELECT(Schema.DataSourceName, allColumns, whereConditions, maximumLimit);
-                }
-                else
-                {
-                    dt = DBRoutines.SELECT(dataSourceName, allColumns, whereConditions, maximumLimit);
-                }
-            }
+                    //Get it's Data Fields.
+                    List<DataField> targetModelFields = targetModelSchema.GetDataFields();
+
+                    //Get the field that describes the relation key from the target model schema
+                    DataField targetKey = targetModelFields.Find(item => item.TableField != null && item.Name == relation.OnDataModelKey);
+
+                    //Get the field that describes our key on which we are in relation with the target model
+                    DataField thisKey = Schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
+
+                    if(thisKey != null && targetKey != null)
+                    {
+                        //Initialize the temporary map and add it to the original relations map
+                        targetTableRelationKeys.Add(DB_VOCABULARY.RELATION_TYPE, relation.RelationType.ToString());
+                        targetTableRelationKeys.Add(DB_VOCABULARY.TARGET_KEY, targetKey.TableField.ColumnName);
+                        targetTableRelationKeys.Add(DB_VOCABULARY.THIS_KEY, thisKey.TableField.ColumnName);
+
+                        //Add the relation keys to the TableRelationsMap
+                        TableRelationsMap.Add(targetModelSchema.GetDataSourceName(), targetTableRelationKeys);
+                    }
+                }//end-foreach
+
+
+                //Fetch the data from the data source only if the relations map has at least one item
+                if (TableRelationsMap.Count > 0)
+                { 
+                    if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
+                    {
+                        if (string.IsNullOrEmpty(dataSourceName))
+                        {
+                            dt = DBRoutines.SELECT(Schema.DataSourceName, allColumns, whereConditions, maximumLimit);
+                        }
+                        else
+                        {
+                            dt = DBRoutines.SELECT(dataSourceName, allColumns, whereConditions, maximumLimit);
+                        }
+                    }
+                }//end-inner-if
+
+            }//end-outer-if
 
             return dt.ConvertToList<T>();
-
         }
 
 
@@ -394,5 +428,4 @@ namespace LyncBillingBase.DataAccess
 
     }
 
-      
 }

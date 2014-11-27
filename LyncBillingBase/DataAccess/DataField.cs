@@ -13,12 +13,17 @@ namespace LyncBillingBase.DataAccess
     public class DataField
     {
         /// <summary>
-        /// Related properties to the database table.
+        /// The class field name that correspondes to this data field.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The class field database properties. This describes it's possible relation to a database table's column.
         /// </summary>
         public DbTableField TableField { get; set; }
 
         /// <summary>
-        /// Related to the database tables relations on this field.
+        /// The class field database tables-relation. This describes what database-relation can fill this data-field's content.
         /// </summary>
         public DbRelation Relation { get; set; }
     }
