@@ -7,12 +7,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
     [DataSource(Name = "MonitoringServersInfo", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.Distributed)]
-    public class PhoneCall
+    public class PhoneCall : DataModel
     {
         public PhoneCall() { }
 

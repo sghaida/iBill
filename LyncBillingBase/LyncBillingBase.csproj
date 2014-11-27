@@ -54,7 +54,6 @@
     <Compile Include="DataAccess\DataField.cs" />
     <Compile Include="DataAccess\DataSourceSchema.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
-    <Compile Include="DataAttributes\DataMapperAttribute.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysDataMapper.cs" />
     <Compile Include="DataMappers\IdentityMapItem.cs" />
@@ -66,6 +65,7 @@
     <Compile Include="DataModels\CallType.cs" />
     <Compile Include="DataModels\Country.cs" />
     <Compile Include="DataModels\Currency.cs" />
+    <Compile Include="DataAccess\DataModel.cs" />
     <Compile Include="DataModels\Department.cs" />
     <Compile Include="DataModels\DialingPrefixRate.cs" />
     <Compile Include="DataModels\DID.cs" />
@@ -81,6 +81,8 @@
     <Compile Include="DataAttributes\AllowIDInsertAttribute.cs" />
     <Compile Include="DataAttributes\FunctionsParametersAttribute.cs" />
     <Compile Include="DataAttributes\IsIDFieldAttribute.cs" />
+    <Compile Include="Exceptions\NoTableIDFieldException.cs" />
+    <Compile Include="Exceptions\NoTableFieldsException.cs" />
     <Compile Include="Exceptions\NoDataSourceNameException.cs" />
     <Compile Include="Repository\DataStorage.cs" />
     <Compile Include="DataAttributes\AllowNullAttribute.cs" />

@@ -9,7 +9,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataAccess
 {
-    public class DataSourceSchema<T> where T: class, new()
+    public class DataSourceSchema<T> where T: DataModel, new()
     {
         public string DataSourceName { get; set; }
         public Enums.DataSourceType DataSourceType { set; get; }

@@ -412,15 +412,27 @@ namespace LyncBillingBase
         public enum DataSourceType
         {
             Default,
+            [Description("Data is read from a database table.")]
             DBTable,
+            [Description("Data is read from a webservice endpoint.")]
             WS
         }
 
         public enum DataSourceAccessType
         {
             Default,
+            [Description("Data is read from a single source, such as: a table, a webservice endpoint...etc")]
             SingleSource,
+            [Description("Data is read from multiple sources, this data source acts as a lookup of the other sources, such as: a lookup table, a lookup webservice endpoint...etc")]
             Distributed
+        }
+
+        public enum DataRelationType
+        {
+            [Description("The union of two data models. Equivalent to an SQL OUTER JOIN.")]
+            UNION = 0,
+            [Description("The intersection of two data models. Equivalent to an SQL INNER JOIN.")]
+            INTERSECTION = 1
         }
 
         /// <summary>

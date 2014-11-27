@@ -6,21 +6,64 @@ using System.Threading.Tasks;
 
 namespace LyncBillingBase.DataAccess
 {
+    /// <summary>
+    /// This is a wrapper class used to describe the Data Model attributes, properties and relations. Each attribute has a Data Field object to describe it.
+    /// This is associated with the DataSourceSchema class.
+    /// </summary>
     public class DataField
     {
+        /// <summary>
+        /// Related properties to the database table.
+        /// </summary>
         public DbTableField TableField { get; set; }
+
+        /// <summary>
+        /// Related to the database tables relations on this field.
+        /// </summary>
         public DbRelation Relation { get; set; }
     }
 
+
+    /// <summary>
+    /// This class is associated with describing the class attributes that are marked with at least on of the following Decorators or Data Attributes.
+    /// * DbColumn Attribute
+    /// * IsIDField Attribute
+    /// * AllowNull Attribute
+    /// * AllowIDInsert Attribute
+    /// </summary>
     public class DbTableField
     {
+        /// <summary>
+        /// The corresponding database table field.
+        /// </summary>
         public string ColumnName { get; set; }
+
+        /// <summary>
+        /// A true or false flag to indicate whether this is an ID field in it's table or not.
+        /// </summary>
         public bool IsIDField { get; set; }
+
+        /// <summary>
+        /// A true or false flag to indicate whether this value can be null on update or insert
+        /// </summary>
         public bool AllowNull { get; set; }
+
+        /// <summary>
+        /// A true or false flag to indicate whether this ID Field can be inserted and/or updated in it's table.
+        /// </summary>
         public bool AllowIDInsert { get; set; }
+
+        /// <summary>
+        /// The reflected field type in the class.
+        /// </summary>
         public Type FieldType { get; set; }
     }
 
+
+    /// <summary>
+    /// This class is associated with describing the class attributes that are marked with the Data Relation Decorator (Data Attribute).
+    /// * DataRelation Attribute
+    /// </summary>
     public class DbRelation
     {
         /// <summary>
@@ -47,5 +90,13 @@ namespace LyncBillingBase.DataAccess
         /// The class instance field name that shares the relation with the destination data model
         /// </summary>
         public string ThisKey { get; set; }
+
+        /// <summary>
+        /// This sets the relation type between the two data models.
+        /// It can be one of the following options:
+        /// * UNION: The union of two data models. Equivalent to an SQL OUTER JOIN.
+        /// * INTERSECTION: The intersection of two data models. Equivalent to an SQL INNER JOIN.
+        /// </summary>
+        public Enums.DataRelationType RelationType { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "ActiveDirectoryUsers", SourceType = Enums.DataSourceType.DBTable)]
+    [DataSource(Name = "ActiveDirectoryUsers", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
     public class User
     {
         [IsIDField]

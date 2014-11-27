@@ -14,7 +14,7 @@ using LyncBillingBase.Exceptions;
 
 namespace LyncBillingBase.DataAccess
 {
-    public class DataAccess<T> : IDataAccess<T> where T : class, new()
+    public class DataAccess<T> : IDataAccess<T> where T : DataModel, new()
     {
         /**
          * Private instance variables
@@ -299,6 +299,47 @@ namespace LyncBillingBase.DataAccess
             Dictionary<string, object> whereConditions = null;
             
             DataTable dt  = new DataTable();
+
+            if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
+            {
+                if (string.IsNullOrEmpty(dataSourceName))
+                {
+                    dt = DBRoutines.SELECT(Schema.DataSourceName, allColumns, whereConditions, maximumLimit);
+                }
+                else
+                {
+                    dt = DBRoutines.SELECT(dataSourceName, allColumns, whereConditions, maximumLimit);
+                }
+            }
+
+            return dt.ConvertToList<T>();
+        }
+
+
+        public virtual IEnumerable<T> GetAllWithRelations(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        {
+            int maximumLimit = 0;
+            List<string> allColumns = null;
+            Dictionary<string, object> whereConditions = null;
+
+            string sql = string.Empty;
+            Dictionary<string, Dictionary<string, string>> tableRelationsMap = new Dictionary<string, Dictionary<string, string>>();
+
+            DataTable dt = new DataTable();
+
+            var tableRelations = Schema.DataFields.Where(field => field.Relation != null).Select<DataField, DbRelation>(field => field.Relation).ToList<DbRelation>();
+
+            if (tableRelations.Count() > 0)
+            {
+                foreach(var relation in tableRelations)
+                {
+                    Type relationType = relation.WithDataModel;
+                    var generalModelSchemaType = typeof(DataSourceSchema<>);
+                    var specialModelSchemaType = generalModelSchemaType.MakeGenericType(relationType);
+
+                    var targetTableSchema = Activator.CreateInstance(specialModelSchemaType);
+                }
+            }
 
             if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
             {

@@ -41,7 +41,9 @@ namespace LyncBillingTesting
 
             //var siteDepartmentsWithEmptyNames = siteDepartments.Where(item => string.IsNullOrEmpty(item.DepartmentName) == true).ToList();
 
-            DataAccess<NumberingPlan> numplan = new DataAccess<NumberingPlan>();
+            DataAccess<SiteDepartment> sitesDepartements = new DataAccess<SiteDepartment>();
+
+            var allData = sitesDepartements.GetAllWithRelations();
         }
     }
 }
