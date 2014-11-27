@@ -126,5 +126,10 @@ namespace LyncBillingBase.DataAccess
                 throw ex.InnerException;
             }
         }
+
+        public List<DataField> GetDataFields()
+        {
+            return this.DataFields;
+        }
     }
 }

@@ -429,10 +429,10 @@ namespace LyncBillingBase
 
         public enum DataRelationType
         {
-            [Description("The union of two data models. Equivalent to an SQL OUTER JOIN.")]
-            UNION = 0,
             [Description("The intersection of two data models. Equivalent to an SQL INNER JOIN.")]
-            INTERSECTION = 1
+            INTERSECTION = 0,
+            [Description("The union of two data models. Equivalent to an SQL OUTER JOIN.")]
+            UNION = 1
         }
 
         /// <summary>

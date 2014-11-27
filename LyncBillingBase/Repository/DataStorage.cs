@@ -7,6 +7,7 @@ using System.Threading;
 
 using LyncBillingBase.Helpers;
 using LyncBillingBase.DataAccess;
+using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;
 
 
@@ -17,38 +18,9 @@ namespace LyncBillingBase.Repository
         /***
          * DataStorage Repositories
          */
-        //public Repository<PhoneCall> PhoneCalls = new Repository<PhoneCall>();
-        //public Repository<Announcement> Announcements = new Repository<Announcement>();
-        //public Repository<BundledAccount> BundledAccounts = new Repository<BundledAccount>();
-        //public Repository<CallMarkerStatus> CallMarkersStatus = new Repository<CallMarkerStatus>();
-        //public Repository<CallType> CallTypes = new Repository<CallType>();
-        ////public Repository<Country> Countries = new Repository<Country>();
-        //public Repository<Department> Departments = new Repository<Department>();
-        ////public Repository<DialingPrefixRate> DialingPrefixesRates = new Repository<DialingPrefixRate>();
-        //public Repository<DID> DIDs = new Repository<DID>();
-        //public Repository<Gateway> Gateways = new Repository<Gateway>();
-        //public Repository<GatewayDetail> GatewaysDetails = new Repository<GatewayDetail>();
-        
-        //public Repository<MailTemplate> MailTemplates = new Repository<MailTemplate>();
-        ////public Repository<MarkingStatus> MarkingsStatus = new Repository<MarkingStatus>();
-        
-        //public Repository<NumberingPlan> NumberingPlan = new Repository<NumberingPlan>();
-        //public Repository<NumberingPlanNGN> NumberingPlanNGN = new Repository<NumberingPlanNGN>();
-        //public Repository<PhoneBookContact> PhoneBook = new Repository<PhoneBookContact>();
-        //public Repository<PhoneCallExclusion> PhoneCallsExclusions = new Repository<PhoneCallExclusion>();
-        //public Repository<Pool> Pools = new Repository<Pool>();
-        ////public Repository<Rate> Rates = new Repository<Rate>();
-        ////public Repository<RatesNGN> Rates_NGN = new Repository<RatesNGN>();
-        ////public Repository<Rates_National> Rates_National = new Repository<Rates_National>();
-        ////public Repository<Rates_International> Rates_International = new Repository<Rates_International>();
-        //public Repository<Site> Sites = new Repository<Site>();
-        //public Repository<SiteDepartment> SitesDepartments = new Repository<SiteDepartment>();
-        //public Repository<User> Users = new Repository<User>();
-
-        //public Repository<GatewayRate> GatewaysRates = new Repository<GatewayRate>();
-        //public Repository<MonitoringServerInfo> MonitoringServersInfo = new Repository<MonitoringServerInfo>();
-        // NOT LOADED ON PURPOSE
-        // public Repository<PhoneCall> PhoneCalls = new Repository<PhoneCall>();
+        //public DataAccess<Site> PhoneCalls = new DataAccess<Site>();
+        //public DataAccess<Department> PhoneCalls = new DataAccess<Department>();
+        //public DataAccess<PhoneCall> PhoneCalls = new DataAccess<PhoneCall>();
 
 
         /***
