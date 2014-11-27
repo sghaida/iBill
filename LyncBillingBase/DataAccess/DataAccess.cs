@@ -317,7 +317,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> GetAllWithRelations(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual IEnumerable<T> GetAllWithRelations(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default) 
         {
             int maximumLimit = 0;
             List<string> allColumns = null;
@@ -335,10 +335,12 @@ namespace LyncBillingBase.DataAccess
                 foreach(var relation in tableRelations)
                 {
                     Type relationType = relation.WithDataModel;
-                    var generalModelSchemaType = typeof(DataSourceSchema<>);
+                    
+                    var generalModelSchemaType = typeof(DataSourceSchema<>);                    
                     var specialModelSchemaType = generalModelSchemaType.MakeGenericType(relationType);
-
-                    var targetTableSchema = Activator.CreateInstance(specialModelSchemaType);
+                    dynamic targetTableSchema = Activator.CreateInstance(specialModelSchemaType);
+                    List<DataField> fields  = targetTableSchema.GetDataFields();
+                                        
                 }
             }
 
