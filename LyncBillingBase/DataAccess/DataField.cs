@@ -98,5 +98,10 @@ namespace LyncBillingBase.DataAccess
         /// * INTERSECTION: The intersection of two data models. Equivalent to an SQL INNER JOIN.
         /// </summary>
         public Enums.DataRelationType RelationType { get; set; }
+
+        private static T Cast<T>(object o)
+        {
+            return (T)o;
+        }
     }
 }
