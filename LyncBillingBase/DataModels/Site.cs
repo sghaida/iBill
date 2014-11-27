@@ -27,10 +27,10 @@ namespace LyncBillingBase.DataModels
         [DbColumn("Description")]
         public string Description { get; set; }
 
-        [DbColumn("CountryId")]
-        public string CountryId { get; set; }
+        //[DbColumn("CountryId")]
+        //public string CountryId { get; set; }
 
-        [DataRelation(Name = "SiteID_CountryID", WithDataModel = typeof(Country), OnDataModelKey = "ID", ThisKey = "CountryId")]
-        public Country SiteCountry { get; set; }
+        //[DataRelation(Name = "SiteID_CountryID", WithDataModel = typeof(Country), OnDataModelKey = "ID", ThisKey = "CountryId")]
+        //public Country SiteCountry { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace LyncBillingBase.Helpers
         /// <typeparam name="T">Class name</typeparam>
         /// <param name="dataTable">data table to convert</param>
         /// <returns>List<T></returns>
-        public static List<T> ConvertToList<T>(this DataTable dataTable) where T : class ,new()
+        public static List<T> ConvertToList<T>(this DataTable dataTable) where T : class, new()
         {
             var dataList = new List<T>();
             

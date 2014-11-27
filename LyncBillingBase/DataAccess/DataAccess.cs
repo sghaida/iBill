@@ -319,16 +319,22 @@ namespace LyncBillingBase.DataAccess
 
         public virtual IEnumerable<T> GetAllWithRelations(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
-            string sql = string.Empty;
+            string SQLQuery = string.Empty;
             DataTable dt = new DataTable();
 
             int maximumLimit = 0;
             List<string> allColumns = null;
             Dictionary<string, object> whereConditions = null;
 
+            //Get our table columns from the schema
+            List<string> thisModelTableColumns = Schema.DataFields
+                .Where(field => field.TableField != null)
+                .Select<DataField, string>(field => field.TableField.ColumnName)
+                .ToList<string>();
+
             //Table Relations Map
             //To be sent to the DB Lib for SQL Query generation
-            Dictionary<string, Dictionary<string, string>> TableRelationsMap = new Dictionary<string, Dictionary<string, string>>();
+            List<SqlJoinRelation> TableRelationsMap = new List<SqlJoinRelation>();
 
             //TableRelationsList
             //To be used to looking up the relations and extracting information from them and copying them into the TableRelationsMap
@@ -341,7 +347,7 @@ namespace LyncBillingBase.DataAccess
                 foreach(var relation in TableRelationsList)
                 {
                     //Create a temporary map for this target table relation
-                    var targetTableRelationKeys = new Dictionary<string, string>();
+                    var joinedTableInfo = new SqlJoinRelation();
 
                     //Get the data model we're in relation with.
                     Type relationType = relation.WithDataModel;
@@ -349,26 +355,36 @@ namespace LyncBillingBase.DataAccess
                     //Build a data source schema for the data model we're in relation with.
                     var generalModelSchemaType = typeof(DataSourceSchema<>);                    
                     var specialModelSchemaType = generalModelSchemaType.MakeGenericType(relationType);
-                    dynamic targetModelSchema = Activator.CreateInstance(specialModelSchemaType);
+                    dynamic joinedModelSchema = Activator.CreateInstance(specialModelSchemaType);
 
                     //Get it's Data Fields.
-                    List<DataField> targetModelFields = targetModelSchema.GetDataFields();
+                    List<DataField> joinedModelFields = joinedModelSchema.GetDataFields();
+
+                    //Get the table column names - exclude the ID field name.
+                    List<string> joinedModelTableColumns = joinedModelFields
+                        .Where(field => field.TableField != null && field.TableField.IsIDField == false)
+                        .Select<DataField, string>(field => field.TableField.ColumnName)
+                        .ToList<string>();
 
                     //Get the field that describes the relation key from the target model schema
-                    DataField targetKey = targetModelFields.Find(item => item.TableField != null && item.Name == relation.OnDataModelKey);
+                    DataField joinedModelKey = joinedModelFields.Find(item => item.TableField != null && item.Name == relation.OnDataModelKey);
 
                     //Get the field that describes our key on which we are in relation with the target model
                     DataField thisKey = Schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
 
-                    if(thisKey != null && targetKey != null)
+                    if(thisKey != null && joinedModelKey != null)
                     {
                         //Initialize the temporary map and add it to the original relations map
-                        targetTableRelationKeys.Add(DB_VOCABULARY.RELATION_TYPE, relation.RelationType.ToString());
-                        targetTableRelationKeys.Add(DB_VOCABULARY.TARGET_KEY, targetKey.TableField.ColumnName);
-                        targetTableRelationKeys.Add(DB_VOCABULARY.THIS_KEY, thisKey.TableField.ColumnName);
+                        
+                        joinedTableInfo.RelationType = relation.RelationType.ToString();
+                        joinedTableInfo.MasterTableName = Schema.DataSourceName;
+                        joinedTableInfo.MasterTableKey = thisKey.TableField.ColumnName;
+                        joinedTableInfo.JoinedTableName = joinedModelSchema.GetDataSourceName();
+                        joinedTableInfo.JoinedTableKey = joinedModelKey.TableField.ColumnName;
+                        joinedTableInfo.JoinedTableColumns = joinedModelTableColumns;
 
                         //Add the relation keys to the TableRelationsMap
-                        TableRelationsMap.Add(targetModelSchema.GetDataSourceName(), targetTableRelationKeys);
+                        TableRelationsMap.Add(joinedTableInfo);
                     }
                 }//end-foreach
 
@@ -378,14 +394,16 @@ namespace LyncBillingBase.DataAccess
                 { 
                     if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
                     {
-                        if (string.IsNullOrEmpty(dataSourceName))
-                        {
-                            dt = DBRoutines.SELECT(Schema.DataSourceName, allColumns, whereConditions, maximumLimit);
-                        }
-                        else
-                        {
-                            dt = DBRoutines.SELECT(dataSourceName, allColumns, whereConditions, maximumLimit);
-                        }
+                        //if (string.IsNullOrEmpty(dataSourceName))
+                        //{
+                        //    dt = DBRoutines.SELECT(Schema.DataSourceName, allColumns, whereConditions, maximumLimit);
+                        //}
+                        //else
+                        //{
+                        //    dt = DBRoutines.SELECT(dataSourceName, allColumns, whereConditions, maximumLimit);
+                        //}
+
+                        dt = DBRoutines.SELECT_WITH_JOIN(Schema.DataSourceName, thisModelTableColumns, whereConditions, TableRelationsMap, maximumLimit);
                     }
                 }//end-inner-if
 

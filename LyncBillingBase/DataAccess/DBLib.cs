@@ -26,6 +26,7 @@ namespace LyncBillingBase.DataAccess
             return new OleDbConnection(connectionString);
         }
 
+
         //SELECT with SQL query
         public DataTable SELECTFROMSQL(string sqlQuery, string customConnectionString = null)
         {
@@ -61,6 +62,219 @@ namespace LyncBillingBase.DataAccess
 
             return dt;
         }
+
+
+        //SELECT FROM a table and JOIN with other tables
+        public DataTable SELECT_WITH_JOIN(string tableName, List<string> masterTableColumns, Dictionary<string, object> whereConditions, List<SqlJoinRelation> tableRelationsMap, int limits)
+        {
+            DataTable dt = new DataTable();
+
+            OleDbDataReader dr;
+            string TRUTH_OPERATOR = "AND";
+            string FinalSelectQuery = string.Empty;
+            List<string> Columns = new List<string>();
+
+            StringBuilder SelectColumns = new StringBuilder("");
+            StringBuilder WhereStatement = new StringBuilder("");
+            StringBuilder JoinStatement = new StringBuilder("");
+            StringBuilder GroupByFields = new StringBuilder("");
+            StringBuilder OrderBy = new StringBuilder("");
+
+
+            //Handle Order By
+            if (tableName.Contains("Phonecalls"))
+            {
+                OrderBy.Append("ORDER BY [SessionIdTime] DESC");
+            }
+
+
+            //Handle the JOIN statement
+            if (tableRelationsMap != null && tableRelationsMap.Count > 0)
+            {
+                foreach (var relation in tableRelationsMap)
+                {
+                    //The two parts of the JOIN STATEMENT
+                    string joinType = string.Empty;
+                    string keysStatement = string.Empty;
+
+                    //Decide the join type
+                    if (relation.RelationType == Enums.DataRelationType.INTERSECTION.ToString())
+                    {
+                        joinType = "INNER JOIN";
+                    }
+                    else
+                    {
+                        //if(relationType == Enums.DataRelationType.UNION.ToString())
+                        joinType = "LEFT OUTER JOIN";
+                    }
+
+                    //Construct the JOIN KEYS statement 
+                    keysStatement = String.Format("ON [{0}].[{1}] = [{2}].[{3}]", tableName, relation.MasterTableKey, relation.JoinedTableName, relation.JoinedTableKey);
+
+                    JoinStatement.Append(String.Format("{0} {1} {2} ", joinType, relation.JoinedTableName, keysStatement));
+
+                    var joinedTableColumns = relation.JoinedTableColumns.Select<string, string>(col => String.Format("[{0}].[{1}]", relation.JoinedTableName, col)).ToList();
+
+                    Columns = Columns.Concat(joinedTableColumns).ToList();
+                }//end-foreach
+            }//end-outer-if
+
+
+            //Concatenate the Master Table Columns with the local list
+            masterTableColumns = masterTableColumns.Select<string, string>(col => String.Format("[{0}].[{1}]", tableName, col)).ToList();
+            Columns = Columns.Concat(masterTableColumns).ToList();
+
+
+            //Handle the fields collection
+            if (Columns.Count > 0)
+            {
+                foreach (string field in Columns)
+                {
+                    //selectedfields.Append(fieldName + ",");
+                    if (!string.IsNullOrEmpty(field))
+                    {
+                        if (field.Contains("COUNT") || field.Contains("SUM") || field.Contains("YEAR") || field.Contains("MONTH") || field.Contains("DISTINCT"))
+                            SelectColumns.Append(field + ",");
+                        else
+                            SelectColumns.Append(field + ",");
+                    }
+                }
+
+                SelectColumns.Remove(SelectColumns.Length - 1, 1);
+            }
+            else
+            {
+                SelectColumns.Append("*");
+            }
+
+
+            //Handle the whereClause collection
+            if (whereConditions != null && whereConditions.Count != 0)
+            {
+                WhereStatement.Append("WHERE ");
+
+                foreach (KeyValuePair<string, object> pair in whereConditions)
+                {
+                    if (pair.Value == null)
+                    {
+                        WhereStatement.Append("[" + pair.Key + "] IS NULL " + TRUTH_OPERATOR);
+                    }
+
+                    else if (pair.Value.ToString() == "!null")
+                    {
+                        WhereStatement.Append("[" + pair.Key + "] IS NOT NULL " + TRUTH_OPERATOR);
+                    }
+
+                    else if (pair.Value.ToString() == "!=0")
+                    {
+                        WhereStatement.Append("[" + pair.Key + "] <> 0 " + TRUTH_OPERATOR);
+                    }
+
+                    else if (pair.Value is string && pair.Value.ToString().ToLower().Contains("like"))
+                    {
+                        //key like value: key = "columnX", value = "like '%ABC%'"
+                        WhereStatement.Append("[" + pair.Key + "] " + pair.Value + TRUTH_OPERATOR);
+                    }
+
+                    else if (pair.Value is string && (pair.Value.ToString()).Contains("BETWEEN"))
+                    {
+                        //key like value: key = "columnX", value = "BETWEEN abc AND xyz"
+                        WhereStatement.Append("[" + pair.Key + "]  " + pair.Value + TRUTH_OPERATOR);
+                    }
+
+                    else if (pair.Value is List<int>)
+                    {
+                        WhereStatement.Append("[" + pair.Key + "] in ( ");
+
+                        foreach (var item in (List<int>)pair.Value)
+                        {
+                            WhereStatement.Append(item.ToString() + ",");
+                        }
+                        //Remove last ','
+                        WhereStatement.Remove(WhereStatement.Length - 1, 1);
+
+                        WhereStatement.Append(" ) " + TRUTH_OPERATOR);
+                    }
+
+                    else if (pair.Value is List<string>)
+                    {
+                        WhereStatement.Append("[" + pair.Key + "] in ( ");
+
+                        foreach (var item in (List<string>)pair.Value)
+                        {
+                            WhereStatement.Append(item.ToString() + ",");
+                        }
+                        //Remove last ','
+                        WhereStatement.Remove(WhereStatement.Length - 1, 1);
+
+                        WhereStatement.Append(" ) " + TRUTH_OPERATOR);
+                    }
+
+                    else
+                    {
+                        Type valueType = pair.Value.GetType();
+                        if (valueType == typeof(int) || valueType == typeof(Double))
+                        {
+                            WhereStatement.Append("[" + pair.Key + "]=" + pair.Value + TRUTH_OPERATOR);
+                        }
+                        else
+                        {
+                            WhereStatement.Append("[" + pair.Key + "]='" + pair.Value + "'" + TRUTH_OPERATOR);
+                        }
+                    }
+                }
+
+                //Trim the whereStatement
+                if (TRUTH_OPERATOR == "OR")
+                    WhereStatement.Remove(WhereStatement.Length - 4, 4);
+                else if(TRUTH_OPERATOR == "AND")
+                    WhereStatement.Remove(WhereStatement.Length - 5, 5);
+            }
+
+
+            //Start constructing the FINAL SELECT QUERY
+            //Start by formatting the select columns and limits
+            if (limits == 0)
+                FinalSelectQuery = string.Format("SELECT {0}", SelectColumns.ToString());
+            else
+                FinalSelectQuery = string.Format("SELECT TOP({0}) {1}", limits, SelectColumns.ToString());
+
+            //Add the JOINED tables part
+            if(JoinStatement.ToString().Length > 0)
+                FinalSelectQuery = String.Format("{0} FROM [{1}] {2}", FinalSelectQuery, tableName, JoinStatement);
+            else
+                FinalSelectQuery = String.Format("{0} FROM [{1}]", FinalSelectQuery, tableName);
+
+            //Add the where conditions to the FINAL SELECT QUERY
+            if (WhereStatement.ToString().Length > 0)
+                FinalSelectQuery = String.Format("{0} {1}", FinalSelectQuery, WhereStatement.ToString());
+            
+            //Add the order by part
+            if (OrderBy.ToString().Length > 0)
+                FinalSelectQuery = String.Format("{0} {1}", FinalSelectQuery, OrderBy.ToString());
+            
+
+            //Initialize the connection and command
+            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbCommand comm = new OleDbCommand(FinalSelectQuery, conn);
+
+            try
+            {
+                conn.Open();
+                dr = comm.ExecuteReader();
+
+                dt.Load(dr);
+            }
+            catch (Exception ex)
+            {
+                System.ArgumentException argEx = new System.ArgumentException("Exception", "ex", ex);
+                throw argEx;
+            }
+            finally { conn.Close(); }
+
+            return dt;
+        }
+
 
         public DataTable SELECT(string tableName, string wherePart, string customConnectionString = null) 
         {
@@ -99,6 +313,7 @@ namespace LyncBillingBase.DataAccess
             return dt;
         }
 
+
         /// <summary>
         /// Construct Generic Select Statemnet 
         /// </summary>
@@ -106,6 +321,9 @@ namespace LyncBillingBase.DataAccess
         /// <param name="whereField">Where statemnet Field</param>
         /// <param name="whereValue">Where statemnet Value</param>
         /// <returns> DataTable Object</returns>
+        /// Obsolete, use the function:
+        /// ---> SELECT(string tableName, List<string> fieldsList, Dictionary<string, object> whereClause, int limits, bool setWhereStatementOperatorToOR = false)
+        [Obsolete]
         public DataTable SELECT(string tableName, string whereField, object whereValue)
         {
             DataTable dt = new DataTable();
@@ -696,7 +914,6 @@ namespace LyncBillingBase.DataAccess
         {
             OleDbConnection conn;
             OleDbCommand comm;
-            OleDbTransaction transaction;
             int numberOfRowsAffected = 0;
             string FinalSelectQuery = string.Empty;
             StringBuilder Parameters = new StringBuilder();
@@ -1449,6 +1666,17 @@ namespace LyncBillingBase.DataAccess
         {
             conn.Close();
         }
-
     }
+
+
+    public class SqlJoinRelation
+    {
+        public string RelationType { get; set; }
+        public string MasterTableName { get; set; }
+        public string MasterTableKey { get; set; }
+        public string JoinedTableName { get; set; }
+        public string JoinedTableKey { get; set; }
+        public List<string> JoinedTableColumns { get; set; }
+    }
+
 }

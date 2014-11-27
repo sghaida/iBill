@@ -34,5 +34,13 @@ namespace LyncBillingBase.DataAccess
                 return "TargetKey";
             }
         }
+
+        public static string SELECT_COLUMNS
+        {
+            get
+            {
+                return "SelectColumns";
+            }
+        }
     }
 }
