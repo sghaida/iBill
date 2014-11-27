@@ -53,6 +53,7 @@
     <Compile Include="Conf\PhoneCallsTablesSection.cs" />
     <Compile Include="DataAccess\DataField.cs" />
     <Compile Include="DataAccess\DataSourceSchema.cs" />
+    <Compile Include="DataAccess\DataSourcesSchemaCache.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysDataMapper.cs" />
@@ -79,7 +80,6 @@
     <Compile Include="DataModels\PhoneCallExclusion.cs" />
     <Compile Include="DataAttributes\DbColumnAttribute.cs" />
     <Compile Include="DataAttributes\AllowIDInsertAttribute.cs" />
-    <Compile Include="DataAttributes\FunctionsParametersAttribute.cs" />
     <Compile Include="DataAttributes\IsIDFieldAttribute.cs" />
     <Compile Include="Exceptions\NoTableIDFieldException.cs" />
     <Compile Include="Exceptions\NoTableFieldsException.cs" />

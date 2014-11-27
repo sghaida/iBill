@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using LyncBillingBase.Helpers;
+using LyncBillingBase.DataModels;
 using LyncBillingBase.DataAttributes;
 using LyncBillingBase.Exceptions;
 
@@ -20,6 +21,7 @@ namespace LyncBillingBase.DataAccess
          * Private instance variables
          */
         private DataSourceSchema<T> Schema;
+
         private static DBLib DBRoutines = new DBLib();
 
         /**
@@ -32,7 +34,7 @@ namespace LyncBillingBase.DataAccess
             {
                 //Initialize the schema for the class T
                 this.Schema = new DataSourceSchema<T>();
-
+                
                 //Check for absent or invalid DataModel attributes and throw the respective exception if they exist.
                 if(string.IsNullOrEmpty(Schema.DataSourceName))
                 {
@@ -52,7 +54,6 @@ namespace LyncBillingBase.DataAccess
                 throw ex;
             }
         }
-
 
         public virtual int Insert(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
