@@ -81,6 +81,7 @@
     <Compile Include="DataAttributes\AllowIDInsertAttribute.cs" />
     <Compile Include="DataAttributes\FunctionsParametersAttribute.cs" />
     <Compile Include="DataAttributes\IsIDFieldAttribute.cs" />
+    <Compile Include="Exceptions\NoDataSourceNameException.cs" />
     <Compile Include="Repository\DataStorage.cs" />
     <Compile Include="DataAttributes\AllowNullAttribute.cs" />
     <Compile Include="DataAttributes\DataSourceAttribute.cs" />

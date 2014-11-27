@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 using LyncBillingBase.Helpers;
 using LyncBillingBase.DataAttributes;
+using LyncBillingBase.Exceptions;
 
 
 namespace LyncBillingBase.DataAccess
@@ -20,10 +21,6 @@ namespace LyncBillingBase.DataAccess
          */
         private DataSourceSchema<T> Schema;
         private static DBLib DBRoutines = new DBLib();
-        
-        private string noDataSourceNameException = String.Format("DataSource Name was not provided for class \"{0}\". Kindly add the [TableName(...)] Attribute to the class.", typeof(T).Name);
-        private string noTableFieldsException = String.Format("Couldn't find any class property marked with the [DbColumn] Attribute in the class \"{0}\". Kindly revise the class definition.", typeof(T).Name);
-        private string noIDFieldsException = String.Format("No class property was marked as an ID Field with the attribute: [IsIDField], in the class: \"{0}\". Kindly revise the class definition.", typeof(T).Name);
 
         /**
          * Repository Constructor
@@ -33,19 +30,21 @@ namespace LyncBillingBase.DataAccess
             //Get the Table Name and List of Class Attributes
             try
             {
+                //Initialize the schema for the class T
                 this.Schema = new DataSourceSchema<T>();
 
+                //Check for absent or invalid DataModel attributes and throw the respective exception if they exist.
                 if(string.IsNullOrEmpty(Schema.DataSourceName))
                 {
-                    throw new Exception(noDataSourceNameException);
+                    throw new NoDataSourceNameException(typeof(T).Name);
                 }
                 else if(Schema.DataFields.Where(item => item.TableField != null).ToList().Count() == 0)
                 {
-                    throw new Exception(noTableFieldsException);
+                    throw new NoTableFieldsException(typeof(T).Name);
                 }
                 else if(string.IsNullOrEmpty(Schema.IDFieldName))
                 {
-                    throw new Exception(noIDFieldsException);
+                    throw new NoTableIDFieldException(typeof(T).Name);
                 }
             }
             catch (Exception ex)
