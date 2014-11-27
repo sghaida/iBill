@@ -74,6 +74,8 @@ namespace LyncBillingBase.DataAccess
             {
                 var newDataField = new DataField();
 
+                newDataField.Name = field.Name;
+
                 if (field.GetCustomAttribute<DbColumnAttribute>() != null)
                 {
                     newDataField.TableField = new DbTableField()
