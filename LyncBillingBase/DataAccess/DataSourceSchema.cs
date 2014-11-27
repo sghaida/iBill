@@ -127,10 +127,36 @@ namespace LyncBillingBase.DataAccess
             }
         }
 
+
+        /***
+         * Getters.
+         * They support accessing a dynamic version of this object's data
+         */
+        public string GetDataSourceName()
+        {
+            return this.DataSourceName;
+        }
+
+        public Enums.DataSourceType GetDataSourceType()
+        {
+            return this.DataSourceType;
+        }
+
+        public Enums.DataSourceAccessType GetDataSourceAccessType()
+        {
+            return this.DataSourceAccessType;
+        }
+
+        public string GetIDFieldName()
+        {
+            return this.IDFieldName;
+        }
+
         public List<DataField> GetDataFields()
         {
             return this.DataFields;
         }
 
     }
+
 }
