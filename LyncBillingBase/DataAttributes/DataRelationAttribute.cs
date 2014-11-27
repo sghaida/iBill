@@ -16,6 +16,29 @@ namespace LyncBillingBase.DataAttributes
     public class DataRelationAttribute : System.Attribute
     {
         /// <summary>
+        /// The data model type this relation is associated with
+        /// </summary>
+        public Type WithDataModel { get; set; }
+
+        /// <summary>
+        /// The data modle key this relation is defined on
+        /// </summary>
+        public string OnDataModelKey { get; set; }
+
+        /// <summary>
+        /// The class instance field name that shares the relation with the destination data model
+        /// </summary>
+        public string ThisKey { get; set; }
+
+        /// <summary>
+        /// This sets the relation type between the two data models.
+        /// It can be one of the following options:
+        /// * UNION: The union of two data models. Equivalent to an SQL OUTER JOIN.
+        /// * INTERSECTION: The intersection of two data models. Equivalent to an SQL INNER JOIN.
+        /// </summary>
+        public Enums.DataRelationType RelationType { get; set; }
+
+        /// <summary>
         /// Relation Descriptive Name
         /// </summary>
         private string _name = string.Empty;
@@ -34,19 +57,7 @@ namespace LyncBillingBase.DataAttributes
             }
         }
 
-        /// <summary>
-        /// The data model type this relation is associated with
-        /// </summary>
-        public Type WithDataModel { get; set; }
 
-        /// <summary>
-        /// The data modle key this relation is defined on
-        /// </summary>
-        public string OnDataModelKey { get; set; }
-
-        /// <summary>
-        /// The class instance field name that shares the relation with the destination data model
-        /// </summary>
-        public string ThisKey { get; set; }
+        public DataRelationAttribute() { }
     }
 }

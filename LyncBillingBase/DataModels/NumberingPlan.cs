@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NumberingPlan", SourceType = Enums.DataSourceType.DBTable)]
-    public class NumberingPlan
+    [DataSource(Name = "NumberingPlan", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
+    public class NumberingPlan : DataModel
     {
         [IsIDField]
         [DbColumn("Dialing_prefix")]

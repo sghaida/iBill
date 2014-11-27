@@ -50,10 +50,6 @@ namespace LyncBillingBase.Repository
         // NOT LOADED ON PURPOSE
         // public Repository<PhoneCall> PhoneCalls = new Repository<PhoneCall>();
 
-        public PhoneCallsDataMapper PhoneCalls = new PhoneCallsDataMapper();
-        public SitesDataMapper Sites = new SitesDataMapper();
-        public SitesDepartmentsDataMapper SitesDepartments = new SitesDepartmentsDataMapper();
-
 
         /***
          * Singleton implementation with an attempted thread-safety using double-check locking

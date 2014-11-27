@@ -6,12 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
     [DataSource(Name = "Sites", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
-    public class Site
+    public class Site : DataModel
     {
         [IsIDField]
         [DbColumn("SiteID")]
@@ -26,10 +27,10 @@ namespace LyncBillingBase.DataModels
         [DbColumn("Description")]
         public string Description { get; set; }
 
-        [DataRelation(Name = "SiteID_CountryID", WithDataModel = typeof(Country), OnDataModelKey = "ID", ThisKey = "CountryId")]
+        [DbColumn("CountryId")]
         public string CountryId { get; set; }
 
-        [DataMapper(RelationName = "SiteID_CountryID", SourceDataModel = typeof(Country), SourceDataAttribute = "Name")]
-        public string CountryName { get; set; }
+        [DataRelation(Name = "SiteID_CountryID", WithDataModel = typeof(Country), OnDataModelKey = "ID", ThisKey = "CountryId")]
+        public Country SiteCountry { get; set; }
     }
 }
