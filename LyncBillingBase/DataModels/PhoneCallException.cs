@@ -9,8 +9,12 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
+    /// <summary>
+    /// This data model is obsolete. Use the PhoneCallExclusion
+    /// </summary>
+
     [Obsolete]
-    [DataSource(Name = "PhoneCallsExceptions", SourceType = Enums.DataSourceType.DBTable)]
+    [DataSource(Name = "PhoneCallsExceptions", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
     public class PhoneCallException
     {
         public int ID { get; set; }
