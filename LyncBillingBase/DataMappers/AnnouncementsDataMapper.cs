@@ -7,21 +7,14 @@ using System.Linq.Expressions;
 
 using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
-using LyncBillingBase.Roles;
 
 namespace LyncBillingBase.DataMappers
 {
     public class AnnouncementsDataMapper : DataAccess<Announcement>
     {
         private SitesDataMapper SitesAccessor = new SitesDataMapper();
-        private List<Role> RolesInformation = new List<Role>();
+        private List<Role> RolesInformation = Role.GetRolesInformation();
 
-        //Get roles information on creation of the data mapper
-        public AnnouncementsDataMapper()
-        {
-            this.RolesInformation = Role.GetRolesInformation();
-        }
-        
 
         //Get announcements for a specific role
         public List<Announcement> GetAnnouncementsForRole(int RoleID)
@@ -37,8 +30,8 @@ namespace LyncBillingBase.DataMappers
 
                 announcements = announcements
                     .Select(item => {
-                        item.RoleName = ((Role)RolesInformation.Find(role => role.RoleID == item.ForRole)).RoleName ?? string.Empty;
-                        item.SiteName = ((Site)SitesAccessor.GetById(item.ForSite)).Name ?? string.Empty;
+                        item.RoleName = (RolesInformation.Find(role => role.RoleID == item.ForRole) != null ? RolesInformation.Find(role => role.RoleID == item.ForRole).RoleName : string.Empty);
+                        item.SiteName = (sites.Find(site => site.ID == item.ForSite) != null ? sites.Find(site => site.ID == item.ForSite).Name : string.Empty);
                         return item;
                     })
                     .ToList();
@@ -56,10 +49,8 @@ namespace LyncBillingBase.DataMappers
         {
             //Expression<Func<Announcement, bool>> predicate = (item => item.ForSite == SiteID);
 
-            Dictionary<string, object> conditions = new Dictionary<string, object>() {
-                //ForRole DbColumn value
-                { "ForSite", SiteID }
-            };
+            Dictionary<string, object> conditions = new Dictionary<string, object>();
+            conditions.Add("ForSite", SiteID);
 
             try
             {
@@ -69,8 +60,8 @@ namespace LyncBillingBase.DataMappers
                 announcements = announcements
                     .Select(item =>
                     {
-                        item.RoleName = ((Role)RolesInformation.Find(role => role.RoleID == item.ForRole)).RoleName ?? string.Empty;
-                        item.SiteName = ((Site)SitesAccessor.GetById(item.ForSite)).Name ?? string.Empty;
+                        item.RoleName = (RolesInformation.Find(role => role.RoleID == item.ForRole) != null ? RolesInformation.Find(role => role.RoleID == item.ForRole).RoleName : string.Empty);
+                        item.SiteName = (sites.Find(site => site.ID == item.ForSite) != null ? sites.Find(site => site.ID == item.ForSite).Name : string.Empty);
                         return item;
                     })
                     .ToList();
