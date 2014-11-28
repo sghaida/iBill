@@ -73,7 +73,7 @@ namespace LyncBillingBase.Helpers
             {
                 Type childtypedObject = property.PropertyType;
 
-                var childtableFields = childtypedObject.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                var childtableFields = childtypedObject.GetProperties(flags)
                       .Where(item => item.GetCustomAttribute<DbColumnAttribute>() != null).
                       Select(item => new ObjectPropertyInfoField
                       {
@@ -98,21 +98,6 @@ namespace LyncBillingBase.Helpers
                     Type = item.DataType
                 }).ToList();
 
-            //Get the master class related columns from the data table
-            var masterObjectColumns = from masterObjField in masterObjectFields
-                                      join dtlFieldName in dtlFieldNames on
-                                      masterObjField.DataFieldName equals dtlFieldName.Name
-                                      where dtlFieldName.Type == masterObjField.DataFieldType
-                                      select
-                                      new ObjectPropertyInfoField()
-                                      { 
-                                          DataFieldName= dtlFieldName.Name,
-                                          DataFieldType = dtlFieldName.Type ,
-                                          Property = masterObjField.Property
-                                      };
-            
-            List<ObjectPropertyInfoField> mdtPropertyInfo = masterObjectColumns.ToList<ObjectPropertyInfoField>();
-
             //Get the Children classes related columns from datatable
 
             Dictionary<string, List<ObjectPropertyInfoField>> cdtPropertyInfo = new Dictionary<string, List<ObjectPropertyInfoField>>();
@@ -133,81 +118,123 @@ namespace LyncBillingBase.Helpers
                                           }).ToList();
 
                 cdtPropertyInfo.Add(childObjectsProperties.Key, childObjectColumns);
-
             }
 
 
             //Fill The data
-           foreach(DataRow datarow in  dataTable.AsEnumerable().ToList())
-           {
-                var classObj = new T();
+           
 
-                foreach (PropertyInfo property in childPropertInfoFields) 
+
+           //foreach(DataRow datarow in  dataTable.AsEnumerable().ToList())
+            Parallel.ForEach(dataTable.AsEnumerable().ToList(),
+                (datarow) =>
                 {
-                    Type childtypedObject = property.PropertyType;
+                    var masterObj = new T();
 
-                    var childObj = Activator.CreateInstance(childtypedObject);
-
-                    
-                    List<ObjectPropertyInfoField> data;
-                    cdtPropertyInfo.TryGetValue(childtypedObject.GetCustomAttribute<DataSourceAttribute>().Name, out data);
-
-                    foreach (var dtField in data) 
+                    //Fill the Data for children objects
+                    foreach (PropertyInfo property in childPropertInfoFields)
                     {
-                        var dataField = data.Find(item => item.DataFieldName == dtField.DataFieldName);
+                        Type childtypedObject = property.PropertyType;
 
-                        if (dataField != null)
+                        var childObj = Activator.CreateInstance(childtypedObject);
+
+                        List<ObjectPropertyInfoField> data;
+                        cdtPropertyInfo.TryGetValue(childtypedObject.GetCustomAttribute<DataSourceAttribute>().Name, out data);
+
+                        foreach (var dtField in data)
                         {
-                            PropertyInfo dataFieldPropertyInfo = dataField.Property;
+                            var dataField = data.Find(item => item.DataFieldName == dtField.DataFieldName);
+
+                            if (dataField != null)
+                            {
+                                PropertyInfo dataFieldPropertyInfo = dataField.Property;
+
+                                if (dataFieldPropertyInfo.PropertyType == typeof(DateTime))
+                                {
+                                    dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnDateTimeMinIfNull(), null);
+                                }
+                                else if (dataFieldPropertyInfo.PropertyType == typeof(int))
+                                {
+                                    dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
+                                }
+                                else if (dataFieldPropertyInfo.PropertyType == typeof(long))
+                                {
+                                    dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
+                                }
+                                else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
+                                {
+                                    dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
+                                }
+                                else if (dataFieldPropertyInfo.PropertyType == typeof(String))
+                                {
+                                    if (datarow[dtField.DataFieldName].GetType() == typeof(DateTime))
+                                    {
+                                        dataFieldPropertyInfo.SetValue(childObj, ConvertToDateString(datarow[dtField.DataFieldName]), null);
+                                    }
+                                    else
+                                    {
+                                        dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnEmptyIfNull(), null);
+                                    }
+                                }
+
+                            }
+                        }
+
+                        //Set the values for the children object
+                        foreach (PropertyInfo masterPropertyInfo in childPropertInfoFields)
+                        {
+                            if (masterPropertyInfo.PropertyType.Name == childObj.GetType().Name)
+                            {
+                                masterPropertyInfo.SetValue(masterObj, childObj);
+                            }
+                        }
+
+                    }// end foreach
+
+                    //Fill master Object with its related properties values
+                    foreach (var dtField in masterObjectFields)
+                    {
+
+                        if (dtField != null)
+                        {
+                            // Get the property info object of this field, for easier accessibility
+                            PropertyInfo dataFieldPropertyInfo = dtField.Property;
 
                             if (dataFieldPropertyInfo.PropertyType == typeof(DateTime))
                             {
-                                dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnDateTimeMinIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(masterObj, datarow[dtField.DataFieldName].ReturnDateTimeMinIfNull(), null);
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(int))
                             {
-                                dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(masterObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(long))
                             {
-                                dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(masterObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
                             {
-                                dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(masterObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(String))
                             {
                                 if (datarow[dtField.DataFieldName].GetType() == typeof(DateTime))
                                 {
-                                    dataFieldPropertyInfo.SetValue(childObj, ConvertToDateString(datarow[dtField.DataFieldName]), null);
+                                    dataFieldPropertyInfo.SetValue(masterObj, ConvertToDateString(datarow[dtField.DataFieldName]), null);
                                 }
                                 else
                                 {
-                                    dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnEmptyIfNull(), null);
+                                    dataFieldPropertyInfo.SetValue(masterObj, datarow[dtField.DataFieldName].ReturnEmptyIfNull(), null);
                                 }
                             }
+                        }//end if
+                    }//end foreach
 
-
-                            string x = string.Empty;
-                        }
-                    }
-
-                    foreach (PropertyInfo masterPropertyInfo in childPropertInfoFields) 
+                    lock (dataList)
                     {
-                        if (masterPropertyInfo.PropertyType.Name == childObj.GetType().Name) 
-                        {
-                            masterPropertyInfo.SetValue(classObj, childObj);
-                        }
+                        dataList.Add(masterObj);
                     }
-
-
-                    string xy = string.Empty;
-                }
-                dataList.Add(classObj);
-
-            }
-
+                });
 
             return dataList;
         }
