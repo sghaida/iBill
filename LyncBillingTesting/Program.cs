@@ -26,10 +26,10 @@ namespace LyncBillingTesting
         {
             //var _dbStorage = DataStorage.Instance;
 
-            DataAccess<SiteDepartment> sitesDepartements = new DataAccess<SiteDepartment>();
+            var AnnouncemenetsRepository = new AnnouncementsDataMapper();
 
-            var allData = sitesDepartements.GetAllWithRelations();
-
+            var announcementsForRole = AnnouncemenetsRepository.GetAnnouncementsForRole(2);
+            var announcementsForSite = AnnouncemenetsRepository.GetAnnouncementsForSite(1);
         }
     }
 }
