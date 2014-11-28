@@ -8,102 +8,64 @@ using System.Threading.Tasks;
 using LyncBillingBase.Helpers;
 using LyncBillingBase.Libs;
 
-
 namespace LyncBillingBase.Roles
 {
-    public class Roles
+    public class Role : DataModel
     {
+        //Data Attributes
         public int RoleID { get; set; }
         public string RoleName { get; set; }
         public string RoleDescription { get; set; }
 
-        public static List<Roles> GetRoles(List<string> columns, Dictionary<string, object> wherePart, int limits)
-        {
-            DataTable dt = new DataTable();
-            List<Roles> Roles = new List<Roles>();
-           
-            return Roles;
-        }
+        //To be used from outside the class as lookup values
+        public static int DeveloperRoleID { get { return Convert.ToInt32(Enums.GetValue(Enums.SystemRoles.DeveloperRole)); } }
+        public static int SystemAdminRoleID { get { return Convert.ToInt32(Enums.GetValue(Enums.SystemRoles.SystemAdminRole)); } }
+        public static int SiteAdminRoleID { get { return Convert.ToInt32(Enums.GetValue(Enums.SystemRoles.SiteAdminRole)); } }
+        public static int SiteAccountantRoleID { get { return Convert.ToInt32(Enums.GetValue(Enums.SystemRoles.SiteAccountantRole)); } }
 
-        
-        public static List<Roles> GetRolesInformation()
+
+        public static List<Role> GetRolesInformation()
         {
-            List<Roles> AllRolesInfo = new List<Roles>();
+            List<Role> AllRolesInfo = new List<Role>();
 
             //System Admin
-            AllRolesInfo.Add(new Roles 
+            AllRolesInfo.Add(new Role 
             { 
                 RoleID = Convert.ToInt32(Enums.GetValue(Enums.SystemRoles.SystemAdminRole)),
                 RoleName = Convert.ToString(Enums.GetDescription(Enums.SystemRoles.SystemAdminRole))
             });
 
             //Sites Admin
-            AllRolesInfo.Add(new Roles
+            AllRolesInfo.Add(new Role
             {
                 RoleID = Convert.ToInt32(Enums.GetValue(Enums.SystemRoles.SiteAdminRole)),
                 RoleName = Convert.ToString(Enums.GetDescription(Enums.SystemRoles.SiteAdminRole))
             });
 
             //Sites Accountant
-            AllRolesInfo.Add(new Roles
+            AllRolesInfo.Add(new Role
             {
                 RoleID = Convert.ToInt32(Enums.GetValue(Enums.SystemRoles.SiteAccountantRole)),
                 RoleName = Convert.ToString(Enums.GetDescription(Enums.SystemRoles.SiteAccountantRole))
             });
 
             //Departments Head
-            AllRolesInfo.Add(new Roles
+            AllRolesInfo.Add(new Role
             {
                 RoleID = Convert.ToInt32(Enums.GetValue(Enums.SystemRoles.DepartmentHeadRole)),
                 RoleName = Convert.ToString(Enums.GetDescription(Enums.SystemRoles.DepartmentHeadRole))
             });
 
             //Normal User
-            AllRolesInfo.Add(new Roles
+            AllRolesInfo.Add(new Role
             {
                 RoleID = Convert.ToInt32(Enums.GetValue(Enums.SystemRoles.NormalUserRole)),
                 RoleName = Convert.ToString(Enums.GetDescription(Enums.SystemRoles.NormalUserRole))
             });
 
-
             return AllRolesInfo;
         }
 
-
-        public static int InsertRole(Roles role)
-        {
-            int rowID = 0;
-           
-
-            return rowID;
-        }
-
-
-        public static bool UpdateRole(Roles role)
-        {
-            bool status = false;
-
-            Dictionary<string, object> setPart = new Dictionary<string, object>();
-
-            return status;
-        }
-
-
-        public static bool DeleteRole(Roles role)
-        {
-            bool status = false;
-
-            try
-            {
-                //status = DBRoutines.DELETE(Enums.GetDescription(Enums.Roles.TableName), Enums.GetDescription(Enums.Roles.RoleID), role.RoleID);
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-
-            return status;
-        }
-
     }
+
 }
