@@ -55,6 +55,9 @@
     <Compile Include="DataAccess\DataSourceSchema.cs" />
     <Compile Include="DataAccess\DB_VOCABULARY.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
+    <Compile Include="DataMappers\AnnouncementsDataMapper.cs" />
+    <Compile Include="DataMappers\DelegatesRolesMapper.cs" />
+    <Compile Include="DataMappers\SystemRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysDataMapper.cs" />
     <Compile Include="DataMappers\IdentityMapItem.cs" />
@@ -93,7 +96,7 @@
     <Compile Include="DataModels\GatewayRate.cs" />
     <Compile Include="DataModels\MailTemplate.cs" />
     <Compile Include="DataModels\MarkingStatus.cs" />
-    <Compile Include="DataModels\MatchingExtention.cs" />
+    <Compile Include="Helpers\MatchingExtention.cs" />
     <Compile Include="DataModels\Misc.cs" />
     <Compile Include="DataModels\MonitoringServerInfo.cs" />
     <Compile Include="DataModels\NumberingPlan.cs" />
@@ -110,7 +113,7 @@
     <Compile Include="DataModels\SiteDepartment.cs" />
     <Compile Include="DataModels\StoreLoader.cs" />
     <Compile Include="DataModels\User.cs" />
-    <Compile Include="DataModels\UserSession.cs" />
+    <Compile Include="SessionManagement\UserSession.cs" />
     <Compile Include="Libs\ADLib.cs" />
     <Compile Include="DataAccess\DBLib.cs" />
     <Compile Include="Helpers\HelperFunctions.cs" />
@@ -128,11 +131,11 @@
     <Compile Include="Reports\TopDestinationCountries.cs" />
     <Compile Include="Reports\TopDestinationNumbers.cs" />
     <Compile Include="Reports\UserCallsSummary.cs" />
-    <Compile Include="Roles\DelegateRole.cs" />
-    <Compile Include="Roles\DelegeeAccountInfo.cs" />
-    <Compile Include="Roles\DepartmentHeadRole.cs" />
-    <Compile Include="Roles\Roles.cs" />
-    <Compile Include="Roles\SystemRole.cs" />
+    <Compile Include="DataModels\DelegateRole.cs" />
+    <Compile Include="DataModels\DelegeeAccountInfo.cs" />
+    <Compile Include="DataModels\DepartmentHeadRole.cs" />
+    <Compile Include="DataModels\Roles.cs" />
+    <Compile Include="DataModels\SystemRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LyncBillingBase.dll.config">

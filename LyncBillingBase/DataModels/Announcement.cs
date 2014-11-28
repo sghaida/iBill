@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
     [Serializable]
-    [DataSource(Name = "Announcements", SourceType = Enums.DataSourceType.DBTable)]
-    public class Announcement
+    [DataSource(Name = "Announcements", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
+    public class Announcement : DataModel
     {
         [IsIDField]
         [DbColumn("ID")]
@@ -29,5 +30,8 @@ namespace LyncBillingBase.DataModels
         [AllowNull]
         [DbColumn("ForSite")]
         public int ForSite { get; set; }
+
+        public string RoleName { get; set; }
+        public string SiteName { get; set; }
     }
 }
