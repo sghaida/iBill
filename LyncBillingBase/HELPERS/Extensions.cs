@@ -13,9 +13,10 @@ namespace LyncBillingBase.Helpers
 {
     // Helper class for the ConverToList<T> function
     public class ObjectPropertyInfoField
-    {
-        public PropertyInfo Property { get; set; }
+    {   
         public string DataFieldName { get; set; }
+        public string ObjectFieldName { get; set; }
+        public PropertyInfo Property { get; set; }
         public Type DataFieldType { get; set; }
     }
 
@@ -30,29 +31,34 @@ namespace LyncBillingBase.Helpers
         /// <returns>List<T></returns>
         public static List<T> ConvertToList<T>(this DataTable dataTable) where T : class, new()
         {
-            List<PropertyInfo> ParentClassProperties;
-            List<ObjectPropertyInfoField> ParentClassObjectFields;
-            List<DataAccess.DbRelation> ParentClassChildrenFields;
-            List<PropertyInfo> ChildObjectsProperties;
-            List<ObjectPropertyInfoField> ChildObjectsFields;
-            
-            //Define what attributes to be read from the class
-            const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
-
-            //Initialize the data list
             var dataList = new List<T>();
 
             // List of class property infos
-            ParentClassProperties = typeof(T).GetProperties(flags)
+            List<PropertyInfo> masterPropertyInfoFields = new List<PropertyInfo>();
+            List<PropertyInfo> childPropertInfoFields = new List<PropertyInfo>();
+
+            //List of T object data fields (DbColumnAttribute Values), and types.
+            List<ObjectPropertyInfoField> masterObjectFields = new List<ObjectPropertyInfoField>();
+
+            //Define what attributes to be read from the class
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+
+            // Initialize Master the property info fields list
+            masterPropertyInfoFields = typeof(T).GetProperties(flags)
                 .Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null)
                 .Cast<PropertyInfo>()
                 .ToList();
 
-            //List of T object data fields (DbColumnAttribute Values), and types.
-            ParentClassObjectFields = new List<ObjectPropertyInfoField>();
-            foreach (var item in ParentClassProperties)
+            // Initialize child the property info fields list
+            childPropertInfoFields = typeof(T).GetProperties(flags)
+             .Where(property => property.GetCustomAttribute<DataRelationAttribute>() != null)
+             .Cast<PropertyInfo>()
+             .ToList();
+
+            // Initialize the object data fields  list for Master Object
+            foreach (var item in masterPropertyInfoFields)
             {
-                ParentClassObjectFields.Add(new ObjectPropertyInfoField
+                masterObjectFields.Add(new ObjectPropertyInfoField
                 {
                     Property = item,
                     DataFieldName = item.GetCustomAttribute<DbColumnAttribute>().Name,
@@ -60,27 +66,29 @@ namespace LyncBillingBase.Helpers
                 });
             }
 
-            //List of the parent class T children
-            //ParentClassChildrenFields = new List<DataAccess.DbRelation>();
-            ParentClassChildrenFields = typeof(T).GetProperties(flags)
-                .Where(item => item.GetCustomAttribute<DataRelationAttribute>() != null)
-                .Select<PropertyInfo, DataAccess.DbRelation>(
-                    item => new DataAccess.DbRelation
-                    {
-                        DataField = item.Name,
-                        RelationName = item.GetCustomAttribute<DataRelationAttribute>().Name,
-                        RelationType = item.GetCustomAttribute<DataRelationAttribute>().RelationType,
-                        WithDataModel = item.GetCustomAttribute<DataRelationAttribute>().WithDataModel,
-                        OnDataModelKey = item.GetCustomAttribute<DataRelationAttribute>().OnDataModelKey,
-                        ThisKey = item.GetCustomAttribute<DataRelationAttribute>().ThisKey
-                    })
-                .ToList<DataAccess.DbRelation>();
+            Dictionary<string, List<ObjectPropertyInfoField>> childrenObjectsProperties = new Dictionary<string, List<ObjectPropertyInfoField>>();
 
-            //List of the class child objects property info fields
-            ChildObjectsProperties = new List<PropertyInfo>();
+            // Fill the childrenObjectsProperties dictionary with the name of the children class for reflection and their corrospndant attributes
+            foreach (PropertyInfo property in childPropertInfoFields)
+            {
+                Type childtypedObject = property.PropertyType;
 
-            //List of the class T child objects data fields
-            ChildObjectsFields = new List<ObjectPropertyInfoField>();
+                var childtableFields = childtypedObject.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                      .Where(item => item.GetCustomAttribute<DbColumnAttribute>() != null).
+                      Select(item => new ObjectPropertyInfoField
+                      {
+                          Property = (PropertyInfo)item,
+                          DataFieldName = item.GetCustomAttribute<DbColumnAttribute>().Name,
+                          DataFieldType = Nullable.GetUnderlyingType(item.PropertyType) ?? item.PropertyType
+                      })
+                      .ToList();
+
+                var tableName = childtypedObject.GetCustomAttribute<DataSourceAttribute>().Name;
+
+                childrenObjectsProperties.Add(tableName, childtableFields);
+
+                //var childObj = Activator.CreateInstance(childtypedObject);
+            }
 
             //Read Datatable column names and types
             var dtlFieldNames = dataTable.Columns.Cast<DataColumn>()
@@ -90,61 +98,116 @@ namespace LyncBillingBase.Helpers
                     Type = item.DataType
                 }).ToList();
 
+            //Get the master class related columns from the data table
+            var masterObjectColumns = from masterObjField in masterObjectFields
+                                      join dtlFieldName in dtlFieldNames on
+                                      masterObjField.DataFieldName equals dtlFieldName.Name
+                                      where dtlFieldName.Type == masterObjField.DataFieldType
+                                      select
+                                      new ObjectPropertyInfoField()
+                                      { 
+                                          DataFieldName= dtlFieldName.Name,
+                                          DataFieldType = dtlFieldName.Type ,
+                                          Property = masterObjField.Property
+                                      };
+            
+            List<ObjectPropertyInfoField> mdtPropertyInfo = masterObjectColumns.ToList<ObjectPropertyInfoField>();
 
-            //Begin data table processing
-            Parallel.ForEach(
-                dataTable.AsEnumerable().ToList(),
-                (datarow) =>
+            //Get the Children classes related columns from datatable
+
+            Dictionary<string, List<ObjectPropertyInfoField>> cdtPropertyInfo = new Dictionary<string, List<ObjectPropertyInfoField>>();
+
+            foreach (KeyValuePair<string, List<ObjectPropertyInfoField>> childObjectsProperties in childrenObjectsProperties) 
+            {
+                var childObjectColumns = (from childObjField in childObjectsProperties.Value
+                                          join dtlFieldName in dtlFieldNames on
+                                          (childObjectsProperties.Key + "." + childObjField.DataFieldName) equals dtlFieldName.Name
+                                          where dtlFieldName.Type == childObjField.DataFieldType
+                                          select
+                                          new ObjectPropertyInfoField()
+                                          {
+                                              DataFieldName = dtlFieldName.Name,
+                                              DataFieldType = dtlFieldName.Type,
+                                              Property = childObjField.Property,
+                                              ObjectFieldName = childObjField.DataFieldName
+                                          }).ToList();
+
+                cdtPropertyInfo.Add(childObjectsProperties.Key, childObjectColumns);
+
+            }
+
+
+            //Fill The data
+           foreach(DataRow datarow in  dataTable.AsEnumerable().ToList())
+           {
+                var classObj = new T();
+
+                foreach (PropertyInfo property in childPropertInfoFields) 
                 {
-                    var classObj = new T();
+                    Type childtypedObject = property.PropertyType;
 
-                    foreach (var dtField in dtlFieldNames)
+                    var childObj = Activator.CreateInstance(childtypedObject);
+
+                    
+                    List<ObjectPropertyInfoField> data;
+                    cdtPropertyInfo.TryGetValue(childtypedObject.GetCustomAttribute<DataSourceAttribute>().Name, out data);
+
+                    foreach (var dtField in data) 
                     {
-                        bool doesItBelongToParentClass = (ParentClassObjectFields.Find(item => item.DataFieldName == dtField.Name) != null);
-                        bool doesItBelongToChildren = (ParentClassChildrenFields.Find(child => dtField.Name.Contains(child.WithDataModel.Name + ".") == true) != null);
+                        var dataField = data.Find(item => item.DataFieldName == dtField.DataFieldName);
 
-                        if (doesItBelongToParentClass == true)
+                        if (dataField != null)
                         {
-                            var parentClassDataField = ParentClassObjectFields.Find(item => item.DataFieldName == dtField.Name);
-
-                            // Get the property info object of this field, for easier accessibility
-                            PropertyInfo dataFieldPropertyInfo = parentClassDataField.Property;
+                            PropertyInfo dataFieldPropertyInfo = dataField.Property;
 
                             if (dataFieldPropertyInfo.PropertyType == typeof(DateTime))
                             {
-                                dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnDateTimeMinIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnDateTimeMinIfNull(), null);
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(int))
                             {
-                                dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnZeroIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(long))
                             {
-                                dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnZeroIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
                             {
-                                dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnZeroIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(String))
                             {
-                                if (datarow[dtField.Name].GetType() == typeof(DateTime))
+                                if (datarow[dtField.DataFieldName].GetType() == typeof(DateTime))
                                 {
-                                    dataFieldPropertyInfo.SetValue(classObj, ConvertToDateString(datarow[dtField.Name]), null);
+                                    dataFieldPropertyInfo.SetValue(childObj, ConvertToDateString(datarow[dtField.DataFieldName]), null);
                                 }
                                 else
                                 {
-                                    dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnEmptyIfNull(), null);
+                                    dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnEmptyIfNull(), null);
                                 }
                             }
+
+
+                            string x = string.Empty;
                         }
                     }
 
-                    lock (dataList)
+                    foreach (PropertyInfo masterPropertyInfo in childPropertInfoFields) 
                     {
-                        dataList.Add(classObj);
+                        if (masterPropertyInfo.PropertyType.Name == childObj.GetType().Name) 
+                        {
+                            masterPropertyInfo.SetValue(classObj, childObj);
+                        }
                     }
-                });
+
+
+                    string xy = string.Empty;
+                }
+                dataList.Add(classObj);
+
+            }
+
 
             return dataList;
         }
