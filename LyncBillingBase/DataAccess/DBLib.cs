@@ -27,7 +27,7 @@ namespace LyncBillingBase.DataAccess
         /// <returns></returns>
         private static List<string> ConstructUniqueTableColumnsNames(string tableName, List<string> columns)
         {
-            string SEPARATOR = "#";
+            string SEPARATOR = ".";
             List<string> formattedColumnsNames = new List<string>();
 
             if(!string.IsNullOrEmpty(tableName) && columns != null && columns.Count() > 0)

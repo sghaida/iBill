@@ -100,10 +100,13 @@ namespace LyncBillingBase.Helpers
 
                     foreach (var dtField in dtlFieldNames)
                     {
-                        var parentClassDataField = ParentClassObjectFields.Find(item => item.DataFieldName == dtField.Name);
+                        bool doesItBelongToParentClass = (ParentClassObjectFields.Find(item => item.DataFieldName == dtField.Name) != null);
+                        bool doesItBelongToChildren = (ParentClassChildrenFields.Find(child => dtField.Name.Contains(child.WithDataModel.Name + ".") == true) != null);
 
-                        if (parentClassDataField != null)
+                        if (doesItBelongToParentClass == true)
                         {
+                            var parentClassDataField = ParentClassObjectFields.Find(item => item.DataFieldName == dtField.Name);
+
                             // Get the property info object of this field, for easier accessibility
                             PropertyInfo dataFieldPropertyInfo = parentClassDataField.Property;
 
