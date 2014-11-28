@@ -11,7 +11,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Departments", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource, AccessType = Enums.DataSourceAccessType.SingleSource)]
+    [DataSource(Name = "Departments", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
     public class Department : DataModel
     {
         [IsIDField]

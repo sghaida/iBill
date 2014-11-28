@@ -55,6 +55,7 @@
     <Compile Include="DataAccess\DataSourceSchema.cs" />
     <Compile Include="DataAccess\DB_VOCABULARY.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
+    <Compile Include="DataMappers\AnnouncementsDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysDataMapper.cs" />
     <Compile Include="DataMappers\IdentityMapItem.cs" />
