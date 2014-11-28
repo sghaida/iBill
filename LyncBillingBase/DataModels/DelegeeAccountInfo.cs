@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using LyncBillingBase.DataModels;
+using LyncBillingBase.DataAccess;
+using LyncBillingBase.DataAttributes;
 
-
-namespace LyncBillingBase.Roles
+namespace LyncBillingBase.DataModels
 {
-    public class DelegeeAccountInfo
+    public class DelegeeAccountInfo : DataModel
     {
         public int DelegeeTypeID { get; set; }
 
