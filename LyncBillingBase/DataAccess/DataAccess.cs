@@ -362,7 +362,8 @@ namespace LyncBillingBase.DataAccess
 
                     //Get the table column names - exclude the ID field name.
                     List<string> joinedModelTableColumns = joinedModelFields
-                        .Where(field => field.TableField != null && field.TableField.IsIDField == false)
+                        //.Where(field => field.TableField != null && field.TableField.IsIDField == false)
+                        .Where(field => field.TableField != null)
                         .Select<DataField, string>(field => field.TableField.ColumnName)
                         .ToList<string>();
 
