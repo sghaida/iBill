@@ -93,7 +93,7 @@
     <Compile Include="DataModels\GatewayRate.cs" />
     <Compile Include="DataModels\MailTemplate.cs" />
     <Compile Include="DataModels\MarkingStatus.cs" />
-    <Compile Include="DataModels\MatchingExtention.cs" />
+    <Compile Include="Helpers\MatchingExtention.cs" />
     <Compile Include="DataModels\Misc.cs" />
     <Compile Include="DataModels\MonitoringServerInfo.cs" />
     <Compile Include="DataModels\NumberingPlan.cs" />

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LyncBillingBase.DataModels
+namespace LyncBillingBase.Helpers
 {
     public static class MatchingExtention
     {
