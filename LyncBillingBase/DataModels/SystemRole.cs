@@ -1,29 +1,44 @@
-﻿using System;
+﻿using LyncBillingBase.Libs;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
+using LyncBillingBase.DataAttributes;
 
-namespace LyncBillingBase.Roles
+namespace LyncBillingBase.DataModels
 {
-    public class SystemRole
+    [DataSource(Name="Roles_System", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
+    public class SystemRole : DataModel
     {
+        [IsIDField]
+        [DbColumn("ID")]
         public int ID { set; get; }
+
+        [DbColumn("SipAccount")]
         public string SipAccount { get; set; }
+
+        [DbColumn("RoleID")]
         public int RoleID { get; set; }
+
+        [AllowNull]
+        [DbColumn("SiteID")]
         public int SiteID { get; set; }
+
+        [AllowNull]
+        [DbColumn("Description")]
         public string Description { get; set; }
 
-        //The following are logical representation of existing data, they don't belong to the table
-        public string SiteName { get; set; }
-        public string RoleOwnerName { get; set; }
-        public string RoleDescription { get; set; }
 
-        //"This" System Role Flags
-        public bool IsDeveloper() { return this.RoleID == DeveloperRoleID ? true : false; }
-        public bool IsSystemAdmin() { return this.RoleID == SystemAdminRoleID ? true : false; }
-        public bool IsSiteAdmin() { return this.RoleID == SiteAdminRoleID ? true : false; }
-        public bool IsSiteAccountant() { return this.RoleID == SiteAccountantRoleID ? true : false; }
+        //
+        // Relations
+        [DataRelation(Name = "SiteID_Site.ID", WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
+        public Site SiteInfo { get; set; }
+
+        [DataRelation(Name = "SipAccount_User.SipAccount", WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "SipAccount")]
+        public User UserInfo { get; set; }
     }
 }

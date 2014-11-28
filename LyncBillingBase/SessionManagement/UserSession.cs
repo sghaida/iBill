@@ -1,16 +1,23 @@
-﻿using LyncBillingBase.Roles;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LyncBillingBase.DataModels
+using LyncBillingBase.DataModels;
+using LyncBillingBase.DataAccess;
+using LyncBillingBase.DataMappers;
+
+namespace LyncBillingBase.SessionManagement
 {
-    class UserSession
+    public class UserSession
     {
+        //The delegates roles data mapper - used for data access
+        private DelegatesRolesMapper DelegateRoleAccessor = new DelegatesRolesMapper();
+
         private static List<UserSession> usersSessions = new List<UserSession>();
         private List<DelegateRole> userDelegees = new List<DelegateRole>();
+
 
         //Normal user data
         public User NormalUserInfo { get; set; }
@@ -99,25 +106,10 @@ namespace LyncBillingBase.DataModels
 
                 foreach (SystemRole role in SystemRoles)
                 {
-                    if (role.IsDeveloper())
-                    {
-                        IsDeveloper = true;
-                    }
-
-                    else if (role.IsSystemAdmin())
-                    {
-                        IsSystemAdmin = true;
-                    }
-
-                    else if (role.IsSiteAdmin())
-                    {
-                        IsSiteAdmin = true;
-                    }
-
-                    else if (role.IsSiteAccountant())
-                    {
-                        IsSiteAccountant = true;
-                    }
+                    if (Role.IsDeveloper(role.RoleID)) IsDeveloper = true;
+                    else if (Role.IsSystemAdmin(role.RoleID)) IsSystemAdmin = true;
+                    else if (Role.IsSiteAdmin(role.RoleID)) IsSiteAdmin = true;
+                    else if (Role.IsSiteAccountant(role.RoleID)) IsSiteAccountant = true;
                 }
             }
         }
@@ -140,21 +132,21 @@ namespace LyncBillingBase.DataModels
             }
 
             //Initialize the Delegees SystemRoles Flags
-            this.IsUserDelegate = DelegateRole.IsUserDelegate(userSipAccount);
-            this.IsSiteDelegate = DelegateRole.IsSiteDelegate(userSipAccount);
-            this.IsDepartmentDelegate = DelegateRole.IsDepartmentDelegate(userSipAccount);
+            this.IsUserDelegate = DelegateRoleAccessor.IsUserDelegate(userSipAccount);
+            this.IsSiteDelegate = DelegateRoleAccessor.IsSiteDelegate(userSipAccount);
+            this.IsDepartmentDelegate = DelegateRoleAccessor.IsDepartmentDelegate(userSipAccount);
 
             this.IsDelegee = this.IsUserDelegate || this.IsDepartmentDelegate || this.IsSiteDelegate;
 
             //Initialize the Delegees Information Lists
             if (IsUserDelegate)
-                this.UserDelegateRoles = DelegateRole.GetDelegees(userSipAccount, DelegateRole.UserDelegeeTypeID);
+                this.UserDelegateRoles = DelegateRoleAccessor.GetDelegees(userSipAccount, Role.UserDelegeeTypeID);
 
             if (IsDepartmentDelegate)
-                this.DepartmentDelegateRoles = DelegateRole.GetDelegees(userSipAccount, DelegateRole.DepartmentDelegeeTypeID);
+                this.DepartmentDelegateRoles = DelegateRoleAccessor.GetDelegees(userSipAccount, Role.DepartmentDelegeeTypeID);
 
             if (IsSiteDelegate)
-                this.SiteDelegateRoles = DelegateRole.GetDelegees(userSipAccount, DelegateRole.SiteDelegeeTypeID);
+                this.SiteDelegateRoles = DelegateRoleAccessor.GetDelegees(userSipAccount, Role.SiteDelegeeTypeID);
 
         }
 
@@ -280,6 +272,6 @@ namespace LyncBillingBase.DataModels
             }
         }
 
-
     }
+
 }

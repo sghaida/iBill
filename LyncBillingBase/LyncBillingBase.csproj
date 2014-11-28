@@ -56,6 +56,8 @@
     <Compile Include="DataAccess\DB_VOCABULARY.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
     <Compile Include="DataMappers\AnnouncementsDataMapper.cs" />
+    <Compile Include="DataMappers\DelegatesRolesMapper.cs" />
+    <Compile Include="DataMappers\SystemRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysDataMapper.cs" />
     <Compile Include="DataMappers\IdentityMapItem.cs" />
@@ -111,7 +113,7 @@
     <Compile Include="DataModels\SiteDepartment.cs" />
     <Compile Include="DataModels\StoreLoader.cs" />
     <Compile Include="DataModels\User.cs" />
-    <Compile Include="DataModels\UserSession.cs" />
+    <Compile Include="SessionManagement\UserSession.cs" />
     <Compile Include="Libs\ADLib.cs" />
     <Compile Include="DataAccess\DBLib.cs" />
     <Compile Include="Helpers\HelperFunctions.cs" />
