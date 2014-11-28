@@ -129,11 +129,11 @@
     <Compile Include="Reports\TopDestinationCountries.cs" />
     <Compile Include="Reports\TopDestinationNumbers.cs" />
     <Compile Include="Reports\UserCallsSummary.cs" />
-    <Compile Include="Roles\DelegateRole.cs" />
-    <Compile Include="Roles\DelegeeAccountInfo.cs" />
-    <Compile Include="Roles\DepartmentHeadRole.cs" />
-    <Compile Include="Roles\Roles.cs" />
-    <Compile Include="Roles\SystemRole.cs" />
+    <Compile Include="DataModels\DelegateRole.cs" />
+    <Compile Include="DataModels\DelegeeAccountInfo.cs" />
+    <Compile Include="DataModels\DepartmentHeadRole.cs" />
+    <Compile Include="DataModels\Roles.cs" />
+    <Compile Include="DataModels\SystemRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LyncBillingBase.dll.config">
