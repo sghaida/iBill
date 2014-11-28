@@ -15,6 +15,34 @@ namespace LyncBillingBase.DataAccess
 {
     public class DBLib
     {
+        /// <summary>
+        /// Given a table name and a list of it's column names, return a list of column names in the following format: TableName#ColumnName.
+        /// Example:
+        ///     * TableName: "Users"
+        ///     * Columns: ["UserName", "UserEmail"]
+        ///     * Returned As: ["Users#UserName", "Users#UserEmail"]
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="columns"></param>
+        /// <returns></returns>
+        private static List<string> ConstructUniqueTableColumnsNames(string tableName, List<string> columns)
+        {
+            string SEPARATOR = "#";
+            List<string> formattedColumnsNames = new List<string>();
+
+            if(!string.IsNullOrEmpty(tableName) && columns != null && columns.Count() > 0)
+            {
+                formattedColumnsNames = columns
+                    .Select<string, string>(
+                        column => 
+                            String.Format("[{0}].[{1}] as '{2}{3}{4}'", tableName, column, tableName, SEPARATOR, column)
+                    ).ToList<string>();
+            }
+
+            return formattedColumnsNames;
+        }
+
+
         //Load DLL Configs
         public  static LoadConfigs config = new LoadConfigs();
 
@@ -113,7 +141,8 @@ namespace LyncBillingBase.DataAccess
 
                     JoinStatement.Append(String.Format("{0} {1} {2} ", joinType, relation.JoinedTableName, keysStatement));
 
-                    var joinedTableColumns = relation.JoinedTableColumns.Select<string, string>(col => String.Format("[{0}].[{1}]", relation.JoinedTableName, col)).ToList();
+                    //Construct the Joined Table Column Names by combining that table name and the column name, to avoid duplicate column names between tables
+                    var joinedTableColumns = ConstructUniqueTableColumnsNames(relation.JoinedTableName, relation.JoinedTableColumns.ToList<string>());
 
                     Columns = Columns.Concat(joinedTableColumns).ToList();
                 }//end-foreach
@@ -121,8 +150,9 @@ namespace LyncBillingBase.DataAccess
 
 
             //Concatenate the Master Table Columns with the local list
-            masterTableColumns = masterTableColumns.Select<string, string>(col => String.Format("[{0}].[{1}]", tableName, col)).ToList();
-            Columns = Columns.Concat(masterTableColumns).ToList();
+            if (masterTableColumns == null) masterTableColumns = new List<string>();
+            masterTableColumns = masterTableColumns.Select<string, string>(col => String.Format("[{0}].[{1}]", tableName, col, tableName, col)).ToList();
+            Columns = masterTableColumns.Concat(Columns).ToList();
 
 
             //Handle the fields collection
@@ -133,10 +163,12 @@ namespace LyncBillingBase.DataAccess
                     //selectedfields.Append(fieldName + ",");
                     if (!string.IsNullOrEmpty(field))
                     {
-                        if (field.Contains("COUNT") || field.Contains("SUM") || field.Contains("YEAR") || field.Contains("MONTH") || field.Contains("DISTINCT"))
-                            SelectColumns.Append(field + ",");
-                        else
-                            SelectColumns.Append(field + ",");
+                        //if (field.Contains("COUNT") || field.Contains("SUM") || field.Contains("YEAR") || field.Contains("MONTH") || field.Contains("DISTINCT"))
+                        //    SelectColumns.Append(field + ",");
+                        //else
+                        //    SelectColumns.Append(field + ",");
+
+                        SelectColumns.Append(field + ",");
                     }
                 }
 
