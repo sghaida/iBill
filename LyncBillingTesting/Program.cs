@@ -26,12 +26,16 @@ namespace LyncBillingTesting
         {
             var _dbStorage = DataStorage.Instance;
 
-            AnnouncementsDataMapper AnnouncemenetsDM = new AnnouncementsDataMapper();
-            var announcementsForRole = AnnouncemenetsDM.GetAnnouncementsForRole(2);
-            var announcementsForSite = AnnouncemenetsDM.GetAnnouncementsForSite(1);
+            //AnnouncementsDataMapper AnnouncemenetsDM = new AnnouncementsDataMapper();
+            //var announcementsForRole = AnnouncemenetsDM.GetAnnouncementsForRole(2);
+            //var announcementsForSite = AnnouncemenetsDM.GetAnnouncementsForSite(1);
 
-            SystemRolesDataMapper SystemRolesDM = new SystemRolesDataMapper();
-            var systemRoles = SystemRolesDM.GetAll().ToList<SystemRole>();
+            //SystemRolesDataMapper SystemRolesDM = new SystemRolesDataMapper();
+            //var systemRoles = SystemRolesDM.GetAll().ToList<SystemRole>();
+
+            DataAccess<SiteDepartment> sitesDepartements = new DataAccess<SiteDepartment>();
+
+            var allData = sitesDepartements.GetAllWithRelations();
 
         }
 
