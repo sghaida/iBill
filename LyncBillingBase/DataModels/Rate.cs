@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
     [DataSource(Name = "Rates", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.Distributed)]
-    public class Rate
+    public class Rate : DataModel
     {
         public int RateID { get; set; }
         public string CountryCode { get; set; }

@@ -56,7 +56,10 @@
     <Compile Include="DataAccess\DB_VOCABULARY.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
     <Compile Include="DataMappers\AnnouncementsDataMapper.cs" />
-    <Compile Include="DataMappers\DelegatesRolesMapper.cs" />
+    <Compile Include="DataMappers\BundledAccountsDataMapper.cs" />
+    <Compile Include="DataMappers\CallTypesDataMapper.cs" />
+    <Compile Include="DataMappers\DelegateRolesMapper.cs" />
+    <Compile Include="DataMappers\DepartmentHeadRolesDataMapper.cs" />
     <Compile Include="DataMappers\SystemRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysDataMapper.cs" />

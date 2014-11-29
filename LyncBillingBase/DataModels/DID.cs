@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
     [DataSource(Name = "DIDs", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
-    public class DID
+    public class DID : DataModel
     {
         [IsIDField]
         [DbColumn("ID")]
@@ -26,6 +27,10 @@ namespace LyncBillingBase.DataModels
         [DbColumn("SiteID")]
         public int SiteID { get; set; }
 
-        public string SiteName { get; set; }
+
+        //
+        // Relations
+        [DataRelation(Name = "SiteID_Site.ID", WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
+        public Site EffectiveSite { get; set; }
     }
 }

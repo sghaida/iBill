@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
     [DataSource(Name = "BundledAccounts", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
-    public class BundledAccount
+    public class BundledAccount : DataModel
     {
         [IsIDField]
         [DbColumn("ID")]
@@ -21,17 +22,11 @@ namespace LyncBillingBase.DataModels
         [DbColumn("AssociatedSipAccount")]
         public List<string> AssociatedSipAccounts { get; set; }
 
+
+        //
+        // Relations
+        [DataRelation(Name = "PrimarySipAccount_Users.SipAccount", WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "PrimarySipAccount")]
         public User PrimaryUserAccount { get; set; }
-
-
-
-        /***
-         * Custom Functions
-         */
-        public static List<string> GetAssociatedSipAccounts(string primarySipAccount)
-        {
-            throw new NotImplementedException();
-        }
-
     }
+
 }
