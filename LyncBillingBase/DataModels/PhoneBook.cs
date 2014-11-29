@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
     [DataSource(Name = "PhoneBook", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
-    public class PhoneBookContact
+    public class PhoneBookContact : DataModel
     {
         [IsIDField]
         [DbColumn("ID")]

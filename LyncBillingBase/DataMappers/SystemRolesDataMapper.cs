@@ -15,5 +15,15 @@ namespace LyncBillingBase.DataMappers
         private SitesDataMapper SitesAccessor = new SitesDataMapper();
         private List<Role> RolesInformation = Role.GetRolesInformation();
 
+
+        public List<SystemRole> GetSystemRolesForUser(string sipAccount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ValidateRoleForUser(int RoleID, string EmailAddress)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

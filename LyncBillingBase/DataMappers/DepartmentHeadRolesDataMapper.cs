@@ -10,24 +10,19 @@ using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
 {
-    public class DelegatesRolesMapper : DataAccess<DelegateRole>
+    public class DepartmentHeadRolesDataMapper : DataAccess<DepartmentHeadRole>
     {
-        public bool IsUserDelegate(string userSipAccount)
+        public bool IsDepartmentHead(string userSipAccount)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsSiteDelegate(string userSipAccount)
+        public List<DepartmentHeadRole> GetDepartmentHeadsForSite(int siteDepartmentID)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsDepartmentDelegate(string userSipAccount)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<DelegateRole> GetDelegees(string userSipAccount, int DelegateTypeID)
+        public List<SiteDepartment> GetSiteDepartmentsForUser(string sipAccount)
         {
             throw new NotImplementedException();
         }

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
     [DataSource(Name = "NEW_Countries", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
-    public class Country
+    public class Country : DataModel
     {
         [IsIDField]
         [DbColumn("ID")]
@@ -27,6 +28,9 @@ namespace LyncBillingBase.DataModels
         [DbColumn("CurrencyID")]
         public string CurrencyID { get; set; }
 
+
+        //
+        // Relations
         [DataRelation(Name = "Country.CunrrncyID_Currency.ID", WithDataModel = typeof(Currency), OnDataModelKey = "ID", ThisKey = "CurrencyID")]
         public Currency LocalCurrency { get; set; }
     }
