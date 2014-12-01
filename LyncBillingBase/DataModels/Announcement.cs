@@ -31,7 +31,13 @@ namespace LyncBillingBase.DataModels
         [DbColumn("ForSite")]
         public int ForSite { get; set; }
 
-        public string RoleName { get; set; }
-        public string SiteName { get; set; }
+
+        //
+        // Relations
+        [DataRelation(Name = "ForRole_Role.RoleID", WithDataModel = typeof(Role), OnDataModelKey = "RoleID", ThisKey = "ForRole")]
+        public Role Role { get; set; }
+
+        [DataRelation(Name = "ForSite_Site.ID", WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "ForSite")]
+        public Site Site { get; set; }
     }
 }

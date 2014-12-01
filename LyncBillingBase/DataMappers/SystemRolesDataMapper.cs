@@ -12,10 +12,6 @@ namespace LyncBillingBase.DataMappers
 {
     public class SystemRolesDataMapper : DataAccess<SystemRole>
     {
-        private SitesDataMapper SitesAccessor = new SitesDataMapper();
-        private List<Role> RolesInformation = Role.GetRolesInformation();
-
-
         public List<SystemRole> GetSystemRolesForUser(string sipAccount)
         {
             throw new NotImplementedException();

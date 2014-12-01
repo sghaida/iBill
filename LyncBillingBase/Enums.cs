@@ -133,64 +133,6 @@ namespace LyncBillingBase
             Rate,
         }
 
-        public enum SystemRoles
-        {
-            [DefaultValue(10)]
-            [Description("System Developer")]
-            DeveloperRole,
-            [DefaultValue(20)]
-            [Description("System Admin")]
-            SystemAdminRole,
-            [DefaultValue(30)]
-            [Description("Sites Administrator")]
-            SiteAdminRole,
-            [DefaultValue(40)]
-            [Description("Sites Accountant")]
-            SiteAccountantRole,
-            [DefaultValue(100)]
-            [Description("Departments Head")]
-            DepartmentHeadRole,
-            [DefaultValue(1000)]
-            [Description("Normal User")]
-            NormalUserRole
-        }
-
-        public enum ValidRoles
-        {
-            [Description("IsDeveloper")]
-            IsDeveloper,
-            [Description("IsSystemAdmin")]
-            IsSystemAdmin,
-            [Description("IsSiteAdmin")]
-            IsSiteAdmin,
-            [Description("IsSiteAccountant")]
-            IsSiteAccountant,
-            [Description("IsDepartmentHead")]
-            IsDepartmentHead
-        }
-
-        public enum ActiveRoleNames
-        {
-            [Description("developer")]
-            Developer,
-            [Description("sysadmin")]
-            SystemAdmin,
-            [Description("admin")]
-            SiteAdmin,
-            [Description("accounting")]
-            SiteAccountant,
-            [Description("dephead")]
-            DepartmentHead,
-            [Description("userdelegee")]
-            UserDelegee,
-            [Description("depdelegee")]
-            DepartmentDelegee,
-            [Description("sitedelegee")]
-            SiteDelegee,
-            [Description("user")]
-            NormalUser
-        }
-
         public enum DelegateTypes 
         {
             [DefaultValue(1)]

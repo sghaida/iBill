@@ -106,10 +106,10 @@ namespace LyncBillingBase.SessionManagement
 
                 foreach (SystemRole role in SystemRoles)
                 {
-                    if (Role.IsDeveloper(role.RoleID)) IsDeveloper = true;
-                    else if (Role.IsSystemAdmin(role.RoleID)) IsSystemAdmin = true;
-                    else if (Role.IsSiteAdmin(role.RoleID)) IsSiteAdmin = true;
-                    else if (Role.IsSiteAccountant(role.RoleID)) IsSiteAccountant = true;
+                    //if (Role.IsDeveloper(role.RoleID)) IsDeveloper = true;
+                    //else if (Role.IsSystemAdmin(role.RoleID)) IsSystemAdmin = true;
+                    //else if (Role.IsSiteAdmin(role.RoleID)) IsSiteAdmin = true;
+                    //else if (Role.IsSiteAccountant(role.RoleID)) IsSiteAccountant = true;
                 }
             }
         }
@@ -139,14 +139,14 @@ namespace LyncBillingBase.SessionManagement
             this.IsDelegee = this.IsUserDelegate || this.IsDepartmentDelegate || this.IsSiteDelegate;
 
             //Initialize the Delegees Information Lists
-            if (IsUserDelegate)
-                this.UserDelegateRoles = DelegateRoleAccessor.GetDelegees(userSipAccount, Role.UserDelegeeTypeID);
+            //if (IsUserDelegate)
+            //    this.UserDelegateRoles = DelegateRoleAccessor.GetDelegees(userSipAccount, Role.UserDelegeeTypeID);
 
-            if (IsDepartmentDelegate)
-                this.DepartmentDelegateRoles = DelegateRoleAccessor.GetDelegees(userSipAccount, Role.DepartmentDelegeeTypeID);
+            //if (IsDepartmentDelegate)
+            //    this.DepartmentDelegateRoles = DelegateRoleAccessor.GetDelegees(userSipAccount, Role.DepartmentDelegeeTypeID);
 
-            if (IsSiteDelegate)
-                this.SiteDelegateRoles = DelegateRoleAccessor.GetDelegees(userSipAccount, Role.SiteDelegeeTypeID);
+            //if (IsSiteDelegate)
+            //    this.SiteDelegateRoles = DelegateRoleAccessor.GetDelegees(userSipAccount, Role.SiteDelegeeTypeID);
 
         }
 
@@ -223,7 +223,7 @@ namespace LyncBillingBase.SessionManagement
             InitializeDelegeesInformation(userSipAccount);
             InitializeDepartmentHeadRoles(userSipAccount);
 
-            ActiveRoleName = Enums.GetDescription(Enums.ActiveRoleNames.NormalUser);
+            //ActiveRoleName = Enums.GetDescription(Enums.ActiveRoleNames.NormalUser);
         }
 
 
@@ -232,9 +232,9 @@ namespace LyncBillingBase.SessionManagement
         {
             List<string> DelegeesRoleNames = new List<string>()
             {
-                Enums.GetDescription(Enums.ActiveRoleNames.UserDelegee),
-                Enums.GetDescription(Enums.ActiveRoleNames.DepartmentDelegee),
-                Enums.GetDescription(Enums.ActiveRoleNames.SiteDelegee)
+                //Enums.GetDescription(Enums.ActiveRoleNames.UserDelegee),
+                //Enums.GetDescription(Enums.ActiveRoleNames.DepartmentDelegee),
+                //Enums.GetDescription(Enums.ActiveRoleNames.SiteDelegee)
             };
 
             //if the user is a user-delegee return the delegate sipaccount.
@@ -255,9 +255,9 @@ namespace LyncBillingBase.SessionManagement
         {
             List<string> DelegeesRoleNames = new List<string>()
             {
-                Enums.GetDescription(Enums.ActiveRoleNames.UserDelegee),
-                Enums.GetDescription(Enums.ActiveRoleNames.DepartmentDelegee),
-                Enums.GetDescription(Enums.ActiveRoleNames.SiteDelegee)
+                //Enums.GetDescription(Enums.ActiveRoleNames.UserDelegee),
+                //Enums.GetDescription(Enums.ActiveRoleNames.DepartmentDelegee),
+                //Enums.GetDescription(Enums.ActiveRoleNames.SiteDelegee)
             };
 
             //if the user is a user-delegee return the delegate sipaccount.
