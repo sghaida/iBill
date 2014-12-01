@@ -42,9 +42,9 @@ namespace LyncBillingTesting
 
             var MOA = SitesMapper.GetById(29);
 
-            var gatewaysInfo = GatewaysMapper.GetAll();
+            var gatewaysInfo = GatewaysMapper.GetAll(IncludeDataRelations: false);
 
-            var allGatewaysInfo = GatewaysMapper.GetWithRelations();
+            var allGatewaysInfo = GatewaysMapper.GetAll();
 
             var MOA_Gateways = GatewaysMapper.GetGatewaysForSite(MOA.ID); ;
         }

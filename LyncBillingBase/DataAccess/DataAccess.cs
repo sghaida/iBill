@@ -24,6 +24,75 @@ namespace LyncBillingBase.DataAccess
 
         private static DBLib DBRoutines = new DBLib();
 
+        /// <summary>
+        /// This is a private function. It is responsible for returning a list of the data relations on this data model translated to a list of SqlJoinRelation objects.
+        /// </summary>
+        /// <returns>List of SqlJoinRelation objects</returns>
+        private List<SqlJoinRelation> GetDataRelations()
+        {
+            //Table Relations Map
+            //To be sent to the DB Lib for SQL Query generation
+            List<SqlJoinRelation> TableRelationsMap = new List<SqlJoinRelation>();
+
+            //TableRelationsList
+            //To be used to looking up the relations and extracting information from them and copying them into the TableRelationsMap
+            List<DbRelation> DbRelationsList = Schema.DataFields.Where(field => field.Relation != null).Select<DataField, DbRelation>(field => field.Relation).ToList<DbRelation>();
+
+            //Start processing the list of table relations
+            if (DbRelationsList != null && DbRelationsList.Count() > 0)
+            {
+                //Foreach relation in the relations list, process it and construct the big TablesRelationsMap
+                foreach (var relation in DbRelationsList)
+                {
+                    //Create a temporary map for this target table relation
+                    var joinedTableInfo = new SqlJoinRelation();
+
+                    //Get the data model we're in relation with.
+                    Type relationType = relation.WithDataModel;
+
+                    //Build a data source schema for the data model we're in relation with.
+                    var generalModelSchemaType = typeof(DataSourceSchema<>);
+                    var specialModelSchemaType = generalModelSchemaType.MakeGenericType(relationType);
+                    dynamic joinedModelSchema = Activator.CreateInstance(specialModelSchemaType);
+
+                    //Get it's Data Fields.
+                    List<DataField> joinedModelFields = joinedModelSchema.GetDataFields();
+
+                    //Get the table column names - exclude the ID field name.
+                    List<string> joinedModelTableColumns = joinedModelFields
+                        .Where(field => field.TableField != null)
+                        .Select<DataField, string>(field => field.TableField.ColumnName)
+                        .ToList<string>();
+
+                    //Get the field that describes the relation key from the target model schema
+                    DataField joinedModelKey = joinedModelFields.Find(item => item.TableField != null && item.Name == relation.OnDataModelKey);
+
+                    //Get the field that describes our key on which we are in relation with the target model
+                    DataField thisKey = Schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
+
+                    if (thisKey != null && joinedModelKey != null)
+                    {
+                        //Initialize the temporary map and add it to the original relations map
+
+                        joinedTableInfo.RelationType = relation.RelationType.ToString();
+                        joinedTableInfo.MasterTableName = Schema.DataSourceName;
+                        joinedTableInfo.MasterTableKey = thisKey.TableField.ColumnName;
+                        joinedTableInfo.JoinedTableName = joinedModelSchema.GetDataSourceName();
+                        joinedTableInfo.JoinedTableKey = joinedModelKey.TableField.ColumnName;
+                        joinedTableInfo.JoinedTableColumns = joinedModelTableColumns;
+
+                        //Add the relation keys to the TableRelationsMap
+                        TableRelationsMap.Add(joinedTableInfo);
+                    }
+
+                }//end-foreach
+
+            }//end-outer-if
+
+            return TableRelationsMap;
+        }
+
+
         /**
          * Repository Constructor
          */
@@ -206,31 +275,68 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual T GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual T GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
         {
+            DataTable dt = new DataTable();
+            string finalDataSourceName = string.Empty;
+
+            int maximumLimit = 1;
+            List<string> thisModelTableColumns;
+            List<SqlJoinRelation> dataRelations;
+            Dictionary<string, object> condition;
+
             string errorMessage = string.Empty;
 
-            if (id > 0)
-            {
-                DataTable dt = DBRoutines.SELECT(Schema.DataSourceName, Schema.IDFieldName, id);
+            //Get our table columns from the schema
+            thisModelTableColumns = Schema.DataFields
+                .Where(field => field.TableField != null)
+                .Select<DataField, string>(field => field.TableField.ColumnName)
+                .ToList<string>();
 
-                if (dt.Rows.Count == 0)
+            //Decide on the Data Source Name
+            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? Schema.DataSourceName : dataSourceName);
+
+            //Validate the presence of the ID
+            if (id <= 0)
+            {
+                errorMessage = String.Format("The ID Field is either null or zero. Kindly pass a valid ID. Class name: \"{0}\".", typeof(T).Name);
+                throw new Exception(errorMessage);
+            }
+
+            //Construct the record ID condition
+            condition = new Dictionary<string, object>();
+            condition.Add(Schema.IDFieldName, id);
+
+            //Proceed with getting the data
+            if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
+            {
+                switch (IncludeDataRelations)
                 {
-                    return (T)Activator.CreateInstance(typeof(T));
-                }
-                else 
-                {
-                    return dt.ConvertToList<T>().FirstOrDefault<T>()??null; 
+                    case true:
+                        //Get our data relations list (SqlJoinRelation objects)
+                        dataRelations = GetDataRelations();
+                        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, condition, dataRelations, maximumLimit);
+                        break;
+
+                    case false:
+                        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, condition, maximumLimit);
+                        break;
                 }
             }
 
-            errorMessage = String.Format("The ID Field is either null or zero. Kindly pass a valid ID. Class name: \"{0}\".", typeof(T).Name);
-
-            throw new Exception(errorMessage);
+            //It will either return a data table with one row or zero rows
+            if (dt.Rows.Count == 0)
+            {
+                return (T)Activator.CreateInstance(typeof(T));
+            }
+            else
+            {
+                return dt.ConvertToList<T>().FirstOrDefault<T>() ?? null;
+            }
         }
 
 
-        public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             DataTable dt = new DataTable();
 
@@ -275,41 +381,47 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> Get(Dictionary<string, object> whereCondition, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual IEnumerable<T> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
         {
+            DataTable dt = new DataTable();
+            string finalDataSourceName = string.Empty;
+            
+            List<string> thisModelTableColumns;
+            List<SqlJoinRelation> dataRelations;
+
             string errorMessage = string.Empty;
-            List<string> allColumns = null;
 
-            if (whereCondition != null && whereCondition.Count > 0)
+            //Get our table columns from the schema
+            thisModelTableColumns = Schema.DataFields
+                .Where(field => field.TableField != null)
+                .Select<DataField, string>(field => field.TableField.ColumnName)
+                .ToList<string>();
+
+            //Decide on the Data Source Name
+            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? Schema.DataSourceName : dataSourceName);
+            
+            //Validate the presence of the where conditions
+            if (whereConditions == null || whereConditions.Count  == 0)
             {
-                DataTable dt = DBRoutines.SELECT(Schema.DataSourceName, allColumns, whereCondition, limit);
-
-                return dt.ConvertToList<T>();
+                errorMessage = String.Format("The \"whereConditions\" parameter is either null or empty. Kindly pass a valid \"whereConditions\" parameter. Class name: \"{0}\".", typeof(T).Name);
+                throw new Exception(errorMessage);
             }
 
-            errorMessage = String.Format("The \"whereConditions\" parameter is either null or empty. Kindly pass a valid \"whereConditions\" parameter. Class name: \"{0}\".", typeof(T).Name);
 
-            throw new Exception(errorMessage);
-        }
-
-
-        public virtual IEnumerable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
-        {
-            int maximumLimit = 0;
-            List<string> allColumns = null;
-            Dictionary<string, object> whereConditions = null;
-            
-            DataTable dt  = new DataTable();
-
+            //Proceed with getting the data
             if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
             {
-                if (string.IsNullOrEmpty(dataSourceName))
+                switch (IncludeDataRelations)
                 {
-                    dt = DBRoutines.SELECT(Schema.DataSourceName, allColumns, whereConditions, maximumLimit);
-                }
-                else
-                {
-                    dt = DBRoutines.SELECT(dataSourceName, allColumns, whereConditions, maximumLimit);
+                    case true:
+                        //Get our data relations list (SqlJoinRelation objects)
+                        dataRelations = GetDataRelations();
+                        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, whereConditions, dataRelations, 0);
+                        break;
+
+                    case false:
+                        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, limit);
+                        break;
                 }
             }
 
@@ -317,93 +429,41 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> GetWithRelations(Dictionary<string, object> whereConditions = null, int maximumLimit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual IEnumerable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
         {
-            string SQLQuery = string.Empty;
             DataTable dt = new DataTable();
+            string finalDataSourceName = string.Empty;
+
+            int maximumLimit = 0;
+            List<string> thisModelTableColumns;
+            Dictionary<string, object> whereConditions = null;
+            List<SqlJoinRelation> dataRelations;
 
             //Get our table columns from the schema
-            List<string> thisModelTableColumns = Schema.DataFields
+            thisModelTableColumns = Schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select<DataField, string>(field => field.TableField.ColumnName)
                 .ToList<string>();
 
-            //Table Relations Map
-            //To be sent to the DB Lib for SQL Query generation
-            List<SqlJoinRelation> TableRelationsMap = new List<SqlJoinRelation>();
-
-            //TableRelationsList
-            //To be used to looking up the relations and extracting information from them and copying them into the TableRelationsMap
-            List<DbRelation> TableRelationsList = Schema.DataFields.Where(field => field.Relation != null).Select<DataField, DbRelation>(field => field.Relation).ToList<DbRelation>();
-
-            //Start processing the list of table relations
-            if (TableRelationsList.Count() > 0)
+            //Decide on the Data Source Name
+            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? Schema.DataSourceName : dataSourceName);
+            
+            //Proceed with getting the data
+            if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
             {
-                //Foreach relation in the relations list, process it and construct the big TablesRelationsMap
-                foreach(var relation in TableRelationsList)
-                {
-                    //Create a temporary map for this target table relation
-                    var joinedTableInfo = new SqlJoinRelation();
-
-                    //Get the data model we're in relation with.
-                    Type relationType = relation.WithDataModel;
-                    
-                    //Build a data source schema for the data model we're in relation with.
-                    var generalModelSchemaType = typeof(DataSourceSchema<>);                    
-                    var specialModelSchemaType = generalModelSchemaType.MakeGenericType(relationType);
-                    dynamic joinedModelSchema = Activator.CreateInstance(specialModelSchemaType);
-
-                    //Get it's Data Fields.
-                    List<DataField> joinedModelFields = joinedModelSchema.GetDataFields();
-
-                    //Get the table column names - exclude the ID field name.
-                    List<string> joinedModelTableColumns = joinedModelFields
-                        .Where(field => field.TableField != null)
-                        .Select<DataField, string>(field => field.TableField.ColumnName)
-                        .ToList<string>();
-
-                    //Get the field that describes the relation key from the target model schema
-                    DataField joinedModelKey = joinedModelFields.Find(item => item.TableField != null && item.Name == relation.OnDataModelKey);
-
-                    //Get the field that describes our key on which we are in relation with the target model
-                    DataField thisKey = Schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
-
-                    if(thisKey != null && joinedModelKey != null)
-                    {
-                        //Initialize the temporary map and add it to the original relations map
-                        
-                        joinedTableInfo.RelationType = relation.RelationType.ToString();
-                        joinedTableInfo.MasterTableName = Schema.DataSourceName;
-                        joinedTableInfo.MasterTableKey = thisKey.TableField.ColumnName;
-                        joinedTableInfo.JoinedTableName = joinedModelSchema.GetDataSourceName();
-                        joinedTableInfo.JoinedTableKey = joinedModelKey.TableField.ColumnName;
-                        joinedTableInfo.JoinedTableColumns = joinedModelTableColumns;
-
-                        //Add the relation keys to the TableRelationsMap
-                        TableRelationsMap.Add(joinedTableInfo);
-                    }
-                }//end-foreach
-
-
-                //Fetch the data from the data source only if the relations map has at least one item
-                if (TableRelationsMap.Count > 0)
+                switch(IncludeDataRelations)
                 { 
-                    if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
-                    {
-                        //if (string.IsNullOrEmpty(dataSourceName))
-                        //{
-                        //    dt = DBRoutines.SELECT(Schema.DataSourceName, allColumns, whereConditions, maximumLimit);
-                        //}
-                        //else
-                        //{
-                        //    dt = DBRoutines.SELECT(dataSourceName, allColumns, whereConditions, maximumLimit);
-                        //}
+                    case true:
+                        //Get our data relations list (SqlJoinRelation objects)
+                        dataRelations = GetDataRelations();
+                        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, null, dataRelations, 0);
+                        break;
 
-                        dt = DBRoutines.SELECT_WITH_JOIN(Schema.DataSourceName, thisModelTableColumns, whereConditions, TableRelationsMap, maximumLimit);
-                    }
-                }//end-inner-if
-
-            }//end-outer-if
+                    case false:
+                        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
+                        break;
+                }
+            }
 
             return dt.ConvertToList<T>();
         }

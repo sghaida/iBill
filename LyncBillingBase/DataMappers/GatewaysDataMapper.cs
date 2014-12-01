@@ -21,7 +21,7 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                gatewaysInfo = GetWithRelations(conditions, 0).ToList<GatewayInfo>();
+                gatewaysInfo = Get(whereConditions: conditions, limit: 0).ToList<GatewayInfo>();
 
                 var gateways = gatewaysInfo.Select<GatewayInfo, Gateway>(item => item.GatewayData).ToList<Gateway>();
 
