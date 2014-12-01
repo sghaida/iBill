@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LyncBillingBase.DataMappers
+namespace LyncBillingBase.DataMappers.SQLQueries
 {
     public class PhoneCallsSQL
     {
