@@ -11,8 +11,6 @@ using LyncBillingBase.DataMappers;
 using LyncBillingBase.Helpers;
 using LyncBillingBase.Repository;
 
-
-
 namespace LyncBillingTesting
 {
     class Program
@@ -33,20 +31,29 @@ namespace LyncBillingTesting
             //SystemRolesDataMapper SystemRolesDM = new SystemRolesDataMapper();
             //var systemRoles = SystemRolesDM.GetAll().ToList<SystemRole>();
 
-            //DataAccess<SiteDepartment> sitesDepartements = new DataAccess<SiteDepartment>();
+            //SitesDepartmentsDataMapper SitesDepartementsMapper = new SitesDepartmentsDataMapper();
 
-            //var allData = sitesDepartements.GetAllWithRelations();
+            //var sitesDepartments = SitesDepartementsMapper.GetAll();
+
+            //var MOA_Departments = SitesDepartementsMapper.GetDepartmentsForSite(Convert.ToInt64(MOA.ID));
+
+            //GatewaysDataMapper GatewaysMapper = new GatewaysDataMapper();
+            //AnnouncementsDataMapper AnnouncementsMapper = new AnnouncementsDataMapper();
+
+            //var ann = AnnouncementsMapper.GetAll();
+
+            //var gatewaysInfo = GatewaysMapper.GetAll(IncludeDataRelations: false);
+
+            //var allGatewaysInfo = GatewaysMapper.GetAll();
+
+            //var MOA_Gateways = GatewaysMapper.GetGatewaysForSite(MOA.ID); ;
 
             SitesDataMapper SitesMapper = new SitesDataMapper();
-            GatewaysDataMapper GatewaysMapper = new GatewaysDataMapper();
-
+            PhoneCallsDataMapper PhoneCallsMapper = new PhoneCallsDataMapper();
+            
             var MOA = SitesMapper.GetById(29);
 
-            var gatewaysInfo = GatewaysMapper.GetAll(IncludeDataRelations: false);
-
-            var allGatewaysInfo = GatewaysMapper.GetAll();
-
-            var MOA_Gateways = GatewaysMapper.GetGatewaysForSite(MOA.ID); ;
+            var MOA_Calls = PhoneCallsMapper.GetChargeableCallsForSite(MOA.Name);
         }
 
     }

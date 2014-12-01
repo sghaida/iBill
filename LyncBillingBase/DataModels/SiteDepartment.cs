@@ -23,9 +23,9 @@ namespace LyncBillingBase.DataModels
         public int DepartmentID { get; set; }
 
         [DataRelation(Name = "SiteID_Site.ID", WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
-        public Site site { get; set; }
+        public Site Site { get; set; }
 
         [DataRelation(Name = "DepartmentID_Department.ID", WithDataModel = typeof(Department), OnDataModelKey = "ID", ThisKey = "DepartmentID")]
-        public Department department { get; set; }
+        public Department Department { get; set; }
     }
 }

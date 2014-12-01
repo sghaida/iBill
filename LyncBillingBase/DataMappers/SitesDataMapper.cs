@@ -12,9 +12,6 @@ namespace LyncBillingBase.DataMappers
 {
     public class SitesDataMapper : DataAccess<Site>
     {
-        private DataAccess<Department> Departments = new DataAccess<Department>();
-        private DataAccess<SiteDepartment> SitesDepartments = new DataAccess<SiteDepartment>();
-
         //Identity Map
         private List<IdentityMapItem<Site>> IdentityMap = new List<IdentityMapItem<Site>>();
 
