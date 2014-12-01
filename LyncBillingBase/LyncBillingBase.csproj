@@ -53,7 +53,6 @@
     <Compile Include="Conf\PhoneCallsTablesSection.cs" />
     <Compile Include="DataAccess\DataField.cs" />
     <Compile Include="DataAccess\DataSourceSchema.cs" />
-    <Compile Include="DataAccess\DB_VOCABULARY.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
     <Compile Include="DataMappers\AnnouncementsDataMapper.cs" />
     <Compile Include="DataMappers\BundledAccountsDataMapper.cs" />
@@ -76,7 +75,7 @@
     <Compile Include="DataModels\Department.cs" />
     <Compile Include="DataModels\DialingPrefixRate.cs" />
     <Compile Include="DataModels\DID.cs" />
-    <Compile Include="DataMappers\PhoneCallsSQL.cs" />
+    <Compile Include="DataMappers\SQLQueries\PhoneCallsSQL.cs" />
     <Compile Include="DataAccess\CustomExpressionVisitor.cs" />
     <Compile Include="DataAccess\DataAccess.cs" />
     <Compile Include="DataMappers\PhoneCallsDataMapper.cs" />
@@ -95,7 +94,7 @@
     <Compile Include="DataAttributes\DataSourceAttribute.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="DataModels\Gateway.cs" />
-    <Compile Include="DataModels\GatewayDetail.cs" />
+    <Compile Include="DataModels\GatewayInfo.cs" />
     <Compile Include="DataModels\GatewayRate.cs" />
     <Compile Include="DataModels\MailTemplate.cs" />
     <Compile Include="DataModels\MarkingStatus.cs" />

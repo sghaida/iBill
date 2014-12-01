@@ -10,7 +10,27 @@ using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
 {
-    public class GatewaysDataMapper : DataAccess<Gateway>
+    public class GatewaysDataMapper : DataAccess<GatewayInfo>
     {
+        public List<Gateway> GetGatewaysForSite(int siteID)
+        {
+            List<GatewayInfo> gatewaysInfo = new List<GatewayInfo>();
+
+            Dictionary<string, object> conditions = new Dictionary<string, object>();
+            conditions.Add("SiteID", siteID);
+
+            try
+            {
+                gatewaysInfo = GetWithRelations(conditions, 0).ToList<GatewayInfo>();
+
+                var gateways = gatewaysInfo.Select<GatewayInfo, Gateway>(item => item.GatewayData).ToList<Gateway>();
+
+                return gateways;
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
     }
 }

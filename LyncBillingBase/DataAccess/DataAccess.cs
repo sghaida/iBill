@@ -212,7 +212,7 @@ namespace LyncBillingBase.DataAccess
 
             if (id > 0)
             {
-                DataTable dt =  DBRoutines.SELECT(Schema.DataSourceName, Schema.IDFieldName, id);
+                DataTable dt = DBRoutines.SELECT(Schema.DataSourceName, Schema.IDFieldName, id);
 
                 if (dt.Rows.Count == 0)
                 {
@@ -317,14 +317,10 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> GetAllWithRelations(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual IEnumerable<T> GetWithRelations(Dictionary<string, object> whereConditions = null, int maximumLimit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
         {
             string SQLQuery = string.Empty;
             DataTable dt = new DataTable();
-
-            int maximumLimit = 0;
-            List<string> allColumns = null;
-            Dictionary<string, object> whereConditions = null;
 
             //Get our table columns from the schema
             List<string> thisModelTableColumns = Schema.DataFields

@@ -20,7 +20,7 @@ namespace LyncBillingBase.DataMappers
         /**
          * The SQL Queries Generator
          */
-        private PhoneCallsSQL sqlAccessor = new PhoneCallsSQL();
+        private SQLQueries.PhoneCallsSQL sqlAccessor = new SQLQueries.PhoneCallsSQL();
 
         /***
          * The list of phone calls tables

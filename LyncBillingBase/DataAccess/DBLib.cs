@@ -98,9 +98,9 @@ namespace LyncBillingBase.DataAccess
             DataTable dt = new DataTable();
 
             OleDbDataReader dr;
-            string TRUTH_OPERATOR = "AND";
             string FinalSelectQuery = string.Empty;
             List<string> Columns = new List<string>();
+            string TRUTH_OPERATOR = "AND";
 
             StringBuilder SelectColumns = new StringBuilder("");
             StringBuilder WhereStatement = new StringBuilder("");
@@ -187,36 +187,45 @@ namespace LyncBillingBase.DataAccess
 
                 foreach (KeyValuePair<string, object> pair in whereConditions)
                 {
+                    string key = pair.Key;
+
+                    //If the key doesn't contain the table separator ("."), then add the master table name and the table separator.
+                    if (!key.Contains("."))
+                    {
+                        key = String.Format("[{0}].[{1}]", tableName, key);
+                    }
+
+
                     if (pair.Value == null)
                     {
-                        WhereStatement.Append("[" + pair.Key + "] IS NULL " + TRUTH_OPERATOR);
+                        WhereStatement.Append(String.Format("{0} IS NULL {1} ", key, TRUTH_OPERATOR));
                     }
 
                     else if (pair.Value.ToString() == "!null")
                     {
-                        WhereStatement.Append("[" + pair.Key + "] IS NOT NULL " + TRUTH_OPERATOR);
+                        WhereStatement.Append(String.Format("{0} IS NOT NULL {1} ", key, TRUTH_OPERATOR));
                     }
 
                     else if (pair.Value.ToString() == "!=0")
                     {
-                        WhereStatement.Append("[" + pair.Key + "] <> 0 " + TRUTH_OPERATOR);
+                        WhereStatement.Append(String.Format("{0} <> 0 {1} ", key, TRUTH_OPERATOR));
                     }
 
                     else if (pair.Value is string && pair.Value.ToString().ToLower().Contains("like"))
                     {
                         //key like value: key = "columnX", value = "like '%ABC%'"
-                        WhereStatement.Append("[" + pair.Key + "] " + pair.Value + TRUTH_OPERATOR);
+                        WhereStatement.Append(String.Format("{0} {1} {2} ", key, pair.Value, TRUTH_OPERATOR));
                     }
 
                     else if (pair.Value is string && (pair.Value.ToString()).Contains("BETWEEN"))
                     {
                         //key like value: key = "columnX", value = "BETWEEN abc AND xyz"
-                        WhereStatement.Append("[" + pair.Key + "]  " + pair.Value + TRUTH_OPERATOR);
+                        WhereStatement.Append(String.Format("{0} {1} {2} ", key, pair.Value, TRUTH_OPERATOR));
                     }
 
                     else if (pair.Value is List<int>)
                     {
-                        WhereStatement.Append("[" + pair.Key + "] in ( ");
+                        WhereStatement.Append(key + " in ( ");
 
                         foreach (var item in (List<int>)pair.Value)
                         {
@@ -225,12 +234,12 @@ namespace LyncBillingBase.DataAccess
                         //Remove last ','
                         WhereStatement.Remove(WhereStatement.Length - 1, 1);
 
-                        WhereStatement.Append(" ) " + TRUTH_OPERATOR);
+                        WhereStatement.Append(" ) " + TRUTH_OPERATOR + " ");
                     }
 
                     else if (pair.Value is List<string>)
                     {
-                        WhereStatement.Append("[" + pair.Key + "] in ( ");
+                        WhereStatement.Append(key + " in ( ");
 
                         foreach (var item in (List<string>)pair.Value)
                         {
@@ -239,7 +248,7 @@ namespace LyncBillingBase.DataAccess
                         //Remove last ','
                         WhereStatement.Remove(WhereStatement.Length - 1, 1);
 
-                        WhereStatement.Append(" ) " + TRUTH_OPERATOR);
+                        WhereStatement.Append(" ) " + TRUTH_OPERATOR + " ");
                     }
 
                     else
@@ -247,20 +256,17 @@ namespace LyncBillingBase.DataAccess
                         Type valueType = pair.Value.GetType();
                         if (valueType == typeof(int) || valueType == typeof(Double))
                         {
-                            WhereStatement.Append("[" + pair.Key + "]=" + pair.Value + TRUTH_OPERATOR);
+                            WhereStatement.Append(String.Format("{0}={1} {2} ", key, pair.Value, TRUTH_OPERATOR));
                         }
                         else
                         {
-                            WhereStatement.Append("[" + pair.Key + "]='" + pair.Value + "'" + TRUTH_OPERATOR);
+                            WhereStatement.Append(String.Format("{0}='{1}' {2} ", key, pair.Value, TRUTH_OPERATOR));
                         }
                     }
                 }
 
                 //Trim the whereStatement
-                if (TRUTH_OPERATOR == "OR")
-                    WhereStatement.Remove(WhereStatement.Length - 4, 4);
-                else if(TRUTH_OPERATOR == "AND")
-                    WhereStatement.Remove(WhereStatement.Length - 5, 5);
+                WhereStatement.Remove(WhereStatement.Length - 5, 5);
             }
 
 

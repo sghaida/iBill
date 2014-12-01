@@ -33,10 +33,20 @@ namespace LyncBillingTesting
             //SystemRolesDataMapper SystemRolesDM = new SystemRolesDataMapper();
             //var systemRoles = SystemRolesDM.GetAll().ToList<SystemRole>();
 
-            DataAccess<SiteDepartment> sitesDepartements = new DataAccess<SiteDepartment>();
+            //DataAccess<SiteDepartment> sitesDepartements = new DataAccess<SiteDepartment>();
 
-            var allData = sitesDepartements.GetAllWithRelations();
+            //var allData = sitesDepartements.GetAllWithRelations();
 
+            SitesDataMapper SitesMapper = new SitesDataMapper();
+            GatewaysDataMapper GatewaysMapper = new GatewaysDataMapper();
+
+            var MOA = SitesMapper.GetById(29);
+
+            var gatewaysInfo = GatewaysMapper.GetAll();
+
+            var allGatewaysInfo = GatewaysMapper.GetWithRelations();
+
+            var MOA_Gateways = GatewaysMapper.GetGatewaysForSite(MOA.ID); ;
         }
 
     }
