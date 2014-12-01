@@ -13,7 +13,23 @@ namespace LyncBillingBase.DataMappers
     {
         public List<CallType> GetNGNCallTypes()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var callTypes = GetAll().ToList<CallType>();
+
+                callTypes = callTypes
+                    .Where(type =>
+                        type.Name == "NGN" ||
+                        type.Name == "TOLL-FREE" ||
+                        type.Name == "PUSH-TO-TALK")
+                    .ToList<CallType>();
+
+                return callTypes;
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
     }
 }
