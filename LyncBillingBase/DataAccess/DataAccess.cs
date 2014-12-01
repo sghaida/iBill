@@ -331,7 +331,7 @@ namespace LyncBillingBase.DataAccess
             }
             else
             {
-                return dt.ConvertToList<T>().FirstOrDefault<T>() ?? null;
+                return dt.ConvertToList<T>(IncludeDataRelations).FirstOrDefault<T>() ?? null;
             }
         }
 
@@ -377,7 +377,7 @@ namespace LyncBillingBase.DataAccess
                 }
             }
 
-            return dt.ConvertToList<T>();
+            return dt.ConvertToList<T>(IncludeDataRelations);
         }
 
 
@@ -425,7 +425,7 @@ namespace LyncBillingBase.DataAccess
                 }
             }
 
-            return dt.ConvertToList<T>();
+            return dt.ConvertToList<T>(IncludeDataRelations);
         }
 
 
@@ -465,7 +465,7 @@ namespace LyncBillingBase.DataAccess
                 }
             }
 
-            return dt.ConvertToList<T>();
+            return dt.ConvertToList<T>(IncludeDataRelations);
         }
 
 
