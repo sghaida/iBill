@@ -26,7 +26,7 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 var sites = SitesAccessor.GetAll().ToList<Site>();
-                var announcements = base.Get(whereCondition: conditions, limit: 0).ToList<Announcement>();
+                var announcements = base.Get(whereConditions: conditions, limit: 0).ToList<Announcement>();
 
                 announcements = announcements
                     .Select(item => {
@@ -55,7 +55,7 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 var sites = SitesAccessor.GetAll().ToList<Site>();
-                var announcements = base.Get(whereCondition: conditions, limit: 0).ToList<Announcement>();
+                var announcements = base.Get(whereConditions: conditions, limit: 0).ToList<Announcement>();
 
                 announcements = announcements
                     .Select(item =>
