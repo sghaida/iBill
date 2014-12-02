@@ -9,14 +9,14 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "CallTypes", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
+    [DataSource(Name = "NEW_CallTypes", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
     public class CallType : DataModel
     {
         [IsIDField]
-        [DbColumn("id")]
+        [DbColumn("ID")]
         public int ID { get; set; }
 
-        [DbColumn("CallType")]
+        [DbColumn("Name")]
         public string Name { get; set; }
     }
 }

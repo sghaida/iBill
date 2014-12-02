@@ -15,7 +15,7 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// Given a User's SipAccount, return the list of Sites-Departments that he is assigned on as a Department Head.
         /// </summary>
-        /// <param name="UserSipAccount">User.SipAccount (string).</param>
+        /// <param name="UserSipAccount">The Department Head SipAccount (string).</param>
         /// <returns>List of SiteDepartment objects.</returns>
         public List<SiteDepartment> GetSiteDepartmentsForUser(string UserSipAccount)
         {

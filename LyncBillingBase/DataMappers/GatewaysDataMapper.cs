@@ -44,7 +44,7 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="SiteID">Site.ID (int)</param>
         /// <returns>List of Gateway objects.</returns>
-        public List<Gateway> GetGatewaysForSite(int SiteID)
+        public List<Gateway> GetGatewaysBySiteID(int SiteID)
         {
             List<Gateway> gateways = null;
             List<GatewayInfo> gatewaysInfo = null;
@@ -75,7 +75,7 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="GatewayID">Gateway.ID (int), GatewayInfo.GatewayID (int)</param>
         /// <returns></returns>
-        public List<Site> GetSitesOfGateway(int GatewayID)
+        public List<Site> GetSitesByGatewayID(int GatewayID)
         {
             List<Site> sites = null;
             List<GatewayInfo> gatewaysInfo = null;
