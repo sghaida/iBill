@@ -67,6 +67,9 @@
     <Compile Include="DataMappers\MonitoringServersDataMapper.cs" />
     <Compile Include="DataMappers\NumberingPlansNGNDataMapper.cs" />
     <Compile Include="DataMappers\NumberingPlansDataMapper.cs" />
+    <Compile Include="DataMappers\PhoneBookContactsDataMapper.cs" />
+    <Compile Include="DataMappers\PhoneCallExclusionsDataMapper.cs" />
+    <Compile Include="DataMappers\PoolsDataMapper.cs" />
     <Compile Include="DataMappers\RolesDataMapper.cs" />
     <Compile Include="DataMappers\SystemRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
@@ -74,6 +77,7 @@
     <Compile Include="DataMappers\IdentityMapItem.cs" />
     <Compile Include="DataMappers\SitesDataMapper.cs" />
     <Compile Include="DataMappers\SitesDepartmentsDataMapper.cs" />
+    <Compile Include="DataMappers\UsersDataMapper.cs" />
     <Compile Include="DataModels\Announcement.cs" />
     <Compile Include="DataModels\BundledAccount.cs" />
     <Compile Include="DataModels\CallMarkerStatus.cs" />
@@ -106,15 +110,13 @@
     <Compile Include="DataModels\GatewayInfo.cs" />
     <Compile Include="DataModels\GatewayRate.cs" />
     <Compile Include="DataModels\MailTemplate.cs" />
-    <Compile Include="DataModels\MarkingStatus.cs" />
     <Compile Include="Helpers\MatchingExtention.cs" />
     <Compile Include="DataModels\Misc.cs" />
     <Compile Include="DataModels\MonitoringServerInfo.cs" />
     <Compile Include="DataModels\NumberingPlan.cs" />
     <Compile Include="DataModels\NumberingPlanForNGN.cs" />
-    <Compile Include="DataModels\PhoneBook.cs" />
+    <Compile Include="DataModels\PhoneBookContact.cs" />
     <Compile Include="DataModels\PhoneCall.cs" />
-    <Compile Include="DataModels\PhoneCallException.cs" />
     <Compile Include="DataModels\Pool.cs" />
     <Compile Include="DataModels\Rate.cs" />
     <Compile Include="DataModels\RatesNGN.cs" />

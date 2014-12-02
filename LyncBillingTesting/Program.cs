@@ -23,70 +23,65 @@ namespace LyncBillingTesting
         public static void Main(string[] args)
         {
             var _dbStorage = DataStorage.Instance;
-
+            
             /***
              * Announcements Tests;
              */
-            //AnnouncementsDataMapper AnnouncemenetsDM = new AnnouncementsDataMapper();
-            //var announcementsForRole = AnnouncemenetsDM.GetAnnouncementsForRole(2);
-            //var announcementsForSite = AnnouncemenetsDM.GetAnnouncementsForSite(1);
+            //var announcementsForRole = _dbStorage.Announcements.GetAnnouncementsForRole(2);
+            //var announcementsForSite = _dbStorage.Announcements.GetAnnouncementsForSite(1);
 
 
             /***
              * SystemRoles Tests;
              */
-            //SystemRolesDataMapper SystemRolesDM = new SystemRolesDataMapper();
-            //var systemRoles = SystemRolesDM.GetAll().ToList<SystemRole>();
+            //var systemRoles = _dbStorage.SystemRoles.GetAll().ToList<SystemRole>();
 
 
             /***
              * Sites Tests;
              */
-            //SitesDataMapper SitesMapper = new SitesDataMapper();
-            //var MOA = SitesMapper.GetById(29);
+            //var MOA = _dbStorage.Sites.GetById(29);
 
 
             /***
              * SitesDepartments Tests;
              */
-            //SitesDepartmentsDataMapper SitesDepartementsMapper = new SitesDepartmentsDataMapper();
-            //var sitesDepartments = SitesDepartementsMapper.GetAll();
-            //var MOA_Departments = SitesDepartementsMapper.GetDepartmentsForSite(Convert.ToInt64(MOA.ID));
+            //var sitesDepartments = _dbStorage.SitesDepartments.GetAll();
+            //var MOA_Departments = _dbStorage.SitesDepartments.GetDepartmentsForSite(Convert.ToInt64(MOA.ID));
 
 
             /***
              * Gateways Tests;
              */
-            //GatewaysDataMapper GatewaysMapper = new GatewaysDataMapper();
-            //var gatewaysInfo = GatewaysMapper.GetAll(IncludeDataRelations: false);
-            //var allGatewaysInfo = GatewaysMapper.GetAll();
-            //var MOA_Gateways = GatewaysMapper.GetGatewaysForSite(MOA.ID); ;
+            //var gatewaysInfo = _dbStorage.Gateways.GetAll(IncludeDataRelations: false);
+            //var allGatewaysInfo = _dbStorage.Gateways.GetAll();
+            //var MOA_Gateways = _dbStorage.Gateways.GetGatewaysForSite(MOA.ID); ;
 
 
             /***
              * PhoneCalls Tests;
              */
-            //PhoneCallsDataMapper PhoneCallsMapper = new PhoneCallsDataMapper();
-            //var MOA_Calls = PhoneCallsMapper.GetChargeableCallsForSite(MOA.Name);
+            //var MOA_Calls = _dbStorage.PhoneCalls.GetChargeableCallsForSite(MOA.Name);
 
 
             /***
              * DelegateRoles Tests;
              */
-            //DelegateRolesDataMapper DelegatesMapper = new DelegateRolesDataMapper();
-            //var allDelegates =  DelegatesMapper.GetAll().ToList<DelegateRole>();
-            //bool isUserDelegate = DelegatesMapper.IsUserDelegate("aalhour@ccc.gr");
-            //bool isDepartmentDelegate = DelegatesMapper.IsSiteDepartmentDelegate("aalhour@ccc.gr");
-            //bool isSiteDelegate = DelegatesMapper.IsSiteDelegate("aalhour@ccc.gr");
+            //var allDelegates =  _dbStorage.DelegateRoles.GetAll().ToList<DelegateRole>();
+            //bool isUserDelegate = _dbStorage.DelegateRoles.IsUserDelegate("aalhour@ccc.gr");
+            //bool isDepartmentDelegate = _dbStorage.DelegateRoles.IsSiteDepartmentDelegate("aalhour@ccc.gr");
+            //bool isSiteDelegate = _dbStorage.DelegateRoles.IsSiteDelegate("aalhour@ccc.gr");
 
 
             /***
              * DepartmentHeadRoles Tests;
              */
-            //DepartmentHeadRolesDataMapper DepartmentHeadsMapper = new DepartmentHeadRolesDataMapper();
-            //List<DepartmentHeadRole> departmentHeads = DepartmentHeadsMapper.GetAll().ToList<DepartmentHeadRole>();
-            //List<SiteDepartment> siteDepartments = DepartmentHeadsMapper.GetSiteDepartmentsForUser("aalhour@ccc.gr");
-            //bool isDepartmentHead = DepartmentHeadsMapper.IsDepartmentHead("aalhour@ccc.gr");
+            //List<DepartmentHeadRole> departmentHeads = _dbStorage.DepartmentHeads.GetAll().ToList<DepartmentHeadRole>();
+            //List<SiteDepartment> siteDepartments = _dbStorage.DepartmentHeads.GetSiteDepartmentsForUser("aalhour@ccc.gr");
+            //bool isDepartmentHead = _dbStorage.DepartmentHeads.IsDepartmentHead("aalhour@ccc.gr");
+
+            var users = _dbStorage.Users.GetAll();
+
         }
 
     }
