@@ -60,5 +60,26 @@ namespace LyncBillingBase.DataMappers
                 throw ex.InnerException;
             }
         }
+
+        //Get Currency for Country
+        public Currency GetCurrency(int countryID)
+        {
+            Country country = null;
+            Currency currency = null;
+
+            try
+            {
+                country = GetById(countryID);
+
+                if (country != null && country.Currency != null)
+                    currency = country.Currency;
+
+                return currency;
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
     }
 }
