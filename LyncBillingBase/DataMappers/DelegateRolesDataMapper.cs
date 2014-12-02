@@ -12,11 +12,40 @@ namespace LyncBillingBase.DataMappers
 {
     public class DelegateRolesDataMapper : DataAccess<DelegateRole>
     {
-        public bool IsUserDelegate(string userSipAccount)
+        /// <summary>
+        /// Given a sip account and a delegation type ID, this function will return all the data that this user is managing for this kind of delegation...
+        /// Managed Users, Managed Sites, Managed Sites-Departments
+        /// </summary>
+        /// <param name="DelegeeSipAccount">The Delegee SipAccount</param>
+        /// <param name="DelegationType">The Delegation TypeID</param>
+        /// <returns></returns>
+        public List<DelegateRole> GetDelegatedAccountsForUser(string DelegeeSipAccount, int DelegationType)
+        {
+            Dictionary<string, object> conditions = new Dictionary<string, object>();
+            conditions.Add("DelegeeSipAccount", DelegeeSipAccount);
+            conditions.Add("DelegationType", DelegationType);
+
+            try
+            {
+                return Get(whereConditions: conditions, limit: 1).ToList<DelegateRole>();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns true or false, whether this Delegee User (SipAccount) is managing any Users
+        /// </summary>
+        /// <param name="DelegeeSipAccount">The Delegee User SipAccount</param>
+        /// <returns>True or False</returns>
+        public bool IsUserDelegate(string DelegeeSipAccount)
         {
             DelegateRole role = null;
             Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("DelegeeSipAccount", userSipAccount);
+            condition.Add("DelegeeSipAccount", DelegeeSipAccount);
 
             try
             {
@@ -33,11 +62,17 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public bool IsSiteDelegate(string userSipAccount)
+
+        /// <summary>
+        /// Returns true or false, whether this Delegee User (SipAccount) is managing any Sites
+        /// </summary>
+        /// <param name="DelegeeSipAccount">The Delegee User SipAccount</param>
+        /// <returns>True or False</returns>
+        public bool IsSiteDelegate(string DelegeeSipAccount)
         {
             DelegateRole role = null;
             Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("DelegeeSipAccount", userSipAccount);
+            condition.Add("DelegeeSipAccount", DelegeeSipAccount);
 
             try
             {
@@ -53,12 +88,18 @@ namespace LyncBillingBase.DataMappers
                 throw ex.InnerException;
             }
         }
+        
 
-        public bool IsDepartmentDelegate(string userSipAccount)
+        /// <summary>
+        /// Returns true or false, whether this Delegee User (SipAccount) is managing any Sites-Departments
+        /// </summary>
+        /// <param name="DelegeeSipAccount">The Delegee User SipAccount</param>
+        /// <returns>True or False</returns>
+        public bool IsSiteDepartmentDelegate(string DelegeeSipAccount)
         {
             DelegateRole role = null;
             Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("DelegeeSipAccount", userSipAccount);
+            condition.Add("DelegeeSipAccount", DelegeeSipAccount);
 
             try
             {
@@ -75,20 +116,6 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public List<DelegateRole> GetDelegees(string userSipAccount, int DelegateTypeID)
-        {
-            Dictionary<string, object> conditions = new Dictionary<string, object>();
-            conditions.Add("DelegeeSipAccount", userSipAccount);
-            conditions.Add("DelegationType", DelegateTypeID);
-
-            try
-            {
-                return Get(whereConditions: conditions, limit: 1).ToList<DelegateRole>();
-            }
-            catch (Exception ex)
-            {
-                throw ex.InnerException;
-            }
-        }
     }
+
 }

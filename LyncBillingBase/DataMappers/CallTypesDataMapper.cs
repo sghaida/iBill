@@ -11,20 +11,24 @@ namespace LyncBillingBase.DataMappers
 {
     public class CallTypesDataMapper : DataAccess<CallType>
     {
+        /// <summary>
+        /// Return the list of NGN (Non-Geographical Numbers) Call Types.
+        /// </summary>
+        /// <returns>List of CallType objects.</returns>
         public List<CallType> GetNGNCallTypes()
         {
+            List<CallType> NGNCallTypes = null;
+
             try
             {
                 var callTypes = GetAll().ToList<CallType>();
 
-                callTypes = callTypes
-                    .Where(type =>
-                        type.Name == "NGN" ||
-                        type.Name == "TOLL-FREE" ||
-                        type.Name == "PUSH-TO-TALK")
-                    .ToList<CallType>();
+                if(callTypes != null && callTypes.Count > 0)
+                {
+                    NGNCallTypes = callTypes.Where(type => type.Name == "NGN" || type.Name == "TOLL-FREE" || type.Name == "PUSH-TO-TALK").ToList<CallType>();
+                }
 
-                return callTypes;
+                return NGNCallTypes;
             }
             catch(Exception ex)
             {

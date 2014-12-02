@@ -90,14 +90,16 @@ namespace LyncBillingBase.DataAccess
 
                 if (field.GetCustomAttribute<DataRelationAttribute>() != null)
                 {
+                    var dataRelationAttribute = field.GetCustomAttribute<DataRelationAttribute>();
+
                     newDataField.Relation = new DbRelation()
                     {
                         DataField = field.Name,
-                        RelationName = field.GetCustomAttribute<DataRelationAttribute>().Name,
-                        WithDataModel = field.GetCustomAttribute<DataRelationAttribute>().WithDataModel,
-                        OnDataModelKey = field.GetCustomAttribute<DataRelationAttribute>().OnDataModelKey,
-                        ThisKey = field.GetCustomAttribute<DataRelationAttribute>().ThisKey,
-                        RelationType = field.GetCustomAttribute<DataRelationAttribute>().RelationType
+                        RelationName = dataRelationAttribute.Name,
+                        WithDataModel = dataRelationAttribute.WithDataModel,
+                        OnDataModelKey = dataRelationAttribute.OnDataModelKey,
+                        ThisKey = dataRelationAttribute.ThisKey,
+                        RelationType = dataRelationAttribute.RelationType
                     };
                 }
 

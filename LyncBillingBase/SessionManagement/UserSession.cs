@@ -134,7 +134,7 @@ namespace LyncBillingBase.SessionManagement
             //Initialize the Delegees SystemRoles Flags
             this.IsUserDelegate = DelegateRoleAccessor.IsUserDelegate(userSipAccount);
             this.IsSiteDelegate = DelegateRoleAccessor.IsSiteDelegate(userSipAccount);
-            this.IsDepartmentDelegate = DelegateRoleAccessor.IsDepartmentDelegate(userSipAccount);
+            this.IsDepartmentDelegate = DelegateRoleAccessor.IsSiteDepartmentDelegate(userSipAccount);
 
             this.IsDelegee = this.IsUserDelegate || this.IsDepartmentDelegate || this.IsSiteDelegate;
 
