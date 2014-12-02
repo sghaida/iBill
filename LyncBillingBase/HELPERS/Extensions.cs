@@ -165,6 +165,10 @@ namespace LyncBillingBase.Helpers
                                     {
                                         dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
                                     }
+                                    else if (dataFieldPropertyInfo.PropertyType == typeof(Char))
+                                    {
+                                        dataFieldPropertyInfo.SetValue(childObj, Convert.ToString(datarow[dtField.DataFieldName].ReturnEmptyIfNull()), null);
+                                    }
                                     else if (dataFieldPropertyInfo.PropertyType == typeof(String))
                                     {
                                         if (datarow[dtField.DataFieldName].GetType() == typeof(DateTime))
@@ -176,7 +180,6 @@ namespace LyncBillingBase.Helpers
                                             dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnEmptyIfNull(), null);
                                         }
                                     }
-
                                 }
                             }
 

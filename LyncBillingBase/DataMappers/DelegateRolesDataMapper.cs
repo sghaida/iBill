@@ -25,27 +25,34 @@ namespace LyncBillingBase.DataMappers
         /// <param name="delegateRoles">A list of DelegateRole objects.</param>
         private void FillSiteDepartmentsData(ref List<DelegateRole> delegateRoles)
         {
-            List<SiteDepartment> allSitesDepartments = _sitesDepartmentsDataMapper.GetAll().ToList<SiteDepartment>();
+            try
+            { 
+                List<SiteDepartment> allSitesDepartments = _sitesDepartmentsDataMapper.GetAll().ToList<SiteDepartment>();
 
-            delegateRoles =
-                (from role in delegateRoles
-                 where (role.ManagedSiteDepartmentID > 0 && (role.ManagedSiteDepartment != null && role.ManagedSiteDepartment.ID > 0))
-                 join siteDepartment in allSitesDepartments on role.ManagedSiteDepartmentID equals siteDepartment.ID
-                 select new DelegateRole
-                 {
-                     ID = role.ID,
-                     DelegeeSipAccount = role.DelegeeSipAccount,
-                     DelegationType = role.DelegationType,
-                     ManagedUserSipAccount = role.ManagedUserSipAccount,
-                     ManagedSiteID = role.ManagedSiteID,
-                     ManagedSiteDepartmentID = siteDepartment.ID,
-                     Description = role.Description,
-                     //Relations Objects
-                     ManagedUser = role.ManagedUser,
-                     ManagedSiteDepartment = siteDepartment,
-                     ManagedSite = role.ManagedSite
-                 })
-                 .ToList<DelegateRole>();
+                delegateRoles =
+                    (from role in delegateRoles
+                     where (role.ManagedSiteDepartmentID > 0 && (role.ManagedSiteDepartment != null && role.ManagedSiteDepartment.ID > 0))
+                     join siteDepartment in allSitesDepartments on role.ManagedSiteDepartmentID equals siteDepartment.ID
+                     select new DelegateRole
+                     {
+                         ID = role.ID,
+                         DelegeeSipAccount = role.DelegeeSipAccount,
+                         DelegationType = role.DelegationType,
+                         ManagedUserSipAccount = role.ManagedUserSipAccount,
+                         ManagedSiteID = role.ManagedSiteID,
+                         ManagedSiteDepartmentID = siteDepartment.ID,
+                         Description = role.Description,
+                         //Relations Objects
+                         ManagedUser = role.ManagedUser,
+                         ManagedSiteDepartment = siteDepartment,
+                         ManagedSite = role.ManagedSite
+                     })
+                     .ToList<DelegateRole>();
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
 
@@ -85,87 +92,6 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 return this.Get(whereConditions: conditions, limit: 0).ToList<DelegateRole>();
-            }
-            catch (Exception ex)
-            {
-                throw ex.InnerException;
-            }
-        }
-
-
-        /// <summary>
-        /// Returns true or false, whether this Delegee User (SipAccount) is managing any Users
-        /// </summary>
-        /// <param name="DelegeeSipAccount">The Delegee User SipAccount</param>
-        /// <returns>Boolean</returns>
-        public bool IsUserDelegate(string DelegeeSipAccount)
-        {
-            DelegateRole role = null;
-            Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("DelegeeSipAccount", DelegeeSipAccount);
-
-            try
-            {
-                role = Get(whereConditions: condition, limit: 1).ToList<DelegateRole>().FirstOrDefault<DelegateRole>() ?? null;
-
-                if (role != null)
-                    return (!string.IsNullOrEmpty(role.ManagedUserSipAccount) && role.ManagedUser != null);
-                else
-                    return false;
-            }
-            catch(Exception ex)
-            {
-                throw ex.InnerException;
-            }
-        }
-
-
-        /// <summary>
-        /// Returns true or false, whether this Delegee User (SipAccount) is managing any Sites
-        /// </summary>
-        /// <param name="DelegeeSipAccount">The Delegee User SipAccount</param>
-        /// <returns>Boolean</returns>
-        public bool IsSiteDelegate(string DelegeeSipAccount)
-        {
-            DelegateRole role = null;
-            Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("DelegeeSipAccount", DelegeeSipAccount);
-
-            try
-            {
-                role = Get(whereConditions: condition, limit: 1).ToList<DelegateRole>().FirstOrDefault<DelegateRole>() ?? null;
-
-                if (role != null)
-                    return (role.ManagedSiteID > 0 && role.ManagedSite != null);
-                else
-                    return false;
-            }
-            catch (Exception ex)
-            {
-                throw ex.InnerException;
-            }
-        }
-        
-
-        /// <summary>
-        /// Returns true or false, whether this Delegee User (SipAccount) is managing any Sites-Departments
-        /// </summary>
-        /// <param name="DelegeeSipAccount">The Delegee User SipAccount</param>
-        /// <returns>Boolean</returns>
-        public bool IsSiteDepartmentDelegate(string DelegeeSipAccount)
-        {
-            DelegateRole role = null;
-            Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("DelegeeSipAccount", DelegeeSipAccount);
-
-            try
-            {
-                role = Get(whereConditions: condition, limit: 1).ToList<DelegateRole>().FirstOrDefault<DelegateRole>() ?? null;
-
-                if (role != null)
-                    return (role.ManagedSiteDepartmentID > 0 && role.ManagedSiteDepartment != null);
-                else
-                    return false;
             }
             catch (Exception ex)
             {

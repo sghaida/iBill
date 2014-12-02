@@ -11,20 +11,88 @@ namespace LyncBillingBase.DataMappers
 {
     public class PhoneBookContactsDataMapper : DataAccess<PhoneBookContact>
     {
-        public List<PhoneBookContact> GetDestinationNumbers(string UserSipAccount)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="UserSipAccount"></param>
+        /// <returns></returns>
+        public List<PhoneBookContact> GetBySipAccount(string UserSipAccount)
         {
-            throw new NotImplementedException();
+            List<PhoneBookContact> userPhoneBookContacts = null;
+
+            var linqDistinctComparer = new PhoneBookContactComparer();
+
+            var condition = new Dictionary<string, object>();
+            condition.Add("SipAccount", UserSipAccount);
+
+            try
+            {
+                userPhoneBookContacts = Get(whereConditions: condition, limit: 0).ToList<PhoneBookContact>();
+
+                if(userPhoneBookContacts != null && userPhoneBookContacts.Count > 0)
+                {
+                    userPhoneBookContacts = userPhoneBookContacts.Distinct(linqDistinctComparer).ToList<PhoneBookContact>();
+                }
+
+                return userPhoneBookContacts;
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
 
-        public static Dictionary<string, PhoneBookContact> GetAddressBook(string UserSipAccount)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="UserSipAccount"></param>
+        /// <returns></returns>
+        public Dictionary<string, PhoneBookContact> GetAddressBook(string UserSipAccount)
         {
-            throw new NotImplementedException();
+            List<PhoneBookContact> userPhoneBookContacts = null;
+            Dictionary<string, PhoneBookContact> userAddressBook = null;
+
+            try
+            {
+                userPhoneBookContacts = this.GetBySipAccount(UserSipAccount);
+
+                if(userPhoneBookContacts != null && userPhoneBookContacts.Count > 0)
+                {
+                    //Initialize the userAddressBook
+                    userAddressBook = new Dictionary<string, PhoneBookContact>();
+
+                    //Fill the address book dictionary
+                    Parallel.ForEach(userPhoneBookContacts,
+                        (contact) =>
+                        {
+                            lock (userAddressBook)
+                            {
+                                if(false == string.IsNullOrEmpty(contact.DestinationNumber))
+                                {
+                                    if (false == userAddressBook.Keys.Contains(contact.DestinationNumber))
+                                    {
+                                        userAddressBook.Add(contact.DestinationNumber, contact);
+                                    }
+                                }
+                            }
+                        });
+                }
+
+                return userAddressBook;
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
-    }
+
+    }//end-of-data-mapper-class
 
 
-    //This is used with LINQ Distinct method to compare if two contacts are the same before adding them to the "List of Contacts from Calls History"
+
+    // LINQ Comparer
+    // This is used with LINQ Distinct method to compare if two contacts are the same before adding them to the "List of Contacts from Calls History"
     class PhoneBookContactComparer : IEqualityComparer<PhoneBookContact>
     {
         public bool Equals(PhoneBookContact firstContact, PhoneBookContact secondContact)
@@ -51,6 +119,6 @@ namespace LyncBillingBase.DataMappers
                 throw ex;
             }
         }
+    }//end-of-comparer-class
 
-    }
 }

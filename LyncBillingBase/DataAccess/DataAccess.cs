@@ -131,17 +131,22 @@ namespace LyncBillingBase.DataAccess
           
             if (dataObject != null)
             {
-                var properties = Schema.DataFields.Select(field => field.TableField).ToList();
+                // Get only the Data Fields from Schema which have TableFields objects
+                var properties = Schema.DataFields
+                    .Where(field => field.TableField != null)
+                    .Select<DataField, DbTableField>(field => field.TableField)
+                    .ToList<DbTableField>();
 
                 foreach (var property in properties)
                 {
-                    var dataObjectAttr = dataObject.GetType().GetProperty(property.ColumnName);
-
                     //Don't insert ID Fields into the Database
-                    if(property.IsIDField == true)
+                    if (property.IsIDField == true && property.AllowIDInsert == false)
                     {
                         continue;
                     }
+
+                    // Get the property value
+                    var dataObjectAttr = dataObject.GetType().GetProperty(property.ColumnName);
 
                     //Continue handling the properties
                     if (property.AllowNull == false && dataObjectAttr != null)
@@ -220,10 +225,21 @@ namespace LyncBillingBase.DataAccess
 
             if (dataObject != null)
             {
-                var properties = Schema.DataFields.Select(field => field.TableField).ToList();
+                // Get only the Data Fields from Schema which have TableFields objects
+                var properties = Schema.DataFields
+                    .Where(field => field.TableField != null)
+                    .Select<DataField, DbTableField>(field => field.TableField)
+                    .ToList<DbTableField>();
 
                 foreach (var property in properties)
                 {
+                    //Don't insert ID Fields into the Database
+                    if (property.IsIDField == true && property.AllowIDInsert == false)
+                    {
+                        continue;
+                    }
+
+                    // Get the property value
                     var dataObjectAttr = dataObject.GetType().GetProperty(property.ColumnName);
 
                     //Don't insert ID Fields into the Database

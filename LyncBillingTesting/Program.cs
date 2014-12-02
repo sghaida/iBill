@@ -100,7 +100,23 @@ namespace LyncBillingTesting
             var departmentHeads = STORAGE.DepartmentHeads.GetAll();
             var MOA_ISD_DepartmentHeads = STORAGE.DepartmentHeads.GetBySiteDepartmentID(MOA_ISD.ID);
             var isAAlhourDepartmenHead = STORAGE.DepartmentHeads.IsDepartmentHead(aalhour.SipAccount);
-            var aalhour_SiteDepartments = STORAGE.DepartmentHeads.GetSiteDepartmentsBySipAccount(aalhour.SipAccount);
+
+            var exclusion = STORAGE.PhoneCallsExclusions.GetAll();
+            var MOA_Exclusions = STORAGE.PhoneCallsExclusions.GetBySiteID(aalhour.Site.ID);
+            var MOA_Sources = STORAGE.PhoneCallsExclusions.GetSourcesBySiteID(aalhour.Site.ID);
+            var MOA_Destinations = STORAGE.PhoneCallsExclusions.GetDestinationsBySiteID(aalhour.Site.ID);
+
+            ////var newExclusion = new PhoneCallExclusion()
+            ////{
+            ////    Entity = "aalhour@ccc.gr",
+            ////    EntityType = "S",
+            ////    SiteID = aalhour.Site.ID,
+            ////    ZeroCost = "Y",
+            ////    AutoMark = "B",
+            ////    Description = null
+            ////};
+            ////STORAGE.PhoneCallsExclusions.Insert(newExclusion);
+
         }
 
     }
