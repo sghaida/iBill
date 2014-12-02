@@ -60,7 +60,7 @@ namespace LyncBillingTesting
             var allDelegates =  DelegatesMapper.GetAll().ToList<DelegateRole>();
 
             bool isUserDelegate = DelegatesMapper.IsUserDelegate("aalhour@ccc.gr");
-            bool isDepartmentDelegate = DelegatesMapper.IsDepartmentDelegate("aalhour@ccc.gr");
+            bool isDepartmentDelegate = DelegatesMapper.IsSiteDepartmentDelegate("aalhour@ccc.gr");
             bool isSiteDelegate = DelegatesMapper.IsSiteDelegate("aalhour@ccc.gr");
         }
 

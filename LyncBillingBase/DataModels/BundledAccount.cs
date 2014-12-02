@@ -20,7 +20,7 @@ namespace LyncBillingBase.DataModels
         public string PrimarySipAccount { get; set; }
 
         [DbColumn("AssociatedSipAccount")]
-        public List<string> AssociatedSipAccounts { get; set; }
+        public string AssociatedSipAccount { get; set; }
 
 
         //

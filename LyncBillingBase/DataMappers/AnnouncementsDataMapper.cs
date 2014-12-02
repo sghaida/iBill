@@ -12,7 +12,11 @@ namespace LyncBillingBase.DataMappers
 {
     public class AnnouncementsDataMapper : DataAccess<Announcement>
     {
-        //Get announcements for a specific role
+        /// <summary>
+        /// Given a Role ID, return all the announcements that are associated with it
+        /// </summary>
+        /// <param name="RoleID">System Role ID or Delegation Type ID.</param>
+        /// <returns>List of announcements objects/</returns>
         public List<Announcement> GetAnnouncementsForRole(int RoleID)
         {
             Dictionary<string, object> conditions = new Dictionary<string, object>();
@@ -31,6 +35,11 @@ namespace LyncBillingBase.DataMappers
         }
 
 
+        /// <summary>
+        /// Given a Site ID, return all the announcements that are associated with it
+        /// </summary>
+        /// <param name="RoleID">Site ID</param>
+        /// <returns>List of announcements objects.</returns>
         public List<Announcement> GetAnnouncementsForSite(int SiteID)
         {
             Dictionary<string, object> conditions = new Dictionary<string, object>();

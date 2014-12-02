@@ -11,7 +11,11 @@ namespace LyncBillingBase.DataMappers
 {
     public class CountriesDataMapper : DataAccess<Country>
     {
-        //Get country by its' ISO 2 Code
+        /// <summary>
+        /// Given an ISO2 Country Code, return the Country object.
+        /// </summary>
+        /// <param name="ISO2Code">ISO2 Code, such as: GR, US, UK, JO.</param>
+        /// <returns>Country object.</returns>
         public Country GetCountryByISO2Code(string ISO2Code)
         {
             try
@@ -36,7 +40,12 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        //Get country by its' ISO 3 Code
+
+        /// <summary>
+        /// Given an ISO3 Country Code, return the Country object.
+        /// </summary>
+        /// <param name="ISO3Code">ISO3 Code, such as: GRC, USA, GBR, JOR, ARE.</param>
+        /// <returns>Country object.</returns>
         public Country GetCountryByISO3Code(string ISO3Code)
         {
             try
@@ -61,15 +70,20 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        //Get Currency for Country
-        public Currency GetCurrency(int countryID)
+
+        /// <summary>
+        /// Given a Country ID, return the Country's Currency object.
+        /// </summary>
+        /// <param name="CountryID">CountryID (int).</param>
+        /// <returns>Currency object.</returns>
+        public Currency GetCurrency(int CountryID)
         {
             Country country = null;
             Currency currency = null;
 
             try
             {
-                country = GetById(countryID);
+                country = GetById(CountryID);
 
                 if (country != null && country.Currency != null)
                     currency = country.Currency;
@@ -81,5 +95,7 @@ namespace LyncBillingBase.DataMappers
                 throw ex.InnerException;
             }
         }
+
     }
+
 }
