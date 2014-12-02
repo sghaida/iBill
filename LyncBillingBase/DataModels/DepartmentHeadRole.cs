@@ -10,7 +10,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Roles_System", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
+    [DataSource(Name = "Roles_DepartmentsHeads", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
     public class DepartmentHeadRole : DataModel
     {
         [IsIDField]
@@ -20,10 +20,15 @@ namespace LyncBillingBase.DataModels
         [DbColumn("SiteDepartmentID")]
         public int SiteDepartmentID { get; set; }
 
+        [DbColumn("SipAccount")]
+        public string SipAccount { get; set; }
 
         //
         // Relations
+        [DataRelation(Name = "SipAccount_User.SipAccount", WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "SipAccount")]
+        public User User { get; set; }
+
         [DataRelation(Name = "SiteDepartmentID_SiteDepartment.ID", WithDataModel = typeof(SiteDepartment), OnDataModelKey = "ID", ThisKey = "SiteDepartmentID")]
-        public SiteDepartment EffectiveSiteDepartment { get; set; }
+        public SiteDepartment SiteDepartment { get; set; }
     }
 }

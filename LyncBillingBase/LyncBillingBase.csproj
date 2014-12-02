@@ -62,6 +62,7 @@
     <Compile Include="DataMappers\CurrenciesDataMapper.cs" />
     <Compile Include="DataMappers\DelegateRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentHeadRolesDataMapper.cs" />
+    <Compile Include="DataMappers\DIDDataMapper.cs" />
     <Compile Include="DataMappers\RolesDataMapper.cs" />
     <Compile Include="DataMappers\SystemRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
