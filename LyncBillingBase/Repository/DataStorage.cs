@@ -5,9 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
-using LyncBillingBase.Helpers;
-using LyncBillingBase.DataAccess;
-using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;
 
 
@@ -54,6 +51,7 @@ namespace LyncBillingBase.Repository
         // Backend, Call Marking
         public CallMarkerStatusDataMapper CallMarkers = new CallMarkerStatusDataMapper();
         public MonitoringServersDataMapper MonitoringServers = new MonitoringServersDataMapper();
+
 
 
         /***
