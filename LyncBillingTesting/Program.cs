@@ -22,7 +22,7 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
-            var _dbStorage = DataStorage.Instance;
+            var STORAGE = DataStorage.Instance;
             
             /***
              * Announcements Tests;
@@ -85,17 +85,22 @@ namespace LyncBillingTesting
              * Users Tests
              */
             //var users = _dbStorage.Users.GetAll();
-            var aalhour = _dbStorage.Users.GetBySipAccount("aalhour@ccc.gr");
+            var aalhour = STORAGE.Users.GetBySipAccount("aalhour@ccc.gr");
             var aalhour_Site = aalhour.Site;
             var aalhour_Department = aalhour.Department;
-            var aalhour_Colleagues = _dbStorage.Users.GetBySite(aalhour_Site);
+            var aalhour_Colleagues = STORAGE.Users.GetBySite(aalhour_Site);
 
             var UNKNOWN_SIPACCOUNT = "unknown@unknown.domain";
-            var unknown = _dbStorage.Users.GetBySipAccount(UNKNOWN_SIPACCOUNT);
+            var unknown = STORAGE.Users.GetBySipAccount(UNKNOWN_SIPACCOUNT);
             bool isSiteNull = (unknown == null || (unknown != null && unknown.Site == null));
             var isDepartmentNull = (unknown == null || (unknown != null && unknown.Department == null));
 
-            var unknown_systemroles = _dbStorage.SystemRoles.GetBySipAccount(UNKNOWN_SIPACCOUNT);
+            var MOA_ISD = STORAGE.SitesDepartments.GetBySiteID(aalhour.Site.ID).Find(item => item.Department != null && item.Department.Name == "ISD");
+
+            var departmentHeads = STORAGE.DepartmentHeads.GetAll();
+            var MOA_ISD_DepartmentHeads = STORAGE.DepartmentHeads.GetBySiteDepartmentID(MOA_ISD.ID);
+            var isAAlhourDepartmenHead = STORAGE.DepartmentHeads.IsDepartmentHead(aalhour.SipAccount);
+            var aalhour_SiteDepartments = STORAGE.DepartmentHeads.GetSiteDepartmentsBySipAccount(aalhour.SipAccount);
         }
 
     }
