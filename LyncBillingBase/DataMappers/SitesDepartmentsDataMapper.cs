@@ -12,16 +12,19 @@ namespace LyncBillingBase.DataMappers
 {
     public class SitesDepartmentsDataMapper : DataAccess<SiteDepartment>
     {
-        //Get all site-departments for a site
-        public List<SiteDepartment> GetDepartmentsForSite(long siteID)
+        /// <summary>
+        /// Given a Site's ID, return the list of it's Departments.
+        /// </summary>
+        /// <param name="SiteID">Site.ID (int)</param>
+        /// <returns>List of SiteDepartment objects</returns>
+        public List<SiteDepartment> GetDepartmentsForSite(long SiteID)
         {
             Dictionary<string, object> condition = new Dictionary<string,object>();
-            condition.Add("SiteID", siteID);
+            condition.Add("SiteID", SiteID);
 
             try
             {
-                var sitesDepartments = Get(whereConditions: condition, limit: 0).ToList<SiteDepartment>();
-                return sitesDepartments;
+                return Get(whereConditions: condition, limit: 0).ToList<SiteDepartment>();
             }
             catch(Exception ex)
             {
