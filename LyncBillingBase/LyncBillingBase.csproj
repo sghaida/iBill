@@ -59,8 +59,10 @@
     <Compile Include="DataMappers\CallMarkerStatusDataMapper.cs" />
     <Compile Include="DataMappers\CallTypesDataMapper.cs" />
     <Compile Include="DataMappers\CountriesDataMapper.cs" />
+    <Compile Include="DataMappers\CurrenciesDataMapper.cs" />
     <Compile Include="DataMappers\DelegateRolesMapper.cs" />
     <Compile Include="DataMappers\DepartmentHeadRolesDataMapper.cs" />
+    <Compile Include="DataMappers\RolesDataMapper.cs" />
     <Compile Include="DataMappers\SystemRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysDataMapper.cs" />

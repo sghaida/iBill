@@ -14,22 +14,81 @@ namespace LyncBillingBase.DataMappers
     {
         public bool IsUserDelegate(string userSipAccount)
         {
-            throw new NotImplementedException();
+            DelegateRole role = null;
+            Dictionary<string, object> condition = new Dictionary<string, object>();
+            condition.Add("Delegee", userSipAccount);
+
+            try
+            {
+                role = Get(whereConditions: condition, limit: 1).ToList<DelegateRole>().FirstOrDefault<DelegateRole>() ?? null;
+
+                if (role != null)
+                    return (role.DelegeeUser != null);
+                else
+                    return false;
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         public bool IsSiteDelegate(string userSipAccount)
         {
-            throw new NotImplementedException();
+            DelegateRole role = null;
+            Dictionary<string, object> condition = new Dictionary<string, object>();
+            condition.Add("Delegee", userSipAccount);
+
+            try
+            {
+                role = Get(whereConditions: condition, limit: 1).ToList<DelegateRole>().FirstOrDefault<DelegateRole>() ?? null;
+
+                if (role != null)
+                    return (role.DelegeeSite != null);
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         public bool IsDepartmentDelegate(string userSipAccount)
         {
-            throw new NotImplementedException();
+            DelegateRole role = null;
+            Dictionary<string, object> condition = new Dictionary<string, object>();
+            condition.Add("Delegee", userSipAccount);
+
+            try
+            {
+                role = Get(whereConditions: condition, limit: 1).ToList<DelegateRole>().FirstOrDefault<DelegateRole>() ?? null;
+
+                if (role != null)
+                    return (role.DelegeeDepartment != null);
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         public List<DelegateRole> GetDelegees(string userSipAccount, int DelegateTypeID)
         {
-            throw new NotImplementedException();
+            Dictionary<string, object> conditions = new Dictionary<string, object>();
+            conditions.Add("Delegee", userSipAccount);
+            conditions.Add("DelegeeType", DelegateTypeID);
+
+            try
+            {
+                return Get(whereConditions: conditions, limit: 1).ToList<DelegateRole>();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
     }
 }

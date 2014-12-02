@@ -29,7 +29,7 @@ namespace LyncBillingBase.Helpers
         /// <typeparam name="T">Class name</typeparam>
         /// <param name="dataTable">data table to convert</param>
         /// <returns>List<T></returns>
-        public static List<T> ConvertToList<T>(this DataTable dataTable,bool includeRelations = true) where T : class, new()
+        public static List<T> ConvertToList<T>(this DataTable DataTable,bool IncludeDataRelations = true) where T : class, new()
         {
             var dataList = new List<T>();
 
@@ -53,7 +53,7 @@ namespace LyncBillingBase.Helpers
                 .ToList();
 
             //Read Datatable column names and types
-            var dtlFieldNames = dataTable.Columns.Cast<DataColumn>()
+            var dtlFieldNames = DataTable.Columns.Cast<DataColumn>()
                 .Select(item => new
                 {
                     Name = item.ColumnName,
@@ -72,7 +72,7 @@ namespace LyncBillingBase.Helpers
             }
 
 
-            if (includeRelations == true)
+            if (IncludeDataRelations == true)
             {
                 // Initialize child the property info fields list
                 childPropertInfoFields = typeof(T).GetProperties(flags)
@@ -124,12 +124,12 @@ namespace LyncBillingBase.Helpers
             }
 
            //Fill The data
-           Parallel.ForEach(dataTable.AsEnumerable().ToList(),
+           Parallel.ForEach(DataTable.AsEnumerable().ToList(),
                 (datarow) =>
                 {
                     var masterObj = new T();
 
-                    if (includeRelations == true)
+                    if (IncludeDataRelations == true)
                     {
                         //Fill the Data for children objects
                         foreach (PropertyInfo property in childPropertInfoFields)
