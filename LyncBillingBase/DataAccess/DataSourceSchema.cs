@@ -97,6 +97,7 @@ namespace LyncBillingBase.DataAccess
                         WithDataModel = field.GetCustomAttribute<DataRelationAttribute>().WithDataModel,
                         OnDataModelKey = field.GetCustomAttribute<DataRelationAttribute>().OnDataModelKey,
                         ThisKey = field.GetCustomAttribute<DataRelationAttribute>().ThisKey,
+                        RelationType = field.GetCustomAttribute<DataRelationAttribute>().RelationType
                     };
                 }
 
