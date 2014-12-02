@@ -17,7 +17,7 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="SipAccount"></param>
         /// <returns>List of SystemRole objects</returns>
-        public List<SystemRole> GetSystemRolesForUser(string SipAccount)
+        public List<SystemRole> GetBySipAccount(string SipAccount)
         {
             Dictionary<string, object> condition = new Dictionary<string, object>();
             condition.Add("SipAccount", SipAccount);

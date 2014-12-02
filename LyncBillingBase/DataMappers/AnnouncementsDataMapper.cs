@@ -24,9 +24,7 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                var announcements = Get(whereConditions: conditions, limit: 0).ToList<Announcement>();
-
-                return announcements;
+                return Get(whereConditions: conditions, limit: 0).ToList<Announcement>();
             }
             catch (Exception ex)
             {
@@ -47,9 +45,7 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                var announcements = Get(whereConditions: conditions, limit: 0).ToList<Announcement>();
-
-                return announcements;
+                return Get(whereConditions: conditions, limit: 0).ToList<Announcement>();
             }
             catch (Exception ex)
             {
