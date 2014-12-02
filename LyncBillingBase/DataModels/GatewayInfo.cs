@@ -31,12 +31,12 @@ namespace LyncBillingBase.DataModels
         //
         // Relations
         [DataRelation(Name = "GatewayID_Gateway.ID", WithDataModel = typeof(Gateway), OnDataModelKey = "ID", ThisKey = "GatewayID")]
-        public Gateway GatewayData { get; set; }
+        public Gateway Gateway { get; set; }
 
         [DataRelation(Name = "SiteID_Site.ID", WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
-        public Site GatewaySite { get; set; }
+        public Site Site { get; set; }
 
         [DataRelation(Name = "PoolID_Pool.ID", WithDataModel = typeof(Pool), OnDataModelKey = "ID", ThisKey = "PoolID")]
-        public Pool GatewayPool { get; set; }
+        public Pool Pool { get; set; }
     }
 }

@@ -12,11 +12,6 @@ namespace LyncBillingBase.DataMappers
 {
     public class RolesDataMapper : DataAccess<Role>
     {
-        public List<Role> AllRoles = new List<Role>();
-
-        public RolesDataMapper()
-        {
-            AllRoles = GetAll().ToList<Role>();
-        }
+        
     }
 }
