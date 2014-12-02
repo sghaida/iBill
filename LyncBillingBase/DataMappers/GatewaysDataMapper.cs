@@ -13,6 +13,33 @@ namespace LyncBillingBase.DataMappers
     public class GatewaysDataMapper : DataAccess<GatewayInfo>
     {
         /// <summary>
+        /// Returns all the Gateways
+        /// </summary>
+        /// <returns>List of Gateway objects.</returns>
+        public List<Gateway> GetAllGateways()
+        {
+            List<Gateway> gateways = null;
+            List<GatewayInfo> gatewaysInfo = null;
+
+            try
+            {
+                gatewaysInfo = GetAll().ToList<GatewayInfo>();
+
+                if (gatewaysInfo != null && gatewaysInfo.Count > 0)
+                {
+                    gateways = gatewaysInfo.Select<GatewayInfo, Gateway>(item => item.Gateway).ToList<Gateway>();
+                }
+
+                return gateways;
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+
+        /// <summary>
         /// Given a Site's ID, return the list of Gateways mapped to it.
         /// </summary>
         /// <param name="SiteID">Site.ID (int)</param>

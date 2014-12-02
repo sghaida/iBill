@@ -18,9 +18,26 @@ namespace LyncBillingBase.Repository
         /***
          * DataStorage Repositories
          */
-        //public DataAccess<Site> PhoneCalls = new DataAccess<Site>();
-        //public DataAccess<Department> PhoneCalls = new DataAccess<Department>();
-        //public DataAccess<PhoneCall> PhoneCalls = new DataAccess<PhoneCall>();
+        public AnnouncementsDataMapper Announcements = new AnnouncementsDataMapper();
+        public BundledAccountsDataMapper BundledAccounts = new BundledAccountsDataMapper();
+        public CallMarkerStatusDataMapper CallMarkers = new CallMarkerStatusDataMapper();
+        public CallTypesDataMapper CallTypes = new CallTypesDataMapper();
+        
+        public CountriesDataMapper Countries = new CountriesDataMapper();
+        public SitesDepartmentsDataMapper Sites = new SitesDepartmentsDataMapper();
+        public GatewaysDataMapper Gateways = new GatewaysDataMapper();
+        public DepartmentsDataMapper Departments = new DepartmentsDataMapper();
+        public SitesDepartmentsDataMapper SitesDepartments = new SitesDepartmentsDataMapper();
+        public CurrenciesDataMapper Currencies = new CurrenciesDataMapper();
+
+        public RolesDataMapper Roles = new RolesDataMapper();
+        public SystemRolesDataMapper SystemRoles = new SystemRolesDataMapper();
+        public DelegateRolesDataMapper DelegateRoles = new DelegateRolesDataMapper();
+        public DepartmentHeadRolesDataMapper DepartmentHeads = new DepartmentHeadRolesDataMapper();
+
+        public DIDDataMapper DIDs = new DIDDataMapper();
+        public PhoneCallsDataMapper PhoneCalls = new PhoneCallsDataMapper();
+
 
 
         /***
