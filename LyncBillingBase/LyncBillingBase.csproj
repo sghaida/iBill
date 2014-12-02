@@ -63,6 +63,10 @@
     <Compile Include="DataMappers\DelegateRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentHeadRolesDataMapper.cs" />
     <Compile Include="DataMappers\DIDDataMapper.cs" />
+    <Compile Include="DataMappers\MailTemplatesDataMapper.cs" />
+    <Compile Include="DataMappers\MonitoringServersDataMapper.cs" />
+    <Compile Include="DataMappers\NumberingPlansNGNDataMapper.cs" />
+    <Compile Include="DataMappers\NumberingPlansDataMapper.cs" />
     <Compile Include="DataMappers\RolesDataMapper.cs" />
     <Compile Include="DataMappers\SystemRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
@@ -107,7 +111,7 @@
     <Compile Include="DataModels\Misc.cs" />
     <Compile Include="DataModels\MonitoringServerInfo.cs" />
     <Compile Include="DataModels\NumberingPlan.cs" />
-    <Compile Include="DataModels\NumberingPlanNGN.cs" />
+    <Compile Include="DataModels\NumberingPlanForNGN.cs" />
     <Compile Include="DataModels\PhoneBook.cs" />
     <Compile Include="DataModels\PhoneCall.cs" />
     <Compile Include="DataModels\PhoneCallException.cs" />

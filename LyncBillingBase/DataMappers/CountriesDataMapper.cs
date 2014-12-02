@@ -16,7 +16,7 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="ISO2Code">ISO2 Code, such as: GR, US, UK, JO.</param>
         /// <returns>Country object.</returns>
-        public Country GetCountryByISO2Code(string ISO2Code)
+        public Country GetByISO2Code(string ISO2Code)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="ISO3Code">ISO3 Code, such as: GRC, USA, GBR, JOR, ARE.</param>
         /// <returns>Country object.</returns>
-        public Country GetCountryByISO3Code(string ISO3Code)
+        public Country GetByISO3Code(string ISO3Code)
         {
             try
             {

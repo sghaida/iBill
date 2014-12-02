@@ -36,5 +36,18 @@ namespace LyncBillingBase.DataModels
         [AllowNull]
         [DbColumn("Type_Of_Service")]
         public string TypeOfService { get; set; }
+
+
+        //
+        // Relations
+        [DataRelation(Name = "ISO3CountryCode_Country.ISO3Code", WithDataModel = typeof(Country), OnDataModelKey = "ISO3Code", ThisKey = "ISO3CountryCode")]
+        public Country Country { get; set; }
+
+        //[DataRelation(Name="CountryID_Country.ID", WithDataModel = typeof(Country), OnDataModelKey = "ID", ThisKey = "CountryID")]
+        //public Country Country { get; set; }
+
+        //[DataRelation(Name = "TypeOfServiceID_CallType.ID", WithDataModel = typeof(CallType), OnDataModelKey = "ID", ThisKey = "TypeOfServiceID")]
+        //public CallType TypeOfService { get; set; }
+
     }
 }

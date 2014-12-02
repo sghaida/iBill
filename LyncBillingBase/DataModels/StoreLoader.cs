@@ -20,7 +20,7 @@ namespace LyncBillingBase.DataModels
         public static List<User> LISTOFUSERS;
 
         public static List<NumberingPlan> numberingPlan;
-        public static List<NumberingPlanNGN> numberingPlanNGN;
+        public static List<NumberingPlanForNGN> numberingPlanNGN;
 
         //public static List<GatewayRate> gatewayRates;
 

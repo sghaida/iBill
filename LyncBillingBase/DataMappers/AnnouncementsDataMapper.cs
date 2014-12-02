@@ -17,7 +17,7 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="RoleID">System Role ID or Delegation Type ID.</param>
         /// <returns>List of announcements objects/</returns>
-        public List<Announcement> GetAnnouncementsForRole(int RoleID)
+        public List<Announcement> GetByRoleID(int RoleID)
         {
             Dictionary<string, object> conditions = new Dictionary<string, object>();
             conditions.Add("ForRole", RoleID);
@@ -40,7 +40,7 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="RoleID">Site ID</param>
         /// <returns>List of announcements objects.</returns>
-        public List<Announcement> GetAnnouncementsForSite(int SiteID)
+        public List<Announcement> GetBySiteID(int SiteID)
         {
             Dictionary<string, object> conditions = new Dictionary<string, object>();
             conditions.Add("ForSite", SiteID);

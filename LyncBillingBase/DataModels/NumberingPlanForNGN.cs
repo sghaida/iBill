@@ -10,7 +10,7 @@ using LyncBillingBase.DataAttributes;
 namespace LyncBillingBase.DataModels
 {
     [DataSource(Name = "NGN_NumberingPlan", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
-    public class NumberingPlanNGN : DataModel
+    public class NumberingPlanForNGN : DataModel
     {
         [IsIDField]
         [DbColumn("ID")]
@@ -20,7 +20,7 @@ namespace LyncBillingBase.DataModels
         public string DialingCode { get; set; }
 
         [DbColumn("CountryCodeISO3")]
-        public string CountryCodeISO3 { get; set; }
+        public string ISO3CountryCode { get; set; }
 
         [AllowNull]
         [DbColumn("Provider")]
@@ -34,7 +34,16 @@ namespace LyncBillingBase.DataModels
         [DbColumn("TypeOfServiceID")]
         public int TypeOfServiceID { get; set; }
 
-        public string CountryName { get; set; }
-        public string TypeOfService { get; set; }
+
+        //
+        // Relations
+        [DataRelation(Name = "TypeOfServiceID_CallType.ID", WithDataModel = typeof(CallType), OnDataModelKey = "ID", ThisKey = "TypeOfServiceID")]
+        public CallType TypeOfService { get; set; }
+
+        [DataRelation(Name = "ISO3CountryCode_Country.ISO3Code", WithDataModel = typeof(Country), OnDataModelKey = "ISO3Code", ThisKey = "ISO3CountryCode")]
+        public Country Country { get; set; }
+
+        //[DataRelation(Name="CountryID_Country.ID", WithDataModel = typeof(Country), OnDataModelKey = "ID", ThisKey = "CountryID")]
+        //public Country Country { get; set; }
     }
 }
