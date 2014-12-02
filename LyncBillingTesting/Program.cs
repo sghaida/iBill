@@ -80,8 +80,22 @@ namespace LyncBillingTesting
             //List<SiteDepartment> siteDepartments = _dbStorage.DepartmentHeads.GetSiteDepartmentsForUser("aalhour@ccc.gr");
             //bool isDepartmentHead = _dbStorage.DepartmentHeads.IsDepartmentHead("aalhour@ccc.gr");
 
-            var users = _dbStorage.Users.GetAll();
 
+            /***
+             * Users Tests
+             */
+            //var users = _dbStorage.Users.GetAll();
+            var aalhour = _dbStorage.Users.GetBySipAccount("aalhour@ccc.gr");
+            var aalhour_Site = _dbStorage.Users.GetSiteBySipAccount(aalhour.SipAccount);
+            var aalhour_Department = _dbStorage.Users.GetDepartmentBySipAccount(aalhour.SipAccount);
+            var aalhour_Colleagues = _dbStorage.Users.GetBySite(aalhour_Site);
+
+            var unknown_sipaccount = "unknown@unknown.domain";
+            var unknown = _dbStorage.Users.GetBySipAccount("unknown@unknown.domain");
+            var unknown_Site = _dbStorage.Users.GetSiteBySipAccount("unknown@unknown.domain");
+            var unknown_Department = _dbStorage.Users.GetDepartmentBySipAccount("unknown@unknown.domain");
+
+            var unknown_systemroles = _dbStorage.SystemRoles.GetBySipAccount(unknown_sipaccount);
         }
 
     }

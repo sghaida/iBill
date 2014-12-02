@@ -11,16 +11,26 @@ namespace LyncBillingBase.DataMappers
 {
     public class UsersDataMapper : DataAccess<User>
     {
+        /// <summary>
+        /// Given a Site's ID, return all the Users that belong to that Site.
+        /// </summary>
+        /// <param name="SiteID">Site.ID (int)</param>
+        /// <returns>List of User objects. Users that belong to that Site.</returns>
         public List<User> GetBySiteID(int SiteID)
         {
             throw new NotImplementedException();
         }
 
 
+        /// <summary>
+        /// Given a Site object, return all the Users that belong to that Site.
+        /// </summary>
+        /// <param name="Site">Site (object)</param>
+        /// <returns>List of User objects. Users that belong to that Site.</returns>
         public List<User> GetBySite(Site site)
         {
             Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("SiteName", site.Name);
+            condition.Add("AD_PhysicalDeliveryOfficeName", site.Name);
 
             try
             {
@@ -33,15 +43,20 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public List<User> GetBySearchTerm(string searchTerm)
+        /// <summary>
+        /// Given a search term (string), return all the Users whose SipAccount and/or DisplayName match that term or part of it.
+        /// </summary>
+        /// <param name="SearchTerm">SearchTerm (string)</param>
+        /// <returns>List of User objects. Users that matched the search term.</returns>
+        public List<User> GetBySearchTerm(string SearchTerm)
         {
             List<User> users = new List<User>();
 
             var sipAccountCondition = new Dictionary<string, object>();
-            sipAccountCondition.Add("SipAccount", String.Format("like '%{0}%'", searchTerm));
+            sipAccountCondition.Add("SipAccount", String.Format("like '%{0}%'", SearchTerm));
 
             var displayNameCondition = new Dictionary<string, object>();
-            displayNameCondition.Add("AD_DisplayName", String.Format("like '%{0}%'", searchTerm));
+            displayNameCondition.Add("AD_DisplayName", String.Format("like '%{0}%'", SearchTerm));
 
             try
             {
@@ -63,6 +78,11 @@ namespace LyncBillingBase.DataMappers
         }
 
 
+        /// <summary>
+        /// Get the User with the given SipAccount.
+        /// </summary>
+        /// <param name="UserSipAccount">User.SipAccount (string)</param>
+        /// <returns>A User object.</returns>
         public User GetBySipAccount(string UserSipAccount)
         {
             User user = null;
@@ -86,6 +106,11 @@ namespace LyncBillingBase.DataMappers
         }
 
 
+        /// <summary>
+        /// Get the User with the given UserID.
+        /// </summary>
+        /// <param name="UserID">User.ID (int)</param>
+        /// <returns>A User object.</returns>
         public User GetByUserID(int UserID)
         {
             User user = null;
@@ -109,12 +134,17 @@ namespace LyncBillingBase.DataMappers
         }
 
 
+        /// <summary>
+        /// Given a User's SipAccount, get the Site to which the User belongs.
+        /// </summary>
+        /// <param name="UserSipAccount">User.SipAccount (string)</param>
+        /// <returns>A Site object.</returns>
         public Site GetSiteBySipAccount(string UserSipAccount)
         {
             Site site = null;
             User user = GetBySipAccount(UserSipAccount);
 
-            if (user.Site != null && user.Site.ID > 0)
+            if (user != null && user.Site != null && user.Site.ID > 0)
             {
                 site = user.Site;
             }
@@ -123,12 +153,17 @@ namespace LyncBillingBase.DataMappers
         }
 
 
+        /// <summary>
+        /// Given a User's ID, get the Site to which the User belongs.
+        /// </summary>
+        /// <param name="UserID">User.ID (int)</param>
+        /// <returns>A Site object.</returns>
         public Site GetSiteByUserID(int UserID)
         {
             Site site = null;
             User user = GetByUserID(UserID);
 
-            if (user.Site != null && user.Site.ID > 0)
+            if (user != null && user.Site != null && user.Site.ID > 0)
             {
                 site = user.Site;
             }
@@ -137,12 +172,17 @@ namespace LyncBillingBase.DataMappers
         }
 
 
+        /// <summary>
+        /// Given a User's SipAccount, get the Department to which the User belongs.
+        /// </summary>
+        /// <param name="UserSipAccount">User.SipAccount (string)</param>
+        /// <returns>A Department object.</returns>
         public Department GetDepartmentBySipAccount(string UserSipAccount)
         {
             Department department = null;
             User user = GetBySipAccount(UserSipAccount);
 
-            if (user.Department != null && user.Department.ID > 0)
+            if (user != null && user.Department != null && user.Department.ID > 0)
             {
                 department = user.Department;
             }
@@ -151,12 +191,17 @@ namespace LyncBillingBase.DataMappers
         }
 
 
+        /// <summary>
+        /// Given a User's ID, get the Department to which the User belongs.
+        /// </summary>
+        /// <param name="UserID">User.ID (int)</param>
+        /// <returns>A Department object.</returns>
         public Department GetDepartmentByUserID(int UserID)
         {
             Department department = null;
             User user = GetByUserID(UserID);
 
-            if (user.Department != null && user.Department.ID > 0)
+            if (user != null && user.Department != null && user.Department.ID > 0)
             {
                 department = user.Department;
             }

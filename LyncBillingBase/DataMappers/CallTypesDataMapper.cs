@@ -15,9 +15,9 @@ namespace LyncBillingBase.DataMappers
         /// Return the list of NGN (Non-Geographical Numbers) Call Types.
         /// </summary>
         /// <returns>List of CallType objects.</returns>
-        public List<CallType> GetNGNCallTypes()
+        public List<CallType> GetNGNs()
         {
-            List<CallType> NGNCallTypes = null;
+            List<CallType> NGNTypes = null;
 
             try
             {
@@ -25,10 +25,10 @@ namespace LyncBillingBase.DataMappers
 
                 if(callTypes != null && callTypes.Count > 0)
                 {
-                    NGNCallTypes = callTypes.Where(type => type.Name == "NGN" || type.Name == "TOLL-FREE" || type.Name == "PUSH-TO-TALK").ToList<CallType>();
+                    NGNTypes = callTypes.Where(type => type.Name == "NGN" || type.Name == "TOLL-FREE" || type.Name == "PUSH-TO-TALK").ToList<CallType>();
                 }
 
-                return NGNCallTypes;
+                return NGNTypes;
             }
             catch(Exception ex)
             {
