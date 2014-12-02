@@ -20,10 +20,10 @@ namespace LyncBillingBase.DataModels
         public string CountryName { get; set; }
 
         [DbColumn("Two_Digits_country_code")]
-        public string TwoDigitsCountryCode { get; set; }
+        public string ISO2CountryCode { get; set; }
 
         [DbColumn("Three_Digits_Country_Code")]
-        public string ThreeDigitsCountryCode { get; set; }
+        public string ISO3CountryCode { get; set; }
 
         [AllowNull]
         [DbColumn("City")]

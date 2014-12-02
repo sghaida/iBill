@@ -16,7 +16,14 @@ namespace LyncBillingBase.DataModels
         [DbColumn("ID")]
         public int ID { get; set; }
 
+        [DbColumn("TypeID")]
+        public int TypeID { get; set; }
+
         [DbColumn("Name")]
         public string Name { get; set; }
+
+        [AllowNull]
+        [DbColumn("Description")]
+        public string Description { get; set; }
     }
 }

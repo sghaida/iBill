@@ -29,7 +29,7 @@ namespace LyncBillingBase.DataModels
 
         [AllowNull]
         [DbColumn("AD_Department")]
-        public string Department { get; set; }
+        public string DepartmentName { get; set; }
 
         [AllowNull]
         [DbColumn("AD_TelephoneNumber")]
@@ -51,5 +51,13 @@ namespace LyncBillingBase.DataModels
         
         public string FullName { get; set; }
 
+
+        //
+        // Relations
+        [DataRelation(Name = "SiteName_Site.Name", WithDataModel = typeof(Site), OnDataModelKey = "Name", ThisKey = "SiteName", RelationType = Enums.DataRelationType.UNION)]
+        public Site Site { get; set; }
+
+        [DataRelation(Name = "DepartmentName_Departemnt.Name", WithDataModel = typeof(Department), OnDataModelKey = "Name", ThisKey = "DepartmentName", RelationType = Enums.DataRelationType.UNION)]
+        public Department Department { get; set; }
     }
 }
