@@ -10,20 +10,20 @@ using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
 {
-    public class DelegateRolesMapper : DataAccess<DelegateRole>
+    public class DelegateRolesDataMapper : DataAccess<DelegateRole>
     {
         public bool IsUserDelegate(string userSipAccount)
         {
             DelegateRole role = null;
             Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("Delegee", userSipAccount);
+            condition.Add("DelegeeSipAccount", userSipAccount);
 
             try
             {
                 role = Get(whereConditions: condition, limit: 1).ToList<DelegateRole>().FirstOrDefault<DelegateRole>() ?? null;
 
                 if (role != null)
-                    return (role.DelegeeUser != null);
+                    return (!string.IsNullOrEmpty(role.ManagedUserSipAccount) && role.ManagedUser != null);
                 else
                     return false;
             }
@@ -37,14 +37,14 @@ namespace LyncBillingBase.DataMappers
         {
             DelegateRole role = null;
             Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("Delegee", userSipAccount);
+            condition.Add("DelegeeSipAccount", userSipAccount);
 
             try
             {
                 role = Get(whereConditions: condition, limit: 1).ToList<DelegateRole>().FirstOrDefault<DelegateRole>() ?? null;
 
                 if (role != null)
-                    return (role.DelegeeSite != null);
+                    return (role.ManagedSiteID > 0 && role.ManagedSite != null);
                 else
                     return false;
             }
@@ -58,14 +58,14 @@ namespace LyncBillingBase.DataMappers
         {
             DelegateRole role = null;
             Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("Delegee", userSipAccount);
+            condition.Add("DelegeeSipAccount", userSipAccount);
 
             try
             {
                 role = Get(whereConditions: condition, limit: 1).ToList<DelegateRole>().FirstOrDefault<DelegateRole>() ?? null;
 
                 if (role != null)
-                    return (role.DelegeeDepartment != null);
+                    return (role.ManagedSiteDepartmentID > 0 && role.ManagedSiteDepartment != null);
                 else
                     return false;
             }
@@ -78,8 +78,8 @@ namespace LyncBillingBase.DataMappers
         public List<DelegateRole> GetDelegees(string userSipAccount, int DelegateTypeID)
         {
             Dictionary<string, object> conditions = new Dictionary<string, object>();
-            conditions.Add("Delegee", userSipAccount);
-            conditions.Add("DelegeeType", DelegateTypeID);
+            conditions.Add("DelegeeSipAccount", userSipAccount);
+            conditions.Add("DelegationType", DelegateTypeID);
 
             try
             {

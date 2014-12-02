@@ -48,12 +48,20 @@ namespace LyncBillingTesting
 
             //var MOA_Gateways = GatewaysMapper.GetGatewaysForSite(MOA.ID); ;
 
+            //PhoneCallsDataMapper PhoneCallsMapper = new PhoneCallsDataMapper();
+
+            //var MOA_Calls = PhoneCallsMapper.GetChargeableCallsForSite(MOA.Name);
+
             SitesDataMapper SitesMapper = new SitesDataMapper();
-            PhoneCallsDataMapper PhoneCallsMapper = new PhoneCallsDataMapper();
-            
             var MOA = SitesMapper.GetById(29);
 
-            var MOA_Calls = PhoneCallsMapper.GetChargeableCallsForSite(MOA.Name);
+            DelegateRolesDataMapper DelegatesMapper = new DelegateRolesDataMapper();
+
+            var allDelegates =  DelegatesMapper.GetAll().ToList<DelegateRole>();
+
+            bool isUserDelegate = DelegatesMapper.IsUserDelegate("aalhour@ccc.gr");
+            bool isDepartmentDelegate = DelegatesMapper.IsDepartmentDelegate("aalhour@ccc.gr");
+            bool isSiteDelegate = DelegatesMapper.IsSiteDelegate("aalhour@ccc.gr");
         }
 
     }

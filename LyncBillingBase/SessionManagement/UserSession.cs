@@ -13,7 +13,7 @@ namespace LyncBillingBase.SessionManagement
     public class UserSession
     {
         //The delegates roles data mapper - used for data access
-        private DelegateRolesMapper DelegateRoleAccessor = new DelegateRolesMapper();
+        private DelegateRolesDataMapper DelegateRoleAccessor = new DelegateRolesDataMapper();
 
         private static List<UserSession> usersSessions = new List<UserSession>();
         private List<DelegateRole> userDelegees = new List<DelegateRole>();
