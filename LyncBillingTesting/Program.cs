@@ -86,16 +86,16 @@ namespace LyncBillingTesting
              */
             //var users = _dbStorage.Users.GetAll();
             var aalhour = _dbStorage.Users.GetBySipAccount("aalhour@ccc.gr");
-            var aalhour_Site = _dbStorage.Users.GetSiteBySipAccount(aalhour.SipAccount);
-            var aalhour_Department = _dbStorage.Users.GetDepartmentBySipAccount(aalhour.SipAccount);
+            var aalhour_Site = aalhour.Site;
+            var aalhour_Department = aalhour.Department;
             var aalhour_Colleagues = _dbStorage.Users.GetBySite(aalhour_Site);
 
-            var unknown_sipaccount = "unknown@unknown.domain";
-            var unknown = _dbStorage.Users.GetBySipAccount("unknown@unknown.domain");
-            var unknown_Site = _dbStorage.Users.GetSiteBySipAccount("unknown@unknown.domain");
-            var unknown_Department = _dbStorage.Users.GetDepartmentBySipAccount("unknown@unknown.domain");
+            var UNKNOWN_SIPACCOUNT = "unknown@unknown.domain";
+            var unknown = _dbStorage.Users.GetBySipAccount(UNKNOWN_SIPACCOUNT);
+            bool isSiteNull = (unknown == null || (unknown != null && unknown.Site == null));
+            var isDepartmentNull = (unknown == null || (unknown != null && unknown.Department == null));
 
-            var unknown_systemroles = _dbStorage.SystemRoles.GetBySipAccount(unknown_sipaccount);
+            var unknown_systemroles = _dbStorage.SystemRoles.GetBySipAccount(UNKNOWN_SIPACCOUNT);
         }
 
     }
