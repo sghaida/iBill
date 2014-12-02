@@ -47,6 +47,7 @@ namespace LyncBillingBase.Repository
         // User
         public PhoneBookContactsDataMapper PhoneBooks = new PhoneBookContactsDataMapper();
         public UsersDataMapper Users = new UsersDataMapper();
+        public PhoneCallExclusionsDataMapper PhoneCallsExclusions = new PhoneCallExclusionsDataMapper();
 
         // Backend, Call Marking
         public CallMarkerStatusDataMapper CallMarkers = new CallMarkerStatusDataMapper();

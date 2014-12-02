@@ -104,37 +104,6 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        /// <summary>
-        /// Given a User's SipAccount, return the list of Sites-Departments that he is assigned on as a Department Head.
-        /// </summary>
-        /// <param name="UserSipAccount">The Department Head SipAccount (string).</param>
-        /// <returns>List of SiteDepartment objects.</returns>
-        public List<SiteDepartment> GetSiteDepartmentsBySipAccount(string UserSipAccount)
-        {
-            List<DepartmentHeadRole> roles = null;
-            List<SiteDepartment> sitesDepartments = null;
-
-            Dictionary<string, object> condition = new Dictionary<string, object>();
-            condition.Add("SipAccount", UserSipAccount);
-
-            try
-            {
-                roles = this.Get(whereConditions: condition, limit: 0).ToList<DepartmentHeadRole>();
-
-                if (roles != null && roles.Count > 0)
-                {
-                    sitesDepartments = roles.Select<DepartmentHeadRole, SiteDepartment>(role => role.SiteDepartment).ToList<SiteDepartment>();
-                }
-
-                return sitesDepartments;
-            }
-            catch (Exception ex)
-            {
-                throw ex.InnerException;
-            }
-        }
-
-
         public override DepartmentHeadRole GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             DepartmentHeadRole role = null;

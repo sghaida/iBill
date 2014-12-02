@@ -20,20 +20,29 @@ namespace LyncBillingBase.DataModels
         public string Entity { set; get; }
 
         [DbColumn("EntityType")]
-        public char EntityType { set; get; }
+        public string EntityType { set; get; }
 
         [DbColumn("SiteID")]
         public int SiteID { set; get; }
 
         [DbColumn("ZeroCost")]
-        public char ZeroCost { set; get; }
+        public string ZeroCost { set; get; }
 
         [AllowNull]
         [DbColumn("AutoMark")]
-        public char AutoMark { get; set; }
+        public string AutoMark { get; set; }
 
         [AllowNull]
         [DbColumn("Description")]
         public string Description { set; get; }
+
+
+        //
+        // Relations
+        [DataRelation(Name = "SiteID_Site.ID", WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
+        public Site Site { get; set; }
+
+        [DataRelation(Name = "Entity_User.SipAccount", WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "Entity", RelationType = Enums.DataRelationType.UNION)]
+        public User User { get; set; }
     }
 }

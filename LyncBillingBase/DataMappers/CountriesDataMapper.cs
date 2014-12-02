@@ -70,32 +70,6 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-
-        /// <summary>
-        /// Given a Country ID, return the Country's Currency object.
-        /// </summary>
-        /// <param name="CountryID">CountryID (int).</param>
-        /// <returns>Currency object.</returns>
-        public Currency GetCurrency(int CountryID)
-        {
-            Country country = null;
-            Currency currency = null;
-
-            try
-            {
-                country = GetById(CountryID);
-
-                if (country != null && country.Currency != null)
-                    currency = country.Currency;
-
-                return currency;
-            }
-            catch(Exception ex)
-            {
-                throw ex.InnerException;
-            }
-        }
-
     }
 
 }

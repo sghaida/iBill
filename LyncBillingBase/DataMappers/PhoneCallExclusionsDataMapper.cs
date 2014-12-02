@@ -11,39 +11,81 @@ namespace LyncBillingBase.DataMappers
 {
     public class PhoneCallExclusionsDataMapper : DataAccess<PhoneCallExclusion>
     {
-        /***
-         * Helper functions. These are very specific to the types of data in the data source.
-         */
-        private string LookUpExceptionType(char exceptionType)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exclusions"></param>
+        private void MapDataToReadable(ref List<PhoneCallExclusion> exclusions)
+        {
+            try
+            {
+                exclusions = exclusions
+                        .Select<PhoneCallExclusion, PhoneCallExclusion>
+                        (item =>
+                        {
+                            item.AutoMark = this.LookUpAutoMark(item.AutoMark);
+                            item.ZeroCost = this.LookUpZeroCost(item.ZeroCost);
+                            item.EntityType = this.LookUpExclusionType(item.EntityType);
+                            return item;
+                        })
+                        .ToList<PhoneCallExclusion>();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exceptionType"></param>
+        /// <returns></returns>
+        private string LookUpExclusionType(string exceptionType)
         {
             switch(exceptionType)
             {
-                case 'S': return "Source";
-                case 'D': return "Destination";
+                case "S": return "Source";
+                case "D": return "Destination";
                 default: return "N/A";
             }
         }
 
-        private string LookUpZeroCost(char zeroCost)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="zeroCost"></param>
+        /// <returns></returns>
+        private string LookUpZeroCost(string zeroCost)
         {
             switch(zeroCost)
             {
-                case 'Y': return "Yes";
-                case 'N': return "No";
+                case "Y": return "Yes";
+                case "N": return "No";
                 default: return "N/A";
             }
         }
 
-        private string LookUpAutoMark(char autoMarkType)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="autoMarkType"></param>
+        /// <returns></returns>
+        private string LookUpAutoMark(string autoMarkType)
         {
             switch(autoMarkType)
             {
-                case 'B': return "Business";
-                case 'P': return "Personal";
+                case "B": return "Business";
+                case "P": return "Personal";
                 default: return "DISABLED";
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="phoneCallExclusionBodyText"></param>
+        /// <returns></returns>
         private string CleanTheExceptionBody(string phoneCallExclusionBodyText)
         {
             string cleanedupVersion = string.Empty;
@@ -61,21 +103,182 @@ namespace LyncBillingBase.DataMappers
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="SiteID"></param>
+        /// <returns></returns>
         public List<PhoneCallExclusion> GetBySiteID(int SiteID)
         {
-            throw new NotImplementedException();
+            var condition = new Dictionary<string, object>();
+            condition.Add("SiteID", SiteID);
+
+            try
+            {
+                return this.Get(whereConditions: condition, limit: 0).ToList<PhoneCallExclusion>();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="SiteID"></param>
+        /// <returns></returns>
         public List<PhoneCallExclusion> GetSourcesBySiteID(int SiteID)
         {
-            throw new NotImplementedException();
+            var condition = new Dictionary<string, object>();
+            condition.Add("SiteID", SiteID);
+            condition.Add("EntityType", "S");
+
+            try
+            {
+                return this.Get(whereConditions: condition, limit: 0).ToList<PhoneCallExclusion>();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="SiteID"></param>
+        /// <returns></returns>
         public List<PhoneCallExclusion> GetDestinationsBySiteID(int SiteID)
         {
-            throw new NotImplementedException();
+            var condition = new Dictionary<string, object>();
+            condition.Add("SiteID", SiteID);
+            condition.Add("EntityType", "D");
+
+            try
+            {
+                return this.Get(whereConditions: condition, limit: 0).ToList<PhoneCallExclusion>();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
+
+
+        public override PhoneCallExclusion GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        {
+            PhoneCallExclusion exclusion = null;
+
+            try
+            {
+                exclusion = base.GetById(id, dataSourceName, dataSource, IncludeDataRelations);
+
+                if(exclusion != null)
+                {
+                    var temporaryList = new List<PhoneCallExclusion>() { exclusion };
+                    MapDataToReadable(ref temporaryList);
+                    exclusion = temporaryList.First();
+                }
+
+                return exclusion;
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+
+        public override IEnumerable<PhoneCallExclusion> Get(System.Linq.Expressions.Expression<Func<PhoneCallExclusion, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        {
+            List<PhoneCallExclusion> exclusions = null;
+
+            try
+            { 
+                exclusions = base.Get(predicate, dataSourceName, dataSource, IncludeDataRelations).ToList<PhoneCallExclusion>();
+
+                if (exclusions != null && exclusions.Count > 0)
+                {
+                    MapDataToReadable(ref exclusions);
+                }
+
+                return exclusions;
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+
+        public override IEnumerable<PhoneCallExclusion> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        {
+            List<PhoneCallExclusion> exclusions = null;
+
+            try
+            { 
+                exclusions = base.Get(whereConditions, limit, dataSourceName, dataSource, IncludeDataRelations).ToList<PhoneCallExclusion>();
+
+                if (exclusions != null && exclusions.Count > 0)
+                {
+                    MapDataToReadable(ref exclusions);
+                }
+
+                return exclusions;
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+
+        public override IEnumerable<PhoneCallExclusion> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        {
+            List<PhoneCallExclusion> exclusions = null;
+
+            try
+            { 
+                exclusions = base.GetAll(dataSourceName, dataSource, IncludeDataRelations).ToList<PhoneCallExclusion>();
+
+                if (exclusions != null && exclusions.Count > 0)
+                {
+                    MapDataToReadable(ref exclusions);
+                }
+
+                return exclusions;
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+
+        public override IEnumerable<PhoneCallExclusion> GetAll(string sql)
+        {
+            List<PhoneCallExclusion> exclusions = null;
+
+            try
+            { 
+                exclusions = base.GetAll(sql).ToList<PhoneCallExclusion>();
+
+                if(exclusions != null && exclusions.Count > 0)
+                {
+                    MapDataToReadable(ref exclusions);
+                }
+
+                return exclusions;
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
     }
+
 }
