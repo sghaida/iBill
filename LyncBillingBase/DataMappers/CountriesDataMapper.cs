@@ -18,21 +18,21 @@ namespace LyncBillingBase.DataMappers
         /// <returns>Country object.</returns>
         public Country GetByISO2Code(string ISO2Code)
         {
+            Country country = null;
+
+            var condition = new Dictionary<string, object>();
+            condition.Add("ISO2Code", ISO2Code);
+
             try
             {
-                var condition = new Dictionary<string, object>();
-                condition.Add("ISO2Code", ISO2Code);
-
                 var results = Get(whereConditions: condition, limit: 1).ToList<Country>();
 
                 if(results != null && results.Count() > 0)
                 {
-                    return results.First();
+                    country = results.First();
                 }
-                else
-                {
-                    return null;
-                }
+
+                return country;
             }
             catch(Exception ex)
             {
@@ -48,21 +48,21 @@ namespace LyncBillingBase.DataMappers
         /// <returns>Country object.</returns>
         public Country GetByISO3Code(string ISO3Code)
         {
+            Country country = null;
+
+            var condition = new Dictionary<string, object>();
+            condition.Add("ISO3Code", ISO3Code);
+
             try
             {
-                var condition = new Dictionary<string, object>();
-                condition.Add("ISO3Code", ISO3Code);
-
                 var results = Get(whereConditions: condition, limit: 1).ToList<Country>();
 
                 if (results != null && results.Count() > 0)
                 {
-                    return results.First();
+                    country = results.First();
                 }
-                else
-                {
-                    return null;
-                }
+
+                return country;
             }
             catch (Exception ex)
             {

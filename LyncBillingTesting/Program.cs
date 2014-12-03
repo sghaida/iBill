@@ -24,19 +24,21 @@ namespace LyncBillingTesting
         {
             DataStorage _STORAGE = DataStorage.Instance;
 
+            var monServersInfo = _STORAGE.MonitoringServers.GetAll().ToList<MonitoringServerInfo>();
+            var monServersInfoMap = _STORAGE.MonitoringServers.GetMonitoringServersInfoMap();
+
+            string x = string.Empty;
 
             /***
              * Numbering Plan Tests
              */
-            var countries = _STORAGE.Countries.GetAll();
-            var GREECE = _STORAGE.Countries.GetByISO3Code("GRC");
-            var allPlan = _STORAGE.NumberingPlans.GetAll().ToList<NumberingPlan>();
-            var greeceNumberingPlan = _STORAGE.NumberingPlans.GetByISO3CountryCode(GREECE.ISO3Code);
+            //var countries = _STORAGE.Countries.GetAll();
+            //var GREECE = _STORAGE.Countries.GetByISO3Code("GRC");
+            //var allPlan = _STORAGE.NumberingPlans.GetAll().ToList<NumberingPlan>();
+            //var greeceNumberingPlan = _STORAGE.NumberingPlans.GetByISO3CountryCode(GREECE.ISO3Code);
+            //var allNGNPlan = _STORAGE.NumberingPlansForNGN.GetAll().ToList<NumberingPlanForNGN>();
+            //var greeceNGNPlan = _STORAGE.NumberingPlansForNGN.GetByISO3CountryCode(GREECE.ISO3Code);
 
-            var allNGNPlan = _STORAGE.NumberingPlansForNGN.GetAll().ToList<NumberingPlanForNGN>();
-            var greeceNGNPlan = _STORAGE.NumberingPlansForNGN.GetByISO3CountryCode(GREECE.ISO3Code);
-
-            string x = string.Empty;
 
             /***
              * Users Tests

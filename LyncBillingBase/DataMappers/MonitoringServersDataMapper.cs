@@ -38,15 +38,47 @@ namespace LyncBillingBase.DataMappers
             //return ConnectionString;
         }
 
-        public Dictionary<string, MonitoringServerInfo> GetMonitoringServersInfo()
-        {
-            // Sample data: 
-            // * monInfo is MonitoringServerInfo object.
-            // Dictionary Structure:
-            // * Key = monInfo.TelephonySolutionName
-            // * Value = monInfo
 
-            throw new NotImplementedException();
+        public Dictionary<string, MonitoringServerInfo> GetMonitoringServersInfoMap()
+        {
+            Dictionary<string, MonitoringServerInfo> monitoringServersInfoMap = null;
+
+            try
+            {
+                var allServersInfo = base.GetAll().ToList<MonitoringServerInfo>();
+
+                if(allServersInfo != null && allServersInfo.Count > 0)
+                {
+                    monitoringServersInfoMap = new Dictionary<string, MonitoringServerInfo>();
+
+                    Parallel.ForEach(
+                        allServersInfo,
+                        (server) =>
+                        {
+                            lock(monitoringServersInfoMap)
+                            {
+                                if(server != null && !string .IsNullOrEmpty(server.TelephonySolutionName))
+                                { 
+                                    if(false == monitoringServersInfoMap.Keys.Contains(server.TelephonySolutionName))
+                                    {
+                                        monitoringServersInfoMap.Add(server.TelephonySolutionName, server);
+                                    }
+                                    else
+                                    {
+                                        monitoringServersInfoMap[server.TelephonySolutionName]= server;
+                                    }
+                                }
+                            }
+                        });
+                    //end-of-parallel-foreach
+                }
+
+                return monitoringServersInfoMap;
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
     }
