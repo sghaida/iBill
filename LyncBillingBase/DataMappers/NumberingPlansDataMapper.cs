@@ -27,7 +27,11 @@ namespace LyncBillingBase.DataMappers
         {
             try
             {
-                var allCountries = _countriesDataMapper.GetAll().ToList<Country>();
+                IEnumerable<Country> allCountries = _countriesDataMapper.GetAll();
+
+                // Enable parallelization on the enumerable collection
+                allCountries = allCountries.AsParallel<Country>();
+                numberingPlan = numberingPlan.AsParallel<NumberingPlan>();
 
                 numberingPlan = 
                     (from dialingRecord in numberingPlan
