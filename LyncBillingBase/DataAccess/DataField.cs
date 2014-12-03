@@ -104,9 +104,12 @@ namespace LyncBillingBase.DataAccess
         /// </summary>
         public Enums.DataRelationType RelationType { get; set; }
 
+
         private static T Cast<T>(object o)
         {
             return (T)o;
         }
+
     }
+
 }

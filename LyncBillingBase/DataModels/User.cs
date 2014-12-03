@@ -54,10 +54,10 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(Name = "SiteName_Site.Name", WithDataModel = typeof(Site), OnDataModelKey = "Name", ThisKey = "SiteName", RelationType = Enums.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "Name", ThisKey = "SiteName", RelationType = Enums.DataRelationType.UNION)]
         public Site Site { get; set; }
 
-        [DataRelation(Name = "DepartmentName_Departemnt.Name", WithDataModel = typeof(Department), OnDataModelKey = "Name", ThisKey = "DepartmentName", RelationType = Enums.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(Department), OnDataModelKey = "Name", ThisKey = "DepartmentName", RelationType = Enums.DataRelationType.UNION)]
         public Department Department { get; set; }
     }
 }

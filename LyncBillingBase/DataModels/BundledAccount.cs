@@ -25,7 +25,7 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(Name = "PrimarySipAccount_Users.SipAccount", WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "PrimarySipAccount")]
+        [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "PrimarySipAccount")]
         public User PrimaryUserAccount { get; set; }
     }
 

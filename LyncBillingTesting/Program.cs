@@ -117,6 +117,11 @@ namespace LyncBillingTesting
             ////};
             ////STORAGE.PhoneCallsExclusions.Insert(newExclusion);
 
+            string one = "One";
+            string two = "Two";
+            string three = "Three";
+
+            var hash = (one + two + three).GetHashCode();
         }
 
     }

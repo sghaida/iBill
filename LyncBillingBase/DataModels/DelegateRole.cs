@@ -42,16 +42,16 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        //[DataRelation(Name = "DelegeeSipAccount_User.SipAccount", WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "DelegeeSipAccount", RelationType = Enums.DataRelationType.INTERSECTION)]
+        //[DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "DelegeeSipAccount", RelationType = Enums.DataRelationType.INTERSECTION)]
         //public User DelegeeAccount { get; set; }
 
-        [DataRelation(Name = "ManagedUserSipAccount_User.SipAccount", WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "ManagedUserSipAccount", RelationType = Enums.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "ManagedUserSipAccount", RelationType = Enums.DataRelationType.UNION)]
         public User ManagedUser { get; set; }
 
-        [DataRelation(Name = "ManagedSiteDepartmentID_SiteDepartment.ID", WithDataModel = typeof(SiteDepartment), OnDataModelKey = "ID", ThisKey = "ManagedSiteDepartmentID", RelationType = Enums.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(SiteDepartment), OnDataModelKey = "ID", ThisKey = "ManagedSiteDepartmentID", RelationType = Enums.DataRelationType.UNION)]
         public SiteDepartment ManagedSiteDepartment { get; set; }
 
-        [DataRelation(Name = "ManagedSiteID_Site.ID", WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "ManagedSiteID", RelationType = Enums.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "ManagedSiteID", RelationType = Enums.DataRelationType.UNION)]
         public Site ManagedSite { get; set; }
 
     }
