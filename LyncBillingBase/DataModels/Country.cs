@@ -31,7 +31,7 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(Name = "Country.CunrrncyID_Currency.ID", WithDataModel = typeof(Currency), OnDataModelKey = "ID", ThisKey = "CurrencyID")]
+        [DataRelation(WithDataModel = typeof(Currency), OnDataModelKey = "ID", ThisKey = "CurrencyID")]
         public Currency Currency { get; set; }
     }
 }

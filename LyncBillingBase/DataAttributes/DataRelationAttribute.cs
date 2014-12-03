@@ -44,20 +44,33 @@ namespace LyncBillingBase.DataAttributes
         private string _name = string.Empty;
         public string Name
         {
-            set { this._name = value; }
             get
             {
                 if (string.IsNullOrEmpty(_name))
                 {
-                    //Sample: CountryID_Country.ID
-                    this._name = String.Format("{0}.{1}_{2}", WithDataModel.Name, OnDataModelKey, ThisKey);
+                    //Sample: countryid_country_countryid_234567
+                    var nameString = String.Format("{0}_{1}_{2}", ThisKey, WithDataModel.Name, OnDataModelKey).ToLower();
+                    var hash = Math.Abs(nameString.GetHashCode()).ToString();
+
+                    this._name = String.Format("{0}_{1}", nameString, hash);
                 }
 
                 return _name;
             }
         }
 
-
+        //Empty Constrcutor
         public DataRelationAttribute() { }
+
+        //Adds a new term to the relation name
+        public void AddTermToRelationName(string newTerm)
+        {
+            if (false == string.IsNullOrEmpty(newTerm))
+            {
+                this._name = String.Format("{0}_{1}", newTerm, this.Name).ToLower();
+            }
+        }
+
     }
+
 }

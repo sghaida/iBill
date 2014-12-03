@@ -40,7 +40,7 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(Name = "ISO3CountryCode_Country.ISO3Code", WithDataModel = typeof(Country), OnDataModelKey = "ISO3Code", ThisKey = "ISO3CountryCode")]
+        [DataRelation(WithDataModel = typeof(Country), OnDataModelKey = "ISO3Code", ThisKey = "ISO3CountryCode")]
         public Country Country { get; set; }
 
         //[DataRelation(Name="CountryID_Country.ID", WithDataModel = typeof(Country), OnDataModelKey = "ID", ThisKey = "CountryID")]
