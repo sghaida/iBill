@@ -26,7 +26,7 @@ namespace LyncBillingBase.DataModels
         public string ISO3Code { get; set; }
 
         [DbColumn("CurrencyID")]
-        public string CurrencyID { get; set; }
+        public int CurrencyID { get; set; }
 
 
         //
