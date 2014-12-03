@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using LyncBillingBase.Libs;
 using LyncBillingBase.DataAttributes;
+using System.ComponentModel;
 
 namespace LyncBillingBase.Helpers
 {
@@ -23,13 +24,23 @@ namespace LyncBillingBase.Helpers
 
     public static class Extensions
     {
+        //Helper function
+        private static string ConvertToDateString(object date)
+        {
+            if (date == null)
+                return string.Empty;
+
+            return Convert.ToDateTime(date).ConvertDate();
+        }//end-ConvertToDateString-function
+
+
         /// <summary>
         /// Converts datatable to list<T> dynamically
         /// </summary>
         /// <typeparam name="T">Class name</typeparam>
         /// <param name="dataTable">data table to convert</param>
         /// <returns>List<T></returns>
-        public static List<T> ConvertToList<T>(this DataTable DataTable,bool IncludeDataRelations = true) where T : class, new()
+        public static List<T> ConvertToList<T>(this DataTable DataTable, bool IncludeDataRelations = true) where T : class, new()
         {
             var dataList = new List<T>();
 
@@ -337,15 +348,78 @@ namespace LyncBillingBase.Helpers
                 });
 
             return dataList;
+        }//end-convert-to-list-function
+
+
+        /// <summary>
+        /// Gets the Name of DB table Field
+        /// </summary>
+        /// <param name="value">Enum Name</param>
+        /// <returns>Field Description</returns>
+        public static string Description(this Enum enumObject)
+        {
+            FieldInfo fieldInfo = enumObject.GetType().GetField(enumObject.ToString());
+
+            DescriptionAttribute[] descAttributes = (DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+            if (descAttributes != null && descAttributes.Length > 0)
+            {
+                return descAttributes[0].Description;
+            }
+            else
+            {
+                return enumObject.ToString();
+            }
         }
 
-        private static string ConvertToDateString(object date) 
+
+        /// <summary>
+        /// Gets the DefaultValue attribute of the enum
+        /// </summary>
+        /// <param name="value">Enum Name</param>
+        /// <returns>Field Description</returns>
+        public static string Value(this Enum enumObject)
         {
-            if (date == null)
-                return string.Empty;
-           
-            return Convert.ToDateTime(date).ConvertDate();
+            FieldInfo fieldInfo = enumObject.GetType().GetField(enumObject.ToString());
+
+            DefaultValueAttribute[] valueAttributes = (DefaultValueAttribute[])fieldInfo.GetCustomAttributes(typeof(DefaultValueAttribute), false);
+
+            if (valueAttributes != null && valueAttributes.Length > 0)
+            {
+                return valueAttributes[0].Value.ToString();
+            }
+            else
+            { 
+                return enumObject.ToString();
+            }
+        }
+
+
+        /// <summary>
+        /// Return an enum object to a list of enums
+        /// </summary>
+        /// <typeparam name="T">Enum Object</typeparam>
+        /// <returns>IEnumerable</returns>
+        public static IEnumerable<T> EnumToList<T>()
+        {
+            Type enumType = typeof(T);
+
+            if (enumType.BaseType != typeof(Enum))
+            { 
+                throw new ArgumentException("T is not of System.Enum Type");
+            }
+
+            Array enumValArray = Enum.GetValues(enumType);
+            List<T> enumValList = new List<T>(enumValArray.Length);
+
+            foreach (int val in enumValArray)
+            {
+                enumValList.Add((T)Enum.Parse(enumType, val.ToString()));
+            }
+
+            return enumValList;
         }
 
     }
+
 }

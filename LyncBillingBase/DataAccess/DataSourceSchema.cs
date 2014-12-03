@@ -12,8 +12,8 @@ namespace LyncBillingBase.DataAccess
     public class DataSourceSchema<T> where T: DataModel, new()
     {
         public string DataSourceName { get; set; }
-        public Enums.DataSourceType DataSourceType { set; get; }
-        public Enums.DataSourceAccessType DataSourceAccessType { get; set; }
+        public GLOBALS.DataSourceType DataSourceType { set; get; }
+        public GLOBALS.DataSourceAccessType DataSourceAccessType { get; set; }
 
         public string IDFieldName { set; get; }
 
@@ -144,12 +144,12 @@ namespace LyncBillingBase.DataAccess
             return this.DataSourceName;
         }
 
-        public Enums.DataSourceType GetDataSourceType()
+        public GLOBALS.DataSourceType GetDataSourceType()
         {
             return this.DataSourceType;
         }
 
-        public Enums.DataSourceAccessType GetDataSourceAccessType()
+        public GLOBALS.DataSourceAccessType GetDataSourceAccessType()
         {
             return this.DataSourceAccessType;
         }

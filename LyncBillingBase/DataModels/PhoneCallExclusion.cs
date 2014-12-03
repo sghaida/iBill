@@ -9,7 +9,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "ExceptionsList", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
+    [DataSource(Name = "ExceptionsList", SourceType = GLOBALS.DataSourceType.DBTable, AccessType = GLOBALS.DataSourceAccessType.SingleSource)]
     public class PhoneCallExclusion : DataModel
     {
         [IsIDField]
@@ -17,10 +17,10 @@ namespace LyncBillingBase.DataModels
         public long ID { set; get; }
 
         [DbColumn("Entity")]
-        public string Entity { set; get; }
+        public string ExclusionSubject { set; get; }
 
         [DbColumn("EntityType")]
-        public string EntityType { set; get; }
+        public string ExclusionType { set; get; }
 
         [DbColumn("SiteID")]
         public int SiteID { set; get; }
@@ -42,7 +42,7 @@ namespace LyncBillingBase.DataModels
         [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
         public Site Site { get; set; }
 
-        [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "Entity", RelationType = Enums.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "Entity", RelationType = GLOBALS.DataRelationType.UNION)]
         public User User { get; set; }
     }
 }

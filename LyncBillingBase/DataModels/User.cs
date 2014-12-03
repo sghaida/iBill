@@ -9,7 +9,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "ActiveDirectoryUsers", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
+    [DataSource(Name = "ActiveDirectoryUsers", SourceType = GLOBALS.DataSourceType.DBTable, AccessType = GLOBALS.DataSourceAccessType.SingleSource)]
     public class User : DataModel
     {
         [IsIDField]
@@ -54,10 +54,10 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "Name", ThisKey = "SiteName", RelationType = Enums.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "Name", ThisKey = "SiteName", RelationType = GLOBALS.DataRelationType.UNION)]
         public Site Site { get; set; }
 
-        [DataRelation(WithDataModel = typeof(Department), OnDataModelKey = "Name", ThisKey = "DepartmentName", RelationType = Enums.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(Department), OnDataModelKey = "Name", ThisKey = "DepartmentName", RelationType = GLOBALS.DataRelationType.UNION)]
         public Department Department { get; set; }
     }
 }

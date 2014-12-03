@@ -491,7 +491,7 @@ namespace LyncBillingBase.Libs
                     //Format the cell text if it's the case of Duration
                     if (SourceDataTable.Columns.Contains(column))
                     {
-                        if (ReportColumnsDescriptionsSection.GetDescription(column) == Enums.GetDescription(Enums.PhoneCallSummary.Duration))
+                        if (ReportColumnsDescriptionsSection.GetDescription(column) == GLOBALS.PhoneCallSummary.Duration.Description())
                         {
                             entryCell = new PdfPCell(new Phrase(Convert.ToInt32(r[column]).ConvertSecondsToReadable(), bodyFontSmall));
                         }
@@ -594,9 +594,9 @@ namespace LyncBillingBase.Libs
             Paragraph pageSubTitleParagraph;
             ADUserInfo userInfo = new ADUserInfo();
 
-            string employeeIDKey = Enums.GetDescription(Enums.PhoneCallSummary.EmployeeID);
-            string displayNameKey = Enums.GetDescription(Enums.PhoneCallSummary.DisplayName);
-            string sipAccountKey = Enums.GetDescription(Enums.PhoneCallSummary.ChargingParty);
+            string employeeIDKey = GLOBALS.PhoneCallSummary.EmployeeID.Description();
+            string displayNameKey = GLOBALS.PhoneCallSummary.DisplayName.Description();
+            string sipAccountKey = GLOBALS.PhoneCallSummary.ChargingParty.Description();
 
 
             //--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -725,7 +725,7 @@ namespace LyncBillingBase.Libs
                                 cellText = "N/A";
 
                             //Format the cell text if it's the case of Duration
-                            if (ReportColumnsDescriptionsSection.GetDescription(column) == Enums.GetDescription(Enums.PhoneCallSummary.Duration) && cellText != "N/A")
+                            if (ReportColumnsDescriptionsSection.GetDescription(column) == GLOBALS.PhoneCallSummary.Duration.Description() && cellText != "N/A")
                             {
                                 entryCell = new PdfPCell(new Phrase(Convert.ToInt32(cellText).ConvertSecondsToReadable(),  bodyFontSmall));
                             }

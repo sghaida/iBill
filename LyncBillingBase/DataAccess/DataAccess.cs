@@ -124,7 +124,7 @@ namespace LyncBillingBase.DataAccess
             }
         }
 
-        public virtual int Insert(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual int Insert(T dataObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
         {
             int rowID = 0;
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
@@ -190,7 +190,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual bool Delete(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual bool Delete(T dataObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
         {
             long ID = 0;
 
@@ -218,7 +218,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual bool Update(T dataObject, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default)
+        public virtual bool Update(T dataObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
         {
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
             bool status = false;
@@ -291,7 +291,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual T GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public virtual T GetById(long id, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             DataTable dt = new DataTable();
             string finalDataSourceName = string.Empty;
@@ -324,7 +324,7 @@ namespace LyncBillingBase.DataAccess
             condition.Add(Schema.IDFieldName, id);
 
             //Proceed with getting the data
-            if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
+            if (Schema.DataSourceType == GLOBALS.DataSourceType.DBTable)
             {
                 switch (IncludeDataRelations)
                 {
@@ -352,7 +352,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             DataTable dt = new DataTable();
 
@@ -397,7 +397,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public virtual IEnumerable<T> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             DataTable dt = new DataTable();
             string finalDataSourceName = string.Empty;
@@ -425,7 +425,7 @@ namespace LyncBillingBase.DataAccess
 
 
             //Proceed with getting the data
-            if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
+            if (Schema.DataSourceType == GLOBALS.DataSourceType.DBTable)
             {
                 switch (IncludeDataRelations)
                 {
@@ -445,7 +445,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public virtual IEnumerable<T> GetAll(string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             DataTable dt = new DataTable();
             string finalDataSourceName = string.Empty;
@@ -465,7 +465,7 @@ namespace LyncBillingBase.DataAccess
             finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? Schema.DataSourceName : dataSourceName);
             
             //Proceed with getting the data
-            if (Schema.DataSourceType == Enums.DataSourceType.DBTable)
+            if (Schema.DataSourceType == GLOBALS.DataSourceType.DBTable)
             {
                 switch(IncludeDataRelations)
                 { 

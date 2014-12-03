@@ -36,7 +36,7 @@ namespace LyncBillingBase.DataAttributes
         /// * UNION: The union of two data models. Equivalent to an SQL OUTER JOIN.
         /// * INTERSECTION: The intersection of two data models. Equivalent to an SQL INNER JOIN.
         /// </summary>
-        public Enums.DataRelationType RelationType { get; set; }
+        public GLOBALS.DataRelationType RelationType { get; set; }
 
         /// <summary>
         /// Relation Descriptive Name

@@ -12,7 +12,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "MonitoringServersInfo", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.Distributed)]
+    [DataSource(Name = "MonitoringServersInfo", SourceType = GLOBALS.DataSourceType.DBTable, AccessType = GLOBALS.DataSourceAccessType.DistributedSource)]
     public class PhoneCall : DataModel
     {
         public PhoneCall() { }
