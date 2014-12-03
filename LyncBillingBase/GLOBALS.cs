@@ -112,6 +112,22 @@ namespace LyncBillingBase
         }
 
 
+        // The Call Marker Status GLOBALS
+        public static class CallMarkerStatus
+        {
+            public enum Type
+            {
+                [Description("The rates applying status string.")]
+                [DefaultValue("ApplyingRates")]
+                ApplyingRates = 0,
+
+                [Description("The phone calls marking status string.")]
+                [DefaultValue("Marking")]
+                CallsMarking = 1,
+            }
+        }
+
+
         public enum SpecialDateTime
         {
             [Description("1st Quarter")]

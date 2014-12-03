@@ -39,6 +39,10 @@ namespace LyncBillingBase.DataMappers
         }
 
 
+        /// <summary>
+        /// Return a dictionary containing all the monitoring server's info, accessible by the TelephonySolutionName field of each MonitoringServer.
+        /// </summary>
+        /// <returns>Dictionary<string, MonitoringServerInfo></returns>
         public Dictionary<string, MonitoringServerInfo> GetMonitoringServersInfoMap()
         {
             Dictionary<string, MonitoringServerInfo> monitoringServersInfoMap = null;
@@ -82,4 +86,5 @@ namespace LyncBillingBase.DataMappers
         }
 
     }
+
 }
