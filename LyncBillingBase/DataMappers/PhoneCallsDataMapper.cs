@@ -34,7 +34,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override int Insert(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
+        public override int Insert(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             string finalDataSourceName = string.Empty;
 
@@ -66,7 +66,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override bool Update(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
+        public override bool Update(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             string finalDataSourceName = string.Empty;
 
@@ -102,7 +102,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override bool Delete(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
+        public override bool Delete(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             string finalDataSourceName = string.Empty;
 
@@ -138,7 +138,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override PhoneCall GetById(long id, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override PhoneCall GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
             throw new NotImplementedException();
         }

@@ -98,11 +98,9 @@ namespace LyncBillingBase.DataAccess
 
         /// <summary>
         /// This sets the relation type between the two data models.
-        /// It can be one of the following options:
-        /// * UNION: The union of two data models. Equivalent to an SQL OUTER JOIN.
-        /// * INTERSECTION: The intersection of two data models. Equivalent to an SQL INNER JOIN.
+        /// It can be any value defined in the GLOBALS.DataRelation.Type
         /// </summary>
-        public GLOBALS.DataRelationType RelationType { get; set; }
+        public GLOBALS.DataRelation.Type RelationType { get; set; }
 
 
         private static T Cast<T>(object o)

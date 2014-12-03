@@ -12,8 +12,8 @@ namespace LyncBillingBase.DataAccess
     public class DataSourceSchema<T> where T: DataModel, new()
     {
         public string DataSourceName { get; set; }
-        public GLOBALS.DataSourceType DataSourceType { set; get; }
-        public GLOBALS.DataSourceAccessType DataSourceAccessType { get; set; }
+        public GLOBALS.DataSource.Type DataSourceType { set; get; }
+        public GLOBALS.DataSource.AccessMethod DataSourceAccessMethod { get; set; }
 
         public string IDFieldName { set; get; }
 
@@ -39,11 +39,13 @@ namespace LyncBillingBase.DataAccess
 
                 if (dsAttr != null)
                 {
-                    if (!string.IsNullOrEmpty(dsAttr.Name)) DataSourceName = dsAttr.Name;
+                    DataSourceType = dsAttr.Type;
+                    DataSourceAccessMethod = dsAttr.AccessMethod;
 
-                    if (dsAttr.SourceType != null) DataSourceType = dsAttr.SourceType;
-
-                    if (dsAttr.AccessType != null) DataSourceAccessType = dsAttr.AccessType;
+                    if (false == string.IsNullOrEmpty(dsAttr.Name))
+                    {
+                        DataSourceName = dsAttr.Name;
+                    }
                 }
             }
         }
@@ -121,6 +123,10 @@ namespace LyncBillingBase.DataAccess
         }
 
 
+        /// <summary>
+        /// Constructor.
+        /// Calls the private setters to initialize the schema over the DataModel T
+        /// </summary>
         public DataSourceSchema()
         {
             try
@@ -144,20 +150,24 @@ namespace LyncBillingBase.DataAccess
             return this.DataSourceName;
         }
 
-        public GLOBALS.DataSourceType GetDataSourceType()
+
+        public GLOBALS.DataSource.Type GetDataSourceType()
         {
             return this.DataSourceType;
         }
 
-        public GLOBALS.DataSourceAccessType GetDataSourceAccessType()
+
+        public GLOBALS.DataSource.AccessMethod GetDataSourceAccessMethod()
         {
-            return this.DataSourceAccessType;
+            return this.DataSourceAccessMethod;
         }
+
 
         public string GetIDFieldName()
         {
             return this.IDFieldName;
         }
+
 
         public List<DataField> GetDataFields()
         {
