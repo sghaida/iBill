@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
+using LyncBillingBase;
 using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;
@@ -24,10 +25,20 @@ namespace LyncBillingTesting
         {
             DataStorage _STORAGE = DataStorage.Instance;
 
-            var monServersInfo = _STORAGE.MonitoringServers.GetAll().ToList<MonitoringServerInfo>();
-            var monServersInfoMap = _STORAGE.MonitoringServers.GetMonitoringServersInfoMap();
+            var markerStatus = _STORAGE.CallMarkers.GetAll();
+            var all_2010_status = _STORAGE.CallMarkers.GetByPhoneCallsTable("PhoneCalls2010");
+            var rates_applier_2010 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2010", GLOBALS.CallMarkerStatus.Type.ApplyingRates.Value());
+            var calls_marker_2013 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2013", GLOBALS.CallMarkerStatus.Type.CallsMarking.Value());
 
             string x = string.Empty;
+
+
+            /**
+             * Monitoring Servers Info Tests
+             */
+            //var monServersInfo = _STORAGE.MonitoringServers.GetAll().ToList<MonitoringServerInfo>();
+            //var monServersInfoMap = _STORAGE.MonitoringServers.GetMonitoringServersInfoMap();
+
 
             /***
              * Numbering Plan Tests
