@@ -10,7 +10,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NEW_Roles_Delegates", SourceType = GLOBALS.DataSourceType.DBTable, AccessType = GLOBALS.DataSourceAccessType.SingleSource)]
+    [DataSource(Name = "NEW_Roles_Delegates", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
     public class DelegateRole : DataModel
     {
         [IsIDField]
@@ -45,13 +45,13 @@ namespace LyncBillingBase.DataModels
         //[DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "DelegeeSipAccount", RelationType = Enums.DataRelationType.INTERSECTION)]
         //public User DelegeeAccount { get; set; }
 
-        [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "ManagedUserSipAccount", RelationType = GLOBALS.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "ManagedUserSipAccount", RelationType = GLOBALS.DataRelation.Type.UNION)]
         public User ManagedUser { get; set; }
 
-        [DataRelation(WithDataModel = typeof(SiteDepartment), OnDataModelKey = "ID", ThisKey = "ManagedSiteDepartmentID", RelationType = GLOBALS.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(SiteDepartment), OnDataModelKey = "ID", ThisKey = "ManagedSiteDepartmentID", RelationType = GLOBALS.DataRelation.Type.UNION)]
         public SiteDepartment ManagedSiteDepartment { get; set; }
 
-        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "ManagedSiteID", RelationType = GLOBALS.DataRelationType.UNION)]
+        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "ManagedSiteID", RelationType = GLOBALS.DataRelation.Type.UNION)]
         public Site ManagedSite { get; set; }
 
     }

@@ -23,16 +23,19 @@ namespace LyncBillingBase.DataAttributes
         /// * DBTable: A database table. In this case, the Name option specifies the table name.
         /// * WS: A webservice endpoint. In this case, the Name option speficies the address.
         /// </summary>
-        public GLOBALS.DataSourceType SourceType { get; set; }
+        public GLOBALS.DataSource.Type Type { get; set; }
 
         /// <summary>
         /// This specifies how the data is read and fetched. This option can be one of the following:
         /// * SingleSource: Data is read from a single data source, such as: a table, a webservice endpoint...etc
         /// * Distributed: Data is read from multiple sources, this data source acts as a lookup of the other sources, such as: a lookup table, a lookup webservice endpoint...etc
         /// </summary>
-        public GLOBALS.DataSourceAccessType AccessType { get; set; }
+        public GLOBALS.DataSource.AccessMethod AccessMethod { get; set; }
 
 
+        //Empty constructor
         public DataSourceAttribute() { }
+
     }
+
 }

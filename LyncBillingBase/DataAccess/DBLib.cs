@@ -126,7 +126,7 @@ namespace LyncBillingBase.DataAccess
                     string keysStatement = string.Empty;
 
                     //Decide the join type
-                    if (relation.RelationType == GLOBALS.DataRelationType.INTERSECTION.ToString())
+                    if (GLOBALS.DataRelation.Type.INTERSECTION == relation.RelationType)
                     {
                         joinType = "INNER JOIN";
                     }
@@ -1709,7 +1709,7 @@ namespace LyncBillingBase.DataAccess
 
     public class SqlJoinRelation
     {
-        public string RelationType { get; set; }
+        public GLOBALS.DataRelation.Type RelationType { get; set; }
         public string MasterTableName { get; set; }
         public string MasterTableKey { get; set; }
         public string JoinedTableName { get; set; }

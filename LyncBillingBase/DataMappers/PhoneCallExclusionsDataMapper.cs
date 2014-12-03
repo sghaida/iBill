@@ -210,7 +210,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override int Insert(PhoneCallExclusion newExclusionObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
+        public override int Insert(PhoneCallExclusion newExclusionObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             // NULL value check
             if(null == newExclusionObject)
@@ -231,7 +231,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override bool Update(PhoneCallExclusion existingExclusionObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
+        public override bool Update(PhoneCallExclusion existingExclusionObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             // NULL value check
             if(null == existingExclusionObject)
@@ -252,7 +252,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override PhoneCallExclusion GetById(long id, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override PhoneCallExclusion GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
             PhoneCallExclusion exclusion = null;
 
@@ -276,7 +276,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<PhoneCallExclusion> Get(System.Linq.Expressions.Expression<Func<PhoneCallExclusion, bool>> predicate, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<PhoneCallExclusion> Get(System.Linq.Expressions.Expression<Func<PhoneCallExclusion, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
             List<PhoneCallExclusion> exclusions = null;
 
@@ -298,7 +298,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<PhoneCallExclusion> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<PhoneCallExclusion> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
             List<PhoneCallExclusion> exclusions = null;
 
@@ -320,7 +320,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<PhoneCallExclusion> GetAll(string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<PhoneCallExclusion> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
             List<PhoneCallExclusion> exclusions = null;
 
