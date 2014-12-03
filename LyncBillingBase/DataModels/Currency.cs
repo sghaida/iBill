@@ -9,7 +9,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NEW_Currencies", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
+    [DataSource(Name = "NEW_Currencies", SourceType = GLOBALS.DataSourceType.DBTable, AccessType = GLOBALS.DataSourceAccessType.SingleSource)]
     public class Currency : DataModel
     {
         [IsIDField]

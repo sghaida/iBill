@@ -100,7 +100,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override DelegateRole GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override DelegateRole GetById(long id, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             DelegateRole role = null;
 
@@ -126,7 +126,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DelegateRole> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DelegateRole> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             List<DelegateRole> roles = null;
 
@@ -148,7 +148,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DelegateRole> Get(Expression<Func<DelegateRole, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DelegateRole> Get(Expression<Func<DelegateRole, bool>> predicate, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             List<DelegateRole> roles = null;
 
@@ -170,7 +170,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DelegateRole> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DelegateRole> GetAll(string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             List<DelegateRole> roles = null;
 

@@ -104,7 +104,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override DepartmentHeadRole GetById(long id, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override DepartmentHeadRole GetById(long id, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             DepartmentHeadRole role = null;
 
@@ -131,7 +131,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DepartmentHeadRole> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DepartmentHeadRole> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             List<DepartmentHeadRole> roles = null;
 
@@ -153,7 +153,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DepartmentHeadRole> Get(Expression<Func<DepartmentHeadRole, bool>> predicate, string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DepartmentHeadRole> Get(Expression<Func<DepartmentHeadRole, bool>> predicate, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             List<DepartmentHeadRole> roles = null;
 
@@ -175,7 +175,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DepartmentHeadRole> GetAll(string dataSourceName = null, Enums.DataSourceType dataSource = Enums.DataSourceType.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DepartmentHeadRole> GetAll(string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
             List<DepartmentHeadRole> roles = null;
 

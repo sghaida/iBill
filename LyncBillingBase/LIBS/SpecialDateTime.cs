@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.Helpers;
+
 namespace LyncBillingBase.Libs
 {
     public class SpecialDateTime
@@ -13,12 +15,13 @@ namespace LyncBillingBase.Libs
         public int QuarterAsNumber { get; set; }
         public string QuarterAsText { get; set; }
 
-          public static SpecialDateTime Get_OneYearAgoFromToday()
+
+        public static SpecialDateTime Get_OneYearAgoFromToday()
         {
             return new SpecialDateTime()
             { 
-                YearAsText = Enums.GetDescription(Enums.SpecialDateTime.OneYearAgoFromToday),
-                YearAsNumber = Convert.ToInt32(Enums.GetValue(Enums.SpecialDateTime.OneYearAgoFromToday)),
+                YearAsText = GLOBALS.SpecialDateTime.OneYearAgoFromToday.Description(),
+                YearAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.OneYearAgoFromToday.Value()),
             };
         }
 
@@ -27,8 +30,8 @@ namespace LyncBillingBase.Libs
         {
             return new SpecialDateTime()
             {
-                YearAsText = Enums.GetDescription(Enums.SpecialDateTime.TwoYearsAgoFromToday),
-                YearAsNumber = Convert.ToInt32(Enums.GetValue(Enums.SpecialDateTime.TwoYearsAgoFromToday)),
+                YearAsText = GLOBALS.SpecialDateTime.TwoYearsAgoFromToday.Description(),
+                YearAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.TwoYearsAgoFromToday.Value()),
             };
         }
 
@@ -39,28 +42,28 @@ namespace LyncBillingBase.Libs
             {
                 //First Quarter
                 new SpecialDateTime {
-                    QuarterAsText = Enums.GetDescription(Enums.SpecialDateTime.FirstQuarter),
-                    QuarterAsNumber = Convert.ToInt32(Enums.GetValue(Enums.SpecialDateTime.FirstQuarter))
+                    QuarterAsText = GLOBALS.SpecialDateTime.FirstQuarter.Description(),
+                    QuarterAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.FirstQuarter.Value())
                 },
                 //Second Quarter
                 new SpecialDateTime {
-                    QuarterAsText = Enums.GetDescription(Enums.SpecialDateTime.SecondQuarter),
-                    QuarterAsNumber = Convert.ToInt32(Enums.GetValue(Enums.SpecialDateTime.SecondQuarter))
+                    QuarterAsText = GLOBALS.SpecialDateTime.SecondQuarter.Description(),
+                    QuarterAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.SecondQuarter.Value())
                 },
                 //Third Quarter
                 new SpecialDateTime {
-                    QuarterAsText = Enums.GetDescription(Enums.SpecialDateTime.ThirdQuarter),
-                    QuarterAsNumber = Convert.ToInt32(Enums.GetValue(Enums.SpecialDateTime.ThirdQuarter))
+                    QuarterAsText = GLOBALS.SpecialDateTime.ThirdQuarter.Description(),
+                    QuarterAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.ThirdQuarter.Value())
                 },
                 //Fourth Quarter
                 new SpecialDateTime {
-                    QuarterAsText = Enums.GetDescription(Enums.SpecialDateTime.FourthQuarter),
-                    QuarterAsNumber = Convert.ToInt32(Enums.GetValue(Enums.SpecialDateTime.FourthQuarter))
+                    QuarterAsText = GLOBALS.SpecialDateTime.FourthQuarter.Description(),
+                    QuarterAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.FourthQuarter.Value())
                 },
                 //All Quarters
                 new SpecialDateTime {
-                    QuarterAsText = Enums.GetDescription(Enums.SpecialDateTime.AllQuarters),
-                    QuarterAsNumber = Convert.ToInt32(Enums.GetValue(Enums.SpecialDateTime.AllQuarters))
+                    QuarterAsText = GLOBALS.SpecialDateTime.AllQuarters.Description(),
+                    QuarterAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.AllQuarters.Value())
                 }
             };
 

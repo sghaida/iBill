@@ -31,43 +31,118 @@ namespace LyncBillingBase.DataMappers
         public PhoneCallsDataMapper() : base()
         {
             dbTables = monInfoDA.GetAll().Select(item => item.PhoneCallsTable).ToList<string>();
-   
         }
 
-        public int Insert(PhoneCall dataObject, string dataSourceName = null) 
+
+        public override int Insert(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
         {
-            return base.Insert(dataObject,dataSourceName);
+            string finalDataSourceName = string.Empty;
+
+            // NULL object check
+            if(null == phoneCallObject)
+            {
+                throw new Exception("PhoneCalls#Insert: Cannot insert NULL phone call objects.");
+            }
+
+            // NULL check on the DataSource Name
+            if (false == string.IsNullOrEmpty(dataSourceName))
+            {
+                finalDataSourceName = dataSourceName;
+            }
+            else
+            {
+                throw new Exception("PhoneCalls#Insert: Empty DataSource name. Couldn't insert phone call object.");
+            }
+
+            // Perform data insert
+            try
+            {
+                return base.Insert(phoneCallObject, finalDataSourceName, dataSource);
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
-        public bool Update(PhoneCall dataObject, string dataSourceName = null) 
+
+        public override bool Update(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
         {
-            return base.Update(dataObject,dataSourceName);
+            string finalDataSourceName = string.Empty;
+
+            // NULL object check
+            if (phoneCallObject == null)
+            {
+                throw new Exception("PhoneCalls#Update: Cannot update NULL phone call objects.");
+            }
+
+            // Decide on the value of the DataSource name
+            if (false == string.IsNullOrEmpty(dataSourceName))
+            {
+                finalDataSourceName = dataSourceName;
+            }
+            else if (false == string.IsNullOrEmpty(phoneCallObject.PhoneCallsTableName))
+            {
+                finalDataSourceName = phoneCallObject.PhoneCallsTableName;
+            }
+            else
+            {
+                throw new Exception("PhoneCalls#Update: Both the DataSource name and the phoneCallObject.PhoneCallsTableName are NULL.");
+            }
+
+            // Perform data update 
+            try
+            { 
+                return base.Update(phoneCallObject, finalDataSourceName, dataSource);
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
-        public PhoneCall GetById(long id, string dataSourceName) 
+
+        public override bool Delete(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default)
         {
-            return base.GetById(id, dataSourceName);
+            string finalDataSourceName = string.Empty;
+
+            // NULL object check
+            if(null == phoneCallObject)
+            {
+                throw new Exception("PhoneCalls#Delete: Cannot delete NULL phone call objects.");
+            }
+
+            // Decide on the value of the DataSource name
+            if(false == string.IsNullOrEmpty(dataSourceName))
+            {
+                finalDataSourceName = dataSourceName;
+            }
+            else if(false == string.IsNullOrEmpty(phoneCallObject.PhoneCallsTableName))
+            {
+                finalDataSourceName = phoneCallObject.PhoneCallsTableName;
+            }
+            else
+            {
+                throw new Exception("PhoneCalls#Delete: Both the DataSource name and the phoneCallObject.PhoneCallsTableName are NULL.");
+            }
+
+            // Perform data delete
+            try
+            { 
+                return base.Delete(phoneCallObject, dataSourceName, dataSource);
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
-        public IEnumerable<PhoneCall> Get(Dictionary<string, object> where, string dataSourceName, int limit = 25) 
+
+        public override PhoneCall GetById(long id, string dataSourceName = null, GLOBALS.DataSourceType dataSource = GLOBALS.DataSourceType.Default, bool IncludeDataRelations = true)
         {
-            return base.Get(where, limit, dataSourceName);
+            throw new NotImplementedException();
         }
 
-        public IEnumerable<PhoneCall> Get(Expression<Func<PhoneCall, bool>> predicate, string dataSourceName)
-        {
-            return base.Get(predicate, dataSourceName);
-        }
-
-        public bool Delete(PhoneCall dataObject, string dataSourceName)
-        {
-            return base.Delete(dataObject);
-        }
-
-        public IEnumerable<PhoneCall> GetAll(string dataSourceName) 
-        {
-            return base.GetAll(dataSourceName);
-        }
 
         public IEnumerable<PhoneCall> GetChargableCallsPerUser(string sipAccount) 
         {

@@ -126,7 +126,7 @@ namespace LyncBillingBase.DataAccess
                     string keysStatement = string.Empty;
 
                     //Decide the join type
-                    if (relation.RelationType == Enums.DataRelationType.INTERSECTION.ToString())
+                    if (relation.RelationType == GLOBALS.DataRelationType.INTERSECTION.ToString())
                     {
                         joinType = "INNER JOIN";
                     }

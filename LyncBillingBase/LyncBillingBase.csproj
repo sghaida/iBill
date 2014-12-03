@@ -94,7 +94,7 @@
     <Compile Include="DataMappers\PhoneCallsDataMapper.cs" />
     <Compile Include="DataAccess\Evaluator.cs" />
     <Compile Include="DataAccess\IDataAccess.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="GLOBALS.cs" />
     <Compile Include="DataModels\PhoneCallExclusion.cs" />
     <Compile Include="DataAttributes\DbColumnAttribute.cs" />
     <Compile Include="DataAttributes\AllowIDInsertAttribute.cs" />

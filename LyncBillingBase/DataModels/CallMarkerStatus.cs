@@ -9,7 +9,7 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "CallMarkerStatus", SourceType = Enums.DataSourceType.DBTable, AccessType = Enums.DataSourceAccessType.SingleSource)]
+    [DataSource(Name = "CallMarkerStatus", SourceType = GLOBALS.DataSourceType.DBTable, AccessType = GLOBALS.DataSourceAccessType.SingleSource)]
     public class CallMarkerStatus : DataModel
     {
         [IsIDField]
