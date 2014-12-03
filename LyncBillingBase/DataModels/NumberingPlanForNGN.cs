@@ -37,7 +37,7 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(CallType), OnDataModelKey = "ID", ThisKey = "TypeOfServiceID")]
+        [DataRelation(WithDataModel = typeof(CallType), OnDataModelKey = "TypeID", ThisKey = "TypeOfServiceID")]
         public CallType TypeOfService { get; set; }
 
         [DataRelation(WithDataModel = typeof(Country), OnDataModelKey = "ISO3Code", ThisKey = "ISO3CountryCode")]

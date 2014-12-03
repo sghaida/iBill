@@ -33,6 +33,9 @@ namespace LyncBillingTesting
             var allPlan = _STORAGE.NumberingPlans.GetAll().ToList<NumberingPlan>();
             var greeceNumberingPlan = _STORAGE.NumberingPlans.GetByISO3CountryCode(GREECE.ISO3Code);
 
+            var allNGNPlan = _STORAGE.NumberingPlansForNGN.GetAll().ToList<NumberingPlanForNGN>();
+            var greeceNGNPlan = _STORAGE.NumberingPlansForNGN.GetByISO3CountryCode(GREECE.ISO3Code);
+
             string x = string.Empty;
 
             /***

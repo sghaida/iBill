@@ -23,12 +23,18 @@ namespace LyncBillingBase.DataMappers
         ///     there is no nested relations feature.
         /// </summary>
         /// <param name="departmentHeadsRoles">A list of DepartmentHeadRole objects.</param>
-        private void FillSiteDepartmentsData(ref List<DepartmentHeadRole> departmentHeadsRoles)
+        private void FillSiteDepartmentsData(ref IEnumerable<DepartmentHeadRole> departmentHeadsRoles)
         {
             try
-            { 
-                List<SiteDepartment> allSitesDepartments = _sitesDepartmentsDataMapper.GetAll().ToList<SiteDepartment>();
+            {
+                // Get all sitesDepartments
+                IEnumerable<SiteDepartment> allSitesDepartments = _sitesDepartmentsDataMapper.GetAll();
 
+                //Enable parallelization of the enumerable collections
+                allSitesDepartments = allSitesDepartments.AsParallel<SiteDepartment>();
+                departmentHeadsRoles = departmentHeadsRoles.AsParallel<DepartmentHeadRole>();
+
+                //Fitler, join, and project
                 departmentHeadsRoles =
                     (from role in departmentHeadsRoles
                      where (role.SiteDepartmentID > 0 && (role.SiteDepartment != null && role.SiteDepartment.ID > 0))
@@ -38,11 +44,11 @@ namespace LyncBillingBase.DataMappers
                          ID = role.ID,
                          SipAccount = role.SipAccount,
                          SiteDepartmentID = role.SiteDepartmentID,
-                         //Relations Objects
+                         //RELATIONS
                          User = role.User,
                          SiteDepartment = siteDepartment
                      })
-                     .ToList<DepartmentHeadRole>();
+                     .AsEnumerable<DepartmentHeadRole>();
             }
             catch(Exception ex)
             {
@@ -114,10 +120,8 @@ namespace LyncBillingBase.DataMappers
 
                 if (role != null)
                 {
-                    var temporaryList = new List<DepartmentHeadRole>() { role };
-                    
+                    var temporaryList = new List<DepartmentHeadRole>() { role } as IEnumerable<DepartmentHeadRole>;
                     FillSiteDepartmentsData(ref temporaryList);
-
                     role = temporaryList.First();
                 }
 
@@ -133,15 +137,15 @@ namespace LyncBillingBase.DataMappers
 
         public override IEnumerable<DepartmentHeadRole> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
-            List<DepartmentHeadRole> roles = null;
+            IEnumerable<DepartmentHeadRole> roles = null;
 
             try
             { 
-                roles = base.Get(whereConditions, limit, dataSourceName, dataSource, IncludeDataRelations).ToList<DepartmentHeadRole>();
+                roles = base.Get(whereConditions, limit, dataSourceName, dataSource, IncludeDataRelations);
 
-                if(roles != null && roles.Count > 0)
+                if(roles != null && roles.Count() > 0)
                 {
-                    FillSiteDepartmentsData(ref roles);
+                    this.FillSiteDepartmentsData(ref roles);
                 }
 
                 return roles;
@@ -155,15 +159,15 @@ namespace LyncBillingBase.DataMappers
 
         public override IEnumerable<DepartmentHeadRole> Get(Expression<Func<DepartmentHeadRole, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
-            List<DepartmentHeadRole> roles = null;
+            IEnumerable<DepartmentHeadRole> roles = null;
 
             try
             {
-                roles = base.Get(predicate, dataSourceName, dataSource, IncludeDataRelations).ToList<DepartmentHeadRole>();
+                roles = base.Get(predicate, dataSourceName, dataSource, IncludeDataRelations);
 
-                if (roles != null && roles.Count > 0)
+                if (roles != null && roles.Count() > 0)
                 {
-                    FillSiteDepartmentsData(ref roles);
+                    this.FillSiteDepartmentsData(ref roles);
                 }
 
                 return roles;
@@ -177,15 +181,15 @@ namespace LyncBillingBase.DataMappers
 
         public override IEnumerable<DepartmentHeadRole> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
-            List<DepartmentHeadRole> roles = null;
+            IEnumerable<DepartmentHeadRole> roles = null;
 
             try
             {
-                roles = base.GetAll(dataSourceName, dataSource, IncludeDataRelations).ToList<DepartmentHeadRole>();
+                roles = base.GetAll(dataSourceName, dataSource, IncludeDataRelations);
 
-                if(roles != null && roles.Count > 0)
+                if(roles != null && roles.Count() > 0)
                 {
-                    FillSiteDepartmentsData(ref roles);
+                    this.FillSiteDepartmentsData(ref roles);
                 }
 
                 return roles;
@@ -199,15 +203,15 @@ namespace LyncBillingBase.DataMappers
 
         public override IEnumerable<DepartmentHeadRole> GetAll(string sql)
         {
-            List<DepartmentHeadRole> roles = null;
+            IEnumerable<DepartmentHeadRole> roles = null;
 
             try
             {
-                roles = base.GetAll(sql).ToList<DepartmentHeadRole>();
+                roles = base.GetAll(sql);
 
-                if (roles != null && roles.Count > 0)
+                if (roles != null && roles.Count() > 0)
                 {
-                    FillSiteDepartmentsData(ref roles);
+                    this.FillSiteDepartmentsData(ref roles);
                 }
 
                 return roles;
