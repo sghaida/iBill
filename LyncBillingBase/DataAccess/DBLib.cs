@@ -1715,6 +1715,7 @@ namespace LyncBillingBase.DataAccess
         public string JoinedTableName { get; set; }
         public string JoinedTableKey { get; set; }
         public List<string> JoinedTableColumns { get; set; }
+        public string RelationName { get; set; }
     }
 
 }
