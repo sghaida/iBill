@@ -63,6 +63,7 @@
     <Compile Include="DataMappers\DelegateRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentHeadRolesDataMapper.cs" />
     <Compile Include="DataMappers\DIDDataMapper.cs" />
+    <Compile Include="DataMappers\GatewaysDataMapper.cs" />
     <Compile Include="DataMappers\MailTemplatesDataMapper.cs" />
     <Compile Include="DataMappers\MonitoringServersDataMapper.cs" />
     <Compile Include="DataMappers\NumberingPlansNGNDataMapper.cs" />
@@ -73,7 +74,7 @@
     <Compile Include="DataMappers\RolesDataMapper.cs" />
     <Compile Include="DataMappers\SystemRolesDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentsDataMapper.cs" />
-    <Compile Include="DataMappers\GatewaysDataMapper.cs" />
+    <Compile Include="DataMappers\GatewaysInfoDataMapper.cs" />
     <Compile Include="DataMappers\IdentityMapItem.cs" />
     <Compile Include="DataMappers\SitesDataMapper.cs" />
     <Compile Include="DataMappers\SitesDepartmentsDataMapper.cs" />
