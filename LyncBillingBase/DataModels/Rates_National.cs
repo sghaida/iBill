@@ -4,17 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    public class Rates_National
+    [DataSource(Name = "GatewaysDetails", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
+    public class Rates_National : DataModel
     {
-        public int RateID { get; set; }
+        [IsIDField]
+        [DbColumn("Rate_ID")]
+        public Int64 RateID { get; set; }
+
+        [DbColumn("ISO3CountryCode")]
         public string CountryCode { get; set; }
+
+        [DbColumn("CountryName")]
         public string CountryName { get; set; }
-        public string DialingCode { get; set; }
+
+        [DbColumn("DialingCode")]
+        public Int64 DialingCode { get; set; }
+
+        [DbColumn("TypeOfService")]
         public string TypeOfService { get; set; }
+
+        [DbColumn("Rate")]
         public decimal Rate { get; set; }
     }
 }
