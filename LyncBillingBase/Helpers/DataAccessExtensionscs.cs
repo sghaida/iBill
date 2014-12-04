@@ -1,4 +1,5 @@
 ﻿using LyncBillingBase.DataAccess;
+using LyncBillingBase.DataAttributes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -93,34 +94,44 @@ namespace LyncBillingBase.Helpers
 
             var data = dt.ConvertToList<T>(true);
 
-            
 
             if (source != null && source.Count() > 0)
             {
+
+                var objProperties = data.Select(item => item.GetType().GetProperties()).FirstOrDefault().ToList<PropertyInfo>();
+                var PropertyName = string.Empty;
+                if(objProperties != null && objProperties.Count() > 0)
+                {
+
+                    foreach (PropertyInfo property in objProperties) 
+                    {
+                        if (property.GetCustomAttributes<IsIDFieldAttribute>().Where(item => item.Status == true) != null) 
+                        {
+                            PropertyName = property.Name;
+                            break;
+                        }
+                    }
+                   
+                }
+               
+
+                foreach (var srcData in source) 
+                {
+                    foreach (T dstData in data) 
+                    {
+                        var srcProperties = srcData.GetType().GetProperties().ToList<PropertyInfo>();
+                        var dstProperties = dstData.GetType().GetProperties().ToList<PropertyInfo>();
+
+                        
+                       
+
+                       
+                    }
+                }
+
                 List<T> results = new List<T>();
 
                 var union = source.Union(data);
-
-                foreach (var datafield in data) 
-                {
-                   var dataProperties = datafield.GetType().GetProperties().AsEnumerable<PropertyInfo>();
-
-                   foreach (var souceFields in source) 
-                   {
-                       var sourceProperties = souceFields.GetType().GetProperties().AsEnumerable<PropertyInfo>();
-
-                       foreach (PropertyInfo property in sourceProperties) 
-                       {
-                           var x = dataProperties.Select(item => item.Name == property.Name);
-                           var y = property.GetValue(souceFields);
-                           if (dataProperties.Select(item => item.Name == property.Name).Count() > 0 && property.GetValue(souceFields)== null) 
-                           {
-                               property.SetValue(property,dataProperties.Select(item => item.GetValue(datafield)));
-                           }
-                       }
-                   }
-                   
-                }
 
                 return union;
             }
