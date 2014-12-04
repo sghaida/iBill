@@ -172,7 +172,7 @@ namespace LyncBillingBase.Helpers
                                     }
                                     else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
                                     {
-                                        dataFieldPropertyInfo.SetValue(childObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
+                                        dataFieldPropertyInfo.SetValue(childObj, Convert.ToDecimal(datarow[dtField.DataFieldName].ReturnZeroIfNull()), null);
                                     }
                                     else if (dataFieldPropertyInfo.PropertyType == typeof(Char))
                                     {
@@ -226,7 +226,7 @@ namespace LyncBillingBase.Helpers
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
                             {
-                                dataFieldPropertyInfo.SetValue(masterObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(masterObj, Convert.ToDecimal(datarow[dtField.DataFieldName].ReturnZeroIfNull()), null);
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(String))
                             {
@@ -324,7 +324,7 @@ namespace LyncBillingBase.Helpers
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
                             {
-                                dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnZeroIfNull(), null);
+                                dataFieldPropertyInfo.SetValue(classObj, Convert.ToDecimal(datarow[dtField.Name].ReturnZeroIfNull()), null);
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof(String))
                             {
