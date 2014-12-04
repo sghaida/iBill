@@ -24,7 +24,7 @@ namespace LyncBillingBase.Repository
         public CountriesDataMapper Countries = new CountriesDataMapper();
         public SitesDepartmentsDataMapper Sites = new SitesDepartmentsDataMapper();
         public PoolsDataMapper Pools = new PoolsDataMapper();
-        public GatewaysDataMapper Gateways = new GatewaysDataMapper();
+        public GatewaysInfoDataMapper Gateways = new GatewaysInfoDataMapper();
         public DepartmentsDataMapper Departments = new DepartmentsDataMapper();
         public SitesDepartmentsDataMapper SitesDepartments = new SitesDepartmentsDataMapper();
         public CurrenciesDataMapper Currencies = new CurrenciesDataMapper();

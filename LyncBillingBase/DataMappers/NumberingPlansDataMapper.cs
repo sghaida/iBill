@@ -16,6 +16,8 @@ namespace LyncBillingBase.DataMappers
          */
         private CountriesDataMapper _countriesDataMapper = new CountriesDataMapper();
 
+        IEnumerable<IdentityMapItem<NumberingPlan>> DataCache = new List<IdentityMapItem<NumberingPlan>>() as IEnumerable<IdentityMapItem<NumberingPlan>>;
+
 
         /// <summary>
         /// Given a list of Numbering Plan objects, fill their Countries objects with the Country's Data Relations.
