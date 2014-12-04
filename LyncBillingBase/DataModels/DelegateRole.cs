@@ -42,8 +42,8 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        //[DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "DelegeeSipAccount", RelationType = Enums.DataRelationType.INTERSECTION)]
-        //public User DelegeeAccount { get; set; }
+        [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "DelegeeSipAccount", RelationType = GLOBALS.DataRelation.Type.UNION)]
+        public User DelegeeAccount { get; set; }
 
         [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "ManagedUserSipAccount", RelationType = GLOBALS.DataRelation.Type.UNION)]
         public User ManagedUser { get; set; }
