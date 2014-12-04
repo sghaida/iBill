@@ -25,17 +25,21 @@ namespace LyncBillingTesting
         {
             DataStorage _STORAGE = DataStorage.Instance;
 
-
             /***
              * DelegateRoles Tests;
              */
-            //var allDelegates = _STORAGE.DelegateRoles.GetAll().ToList<DelegateRole>();
+            var allDelegates = _STORAGE.DelegateRoles.GetAll().ToList<DelegateRole>();
+            //bool isUserDelegate = _STORAGE.DelegateRoles.IsUserDelegate("aalhour@ccc.gr");
+            //bool isDepartmentDelegate = _STORAGE.DelegateRoles.IsSiteDepartmentDelegate("aalhour@ccc.gr");
+            //bool isSiteDelegate = _STORAGE.DelegateRoles.IsSiteDelegate("aalhour@ccc.gr");
 
 
-            //var markerStatus = _STORAGE.CallMarkers.GetAll();
-            //var all_2010_status = _STORAGE.CallMarkers.GetByPhoneCallsTable("PhoneCalls2010");
-            //var rates_applier_2010 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2010", GLOBALS.CallMarkerStatus.Type.ApplyingRates.Value());
-            //var calls_marker_2013 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2013", GLOBALS.CallMarkerStatus.Type.CallsMarking.Value());
+            var markerStatus = _STORAGE.CallMarkers.GetAll();
+            var all_2010_status = _STORAGE.CallMarkers.GetByPhoneCallsTable("PhoneCalls2010");
+            var rates_applier_2010 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2010", GLOBALS.CallMarkerStatus.Type.ApplyingRates.Value());
+            var calls_marker_2013 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2013", GLOBALS.CallMarkerStatus.Type.CallsMarking.Value());
+
+            string x = string.Empty;
 
 
             /**
@@ -93,6 +97,7 @@ namespace LyncBillingTesting
             /***
              * Announcements Tests;
              */
+            var ann = _STORAGE.Announcements.GetByRoleID(1);
             //var announcementsForRole = _STORAGE.Announcements.GetAnnouncementsForRole(2);
             //var announcementsForSite = _STORAGE.Announcements.GetAnnouncementsForSite(1);
 
