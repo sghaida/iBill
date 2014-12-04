@@ -109,7 +109,7 @@
     <Compile Include="Repository\DataStorage.cs" />
     <Compile Include="DataAttributes\AllowNullAttribute.cs" />
     <Compile Include="DataAttributes\DataSourceAttribute.cs" />
-    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\DataTableExtensions.cs" />
     <Compile Include="DataModels\Gateway.cs" />
     <Compile Include="DataModels\GatewayInfo.cs" />
     <Compile Include="DataModels\GatewayRate.cs" />
