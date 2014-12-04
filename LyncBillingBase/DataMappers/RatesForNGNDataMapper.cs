@@ -100,6 +100,9 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 var tableName = GetTableNameByGatewayID(GatewayID);
+                var SQL = RATES_SQL_QUERIES.GetNGNRates(tableName);
+
+                //return base.GetAll(SQL_QUERY: SQL).ToList<RateForNGN>();
 
                 return base.GetAll(dataSourceName: tableName, dataSource: GLOBALS.DataSource.Type.DBTable).ToList<RateForNGN>();
             }
