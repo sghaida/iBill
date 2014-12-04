@@ -9,7 +9,7 @@ using LyncBillingBase.DataAttributes;
 namespace LyncBillingBase.DataModels
 {
     [DataSource(Name = "Rates", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
-    public class RatesNGN
+    public class Rates_NGN
     {
         public int RateID { get; set; }
         public long DialingCodeID { get; set; }

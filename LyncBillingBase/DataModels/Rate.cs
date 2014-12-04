@@ -9,13 +9,24 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Rates", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
+    [DataSource(Name = "GatewaysDetails", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
     public class Rate : DataModel
     {
-        public int RateID { get; set; }
-        public string CountryCode { get; set; }
-        public string CountryName { get; set; }
-        public decimal FixedLineRate { get; set; }
-        public decimal MobileLineRate { get; set; }
+        [IsIDField]
+        [DbColumn("Rate_ID")]
+        public long RateID { get; set; }
+
+        [DbColumn("country_code_dialing_prefix")]
+        public long DialingCode { get; set; }
+
+        [DbColumn("rate")]
+        public decimal Price { get; set; }
+                
+
+        //
+        // Relations
+        [DataRelation(WithDataModel = typeof(NumberingPlan), OnDataModelKey = "DialingPrefix", ThisKey = "DialingCode")]
+        public NumberingPlan NumberingPlan { get; set; }
     }
+
 }

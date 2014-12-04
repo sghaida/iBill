@@ -27,6 +27,14 @@ namespace LyncBillingTesting
 
 
             /***
+             * Gateways Tests
+             */
+            var gatewaysRatesInfo = _STORAGE.GatewaysRates.GetByGatewayID(10).Where(info => info.EndingDate == DateTime.MinValue).ToList();
+
+            var ratesForGateway10 = _STORAGE.Rates.GetByGatewayID(10);
+            string x = string.Empty;
+
+            /***
              * DelegateRoles Tests;
              */
             //var allDelegates = _STORAGE.DelegateRoles.GetAll().ToList<DelegateRole>();

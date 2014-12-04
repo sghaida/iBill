@@ -24,7 +24,9 @@ namespace LyncBillingBase.Repository
         public CountriesDataMapper Countries = new CountriesDataMapper();
         public SitesDepartmentsDataMapper Sites = new SitesDepartmentsDataMapper();
         public PoolsDataMapper Pools = new PoolsDataMapper();
-        public GatewaysInfoDataMapper Gateways = new GatewaysInfoDataMapper();
+        public GatewaysDataMapper Gateways = new GatewaysDataMapper();
+        public GatewaysInfoDataMapper GatewaysInfo = new GatewaysInfoDataMapper();
+        public GatewaysRatesDataMapper GatewaysRates = new GatewaysRatesDataMapper();
         public DepartmentsDataMapper Departments = new DepartmentsDataMapper();
         public SitesDepartmentsDataMapper SitesDepartments = new SitesDepartmentsDataMapper();
         public CurrenciesDataMapper Currencies = new CurrenciesDataMapper();
@@ -38,11 +40,12 @@ namespace LyncBillingBase.Repository
         // PhoneCalls
         public PhoneCallsDataMapper PhoneCalls = new PhoneCallsDataMapper();
 
-        // DIDs, CallTypes;
+        // NumberingPlan, DIDs, CallTypes and Rates
         public NumberingPlansDataMapper NumberingPlans = new NumberingPlansDataMapper();
         public NumberingPlansForNGNDataMapper NumberingPlansForNGN = new NumberingPlansForNGNDataMapper();
         public DIDDataMapper DIDs = new DIDDataMapper();
         public CallTypesDataMapper CallTypes = new CallTypesDataMapper();
+        public RatesDataMapper Rates = new RatesDataMapper();
 
         // User
         public PhoneBookContactsDataMapper PhoneBooks = new PhoneBookContactsDataMapper();

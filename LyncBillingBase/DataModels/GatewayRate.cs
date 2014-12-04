@@ -53,7 +53,7 @@ namespace LyncBillingBase.DataModels
         //
         // Relations
         [DataRelation(WithDataModel = typeof(Gateway), OnDataModelKey = "ID", ThisKey = "GatewayID")]
-        public Gateway GatewayData { get; set; }
+        public Gateway Gateway { get; set; }
 
         //[DataRelation(Name = "CurrencyID_Currency.ID", WithDataModel = typeof(Currency), OnDataModelKey = "ID", ThisKey = "CurrencyID")]
         //public Currency RatesCurrency { get; set; }
