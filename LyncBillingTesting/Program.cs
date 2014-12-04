@@ -25,6 +25,15 @@ namespace LyncBillingTesting
         {
             DataStorage _STORAGE = DataStorage.Instance;
 
+            /***
+             * DelegateRoles Tests;
+             */
+            var allDelegates = _STORAGE.DelegateRoles.GetAll().ToList<DelegateRole>();
+            //bool isUserDelegate = _STORAGE.DelegateRoles.IsUserDelegate("aalhour@ccc.gr");
+            //bool isDepartmentDelegate = _STORAGE.DelegateRoles.IsSiteDepartmentDelegate("aalhour@ccc.gr");
+            //bool isSiteDelegate = _STORAGE.DelegateRoles.IsSiteDelegate("aalhour@ccc.gr");
+
+
             //var markerStatus = _STORAGE.CallMarkers.GetAll();
             //var all_2010_status = _STORAGE.CallMarkers.GetByPhoneCallsTable("PhoneCalls2010");
             //var rates_applier_2010 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2010", GLOBALS.CallMarkerStatus.Type.ApplyingRates.Value());
@@ -123,15 +132,6 @@ namespace LyncBillingTesting
              * PhoneCalls Tests;
              */
             //var MOA_Calls = _STORAGE.PhoneCalls.GetChargeableCallsForSite(MOA.Name);
-
-
-            /***
-             * DelegateRoles Tests;
-             */
-            var allDelegates = _STORAGE.DelegateRoles.GetAll().ToList<DelegateRole>();
-            //bool isUserDelegate = _STORAGE.DelegateRoles.IsUserDelegate("aalhour@ccc.gr");
-            //bool isDepartmentDelegate = _STORAGE.DelegateRoles.IsSiteDepartmentDelegate("aalhour@ccc.gr");
-            //bool isSiteDelegate = _STORAGE.DelegateRoles.IsSiteDelegate("aalhour@ccc.gr");
 
         }
 

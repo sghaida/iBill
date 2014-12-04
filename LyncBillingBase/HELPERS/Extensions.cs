@@ -87,10 +87,9 @@ namespace LyncBillingBase.Helpers
             {
                 // Initialize child the property info fields list
                 childPropertInfoFields = typeof(T).GetProperties(flags)
-                 .Where(property => property.GetCustomAttribute<DataRelationAttribute>() != null)
-                 .Cast<PropertyInfo>()
-                 .ToList();
-
+                    .Where(property => property.GetCustomAttribute<DataRelationAttribute>() != null)
+                    .Cast<PropertyInfo>()
+                    .ToList();
 
                 // Fill the childrenObjectsProperties dictionary with the name of the children class for reflection and their corrospndant attributes
                 foreach (PropertyInfo property in childPropertInfoFields)
@@ -107,10 +106,8 @@ namespace LyncBillingBase.Helpers
                           })
                           .ToList();
 
-                    var tableName = childtypedObject.GetCustomAttribute<DataSourceAttribute>().Name;
-
+                    var tableName = property.GetCustomAttribute<DataRelationAttribute>().Name;
                     childrenObjectsProperties.Add(tableName, childtableFields);
-
                 }
 
                 //Get the Children classes related columns from datatable
@@ -131,10 +128,11 @@ namespace LyncBillingBase.Helpers
 
                     cdtPropertyInfo.Add(childObjectsProperties.Key, childObjectColumns);
                 }
-
             }
 
            //Fill The data
+           //foreach (var datarow in DataTable.AsEnumerable().ToList())   
+           //{
            Parallel.ForEach(DataTable.AsEnumerable().ToList(),
                 (datarow) =>
                 {
@@ -150,7 +148,7 @@ namespace LyncBillingBase.Helpers
                             var childObj = Activator.CreateInstance(childtypedObject);
 
                             List<ObjectPropertyInfoField> data;
-                            cdtPropertyInfo.TryGetValue(childtypedObject.GetCustomAttribute<DataSourceAttribute>().Name, out data);
+                            cdtPropertyInfo.TryGetValue(property.GetCustomAttribute<DataRelationAttribute>().Name, out data);
 
                             foreach (var dtField in data)
                             {
@@ -249,6 +247,7 @@ namespace LyncBillingBase.Helpers
                         dataList.Add(masterObj);
                     }
                 });
+                //}
 
             return dataList;
         }

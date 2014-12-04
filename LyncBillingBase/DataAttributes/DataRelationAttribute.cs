@@ -59,15 +59,6 @@ namespace LyncBillingBase.DataAttributes
         //Empty Constrcutor
         public DataRelationAttribute() { }
 
-        //Adds a new term to the relation name
-        public void AddTermToRelationName(string newTerm)
-        {
-            if (false == string.IsNullOrEmpty(newTerm))
-            {
-                this._name = String.Format("{0}_{1}", newTerm, this.Name).ToLower();
-            }
-        }
-
     }
 
 }
