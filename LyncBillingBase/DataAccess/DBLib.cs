@@ -99,7 +99,6 @@ namespace LyncBillingBase.DataAccess
 
             OleDbDataReader dr;
             string FinalSelectQuery = string.Empty;
-            List<string> Columns = new List<string>();
             string TRUTH_OPERATOR = "AND";
 
             StringBuilder SelectColumns = new StringBuilder("");
@@ -137,37 +136,37 @@ namespace LyncBillingBase.DataAccess
                     }
 
                     //Construct the JOIN KEYS statement 
-                    keysStatement = String.Format("ON [{0}].[{1}] = [{2}].[{3}]", tableName, relation.MasterTableKey, relation.JoinedTableName, relation.JoinedTableKey);
+                    keysStatement = String.Format(" AS {4} ON [{0}].[{1}] = [{4}].[{3}]", tableName, relation.MasterTableKey, relation.JoinedTableName, relation.JoinedTableKey, relation.RelationName);
+
+                    foreach (string column in relation.JoinedTableColumns) 
+                    {
+                        SelectColumns.Append(string.Format("{0}.{1} AS '{0}.{1}',", relation.RelationName, column));
+                    }
 
                     JoinStatement.Append(String.Format("{0} {1} {2} ", joinType, relation.JoinedTableName, keysStatement));
 
-                    //Construct the Joined Table Column Names by combining that table name and the column name, to avoid duplicate column names between tables
-                    var joinedTableColumns = ConstructUniqueTableColumnsNames(relation.JoinedTableName, relation.JoinedTableColumns.ToList<string>());
-
-                    Columns = Columns.Concat(joinedTableColumns).ToList();
+                    
                 }//end-foreach
             }//end-outer-if
 
 
             //Concatenate the Master Table Columns with the local list
-            if (masterTableColumns == null) masterTableColumns = new List<string>();
+            if (masterTableColumns == null) 
+            { 
+                masterTableColumns = new List<string>();
+            }
             masterTableColumns = masterTableColumns.Select<string, string>(col => String.Format("[{0}].[{1}]", tableName, col, tableName, col)).ToList();
-            Columns = masterTableColumns.Concat(Columns).ToList();
+            //Columns = masterTableColumns.Concat(Columns).ToList();
 
 
             //Handle the fields collection
-            if (Columns.Count > 0)
+            if (masterTableColumns.Count > 0)
             {
-                foreach (string field in Columns)
+                foreach (string field in masterTableColumns)
                 {
                     //selectedfields.Append(fieldName + ",");
                     if (!string.IsNullOrEmpty(field))
-                    {
-                        //if (field.Contains("COUNT") || field.Contains("SUM") || field.Contains("YEAR") || field.Contains("MONTH") || field.Contains("DISTINCT"))
-                        //    SelectColumns.Append(field + ",");
-                        //else
-                        //    SelectColumns.Append(field + ",");
-
+                    {  
                         SelectColumns.Append(field + ",");
                     }
                 }
@@ -1715,6 +1714,7 @@ namespace LyncBillingBase.DataAccess
         public string JoinedTableName { get; set; }
         public string JoinedTableKey { get; set; }
         public List<string> JoinedTableColumns { get; set; }
+        public string RelationName { get; set; }
     }
 
 }
