@@ -111,6 +111,104 @@ namespace LyncBillingBase.DataMappers
 
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<int, List<RateForNGN>> GetAllGatewaysRatesList()
+        {
+            throw new NotImplementedException();
+
+            //Dictionary<int, List<RateForNGN>> allRates = new Dictionary<int, List<RateForNGN>>();
+            //List<RateForNGN> ratesPerGateway;
+
+            ////Get Entire GatewaysRates to be able to get all the rates  
+
+            //if (StoreLoader.gatewayRates.Count > 0)
+            //{
+            //    foreach (GatewaysRates GatewayRateTable in StoreLoader.gatewayRates)
+            //    {
+            //        // Check RateTable Exists and Rates_International ending time is not null or set : to get uptodate rates table
+            //        if (GatewayRateTable.NgnRatesTableName != null &&
+            //            (GatewayRateTable.EndingDate != DateTime.MinValue ||
+            //            GatewayRateTable.EndingDate != null))
+            //        {
+            //            ratesPerGateway = new List<RatesNGN>();
+            //            ratesPerGateway = GetRates(GatewayRateTable.NgnRatesTableName);
+            //        }
+            //        else
+            //        {
+            //            continue;
+            //        }
+
+            //        allRates.Add(GatewayRateTable.GatewayID, ratesPerGateway);
+            //    }
+            //}
+
+            //return allRates;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, List<RateForNGN>> GetAllGatewaysRatesDictionary()
+        {
+            throw new NotImplementedException();
+
+            //List<RatesNGN> ratesPerGateway;
+            //string gatewayName = string.Empty;
+            //Dictionary<string, List<RatesNGN>> allRates = new Dictionary<string, List<RatesNGN>>();
+
+            ////Get Entire GatewaysRates to be able to get all the rates  
+
+            //if (StoreLoader.gatewayRates.Count > 0)
+            //{
+            //    foreach (GatewaysRates GatewayRateTable in StoreLoader.gatewayRates)
+            //    {
+            //        gatewayName = string.Empty;
+
+            //        // Check RateTable Exists and Rates_International ending time is not null or set : to get uptodate rates table
+            //        if (GatewayRateTable.NgnRatesTableName != null &&
+            //            (GatewayRateTable.EndingDate != DateTime.MinValue ||
+            //            GatewayRateTable.EndingDate != null))
+            //        {
+            //            ratesPerGateway = new List<RatesNGN>();
+            //            ratesPerGateway = GetRates(GatewayRateTable.NgnRatesTableName);
+            //        }
+            //        else
+            //        {
+            //            continue;
+            //        }
+
+            //        //Example:
+            //        // GatewayRateTable.RatesTableName := "Rates_10.1.1.3_2013_04_02"
+            //        // after splitting ===> gatewayRatesTableName := ["Rates_International", "10.1.1.3", "2013", "04", "02"] or ["Rates_International", "NGN","10.1.1.3", "2013", "04", "02"]
+            //        var gatewayRatesTableName = GatewayRateTable.NgnRatesTableName.Split('_');
+
+            //        if (gatewayRatesTableName.Contains("NGN"))
+            //        {
+
+            //            gatewayName = gatewayRatesTableName[2];
+            //        }
+            //        else
+            //        {
+
+            //            gatewayName = gatewayRatesTableName[1];
+            //        }
+
+
+
+            //        if (!allRates.Keys.Contains(gatewayName))
+            //            allRates.Add(gatewayName, ratesPerGateway);
+            //    }
+            //}
+
+            //return allRates;
+        }
+
+
+        /// <summary>
         /// Insert RateForNGN object into the Gateway's NGN Rates table.
         /// </summary>
         /// <param name="ngnRateObject">The Rate object to insert.</param>
