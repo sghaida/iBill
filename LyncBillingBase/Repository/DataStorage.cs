@@ -22,7 +22,7 @@ namespace LyncBillingBase.Repository
         
         // Countries, Sites, Departments, and Currencies
         public CountriesDataMapper Countries = new CountriesDataMapper();
-        public SitesDepartmentsDataMapper Sites = new SitesDepartmentsDataMapper();
+        public SitesDataMapper Sites = new SitesDataMapper();
         public PoolsDataMapper Pools = new PoolsDataMapper();
         public GatewaysDataMapper Gateways = new GatewaysDataMapper();
         public GatewaysInfoDataMapper GatewaysInfo = new GatewaysInfoDataMapper();

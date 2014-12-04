@@ -11,8 +11,21 @@ namespace LyncBillingBase.DataMappers
 {
     public class RatesDataMapper : DataAccess<Rate>
     {
+        /***
+         * These data mappers are responsible for converting the in the Rates tables to different meaningful data models.
+         */
+        private DataAccess<Rates_National> _nationalRatesDataMapper = new DataAccess<Rates_National>();
+        private DataAccess<Rates_International> _interRatesDataMapper = new DataAccess<Rates_International>();
+
+        /***
+         * These data mappers are used to complete the relations data.
+         */
         private GatewaysRatesDataMapper _gatewaysRatesDataMapper = new GatewaysRatesDataMapper();
         private NumberingPlansDataMapper _numberingPlanDataMapper = new NumberingPlansDataMapper();
+
+        /***
+         * The SQL Queries Repository
+         */
         private SQLQueries.RatesSQL RATES_SQL_QUERIES = new SQLQueries.RatesSQL();
         
 
@@ -117,10 +130,31 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 var tableName = GetTableNameByGatewayID(GatewayID);
-                var NationalRatesDataMapper = new DataAccess<Rates_National>();
                 var SQL = RATES_SQL_QUERIES.GetNationalRatesForCountry(tableName, ISO3CountryCode);
 
-                return NationalRatesDataMapper.GetAll(SQL_QUERY: SQL).ToList<Rates_National>();
+                return _nationalRatesDataMapper.GetAll(SQL_QUERY: SQL).ToList<Rates_National>();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="GatewayID"></param>
+        /// <param name="ISO3CountryCode"></param>
+        /// <returns></returns>
+        public List<Rates_International> GetInternationalRatesByGatewayID(int GatewayID)
+        {
+            try
+            {
+                var tableName = GetTableNameByGatewayID(GatewayID);
+                var SQL = RATES_SQL_QUERIES.GetInternationalRates(tableName);
+
+                return _interRatesDataMapper.GetAll(SQL_QUERY: SQL).ToList<Rates_International>();
             }
             catch (Exception ex)
             {

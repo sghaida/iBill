@@ -23,7 +23,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                         "numberingplan.Country_Name, " +
                         "numberingplan.Two_Digits_country_code, " +
                         "numberingplan.Three_Digits_Country_Code, " +
-                        "numberingplan.Type_Of_Service as 'TypeOfService', " +
+                        "numberingplan.Type_Of_Service, " +
                         "fixedrate.rate as rate " +
                     "FROM  " +
                         "dbo.NumberingPlan as numberingplan " +

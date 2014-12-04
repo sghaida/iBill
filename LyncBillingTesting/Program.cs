@@ -28,10 +28,13 @@ namespace LyncBillingTesting
             /***
              * Gateways Tests
              */
-            var gatewaysRatesInfo = _STORAGE.GatewaysRates.GetByGatewayID(10).Where(info => info.EndingDate == DateTime.MinValue).ToList();
+            var MOA = _STORAGE.Sites.GetById(29);
+            var moaGatewaysInfo = _STORAGE.GatewaysInfo.GetGatewaysBySiteID(MOA.ID).Where(item => item.ID == 10).Single();
+            var moaGatewayRatesInfo = _STORAGE.GatewaysRates.GetByGatewayID(moaGatewaysInfo.ID).Where(item => item.EndingDate == DateTime.MinValue).Single();
 
-            var ratesForGateway10 = _STORAGE.Rates.GetByGatewayID(10);
-            var greeceNationalRatesInGateway10 = _STORAGE.Rates.GetNationalRatesForCountryByGatewayID(10, "GRC");
+            var ratesForGateway10 = _STORAGE.Rates.GetByGatewayID(moaGatewayRatesInfo.GatewayID);
+            var greeceNationalRatesInGateway10 = _STORAGE.Rates.GetNationalRatesForCountryByGatewayID(moaGatewayRatesInfo.GatewayID, "GRC");
+            var greekGatewayInternationalRates = _STORAGE.Rates.GetInternationalRatesByGatewayID(moaGatewayRatesInfo.GatewayID);
 
             string x = string.Empty;
 
