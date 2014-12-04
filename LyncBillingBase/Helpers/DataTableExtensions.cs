@@ -126,7 +126,10 @@ namespace LyncBillingBase.Helpers
                                                   ObjectFieldName = childObjField.DataFieldName
                                               }).ToList();
 
-                    cdtPropertyInfo.Add(childObjectsProperties.Key, childObjectColumns);
+                    if (childObjectColumns.Count > 0)
+                    {
+                        cdtPropertyInfo.Add(childObjectsProperties.Key, childObjectColumns);
+                    }
                 }
             }
 

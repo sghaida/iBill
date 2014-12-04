@@ -162,6 +162,32 @@ namespace LyncBillingBase.DataMappers
             }
         }
         
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<int, List<Rates_International>> GetAllGatewaysRatesList()
+        {
+            //if(!allRates.Keys.Contains(GatewayRateTable.GatewayID))
+                //allRates.Add(GatewayRateTable.GatewayID, ratesPerGateway);
+
+            throw new NotImplementedException();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, List<Rates_International>> GetAllGatewaysRatesDictionary()
+        {
+            //if(!allRates.Keys.Contains(gatewayName))
+            //  allRates.Add(gatewayName, ratesPerGateway)
+
+            throw new NotImplementedException();
+        }
+
         
         /// <summary>
         /// Insert Rate object into the Gateway's rates table.
