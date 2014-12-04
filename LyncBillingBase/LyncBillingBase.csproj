@@ -106,6 +106,7 @@
     <Compile Include="Exceptions\NoTableIDFieldException.cs" />
     <Compile Include="Exceptions\NoTableFieldsException.cs" />
     <Compile Include="Exceptions\NoDataSourceNameException.cs" />
+    <Compile Include="Helpers\DataAccessExtensionscs.cs" />
     <Compile Include="Repository\DataStorage.cs" />
     <Compile Include="DataAttributes\AllowNullAttribute.cs" />
     <Compile Include="DataAttributes\DataSourceAttribute.cs" />
