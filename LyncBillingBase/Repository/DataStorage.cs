@@ -46,6 +46,7 @@ namespace LyncBillingBase.Repository
         public DIDDataMapper DIDs = new DIDDataMapper();
         public CallTypesDataMapper CallTypes = new CallTypesDataMapper();
         public RatesDataMapper Rates = new RatesDataMapper();
+        public RatesForNGNDataMapper RatesForNGN = new RatesForNGNDataMapper();
 
         // User
         public PhoneBookContactsDataMapper PhoneBooks = new PhoneBookContactsDataMapper();

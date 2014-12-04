@@ -36,6 +36,8 @@ namespace LyncBillingTesting
             var greeceNationalRatesInGateway10 = _STORAGE.Rates.GetNationalRatesForCountryByGatewayID(moaGatewayRatesInfo.GatewayID, "GRC");
             var greekGatewayInternationalRates = _STORAGE.Rates.GetInternationalRatesByGatewayID(moaGatewayRatesInfo.GatewayID);
 
+            var ngnRates = _STORAGE.RatesForNGN.GetByGatewayID(10);
+
             string x = string.Empty;
 
             

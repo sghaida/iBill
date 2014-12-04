@@ -27,8 +27,8 @@ namespace LyncBillingBase.DataModels
         public static List<Gateway> gateways;
         public static List<string> ListofGatewaysNames;
 
-        public static Dictionary<int, List<Rates_NGN>> ngnRatesPerGateway;
-        public static Dictionary<string, List<Rates_NGN>> ngnGatewaysRates;
+        public static Dictionary<int, List<RateForNGN>> ngnRatesPerGateway;
+        public static Dictionary<string, List<RateForNGN>> ngnGatewaysRates;
 
         public static Dictionary<int, List<Rates_International>> ratesPerGatway;
 

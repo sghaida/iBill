@@ -64,15 +64,16 @@
     <Compile Include="DataMappers\DepartmentHeadRolesDataMapper.cs" />
     <Compile Include="DataMappers\DIDDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysDataMapper.cs" />
-    <Compile Include="DataMappers\GatewaysRatesdataMapper.cs" />
+    <Compile Include="DataMappers\GatewaysRatesDataMapper.cs" />
     <Compile Include="DataMappers\MailTemplatesDataMapper.cs" />
     <Compile Include="DataMappers\MonitoringServersDataMapper.cs" />
-    <Compile Include="DataMappers\NumberingPlansNGNDataMapper.cs" />
+    <Compile Include="DataMappers\NumberingPlansForNGNDataMapper.cs" />
     <Compile Include="DataMappers\NumberingPlansDataMapper.cs" />
     <Compile Include="DataMappers\PhoneBookContactsDataMapper.cs" />
     <Compile Include="DataMappers\PhoneCallExclusionsDataMapper.cs" />
     <Compile Include="DataMappers\PoolsDataMapper.cs" />
     <Compile Include="DataMappers\RatesDataMapper.cs" />
+    <Compile Include="DataMappers\RatesForNGNDataMapper.cs" />
     <Compile Include="DataMappers\RolesDataMapper.cs" />
     <Compile Include="DataMappers\SQLQueries\RatesSQL.cs" />
     <Compile Include="DataMappers\SystemRolesDataMapper.cs" />
@@ -124,7 +125,7 @@
     <Compile Include="DataModels\PhoneCall.cs" />
     <Compile Include="DataModels\Pool.cs" />
     <Compile Include="DataModels\Rate.cs" />
-    <Compile Include="DataModels\Rates_NGN.cs" />
+    <Compile Include="DataModels\RateForNGN.cs" />
     <Compile Include="DataModels\Rates_International.cs" />
     <Compile Include="DataModels\Rates_National.cs" />
     <Compile Include="DataModels\Site.cs" />

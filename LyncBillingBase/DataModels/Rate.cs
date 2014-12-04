@@ -14,10 +14,10 @@ namespace LyncBillingBase.DataModels
     {
         [IsIDField]
         [DbColumn("Rate_ID")]
-        public Int64 RateID { get; set; }
+        public long RateID { get; set; }
 
         [DbColumn("country_code_dialing_prefix")]
-        public Int64 DialingCode { get; set; }
+        public long DialingCode { get; set; }
 
         [DbColumn("rate")]
         public decimal Price { get; set; }
