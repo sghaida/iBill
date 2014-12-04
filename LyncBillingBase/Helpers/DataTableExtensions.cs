@@ -22,7 +22,7 @@ namespace LyncBillingBase.Helpers
     }
 
 
-    public static class DataTableExtensions
+    public static class Extensions
     {
         //Helper function
         private static string ConvertToDateString(object date)

@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 
 using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
+using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DataMappers
 {
@@ -24,7 +25,7 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                return Get(whereConditions: conditions, limit: 0).ToList<Announcement>();
+                return Get(whereConditions: conditions, limit: 0).Include(item=>item.Role).Include(item=>item.Site).ToList<Announcement>();
             }
             catch (Exception ex)
             {
