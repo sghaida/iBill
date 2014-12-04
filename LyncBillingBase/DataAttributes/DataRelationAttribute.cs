@@ -48,11 +48,8 @@ namespace LyncBillingBase.DataAttributes
             {
                 if (string.IsNullOrEmpty(_name))
                 {
-                    //Sample: countryid_country_countryid_234567
-                    var nameString = String.Format("{0}_{1}_{2}", ThisKey, WithDataModel.Name, OnDataModelKey).ToLower();
-                    var hash = Math.Abs(nameString.GetHashCode()).ToString();
-
-                    this._name = String.Format("{0}_{1}", nameString, hash);
+                    //Sample: countryid_country_countryid
+                    this._name = String.Format("{0}_{1}_{2}", ThisKey, WithDataModel.Name, OnDataModelKey).ToLower();
                 }
 
                 return _name;

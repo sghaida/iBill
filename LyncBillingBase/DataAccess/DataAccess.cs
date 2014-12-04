@@ -73,7 +73,7 @@ namespace LyncBillingBase.DataAccess
                     if (thisKey != null && joinedModelKey != null)
                     {
                         //Initialize the temporary map and add it to the original relations map
-
+                        joinedTableInfo.RelationName = relation.RelationName;
                         joinedTableInfo.RelationType = relation.RelationType;
                         joinedTableInfo.MasterTableName = Schema.DataSourceName;
                         joinedTableInfo.MasterTableKey = thisKey.TableField.ColumnName;
