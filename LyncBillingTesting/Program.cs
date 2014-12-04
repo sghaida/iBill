@@ -31,23 +31,18 @@ namespace LyncBillingTesting
             var gatewaysRatesInfo = _STORAGE.GatewaysRates.GetByGatewayID(10).Where(info => info.EndingDate == DateTime.MinValue).ToList();
 
             var ratesForGateway10 = _STORAGE.Rates.GetByGatewayID(10);
+            var greeceNationalRatesInGateway10 = _STORAGE.Rates.GetNationalRatesForCountryByGatewayID(10, "GRC");
+
             string x = string.Empty;
 
+            
             /***
-             * DelegateRoles Tests;
+             * Call Marker Status tests
              */
-            var allDelegates = _STORAGE.DelegateRoles.GetAll().ToList<DelegateRole>();
-            //bool isUserDelegate = _STORAGE.DelegateRoles.IsUserDelegate("aalhour@ccc.gr");
-            //bool isDepartmentDelegate = _STORAGE.DelegateRoles.IsSiteDepartmentDelegate("aalhour@ccc.gr");
-            //bool isSiteDelegate = _STORAGE.DelegateRoles.IsSiteDelegate("aalhour@ccc.gr");
-
-
             var markerStatus = _STORAGE.CallMarkers.GetAll();
             var all_2010_status = _STORAGE.CallMarkers.GetByPhoneCallsTable("PhoneCalls2010");
             var rates_applier_2010 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2010", GLOBALS.CallMarkerStatus.Type.ApplyingRates.Value());
             var calls_marker_2013 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2013", GLOBALS.CallMarkerStatus.Type.CallsMarking.Value());
-
-            string x = string.Empty;
 
 
             /**
@@ -66,6 +61,15 @@ namespace LyncBillingTesting
             //var greeceNumberingPlan = _STORAGE.NumberingPlans.GetByISO3CountryCode(GREECE.ISO3Code);
             //var allNGNPlan = _STORAGE.NumberingPlansForNGN.GetAll().ToList<NumberingPlanForNGN>();
             //var greeceNGNPlan = _STORAGE.NumberingPlansForNGN.GetByISO3CountryCode(GREECE.ISO3Code);
+
+
+            /***
+             * DelegateRoles Tests;
+             */
+            //var allDelegates = _STORAGE.DelegateRoles.GetAll().ToList<DelegateRole>();
+            //bool isUserDelegate = _STORAGE.DelegateRoles.IsUserDelegate("aalhour@ccc.gr");
+            //bool isDepartmentDelegate = _STORAGE.DelegateRoles.IsSiteDepartmentDelegate("aalhour@ccc.gr");
+            //bool isSiteDelegate = _STORAGE.DelegateRoles.IsSiteDelegate("aalhour@ccc.gr");
 
 
             /***

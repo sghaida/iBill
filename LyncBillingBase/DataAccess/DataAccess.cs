@@ -485,9 +485,9 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> GetAll(string sql)
+        public virtual IEnumerable<T> GetAll(string SQL_QUERY)
         {
-            DataTable dt = DBRoutines.SELECTFROMSQL(sql);
+            DataTable dt = DBRoutines.SELECTFROMSQL(SQL_QUERY);
 
             return dt.ConvertToList<T>();
         }

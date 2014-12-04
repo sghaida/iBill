@@ -13,6 +13,8 @@ namespace LyncBillingBase.DataMappers
     {
         private GatewaysRatesDataMapper _gatewaysRatesDataMapper = new GatewaysRatesDataMapper();
         private NumberingPlansDataMapper _numberingPlanDataMapper = new NumberingPlansDataMapper();
+        private SQLQueries.RatesSQL RATES_SQL_QUERIES = new SQLQueries.RatesSQL();
+        
 
         /// <summary>
         /// Given a list of Rates Objects, fill their Numbering Plan objects with the Numbering Plan's Data Relations.
@@ -85,6 +87,49 @@ namespace LyncBillingBase.DataMappers
 
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="GatewayID"></param>
+        /// <returns></returns>
+        public List<Rate> GetByGatewayID(int GatewayID)
+        {
+            try
+            {
+                var tableName = GetTableNameByGatewayID(GatewayID);
+
+                return base.GetAll(dataSourceName: tableName, dataSource: GLOBALS.DataSource.Type.DBTable).ToList<Rate>();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="GatewayID"></param>
+        /// <param name="ISO3CountryCode"></param>
+        /// <returns></returns>
+        public List<Rates_National> GetNationalRatesForCountryByGatewayID(int GatewayID, string ISO3CountryCode)
+        {
+            try
+            {
+                var tableName = GetTableNameByGatewayID(GatewayID);
+                var NationalRatesDataMapper = new DataAccess<Rates_National>();
+                var SQL = RATES_SQL_QUERIES.GetNationalRatesForCountry(tableName, ISO3CountryCode);
+
+                return NationalRatesDataMapper.GetAll(SQL_QUERY: SQL).ToList<Rates_National>();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+        
+        
+        /// <summary>
         /// Insert Rate object into the Gateway's rates table.
         /// </summary>
         /// <param name="rateObject">The Rate object to insert.</param>
@@ -146,25 +191,6 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="GatewayID"></param>
-        /// <returns></returns>
-        public List<Rate> GetByGatewayID(int GatewayID)
-        {
-            try
-            {
-                var tableName = GetTableNameByGatewayID(GatewayID);
-
-                return base.GetAll(dataSourceName: tableName, dataSource: GLOBALS.DataSource.Type.DBTable).ToList<Rate>();
-            }
-            catch (Exception ex)
-            {
-                throw ex.InnerException;
-            }
-        }
 
 
         /***

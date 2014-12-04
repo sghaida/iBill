@@ -12,18 +12,18 @@ namespace LyncBillingBase.DataMappers.SQLQueries
         {
             string SQL = String.Format(
                 "SELECT " +
-                    "Country_Name, " +
-                    "Two_Digits_country_code, " +
-                    "Three_Digits_Country_Code, " +
-                    "MAX(CASE WHEN Type_Of_Service <> 'gsm' THEN rate END) Fixedline, " +
-                    "MAX(CASE WHEN Type_Of_Service = 'gsm' THEN rate END) GSM " +
+                    "Country_Name as 'CountryName', " +
+                    "Two_Digits_country_code as 'ISO2CountryCode', " +
+                    "Three_Digits_Country_Code as 'ISO3CountryCode', " +
+                    "MAX(CASE WHEN Type_Of_Service <> 'gsm' THEN rate END) FixedLineRate, " +
+                    "MAX(CASE WHEN Type_Of_Service = 'gsm' THEN rate END) MobileLineRate " +
                 "FROM " +
                 "(" + 
                     "SELECT	DISTINCT " +
                         "numberingplan.Country_Name, " +
                         "numberingplan.Two_Digits_country_code, " +
                         "numberingplan.Three_Digits_Country_Code, " +
-                        "numberingplan.Type_Of_Service, " +
+                        "numberingplan.Type_Of_Service as 'TypeOfService', " +
                         "fixedrate.rate as rate " +
                     "FROM  " +
                         "dbo.NumberingPlan as numberingplan " +
@@ -38,22 +38,22 @@ namespace LyncBillingBase.DataMappers.SQLQueries
         }
 
 
-        public string GetNationalRatesForCountry(string RatesTableName, string CountryCodeISO3)
+        public string GetNationalRatesForCountry(string RatesTableName, string ISO3CountryCode)
         {
             string SQL = String.Format(
                 "SELECT " +
                     "r.Rate_ID as 'Rate_ID', " +
-                    "np.Dialing_prefix as 'Dialing_prefix', " +
-                    "np.Country_Name as 'Country_Name', " +
-                    "np.Three_Digits_Country_Code as 'Three_Digits_Country_Code', " +
-                    "np.Type_Of_Service as 'Type_Of_Service', " +
+                    "np.Dialing_prefix as 'DialingCode', " +
+                    "np.Country_Name as 'CountryName', " +
+                    "np.Three_Digits_Country_Code as 'ISO3CountryCode', " +
+                    "np.Type_Of_Service as 'TypeOfService', " +
                     "r.rate as 'Rate' " +
                 "FROM dbo.[NumberingPlan] np " +
                 "LEFT OUTER JOIN dbo.[{0}] r on np.Dialing_prefix = r.country_code_dialing_prefix " +
                 "WHERE np.Three_Digits_Country_Code = '{1}' "
 
                 , RatesTableName
-                , CountryCodeISO3);
+                , ISO3CountryCode);
 
             return SQL;
         }

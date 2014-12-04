@@ -88,6 +88,16 @@ namespace LyncBillingBase.Helpers
             }
         }
 
+        public static object ReturnDecimalZeroIfNull(this object value)
+        {
+            if (value == System.DBNull.Value)
+                return Convert.ToDecimal(0.00);
+            else if (value == null)
+                return Convert.ToDecimal(0.00);
+            else
+                return value;
+        }
+
         public static object ReturnZeroIfNull(this object value)
         {
             if (value == System.DBNull.Value)
