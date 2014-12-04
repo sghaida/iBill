@@ -94,8 +94,6 @@ namespace LyncBillingBase.DataAccess
                 {
                     var dataRelationAttribute = field.GetCustomAttribute<DataRelationAttribute>();
 
-                    dataRelationAttribute.AddTermToRelationName(field.Name);
-
                     newDataField.Relation = new DbRelation()
                     {
                         DataField = field.Name,
