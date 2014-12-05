@@ -27,7 +27,20 @@ namespace LyncBillingTesting
             DataStorage _STORAGE = DataStorage.Instance;
             bool status = false;
 
+        }
 
+
+        public static void InsertUpdateDeleteTests()
+        {
+            DataStorage _STORAGE = DataStorage.Instance;
+
+            bool status = false;
+
+
+
+            /***
+             * TESTING PHONE CALLS EXCLUSIONS
+             */
             PhoneCallExclusion exclusion = new PhoneCallExclusion()
             {
                 ExclusionSubject = "aalhour@ccc.gr",
@@ -38,7 +51,7 @@ namespace LyncBillingTesting
                 AutoMark = GLOBALS.PhoneCallExclusion.AutoMark.Business.Value()
             };
 
-            //exclusion.ID = _STORAGE.PhoneCallsExclusions.Insert(exclusion);
+            exclusion.ID = _STORAGE.PhoneCallsExclusions.Insert(exclusion);
 
             exclusion = _STORAGE.PhoneCallsExclusions.GetById(789);
 
@@ -47,14 +60,6 @@ namespace LyncBillingTesting
 
             status = _STORAGE.PhoneCallsExclusions.Update(exclusion);
             status = _STORAGE.PhoneCallsExclusions.Delete(exclusion);
-        }
-
-
-        public static void InsertUpdateDeleteTests()
-        {
-            DataStorage _STORAGE = DataStorage.Instance;
-
-            bool status = false;
 
 
 

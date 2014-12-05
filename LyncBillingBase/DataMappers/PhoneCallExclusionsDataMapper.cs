@@ -46,25 +46,44 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="exclusionType">one character string</param>
         /// <returns>string</returns>
-        private string LookUpExclusionType(string exclusionType)
+        private string LookUpExclusionType(string exclusionType, bool reverseLookup = false)
         {
             var DEFAULT = GLOBALS.PhoneCallExclusion.Type.Default;
             var SOURCE = GLOBALS.PhoneCallExclusion.Type.Source;
             var DESTINATION = GLOBALS.PhoneCallExclusion.Type.Destination;
 
-            if(false == string.IsNullOrEmpty(exclusionType))
-            {
-                if(exclusionType == SOURCE.Value())
+            if(false == reverseLookup)
+            { 
+                if(false == string.IsNullOrEmpty(exclusionType))
                 {
-                    return SOURCE.Description();
+                    if(exclusionType == SOURCE.Value())
+                    {
+                        return SOURCE.Description();
+                    }
+                    else if (exclusionType == DESTINATION.Value())
+                    {
+                        return DESTINATION.Description();
+                    }
                 }
-                else if (exclusionType == DESTINATION.Value())
-                {
-                    return DESTINATION.Description();
-                }
-            }
 
-            return DEFAULT.Description();
+                return DEFAULT.Description();
+            }
+            else
+            {
+                if (false == string.IsNullOrEmpty(exclusionType))
+                {
+                    if (exclusionType == SOURCE.Description())
+                    {
+                        return SOURCE.Value();
+                    }
+                    else if (exclusionType == DESTINATION.Description())
+                    {
+                        return DESTINATION.Value();
+                    }
+                }
+
+                return SOURCE.Value();
+            }
         }
 
         /// <summary>
@@ -74,25 +93,44 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="zeroCost">one character string</param>
         /// <returns>string</returns>
-        private string LookUpZeroCost(string zeroCost)
+        private string LookUpZeroCost(string zeroCost, bool reverseLookup = false)
         {
             var DEFAULT = GLOBALS.PhoneCallExclusion.ZeroCost.Default;
             var YES = GLOBALS.PhoneCallExclusion.ZeroCost.Yes;
             var NO = GLOBALS.PhoneCallExclusion.ZeroCost.No;
 
-            if(false == string.IsNullOrEmpty(zeroCost))
-            {
-                if(zeroCost == YES.Value())
+            if(false == reverseLookup)
+            { 
+                if(false == string.IsNullOrEmpty(zeroCost))
                 {
-                    return YES.Description();
+                    if(zeroCost == YES.Value())
+                    {
+                        return YES.Description();
+                    }
+                    else if(zeroCost == NO.Value())
+                    {
+                        return NO.Description();
+                    }
                 }
-                else if(zeroCost == NO.Value())
-                {
-                    return NO.Description();
-                }
-            }
 
-            return DEFAULT.Description();
+                return DEFAULT.Description();
+            }
+            else
+            {
+                if (false == string.IsNullOrEmpty(zeroCost))
+                {
+                    if (zeroCost == YES.Description())
+                    {
+                        return YES.Value();
+                    }
+                    else if (zeroCost == NO.Description())
+                    {
+                        return NO.Value();
+                    }
+                }
+
+                return NO.Value();
+            }
         }
 
         /// <summary>
@@ -102,25 +140,44 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="autoMarkType">one character string</param>
         /// <returns>string</returns>
-        private string LookUpAutoMark(string autoMarkType)
+        private string LookUpAutoMark(string autoMarkType, bool reverseLookup = false)
         {
             var DEFAULT = GLOBALS.PhoneCallExclusion.AutoMark.Default;
             var BUSINESS = GLOBALS.PhoneCallExclusion.AutoMark.Business;
             var PERSONAL = GLOBALS.PhoneCallExclusion.AutoMark.Personal;
 
-            if(false == string.IsNullOrEmpty(autoMarkType))
+            if(false == reverseLookup)
             {
-                if(autoMarkType == BUSINESS.Value())
+                if(false == string.IsNullOrEmpty(autoMarkType))
                 {
-                    return BUSINESS.Description();
+                    if(autoMarkType == BUSINESS.Value())
+                    {
+                        return BUSINESS.Description();
+                    }
+                    else if(autoMarkType == PERSONAL.Value())
+                    {
+                        return PERSONAL.Description();
+                    }
                 }
-                else if(autoMarkType == PERSONAL.Value())
-                {
-                    return PERSONAL.Description();
-                }
+
+                return DEFAULT.Description();
             }
-            
-            return DEFAULT.Description();
+            else
+            {
+                if (false == string.IsNullOrEmpty(autoMarkType))
+                {
+                    if (autoMarkType == BUSINESS.Description())
+                    {
+                        return BUSINESS.Value();
+                    }
+                    else if (autoMarkType == PERSONAL.Description())
+                    {
+                        return PERSONAL.Value();
+                    }
+                }
+
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -222,6 +279,10 @@ namespace LyncBillingBase.DataMappers
             {
                 newExclusionObject.ExclusionSubject = CleanExclusionSubject(newExclusionObject.ExclusionSubject);
 
+                newExclusionObject.ExclusionType = LookUpExclusionType(newExclusionObject.ExclusionType, reverseLookup: true);
+                newExclusionObject.AutoMark = LookUpAutoMark(newExclusionObject.AutoMark, reverseLookup: true);
+                newExclusionObject.ZeroCost = LookUpZeroCost(newExclusionObject.ZeroCost, reverseLookup: true);
+
                 return base.Insert(newExclusionObject, dataSourceName, dataSource);
             }
             catch(Exception ex)
@@ -243,7 +304,9 @@ namespace LyncBillingBase.DataMappers
             {
                 existingExclusionObject.ExclusionSubject = CleanExclusionSubject(existingExclusionObject.ExclusionSubject);
 
-                existingExclusionObject.
+                existingExclusionObject.ExclusionType = LookUpExclusionType(existingExclusionObject.ExclusionType, reverseLookup: true);
+                existingExclusionObject.AutoMark = LookUpAutoMark(existingExclusionObject.AutoMark, reverseLookup: true);
+                existingExclusionObject.ZeroCost = LookUpZeroCost(existingExclusionObject.ZeroCost, reverseLookup: true);
 
                 return base.Update(dataObject: existingExclusionObject, whereConditions: whereConditions, dataSourceName: dataSourceName, dataSourceType: dataSource);
             }
