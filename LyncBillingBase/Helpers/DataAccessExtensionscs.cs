@@ -100,9 +100,9 @@ namespace LyncBillingBase.Helpers
 
                 var objProperties = data.Select(item => item.GetType().GetProperties()).FirstOrDefault().ToList<PropertyInfo>();
                 var PropertyName = string.Empty;
+               
                 if(objProperties != null && objProperties.Count() > 0)
                 {
-
                     foreach (PropertyInfo property in objProperties) 
                     {
                         if (property.GetCustomAttributes<IsIDFieldAttribute>().Where(item => item.Status == true) != null) 
@@ -111,27 +111,27 @@ namespace LyncBillingBase.Helpers
                             break;
                         }
                     }
-                   
-                }
-               
-
-                foreach (var srcData in source) 
-                {
-                    foreach (T dstData in data) 
-                    {
-                        var srcProperties = srcData.GetType().GetProperties().ToList<PropertyInfo>();
-                        var dstProperties = dstData.GetType().GetProperties().ToList<PropertyInfo>();
-
-                        
-                       
-
-                       
-                    }
                 }
 
-                List<T> results = new List<T>();
+                //source.AsQueryable().OrderByProperty(PropertyName);
+
+                //source.AsEnumerable().OrderBy(item => item.GetType().GetProperty(PropertyName).GetValue(item, null));
+
 
                 var union = source.Union(data);
+                //union.GroupJoin()
+                
+                //Sort New Data
+                var sortedData = (from obj in data
+                                   orderby obj.GetType().GetProperty(PropertyName).GetValue(obj) select obj).ToList<T>();
+
+                //Sort the Old Data
+                var sortedSource = (from obj in source
+                                   orderby obj.GetType().GetProperty(PropertyName).GetValue(obj) select obj).ToList<T>();
+
+
+
+                PropertyInfo theProperty = objProperties.Where(item => item.Name == typeof(TProperty).Name).FirstOrDefault();
 
                 return union;
             }
