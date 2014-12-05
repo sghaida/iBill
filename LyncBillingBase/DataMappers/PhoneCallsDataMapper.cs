@@ -66,7 +66,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override bool Update(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override bool Update(PhoneCall phoneCallObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             string finalDataSourceName = string.Empty;
 
@@ -93,7 +93,7 @@ namespace LyncBillingBase.DataMappers
             // Perform data update 
             try
             { 
-                return base.Update(phoneCallObject, finalDataSourceName, dataSource);
+                return base.Update(phoneCallObject, whereConditions, finalDataSourceName, dataSource);
             }
             catch(Exception ex)
             {

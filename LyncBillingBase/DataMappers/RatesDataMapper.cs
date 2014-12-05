@@ -110,7 +110,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayID(GatewayID);
 
-                return base.GetAll(dataSourceName: tableName, dataSource: GLOBALS.DataSource.Type.DBTable).ToList<Rate>();
+                return base.GetAll(dataSourceName: tableName, dataSourceType: GLOBALS.DataSource.Type.DBTable).ToList<Rate>();
             }
             catch (Exception ex)
             {
@@ -133,7 +133,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayID(GatewayID);
 
-                return base.Get(whereConditions: condition, dataSourceName: tableName, dataSource: GLOBALS.DataSource.Type.DBTable).ToList<Rate>();
+                return base.Get(whereConditions: condition, dataSourceName: tableName, dataSourceType: GLOBALS.DataSource.Type.DBTable).ToList<Rate>();
             }
             catch (Exception ex)
             {
@@ -245,7 +245,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayID(GatewayID);
 
-                return base.Update(rateObject, tableName, GLOBALS.DataSource.Type.DBTable);
+                return base.Update(dataObject: rateObject, dataSourceName: tableName, dataSourceType: GLOBALS.DataSource.Type.DBTable);
             }
             catch (Exception ex)
             {
@@ -285,7 +285,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override bool Update(Rate dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override bool Update(Rate dataObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }

@@ -231,7 +231,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override bool Update(PhoneCallExclusion existingExclusionObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override bool Update(PhoneCallExclusion existingExclusionObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             // NULL value check
             if(null == existingExclusionObject)
@@ -243,7 +243,7 @@ namespace LyncBillingBase.DataMappers
             {
                 existingExclusionObject.ExclusionSubject = CleanExclusionSubject(existingExclusionObject.ExclusionSubject);
 
-                return base.Update(existingExclusionObject, dataSourceName, dataSource);
+                return base.Update(dataObject: existingExclusionObject, whereConditions: whereConditions, dataSourceName: dataSourceName, dataSourceType: dataSource);
             }
             catch(Exception ex)
             {

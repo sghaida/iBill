@@ -104,7 +104,7 @@ namespace LyncBillingBase.DataMappers
 
                 //return base.GetAll(SQL_QUERY: SQL).ToList<RateForNGN>();
 
-                return base.GetAll(dataSourceName: tableName, dataSource: GLOBALS.DataSource.Type.DBTable).ToList<RateForNGN>();
+                return base.GetAll(dataSourceName: tableName, dataSourceType: GLOBALS.DataSource.Type.DBTable).ToList<RateForNGN>();
             }
             catch (Exception ex)
             {
@@ -244,7 +244,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayID(GatewayID);
 
-                return base.Update(ngnRateObject, tableName, GLOBALS.DataSource.Type.DBTable);
+                return base.Update(dataObject: ngnRateObject, dataSourceName: tableName, dataSourceType: GLOBALS.DataSource.Type.DBTable);
             }
             catch (Exception ex)
             {
@@ -284,7 +284,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override bool Update(RateForNGN dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override bool Update(RateForNGN dataObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }

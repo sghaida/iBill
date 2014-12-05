@@ -125,12 +125,12 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual int Insert(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public virtual int Insert(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             int rowID = 0;
             string finalDataSourceName = string.Empty;
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
-            
+            List<Type> numericTypes = new List<Type>() { typeof(int), typeof(long), typeof(Int16), typeof(Int32), typeof(Int64) };
 
             //
             // Decide the DataSource Name
@@ -175,6 +175,19 @@ namespace LyncBillingBase.DataAccess
 
                         if (dataObjectAttrValue != null)
                         {
+                            //
+                            // Only update the int/long values to zeros if they are not foreign keys
+                            if (true == numericTypes.Contains(field.TableField.FieldType))
+                            {
+                                var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
+
+                                if (Convert.ToInt64(value) <= 0 && field.TableField.IsKey == true)
+                                {
+                                    //continue;
+                                    throw new Exception("The Property " + field.TableField.ColumnName + " in the " + dataObject.GetType().Name + " Table is a foreign key and it is not allowed to be null. Kindly set the property value.");
+                                }
+                            }
+                            
                             columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
                         }
                         else
@@ -188,6 +201,18 @@ namespace LyncBillingBase.DataAccess
 
                         if (dataObjectAttrValue != null)
                         {
+                            //
+                            // Only update the int/long values to zeros if they are not foreign keys
+                            if (true == numericTypes.Contains(field.TableField.FieldType))
+                            {
+                                var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
+
+                                if (Convert.ToInt64(value) <= 0 && field.TableField.IsKey == true)
+                                {
+                                    continue;
+                                }
+                            }
+                            
                             columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
                         }
                     }
@@ -210,121 +235,14 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual bool Update(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        //public virtual bool Update(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public virtual bool Update(T dataObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             bool status = false;
             string finalDataSourceName = string.Empty;
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
-            Dictionary<string, object> whereConditions = new Dictionary<string, object>();
+            List<Type> numericTypes = new List<Type>() { typeof(int), typeof(long), typeof(Int16), typeof(Int32), typeof(Int64) };
 
-
-            //
-            // Decide the DataSource Name 
-            if (false == string.IsNullOrEmpty(dataSourceName))
-            {
-                finalDataSourceName = dataSourceName;
-            }
-            else if (false == string.IsNullOrEmpty(Schema.DataSourceName))
-            {
-                finalDataSourceName = Schema.DataSourceName;
-            }
-            else
-            {
-                throw new Exception("Insert Error: No Data Source was provided in the " + dataObject.GetType().Name + ". Kindly review the class definition or the data mapper definition.");
-            }
-
-
-            //
-            // Process the data object and attempt to insert it into the data source
-            if (dataObject != null)
-            {
-                // Get only the Data Fields from Schema which have TableFields objects
-                var objectSchemaFields = Schema.DataFields
-                    .Where(field => field.TableField != null)
-                    .ToList<DataField>();
-
-                foreach (var field in objectSchemaFields)
-                {
-                    // Get the property value
-                    var dataObjectAttr = dataObject.GetType().GetProperty(field.Name);
-
-                    //
-                    // Don't update the ID Field in the Data Source, unless it's marked as AllowIDInsert
-                    // Add the data object ID into the WHERE CONDITIONS
-                    if (field.TableField.IsIDField == true && field.TableField.AllowIDInsert == false)
-                    {
-                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
-
-                        if (dataObjectAttrValue != null)
-                        {
-                            //
-                            // Add the ID Field and Value to the Where Conditions if it was not added already!
-                            if (false == whereConditions.Keys.Contains(field.TableField.ColumnName))
-                            {
-                                whereConditions.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("The Property " + field.TableField.ColumnName + " in the " + dataObject.GetType().Name + " Table is not SET! Kindly please set it to it's original value in order to decide what data to update accordingly.");
-                        }
-
-                        continue;
-                    }
-
-                    // 
-                    // Add the data object fields into the COLUMNS-VALUES dictionary
-                    // This dictionary contains the values to be updated
-                    if (field.TableField.AllowNull == false && dataObjectAttr != null)
-                    {
-                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
-
-                        if (dataObjectAttrValue != null)
-                        {
-                            columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
-                        }
-                    }
-                    else
-                    {
-                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
-
-                        if (dataObjectAttrValue != null)
-                        {
-                            columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
-                        }
-                    }
-                    //end-inner-if
-
-                }//end-foreach
-
-                try
-                {
-                    if (0 == whereConditions.Count)
-                    {
-                        throw new Exception("Update Error: Cannot update data object unless there is at least one WHERE CONDITION. Please revise the update procedures on " + dataObject.GetType().Name);
-                    }
-                    else
-                    {
-                        status = DBRoutines.UPDATE(tableName: finalDataSourceName, columnsValues: columnsValues, wherePart: whereConditions);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw ex.InnerException;
-                }
-
-            }//end-outer-if
-
-            return status;
-        }
-
-
-        public virtual bool Update(T dataObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
-        {
-            bool status = false;
-            string finalDataSourceName = string.Empty;
-            Dictionary<string, object> columnsValues = new Dictionary<string, object>();
-            
 
             //
             // Decide the DataSource Name 
@@ -397,6 +315,19 @@ namespace LyncBillingBase.DataAccess
 
                         if (dataObjectAttrValue != null)
                         {
+                            //
+                            // Only update the int/long values to zeros if they are not foreign keys
+                            if (true == numericTypes.Contains(field.TableField.FieldType))
+                            {
+                                var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
+
+                                if (Convert.ToInt64(value) <= 0 && field.TableField.IsKey == true)
+                                {
+                                    //continue;
+                                    throw new Exception("The Property " + field.TableField.ColumnName + " in the " + dataObject.GetType().Name + " Table is a foreign key and it is not allowed to be null. Kindly set the property value.");
+                                }
+                            }
+
                             columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
                         }
                     }
@@ -406,6 +337,18 @@ namespace LyncBillingBase.DataAccess
 
                         if (dataObjectAttrValue != null)
                         {
+                            //
+                            // Only update the int/long values to zeros if they are not foreign keys
+                            if (true == numericTypes.Contains(field.TableField.FieldType))
+                            {
+                                var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
+
+                                if (Convert.ToInt64(value) <= 0 && field.TableField.IsKey == true)
+                                {
+                                    continue;
+                                }
+                            }
+
                             columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
                         }
                     }
@@ -435,7 +378,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual bool Delete(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public virtual bool Delete(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             long ID = 0;
             string finalDataSourceName = string.Empty;
@@ -502,7 +445,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual T GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public virtual T GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
             DataTable dt = new DataTable();
             string finalDataSourceName = string.Empty;
@@ -563,7 +506,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
             DataTable dt = new DataTable();
 
@@ -608,7 +551,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public virtual IEnumerable<T> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
             DataTable dt = new DataTable();
             string finalDataSourceName = string.Empty;
@@ -656,7 +599,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual IEnumerable<T> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public virtual IEnumerable<T> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
         {
             DataTable dt = new DataTable();
             string finalDataSourceName = string.Empty;

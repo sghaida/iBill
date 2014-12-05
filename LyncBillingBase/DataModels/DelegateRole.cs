@@ -28,10 +28,12 @@ namespace LyncBillingBase.DataModels
         public string ManagedUserSipAccount { get; set; }
 
         [AllowNull]
+        [IsKey]
         [DbColumn("ManagedSiteDepartmentID")]
         public int ManagedSiteDepartmentID { get; set; }
 
         [AllowNull]
+        [IsKey]
         [DbColumn("ManagedSiteID")]
         public int ManagedSiteID { get; set; }
 
