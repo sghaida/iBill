@@ -110,6 +110,7 @@
     <Compile Include="Exceptions\NoTableFieldsException.cs" />
     <Compile Include="Exceptions\NoDataSourceNameException.cs" />
     <Compile Include="Helpers\DataAccessExtensionscs.cs" />
+    <Compile Include="Helpers\HelperFunctions.cs" />
     <Compile Include="Repository\DataStorage.cs" />
     <Compile Include="DataAttributes\AllowNullAttribute.cs" />
     <Compile Include="DataAttributes\DataSourceAttribute.cs" />
@@ -137,7 +138,6 @@
     <Compile Include="SessionManagement\UserSession.cs" />
     <Compile Include="Libs\ADLib.cs" />
     <Compile Include="DataAccess\DBLib.cs" />
-    <Compile Include="Helpers\HelperFunctions.cs" />
     <Compile Include="Libs\JsonTranslator.cs" />
     <Compile Include="Libs\LoadConfigs.cs" />
     <Compile Include="Libs\Mailer.cs" />
