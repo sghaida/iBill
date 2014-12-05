@@ -124,42 +124,62 @@ namespace LyncBillingBase.DataAccess
             }
         }
 
+
         public virtual int Insert(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             int rowID = 0;
+            string finalDataSourceName = string.Empty;
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
-          
+            
+
+            //
+            // Decide the DataSource Name
+            if(false == string.IsNullOrEmpty(dataSourceName))
+            {
+                finalDataSourceName = dataSourceName;
+            }
+            else if(false == string.IsNullOrEmpty(Schema.DataSourceName))
+            {
+                finalDataSourceName = Schema.DataSourceName;
+            }
+            else
+            {
+                throw new Exception("Insert Error: No Data Source was provided in the " + dataObject.GetType().Name + ". Kindly review the class definition or the data mapper definition.");
+            }
+
+
+            //
+            // Process the data object and attempt to insert it into the data source
             if (dataObject != null)
             {
                 // Get only the Data Fields from Schema which have TableFields objects
-                var properties = Schema.DataFields
+                var objectSchemaFields = Schema.DataFields
                     .Where(field => field.TableField != null)
-                    .Select<DataField, DbTableField>(field => field.TableField)
-                    .ToList<DbTableField>();
+                    .ToList<DataField>();
 
-                foreach (var property in properties)
+                foreach (var field in objectSchemaFields)
                 {
-                    //Don't insert ID Fields into the Database
-                    if (property.IsIDField == true && property.AllowIDInsert == false)
+                    // Don't insert the ID Field in the Data Source, unless it's marked as AllowIDInsert
+                    if (field.TableField.IsIDField == true && field.TableField.AllowIDInsert == false)
                     {
                         continue;
                     }
 
                     // Get the property value
-                    var dataObjectAttr = dataObject.GetType().GetProperty(property.ColumnName);
+                    var dataObjectAttr = dataObject.GetType().GetProperty(field.Name);
 
                     //Continue handling the properties
-                    if (property.AllowNull == false && dataObjectAttr != null)
+                    if (field.TableField.AllowNull == false && dataObjectAttr != null)
                     {
                         var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
 
                         if (dataObjectAttrValue != null)
                         {
-                            columnsValues.Add(property.ColumnName, Convert.ChangeType(dataObjectAttrValue, property.FieldType));
+                            columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
                         }
                         else
                         {
-                            throw new Exception("The Property " + property.ColumnName + " in the " + dataObject.GetType().Name + " Table is not allowed to be null kindly annotate the property with [IsAllowNull]");
+                            throw new Exception("The Property " + field.TableField.ColumnName + " in the " + dataObject.GetType().Name + " Table is not allowed to be null kindly annotate the property with [IsAllowNull]");
                         }
                     }
                     else
@@ -168,7 +188,7 @@ namespace LyncBillingBase.DataAccess
 
                         if (dataObjectAttrValue != null)
                         {
-                            columnsValues.Add(property.ColumnName, Convert.ChangeType(dataObjectAttrValue, property.FieldType));
+                            columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
                         }
                     }
                     //end-inner-if
@@ -177,7 +197,7 @@ namespace LyncBillingBase.DataAccess
 
                 try
                 {
-                    rowID = DBRoutines.INSERT(tableName: Schema.DataSourceName, columnsValues: columnsValues, idFieldName: Schema.IDFieldName);
+                    rowID = DBRoutines.INSERT(tableName: finalDataSourceName, columnsValues: columnsValues, idFieldName: Schema.IDFieldName);
                 }
                 catch (Exception ex)
                 {
@@ -190,11 +210,270 @@ namespace LyncBillingBase.DataAccess
         }
 
 
+        public virtual bool Update(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        {
+            bool status = false;
+            string finalDataSourceName = string.Empty;
+            Dictionary<string, object> columnsValues = new Dictionary<string, object>();
+            Dictionary<string, object> whereConditions = new Dictionary<string, object>();
+
+
+            //
+            // Decide the DataSource Name 
+            if (false == string.IsNullOrEmpty(dataSourceName))
+            {
+                finalDataSourceName = dataSourceName;
+            }
+            else if (false == string.IsNullOrEmpty(Schema.DataSourceName))
+            {
+                finalDataSourceName = Schema.DataSourceName;
+            }
+            else
+            {
+                throw new Exception("Insert Error: No Data Source was provided in the " + dataObject.GetType().Name + ". Kindly review the class definition or the data mapper definition.");
+            }
+
+
+            //
+            // Process the data object and attempt to insert it into the data source
+            if (dataObject != null)
+            {
+                // Get only the Data Fields from Schema which have TableFields objects
+                var objectSchemaFields = Schema.DataFields
+                    .Where(field => field.TableField != null)
+                    .ToList<DataField>();
+
+                foreach (var field in objectSchemaFields)
+                {
+                    // Get the property value
+                    var dataObjectAttr = dataObject.GetType().GetProperty(field.Name);
+
+                    //
+                    // Don't update the ID Field in the Data Source, unless it's marked as AllowIDInsert
+                    // Add the data object ID into the WHERE CONDITIONS
+                    if (field.TableField.IsIDField == true && field.TableField.AllowIDInsert == false)
+                    {
+                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                        if (dataObjectAttrValue != null)
+                        {
+                            //
+                            // Add the ID Field and Value to the Where Conditions if it was not added already!
+                            if (false == whereConditions.Keys.Contains(field.TableField.ColumnName))
+                            {
+                                whereConditions.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("The Property " + field.TableField.ColumnName + " in the " + dataObject.GetType().Name + " Table is not SET! Kindly please set it to it's original value in order to decide what data to update accordingly.");
+                        }
+
+                        continue;
+                    }
+
+                    // 
+                    // Add the data object fields into the COLUMNS-VALUES dictionary
+                    // This dictionary contains the values to be updated
+                    if (field.TableField.AllowNull == false && dataObjectAttr != null)
+                    {
+                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                        if (dataObjectAttrValue != null)
+                        {
+                            columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
+                        }
+                    }
+                    else
+                    {
+                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                        if (dataObjectAttrValue != null)
+                        {
+                            columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
+                        }
+                    }
+                    //end-inner-if
+
+                }//end-foreach
+
+                try
+                {
+                    if (0 == whereConditions.Count)
+                    {
+                        throw new Exception("Update Error: Cannot update data object unless there is at least one WHERE CONDITION. Please revise the update procedures on " + dataObject.GetType().Name);
+                    }
+                    else
+                    {
+                        status = DBRoutines.UPDATE(tableName: finalDataSourceName, columnsValues: columnsValues, wherePart: whereConditions);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex.InnerException;
+                }
+
+            }//end-outer-if
+
+            return status;
+        }
+
+
+        public virtual bool Update(T dataObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        {
+            bool status = false;
+            string finalDataSourceName = string.Empty;
+            Dictionary<string, object> columnsValues = new Dictionary<string, object>();
+            
+
+            //
+            // Decide the DataSource Name 
+            if (false == string.IsNullOrEmpty(dataSourceName))
+            {
+                finalDataSourceName = dataSourceName;
+            }
+            else if (false == string.IsNullOrEmpty(Schema.DataSourceName))
+            {
+                finalDataSourceName = Schema.DataSourceName;
+            }
+            else
+            {
+                throw new Exception("Insert Error: No Data Source was provided in the " + dataObject.GetType().Name + ". Kindly review the class definition or the data mapper definition.");
+            }
+
+
+            //
+            // Decide on the WHERE CONDITIONS
+            if (null == whereConditions)
+            {
+                whereConditions = new Dictionary<string, object>();
+            }
+
+
+            //
+            // Process the data object and attempt to insert it into the data source
+            if (dataObject != null)
+            {
+                // Get only the Data Fields from Schema which have TableFields objects
+                var objectSchemaFields = Schema.DataFields
+                    .Where(field => field.TableField != null)
+                    .ToList<DataField>();
+
+                foreach (var field in objectSchemaFields)
+                {
+                    // Get the property value
+                    var dataObjectAttr = dataObject.GetType().GetProperty(field.Name);
+
+                    //
+                    // Don't update the ID Field in the Data Source, unless it's marked as AllowIDInsert
+                    // Add the data object ID into the WHERE CONDITIONS
+                    if (field.TableField.IsIDField == true && field.TableField.AllowIDInsert == false)
+                    {
+                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                        if (dataObjectAttrValue != null)
+                        {
+                            //
+                            // Add the ID Field and Value to the Where Conditions if it was not added already!
+                            if (false == whereConditions.Keys.Contains(field.TableField.ColumnName))
+                            { 
+                                whereConditions.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("The Property " + field.TableField.ColumnName + " in the " + dataObject.GetType().Name + " Table is not SET! Kindly please set it to it's original value in order to decide what data to update accordingly.");
+                        }
+
+                        continue;
+                    }
+
+                    // 
+                    // Add the data object fields into the COLUMNS-VALUES dictionary
+                    // This dictionary contains the values to be updated
+                    if (field.TableField.AllowNull == false && dataObjectAttr != null)
+                    {
+                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                        if (dataObjectAttrValue != null)
+                        {
+                            columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
+                        }
+                    }
+                    else
+                    {
+                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                        if (dataObjectAttrValue != null)
+                        {
+                            columnsValues.Add(field.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
+                        }
+                    }
+                    //end-inner-if
+
+                }//end-foreach
+
+                try
+                {
+                    if (0 == whereConditions.Count)
+                    {
+                        throw new Exception("Update Error: Cannot update data object unless there is at least one WHERE CONDITION. Please revise the update procedures on " + dataObject.GetType().Name);
+                    }
+                    else
+                    {
+                        status = DBRoutines.UPDATE(tableName: finalDataSourceName, columnsValues: columnsValues, wherePart: whereConditions);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex.InnerException;
+                }
+
+            }//end-outer-if
+
+            return status;
+        }
+
+
         public virtual bool Delete(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             long ID = 0;
+            string finalDataSourceName = string.Empty;
+            Dictionary<string, object> whereConditions = new Dictionary<string, object>();
 
-            var dataObjectAttr = dataObject.GetType().GetProperty(Schema.IDFieldName);
+            DataField IDField;
+            string ObjectFieldNameWithIDAttribute = string.Empty;
+
+
+            //
+            // Decide the DataSource Name 
+            if (false == string.IsNullOrEmpty(dataSourceName))
+            {
+                finalDataSourceName = dataSourceName;
+            }
+            else if (false == string.IsNullOrEmpty(Schema.DataSourceName))
+            {
+                finalDataSourceName = Schema.DataSourceName;
+            }
+            else
+            {
+                throw new Exception("Insert Error: No Data Source was provided in the " + dataObject.GetType().Name + ". Kindly review the class definition or the data mapper definition.");
+            }
+
+
+            //
+            // Decide the IDField value
+            IDField = Schema.DataFields.Find(field => field.TableField != null && field.TableField.IsIDField == true);
+            
+            if(null == IDField)
+            {
+                throw new Exception("Delete Error: The Data Model does not have IDField property. Kindly mark the properties of " + typeof(T).Name + " with [IsIDField].");
+            }
+
+
+            //
+            // Get the object field that is marked with the IsIDField attribute
+            var dataObjectAttr = dataObject.GetType().GetProperty(IDField.Name);
 
             if (dataObjectAttr == null)
             {
@@ -206,88 +485,20 @@ namespace LyncBillingBase.DataAccess
 
                 if(dataObjectAttrValue == null)
                 {
-                    throw new Exception("There is no available ID field is presented but not set kindly set the value of the ID field Object for the following class: " + typeof(T).Name);
+                    throw new Exception("The ID Field's value is to NULL. Kindly set the value of the ID Field for the object of type: " + typeof(T).Name);
                 }
                 else
                 {
-                    long.TryParse(dataObjectAttrValue.ToString(),out ID);
+                    //long.TryParse(dataObjectAttrValue.ToString(), out ID);
+                    //return DBRoutines.DELETE(tableName: finalDataSourceName, idFieldName: IDField.TableField.ColumnName, ID: ID);
 
-                    return DBRoutines.DELETE(tableName: Schema.DataSourceName, idFieldName: Schema.IDFieldName, ID: ID);
+                    whereConditions.Add(IDField.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, IDField.TableField.FieldType));
+                    return DBRoutines.DELETE(tableName: finalDataSourceName, wherePart: whereConditions);
+
                 }//end-inner-if-else
+
             }//end-outer-if-else
-        }
 
-
-        public virtual bool Update(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
-        {
-            Dictionary<string, object> columnsValues = new Dictionary<string, object>();
-            bool status = false;
-
-            if (dataObject != null)
-            {
-                // Get only the Data Fields from Schema which have TableFields objects
-                var properties = Schema.DataFields
-                    .Where(field => field.TableField != null)
-                    .Select<DataField, DbTableField>(field => field.TableField)
-                    .ToList<DbTableField>();
-
-                foreach (var property in properties)
-                {
-                    //Don't insert ID Fields into the Database
-                    if (property.IsIDField == true && property.AllowIDInsert == false)
-                    {
-                        continue;
-                    }
-
-                    // Get the property value
-                    var dataObjectAttr = dataObject.GetType().GetProperty(property.ColumnName);
-
-                    //Don't insert ID Fields into the Database
-                    if(property.IsIDField == true)
-                    {
-                        continue;
-                    }
-
-                    //Continue handling the properties
-                    if (property.AllowNull == false && dataObjectAttr != null)
-                    {
-                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
-
-                        if (dataObjectAttrValue != null)
-                        {
-                            columnsValues.Add(property.ColumnName, Convert.ChangeType(dataObjectAttrValue, property.FieldType));
-                        }
-                        else
-                        {
-                            throw new Exception("The Property " + property.ColumnName + " in the " + dataObject.GetType().Name + " Table is not allowed to be null kindly annotate the property with [IsAllowNull]");
-                        }
-                    }
-                    else
-                    {
-                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
-
-                        if (dataObjectAttrValue != null)
-                        {
-                            columnsValues.Add(property.ColumnName, Convert.ChangeType(dataObjectAttrValue, property.FieldType));
-                        }
-                    }
-                    //end-inner-if
-
-                }//end-foreach
-
-                try
-                {
-                    status = DBRoutines.UPDATE(tableName: Schema.DataSourceName, columnsValues: columnsValues, wherePart: null);
-
-                }
-                catch (Exception ex)
-                {
-                    throw ex.InnerException;
-                }
-
-            }//end-outer-if
-
-            return status;  
         }
 
 

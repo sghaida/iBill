@@ -123,6 +123,29 @@ namespace LyncBillingBase.DataMappers
         /// 
         /// </summary>
         /// <param name="GatewayID"></param>
+        /// <returns></returns>
+        public List<Rate> GetByDialingCode(int GatewayID, long DialingCode)
+        {
+            var condition = new Dictionary<string, object>();
+            condition.Add("country_code_dialing_prefix", DialingCode);
+
+            try
+            {
+                var tableName = GetTableNameByGatewayID(GatewayID);
+
+                return base.Get(whereConditions: condition, dataSourceName: tableName, dataSource: GLOBALS.DataSource.Type.DBTable).ToList<Rate>();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="GatewayID"></param>
         /// <param name="ISO3CountryCode"></param>
         /// <returns></returns>
         public List<Rates_National> GetNationalRatesForCountryByGatewayID(int GatewayID, string ISO3CountryCode)

@@ -1580,18 +1580,26 @@ namespace LyncBillingBase.DataAccess
         {
             StringBuilder whereStatement = new StringBuilder();
 
+            //
+            // Parse the where conitions
             foreach (KeyValuePair<string, object> pair in wherePart)
             {
                 Type valueType = pair.Value.GetType();
 
-                if (valueType == typeof(int) || valueType == typeof(Double))
+                if (valueType == typeof(int) || valueType == typeof(long) || valueType == typeof(Decimal) || valueType == typeof(Double))
+                {
                     whereStatement.Append("[" + pair.Key + "]=" + pair.Value + " AND ");
+                }
                 else
+                { 
                     whereStatement.Append("[" + pair.Key + "]='" + pair.Value + "' AND ");
-
+                }
             }
+
             whereStatement.Remove(whereStatement.Length - 5, 5);
 
+            //
+            // Final DELETE SQL Statement
             string deleteQuery = string.Format("DELETE FROM [{0}] WHERE {1}", tableName, whereStatement);
 
             OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
