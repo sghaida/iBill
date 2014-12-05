@@ -17,25 +17,40 @@ namespace LyncBillingBase.DataAccess
         int Insert(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default);
 
         /// <summary>
-        /// Update the data based on a predict expression 
+        /// 
         /// </summary>
-        /// <param name="dataObject">Object to be updated</param>
-        /// <param name="predicate">Expression<Func<T, bool>> predicate specify the expression that should be evaluated</param>
+        /// <param name="dataObject"></param>
+        /// <param name="dataSourceName"></param>
+        /// <param name="dataSource"></param>
         /// <returns></returns>
         bool Update(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default);
 
         /// <summary>
-        /// Delete Data from the repository
+        /// 
         /// </summary>
-        /// <param name="dataObject">the object you wish to delete</param>
-        /// <param name="where">Dictionary<string,object> Represents the where part that should be executed</param>
-        /// <returns>bool status</returns>
+        /// <param name="dataObject"></param>
+        /// <param name="whereConditions"></param>
+        /// <param name="dataSourceName"></param>
+        /// <param name="dataSource"></param>
+        /// <returns></returns>
+        bool Update(T dataObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataObject"></param>
+        /// <param name="dataSourceName"></param>
+        /// <param name="dataSource"></param>
+        /// <returns></returns>
         bool Delete(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="dataSourceName"></param>
+        /// <param name="dataSource"></param>
+        /// <param name="IncludeDataRelations"></param>
         /// <returns></returns>
         T GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true);
 

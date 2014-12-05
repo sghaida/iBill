@@ -25,20 +25,34 @@ namespace LyncBillingTesting
         {
             DataStorage _STORAGE = DataStorage.Instance;
 
+
+            /***
+             * TESTING DATA MAPPERS FOR INSERT, UPDATE AND DELETE
+             */
+            var gateway10 = _STORAGE.Gateways.GetById(10);
+
+            Rate newRate = new Rate()
+            {
+                DialingCode = 123456789,
+                Price = Convert.ToDecimal(12345.12)
+            };
+            // Update
+            newRate.RateID = _STORAGE.Rates.Insert(newRate, gateway10.ID);
+
+            bool status = _STORAGE.Rates.Delete(newRate, gateway10.ID);
+
+            string x = string.Empty;
+
+
             /***
              * Gateways Tests
              */
-            var MOA = _STORAGE.Sites.GetById(29);
-            var moaGatewaysInfo = _STORAGE.GatewaysInfo.GetGatewaysBySiteID(MOA.ID).Where(item => item.ID == 10).Single();
-            var moaGatewayRatesInfo = _STORAGE.GatewaysRates.GetByGatewayID(moaGatewaysInfo.ID).Where(item => item.EndingDate == DateTime.MinValue).Single();
-
-            var ratesForGateway10 = _STORAGE.Rates.GetByGatewayID(moaGatewayRatesInfo.GatewayID);
-            var greeceNationalRatesInGateway10 = _STORAGE.Rates.GetNationalRatesForCountryByGatewayID(moaGatewayRatesInfo.GatewayID, "GRC");
-            var greekGatewayInternationalRates = _STORAGE.Rates.GetInternationalRatesByGatewayID(moaGatewayRatesInfo.GatewayID);
-
-            var ngnRates = _STORAGE.RatesForNGN.GetByGatewayID(10);
-
-            string x = string.Empty;
+            //var moaGatewaysInfo = _STORAGE.GatewaysInfo.GetGatewaysBySiteID(29).Where(item => item.ID == 10).Single();
+            //var moaGatewayRatesInfo = _STORAGE.GatewaysRates.GetByGatewayID(moaGatewaysInfo.ID).Where(item => item.EndingDate == DateTime.MinValue).Single();
+            //var ratesForGateway10 = _STORAGE.Rates.GetByGatewayID(moaGatewayRatesInfo.GatewayID);
+            //var greeceNationalRatesInGateway10 = _STORAGE.Rates.GetNationalRatesForCountryByGatewayID(moaGatewayRatesInfo.GatewayID, "GRC");
+            //var greekGatewayInternationalRates = _STORAGE.Rates.GetInternationalRatesByGatewayID(moaGatewayRatesInfo.GatewayID);
+            //var ngnRates = _STORAGE.RatesForNGN.GetByGatewayID(10);
 
             
             /***
