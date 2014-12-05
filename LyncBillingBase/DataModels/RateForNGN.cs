@@ -14,7 +14,7 @@ namespace LyncBillingBase.DataModels
     {
         [IsIDField]
         [DbColumn("RateID")]
-        public int RateID { get; set; }
+        public int ID { get; set; }
 
         [DbColumn("DialingCodeID")]
         public Int64 DialingCodeID { get; set; }

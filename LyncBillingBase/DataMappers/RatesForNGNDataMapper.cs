@@ -45,7 +45,7 @@ namespace LyncBillingBase.DataMappers
                      join numPlan in allNumberingPlan on rate.NumberingPlanForNGN.ID equals numPlan.ID
                      select new RateForNGN
                      {
-                         RateID = rate.RateID,
+                         ID = rate.ID,
                          DialingCodeID = rate.DialingCodeID,
                          Rate = rate.Rate,
                          //relations
