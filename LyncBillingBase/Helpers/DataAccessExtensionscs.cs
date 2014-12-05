@@ -15,26 +15,27 @@ namespace LyncBillingBase.Helpers
     {
         private static DBLib DBRoutines = new DBLib();
 
-        public static IEnumerable<T> Include<T>(this IEnumerable<T> source, params Expression<Func<T, object>>[] path) where T : DataModel,new() 
+        public static IEnumerable<T> Include<T>(this IEnumerable<T> source, params Expression<Func<T, object>>[] path) where T : DataModel, new()
         {
-             DataSourceSchema<T> Schema = new DataSourceSchema<T>();
+            DataSourceSchema<T> Schema = new DataSourceSchema<T>();
             //Table Relations Map
             //To be sent to the DB Lib for SQL Query generation
             List<SqlJoinRelation> TableRelationsMap = new List<SqlJoinRelation>();
 
             List<DbRelation> DbRelationsList = new List<DbRelation>();
-           
-            //This will hold the information about the sub joins object types
-            List<string> classesTypes = new List<string>();
 
-            foreach (var t in path) 
+            //This will hold the information about the sub joins object types          
+            Dictionary<string, string> expressionLookup = new Dictionary<string, string>();
+            foreach (var t in path)
             {
-                //Fill DataTypes Names
-                classesTypes.Add(t.Body.Type.Name);
+                expressionLookup.Add((t.Body as MemberExpression).Member.Name, t.Body.Type.Name);
             }
 
-            DbRelationsList = Schema.DataFields.Where(field => field.Relation != null && classesTypes.Contains(field.Name)).
-                Select<DataField,DbRelation>(field=>field.Relation).
+            DbRelationsList = Schema.DataFields.Where(field => field.Relation != null &&
+                expressionLookup.Values.Contains(field.Relation.WithDataModel.Name) &&
+                expressionLookup.Keys.Contains(field.Name)
+                ).
+                Select<DataField, DbRelation>(field => field.Relation).
                 ToList<DbRelation>();
 
 
@@ -97,12 +98,13 @@ namespace LyncBillingBase.Helpers
             //Get our table columns from the schema
             thisModelTableColumns = Schema.DataFields
                 .Where(field => field.TableField != null)
-                .Select<DataField, string>(field => field.TableField.ColumnName)
+                .Select<DataField, string>(
+                field => field.TableField.ColumnName)
                 .ToList<string>();
 
             dt = DBRoutines.SELECT_WITH_JOIN(Schema.DataSourceName, thisModelTableColumns, null, TableRelationsMap, 0);
 
-            return dt.ConvertToList<T>(true);
+            return dt.ConvertToList<T>(path);
 
 
         }
