@@ -243,6 +243,8 @@ namespace LyncBillingBase.DataMappers
             {
                 existingExclusionObject.ExclusionSubject = CleanExclusionSubject(existingExclusionObject.ExclusionSubject);
 
+                existingExclusionObject.
+
                 return base.Update(dataObject: existingExclusionObject, whereConditions: whereConditions, dataSourceName: dataSourceName, dataSourceType: dataSource);
             }
             catch(Exception ex)

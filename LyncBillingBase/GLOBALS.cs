@@ -69,22 +69,22 @@ namespace LyncBillingBase
             {
                 [Description("N/A")]
                 [DefaultValue("N/A")]
-                Default = 0,
+                Default,
 
                 [Description("Source")]
                 [DefaultValue("S")]
-                Source = 1,
+                Source,
 
                 [Description("Destination")]
                 [DefaultValue("D")]
-                Destination = 2
+                Destination
             }
 
             public enum ZeroCost
             {
                 [Description("N/A")]
                 [DefaultValue("N/A")]
-                Default = 0,
+                Default,
 
                 [Description("Yes")]
                 [DefaultValue("Y")]

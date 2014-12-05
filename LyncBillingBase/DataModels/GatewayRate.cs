@@ -14,7 +14,7 @@ namespace LyncBillingBase.DataModels
     {
         [IsIDField]
         [DbColumn("GatewaysRatesID")]
-        public int GatewaysRatesID { set; get; }
+        public int ID { set; get; }
 
         [DbColumn("GatewayID")]
         public int GatewayID { set; get; }
