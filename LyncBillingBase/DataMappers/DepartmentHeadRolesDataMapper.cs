@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
+using LyncBillingBase.Helpers;
 using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
 
@@ -110,13 +111,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override DepartmentHeadRole GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override DepartmentHeadRole GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             DepartmentHeadRole role = null;
 
             try
             {
-                role = base.GetById(id, dataSourceName, dataSource, IncludeDataRelations);
+                role = base.GetById(id, dataSourceName, dataSource);
 
                 if (role != null)
                 {
@@ -135,13 +136,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DepartmentHeadRole> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DepartmentHeadRole> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             IEnumerable<DepartmentHeadRole> roles = null;
 
             try
             { 
-                roles = base.Get(whereConditions, limit, dataSourceName, dataSource, IncludeDataRelations);
+                roles = base.Get(whereConditions, limit, dataSourceName, dataSource);
 
                 if(roles != null && roles.Count() > 0)
                 {
@@ -157,13 +158,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DepartmentHeadRole> Get(Expression<Func<DepartmentHeadRole, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DepartmentHeadRole> Get(Expression<Func<DepartmentHeadRole, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             IEnumerable<DepartmentHeadRole> roles = null;
 
             try
             {
-                roles = base.Get(predicate, dataSourceName, dataSource, IncludeDataRelations);
+                roles = base.Get(predicate, dataSourceName, dataSource);
 
                 if (roles != null && roles.Count() > 0)
                 {
@@ -179,18 +180,18 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DepartmentHeadRole> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DepartmentHeadRole> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             IEnumerable<DepartmentHeadRole> roles = null;
 
             try
             {
-                roles = base.GetAll(dataSourceName, dataSource, IncludeDataRelations);
+                roles = base.GetAll(dataSourceName, dataSource).Include(item => item.SiteDepartment, item => item.SiteDepartment.Site, item => item.SiteDepartment.Department);
 
-                if(roles != null && roles.Count() > 0)
-                {
-                    this.FillSiteDepartmentsData(ref roles);
-                }
+                //if(roles != null && roles.Count() > 0)
+                //{
+                //    this.FillSiteDepartmentsData(ref roles);
+                //}
 
                 return roles;
             }

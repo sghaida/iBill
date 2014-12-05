@@ -197,13 +197,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override NumberingPlan GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override NumberingPlan GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             NumberingPlan dialingRecord = null;
 
             try
             {
-                dialingRecord = base.GetById(id, dataSourceName, dataSource, IncludeDataRelations);
+                dialingRecord = base.GetById(id, dataSourceName, dataSource);
 
                 if(null != dialingRecord)
                 {
@@ -221,13 +221,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<NumberingPlan> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<NumberingPlan> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             IEnumerable<NumberingPlan> numberingPlan = null;
 
             try
             { 
-                numberingPlan = base.Get(whereConditions, limit, dataSourceName, dataSource, IncludeDataRelations);
+                numberingPlan = base.Get(whereConditions, limit, dataSourceName, dataSource);
 
                 if(null != numberingPlan && numberingPlan.Count() > 0)
                 {
@@ -243,13 +243,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<NumberingPlan> Get(System.Linq.Expressions.Expression<Func<NumberingPlan, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<NumberingPlan> Get(System.Linq.Expressions.Expression<Func<NumberingPlan, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             IEnumerable<NumberingPlan> numberingPlan = null;
 
             try
             {
-                numberingPlan = base.Get(predicate, dataSourceName, dataSource, IncludeDataRelations);
+                numberingPlan = base.Get(predicate, dataSourceName, dataSource);
 
                 if (null != numberingPlan && numberingPlan.Count() > 0)
                 {
@@ -265,13 +265,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<NumberingPlan> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<NumberingPlan> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             IEnumerable<NumberingPlan> numberingPlan = null;
 
             try
             {
-                numberingPlan = base.GetAll(dataSourceName, dataSource, IncludeDataRelations);
+                numberingPlan = base.GetAll(dataSourceName, dataSource);
 
                 if (null != numberingPlan && numberingPlan.Count() > 0)
                 {

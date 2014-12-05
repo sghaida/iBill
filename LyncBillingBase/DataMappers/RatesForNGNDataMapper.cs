@@ -296,25 +296,25 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override RateForNGN GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override RateForNGN GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
 
-        public override IEnumerable<RateForNGN> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<RateForNGN> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
 
-        public override IEnumerable<RateForNGN> Get(System.Linq.Expressions.Expression<Func<RateForNGN, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<RateForNGN> Get(System.Linq.Expressions.Expression<Func<RateForNGN, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
 
-        public override IEnumerable<RateForNGN> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<RateForNGN> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
