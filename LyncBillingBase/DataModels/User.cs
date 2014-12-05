@@ -37,10 +37,10 @@ namespace LyncBillingBase.DataModels
 
         [AllowNull]
         [DbColumn("UpdatedByAD")]
-        public bool UpdatedByAD { get; set; }
+        public int UpdatedByAD { get; set; }
 
         [DbColumn("NotifyUser")]
-        public bool NotifyUser { get; set; }
+        public string NotifyUser { get; set; }
 
         [AllowNull]
         [DbColumn("UpdatedAt")]

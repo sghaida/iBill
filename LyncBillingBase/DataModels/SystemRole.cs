@@ -24,7 +24,7 @@ namespace LyncBillingBase.DataModels
         [DbColumn("RoleID")]
         public int RoleID { get; set; }
 
-        [AllowNull]
+        [IsKey]
         [DbColumn("SiteID")]
         public int SiteID { get; set; }
 

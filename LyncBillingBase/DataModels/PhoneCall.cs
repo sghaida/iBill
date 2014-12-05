@@ -117,7 +117,7 @@ namespace LyncBillingBase.DataModels
         [DbColumn("CalleeURI")] 
         public string CalleeURI { get; set; }
 
-        [DbColumn("marker_CallFrom")] 
+        [DbColumn("Marker_CallFrom")] 
         public long Marker_CallFrom { set; get; }
 
         [DbColumn("Marker_CallTo")] 
@@ -126,13 +126,11 @@ namespace LyncBillingBase.DataModels
         [DbColumn("Marker_CallTypeID")] 
         public long Marker_CallTypeID { set; get; }
 
-        [DbColumn("SessionIdTime")] 
+        [DbColumn("PhoneCallsTableName")] 
         public string PhoneCallsTableName { get; set; }
 
-        [DbColumn("SessionIdTime")] 
         public string PhoneBookName { set; get; }
 
-        [DbColumn("PhoneCallsTableName")]
         public string PhoneCallsTable { set; get; }
 
         //This is used to tell where to find and update this PhoneCalls
