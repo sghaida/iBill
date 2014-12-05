@@ -24,147 +24,176 @@ namespace LyncBillingTesting
         public static void Main(string[] args)
         {
             DataStorage _STORAGE = DataStorage.Instance;
-
-
-            /***
-             * TESTING DATA MAPPERS FOR INSERT, UPDATE AND DELETE
-             */
-            var gateway10 = _STORAGE.Gateways.GetById(10);
-
-            Rate newRate = new Rate()
-            {
-                DialingCode = 123456789,
-                Price = Convert.ToDecimal(12345.12)
-            };
-            // Update
-            newRate.RateID = _STORAGE.Rates.Insert(newRate, gateway10.ID);
-
-            bool status = _STORAGE.Rates.Delete(newRate, gateway10.ID);
-
-            string x = string.Empty;
-
+            bool status = false;
 
             /***
-             * Gateways Tests
+             * 
              */
-            //var moaGatewaysInfo = _STORAGE.GatewaysInfo.GetGatewaysBySiteID(29).Where(item => item.ID == 10).Single();
-            //var moaGatewayRatesInfo = _STORAGE.GatewaysRates.GetByGatewayID(moaGatewaysInfo.ID).Where(item => item.EndingDate == DateTime.MinValue).Single();
-            //var ratesForGateway10 = _STORAGE.Rates.GetByGatewayID(moaGatewayRatesInfo.GatewayID);
-            //var greeceNationalRatesInGateway10 = _STORAGE.Rates.GetNationalRatesForCountryByGatewayID(moaGatewayRatesInfo.GatewayID, "GRC");
-            //var greekGatewayInternationalRates = _STORAGE.Rates.GetInternationalRatesByGatewayID(moaGatewayRatesInfo.GatewayID);
-            //var ngnRates = _STORAGE.RatesForNGN.GetByGatewayID(10);
-
             
-            /***
-             * Call Marker Status tests
-             */
-            //var markerStatus = _STORAGE.CallMarkers.GetAll();
-            //var all_2010_status = _STORAGE.CallMarkers.GetByPhoneCallsTable("PhoneCalls2010");
-            //var rates_applier_2010 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2010", GLOBALS.CallMarkerStatus.Type.ApplyingRates.Value());
-            //var calls_marker_2013 = _STORAGE.CallMarkers.GetByPhoneCallsTableAndType("PhoneCalls2013", GLOBALS.CallMarkerStatus.Type.CallsMarking.Value());
+        }
 
 
-            /**
-             * Monitoring Servers Info Tests
-             */
-            //var monServersInfo = _STORAGE.MonitoringServers.GetAll().ToList<MonitoringServerInfo>();
-            //var monServersInfoMap = _STORAGE.MonitoringServers.GetMonitoringServersInfoMap();
+        public static void InsertUpdateDeleteTests()
+        {
+            DataStorage _STORAGE = DataStorage.Instance;
+
+            bool status = false;
+
 
 
             /***
-             * Numbering Plan Tests
-             */
-            //var countries = _STORAGE.Countries.GetAll();
-            //var GREECE = _STORAGE.Countries.GetByISO3Code("GRC");
-            //var allPlan = _STORAGE.NumberingPlans.GetAll().ToList<NumberingPlan>();
-            //var greeceNumberingPlan = _STORAGE.NumberingPlans.GetByISO3CountryCode(GREECE.ISO3Code);
-            //var allNGNPlan = _STORAGE.NumberingPlansForNGN.GetAll().ToList<NumberingPlanForNGN>();
-            //var greeceNGNPlan = _STORAGE.NumberingPlansForNGN.GetByISO3CountryCode(GREECE.ISO3Code);
-
-
-            /***
-             * DelegateRoles Tests;
-             */
-            //var allDelegates = _STORAGE.DelegateRoles.GetAll().ToList<DelegateRole>();
-            //bool isUserDelegate = _STORAGE.DelegateRoles.IsUserDelegate("aalhour@ccc.gr");
-            //bool isDepartmentDelegate = _STORAGE.DelegateRoles.IsSiteDepartmentDelegate("aalhour@ccc.gr");
-            //bool isSiteDelegate = _STORAGE.DelegateRoles.IsSiteDelegate("aalhour@ccc.gr");
-
-
-            /***
-             * Users Tests
-             */
-            //var users = _STORAGE.Users.GetAll();
-            //var aalhour = _STORAGE.Users.GetBySipAccount("aalhour@ccc.gr");
-            //var aalhour_Site = aalhour.Site;
-            //var aalhour_Department = aalhour.Department;
-            //var aalhour_Colleagues = _STORAGE.Users.GetBySite(aalhour_Site);
-            //UNKNOWN USER TEST
-            //var UNKNOWN_SIPACCOUNT = "unknown@unknown.domain";
-            //var unknown = _STORAGE.Users.GetBySipAccount(UNKNOWN_SIPACCOUNT);
-            //bool isSiteNull = (unknown == null || (unknown != null && unknown.Site == null));
-            //var isDepartmentNull = (unknown == null || (unknown != null && unknown.Department == null));
-
-
-            /***
-             * Department Head Roles Tests
-             */
-            //var MOA_ISD = _STORAGE.SitesDepartments.GetBySiteID(aalhour.Site.ID).Find(item => item.Department != null && item.Department.Name == "ISD");
-            //var departmentHeads = _STORAGE.DepartmentHeads.GetAll();
-            //var MOA_ISD_DepartmentHeads = _STORAGE.DepartmentHeads.GetBySiteDepartmentID(MOA_ISD.ID);
-            //var isAAlhourDepartmenHead = _STORAGE.DepartmentHeads.IsDepartmentHead(aalhour.SipAccount);
-
-
-            /***
-             * Phone Call Exclusions Tests
-             */
-            //var exclusion = _STORAGE.PhoneCallsExclusions.GetAll();
-            //var aalhour = _STORAGE.Users.GetBySipAccount("aalhour@ccc.gr");
-            //var MOA_Exclusions = _STORAGE.PhoneCallsExclusions.GetBySiteID(aalhour.Site.ID);
-            //var MOA_Sources = _STORAGE.PhoneCallsExclusions.GetSourcesBySiteID(aalhour.Site.ID);
-            //var MOA_Destinations = _STORAGE.PhoneCallsExclusions.GetDestinationsBySiteID(aalhour.Site.ID);
-
-
-            /***
-             * Announcements Tests;
-             */
-            var ann = _STORAGE.Announcements.GetByRoleID(1);
-            //var announcementsForRole = _STORAGE.Announcements.GetAnnouncementsForRole(2);
-            //var announcementsForSite = _STORAGE.Announcements.GetAnnouncementsForSite(1);
-
-
-            /***
-             * SystemRoles Tests;
-             */
-            //var systemRoles = _STORAGE.SystemRoles.GetAll().ToList<SystemRole>();
-
-
-            /***
-             * Sites Tests;
+             * TESTING DELEGATE ROLES DATA MAPPER
              */
             //var MOA = _STORAGE.Sites.GetById(29);
+            //var MOA_ISD = _STORAGE.SitesDepartments.GetBySiteID(29).ToList<SiteDepartment>().Find(department => department.Department.Name == "ISD");
+
+            //DelegateRole userDelegate = new DelegateRole()
+            //{
+            //    DelegationType = 3,
+            //    DelegeeSipAccount = "aalhour@ccc.gr",
+            //    ManagedUserSipAccount = "ghassan@ccc.gr"
+            //};
+
+            //DelegateRole departmentDelegate = new DelegateRole()
+            //{
+            //    DelegationType = 2,
+            //    DelegeeSipAccount = "aalhour@ccc.gr",
+            //    ManagedSiteDepartmentID = MOA_ISD.ID
+            //};
+
+            //DelegateRole siteDelegate = new DelegateRole()
+            //{
+            //    DelegationType = 1,
+            //    DelegeeSipAccount = "aalhour@ccc.gr",
+            //    ManagedSiteID = MOA.ID
+            //};
+
+            //userDelegate.ID = _STORAGE.DelegateRoles.Insert(userDelegate);
+            //departmentDelegate.ID = _STORAGE.DelegateRoles.Insert(departmentDelegate);
+            //siteDelegate.ID = _STORAGE.DelegateRoles.Insert(siteDelegate);
+
+            //var allRoles = _STORAGE.DelegateRoles.GetByDelegeeSipAccount(userDelegate.DelegeeSipAccount);
+
+            //userDelegate.DelegeeSipAccount = "sghaida@ccc.gr";
+            //departmentDelegate.DelegeeSipAccount = "sghaida@ccc.gr";
+            //siteDelegate.DelegeeSipAccount = "sghaida@ccc.gr";
+
+            //status = _STORAGE.DelegateRoles.Update(userDelegate);
+            //status = _STORAGE.DelegateRoles.Update(departmentDelegate);
+            //status = _STORAGE.DelegateRoles.Update(siteDelegate);
+
+            //allRoles = _STORAGE.DelegateRoles.GetByDelegeeSipAccount(userDelegate.DelegeeSipAccount);
+
+            //status = _STORAGE.DelegateRoles.Delete(userDelegate);
+            //status = _STORAGE.DelegateRoles.Delete(departmentDelegate);
+            //status = _STORAGE.DelegateRoles.Delete(siteDelegate);
+
 
 
             /***
-             * SitesDepartments Tests;
+             * TESTING Currencies DATA MAPPER
              */
-            //var sitesDepartments = _STORAGE.SitesDepartments.GetAll();
-            //var MOA_Departments = _STORAGE.SitesDepartments.GetDepartmentsForSite(Convert.ToInt64(MOA.ID));
+            //Currency newCurrency = new Currency()
+            //{
+            //    ISO3Code = "ZVZ",
+            //    Name = "ZeeVeeZee"
+            //};
+            //newCurrency.ID = _STORAGE.Currencies.Insert(newCurrency);
+            //newCurrency.Name = "ZeeeeVeZe";
+            //status = _STORAGE.Currencies.Update(newCurrency);
+            //status = _STORAGE.Currencies.Delete(newCurrency);
 
 
             /***
-             * Gateways Tests;
+             * TESTING COUNTRIES DATA MAPPER
              */
-            //var gatewaysInfo = _STORAGE.Gateways.GetAll(IncludeDataRelations: false);
-            //var allGatewaysInfo = _STORAGE.Gateways.GetAll();
-            //var MOA_Gateways = _STORAGE.Gateways.GetGatewaysForSite(MOA.ID); ;
+            //var EURO = _STORAGE.Currencies.GetByISO3Code("EUR");
+            //Country newCountry = new Country()
+            //{
+            //    CurrencyID = EURO.ID,
+            //    ISO2Code = "ZZ",
+            //    ISO3Code = "ZVZ",
+            //    Name = "ZeeVeeZee"
+            //};
+            //newCountry.ID = _STORAGE.Countries.Insert(newCountry);
+            //newCountry = _STORAGE.Countries.GetById(newCountry.ID);
+            //newCountry.ISO3Code = "VVZ";
+            //newCountry.Name = "VeeVeeZee";
+            //status = _STORAGE.Countries.Update(newCountry);
+            //status = _STORAGE.Countries.Delete(newCountry);
 
 
             /***
-             * PhoneCalls Tests;
+             * TESTING CALL TYPES DATA MAPPER
              */
-            //var MOA_Calls = _STORAGE.PhoneCalls.GetChargeableCallsForSite(MOA.Name);
+            //CallType newCallType = new CallType()
+            //{
+            //    Description = "Testing call types data mapper.",
+            //    Name = "TEST-CALL-TYPE",
+            //    TypeID = 2345123
+            //};
+            //newCallType.ID = _STORAGE.CallTypes.Insert(newCallType);
+            //newCallType.Description = newCallType.Description.ToUpper();
+            //newCallType.Name = (newCallType.Name + "-02").ToUpper();
+            //status = _STORAGE.CallTypes.Update(newCallType);
+            //status = _STORAGE.CallTypes.Delete(newCallType);
 
+
+            /***
+             * TESTING CALL MARKER STATUS DATA MAPPER
+             */
+            //CallMarkerStatus newMarkerStatus = new CallMarkerStatus()
+            //{
+            //    PhoneCallsTable = "PhoneCalls2015",
+            //    Timestamp = DateTime.Now,
+            //    Type = GLOBALS.CallMarkerStatus.Type.CallsMarking.Value()
+            //};
+            //newMarkerStatus.ID = _STORAGE.CallMarkers.Insert(newMarkerStatus);
+            //newMarkerStatus.Type = GLOBALS.CallMarkerStatus.Type.ApplyingRates.Value();
+            //newMarkerStatus.Timestamp = DateTime.Now;
+            //status = _STORAGE.CallMarkers.Update(newMarkerStatus);
+            //status = _STORAGE.CallMarkers.Delete(newMarkerStatus);
+
+
+            /***
+             * TESTING BUNDLED ACCOUNTS
+             */
+            //BundledAccount bundled1 = new BundledAccount()
+            //{
+            //    PrimarySipAccount = "aalhour@ccc.gr",
+            //    AssociatedSipAccount = "sghaida@ccc.gr"
+            //};
+            //BundledAccount bundled2 = new BundledAccount()
+            //{
+            //    PrimarySipAccount = "aalhour@ccc.gr",
+            //    AssociatedSipAccount = "ghassan@ccc.gr"
+            //};
+            //bundled1.ID = _STORAGE.BundledAccounts.Insert(bundled1);
+            //bundled2.ID = _STORAGE.BundledAccounts.Insert(bundled2);
+            //var allBundled = _STORAGE.BundledAccounts.GetAll();
+            //var aalhourBundled = _STORAGE.BundledAccounts.GetAssociatedSipAccounts("aalhour@ccc.gr");
+            //bundled2.AssociatedSipAccount = "nafez@ccc.gr";
+            //status = _STORAGE.BundledAccounts.Update(bundled2);
+            //status = _STORAGE.BundledAccounts.Delete(bundled1);
+            //status = _STORAGE.BundledAccounts.Delete(bundled2);
+
+
+            /***
+             * TESTING ANNOUNCEMENTS 
+             */
+            //Announcement ann = new Announcement
+            //{
+            //    ForRole = 10,
+            //    ForSite = 29,
+            //    PublishOn = DateTime.Now,
+            //    AnnouncementBody = "Hello Developer."
+            //};
+
+            //ann.ID = _STORAGE.Announcements.Insert(ann);
+            //ann = _STORAGE.Announcements.GetById(ann.ID);
+            //ann.AnnouncementBody = "Hello Developer. Things have changed.";
+            //status = _STORAGE.Announcements.Update(ann);
+            //status = _STORAGE.Announcements.Delete(ann);
         }
 
     }

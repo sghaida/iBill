@@ -35,7 +35,31 @@ namespace LyncBillingBase.DataMappers
                 delegateRoles = delegateRoles.AsParallel<DelegateRole>();
 
                 //Fitler, join, and project
-                delegateRoles =
+                var sitesDelegates = delegateRoles.Where(item => item.ManagedSiteID > 0);
+                var sitesDepartmentsDelegates = delegateRoles.Where(item => item.ManagedSiteDepartmentID > 0);
+                var userDelegates = delegateRoles.Where(item => false == string.IsNullOrEmpty(item.ManagedUserSipAccount));
+
+                sitesDelegates =
+                    (from role in sitesDelegates
+                     where (role.ManagedSiteDepartmentID > 0 && (role.ManagedSiteDepartment != null && role.ManagedSiteDepartment.ID > 0))
+                     join site in allSitesDepartments on role.ManagedSiteID equals site.Site.ID
+                     select new DelegateRole
+                     {
+                         ID = role.ID,
+                         DelegeeSipAccount = role.DelegeeSipAccount,
+                         DelegationType = role.DelegationType,
+                         ManagedUserSipAccount = role.ManagedUserSipAccount,
+                         ManagedSiteID = role.ManagedSiteID,
+                         ManagedSiteDepartmentID = role.ManagedSiteDepartmentID,
+                         Description = role.Description,
+                         //RELATIONS
+                         ManagedUser = role.ManagedUser,
+                         ManagedSiteDepartment = role.ManagedSiteDepartment,
+                         ManagedSite = site.Site
+                     })
+                     .AsEnumerable<DelegateRole>();
+
+                sitesDepartmentsDelegates =
                     (from role in delegateRoles
                      where (role.ManagedSiteDepartmentID > 0 && (role.ManagedSiteDepartment != null && role.ManagedSiteDepartment.ID > 0))
                      join siteDepartment in allSitesDepartments on role.ManagedSiteDepartmentID equals siteDepartment.ID
@@ -54,6 +78,8 @@ namespace LyncBillingBase.DataMappers
                          ManagedSite = role.ManagedSite
                      })
                      .AsEnumerable<DelegateRole>();
+
+                delegateRoles = userDelegates.Concat(sitesDelegates.Concat(sitesDepartmentsDelegates).ToList()).ToList();
             }
             catch(Exception ex)
             {

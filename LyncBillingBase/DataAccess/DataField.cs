@@ -59,6 +59,11 @@ namespace LyncBillingBase.DataAccess
         public bool AllowIDInsert { get; set; }
 
         /// <summary>
+        /// A true or false flag to indicate whether this is a foreign key in it's table or not.
+        /// </summary>
+        public bool IsKey { get; set; }
+
+        /// <summary>
         /// The reflected field type in the class.
         /// </summary>
         public Type FieldType { get; set; }
