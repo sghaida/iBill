@@ -284,7 +284,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override bool Update(RateForNGN dataObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override bool Update(RateForNGN dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }

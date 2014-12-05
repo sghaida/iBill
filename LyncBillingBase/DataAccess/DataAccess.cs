@@ -23,6 +23,8 @@ namespace LyncBillingBase.DataAccess
         private DataSourceSchema<T> Schema;
 
         private static DBLib DBRoutines = new DBLib();
+        private static readonly List<Type> NumericTypes = new List<Type>() { typeof(int), typeof(long), typeof(Int16), typeof(Int32), typeof(Int64) };
+
 
         /// <summary>
         /// This is a private function. It is responsible for returning a list of the data relations on this data model translated to a list of SqlJoinRelation objects.
@@ -130,7 +132,7 @@ namespace LyncBillingBase.DataAccess
             int rowID = 0;
             string finalDataSourceName = string.Empty;
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
-            List<Type> numericTypes = new List<Type>() { typeof(int), typeof(long), typeof(Int16), typeof(Int32), typeof(Int64) };
+            
 
             //
             // Decide the DataSource Name
@@ -177,7 +179,7 @@ namespace LyncBillingBase.DataAccess
                         {
                             //
                             // Only update the int/long values to zeros if they are not foreign keys
-                            if (true == numericTypes.Contains(field.TableField.FieldType))
+                            if (true == NumericTypes.Contains(field.TableField.FieldType))
                             {
                                 var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
 
@@ -203,7 +205,7 @@ namespace LyncBillingBase.DataAccess
                         {
                             //
                             // Only update the int/long values to zeros if they are not foreign keys
-                            if (true == numericTypes.Contains(field.TableField.FieldType))
+                            if (true == NumericTypes.Contains(field.TableField.FieldType))
                             {
                                 var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
 
@@ -234,15 +236,13 @@ namespace LyncBillingBase.DataAccess
             return rowID;  
         }
 
-
-        //public virtual bool Update(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
-        public virtual bool Update(T dataObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        
+        public virtual bool Update(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             bool status = false;
             string finalDataSourceName = string.Empty;
             Dictionary<string, object> columnsValues = new Dictionary<string, object>();
-            List<Type> numericTypes = new List<Type>() { typeof(int), typeof(long), typeof(Int16), typeof(Int32), typeof(Int64) };
-
+            Dictionary<string, object> whereConditions = new Dictionary<string, object>();
 
             //
             // Decide the DataSource Name 
@@ -257,14 +257,6 @@ namespace LyncBillingBase.DataAccess
             else
             {
                 throw new Exception("Insert Error: No Data Source was provided in the " + dataObject.GetType().Name + ". Kindly review the class definition or the data mapper definition.");
-            }
-
-
-            //
-            // Decide on the WHERE CONDITIONS
-            if (null == whereConditions)
-            {
-                whereConditions = new Dictionary<string, object>();
             }
 
 
@@ -325,7 +317,7 @@ namespace LyncBillingBase.DataAccess
                         {
                             //
                             // Only update the int/long values to zeros if they are not foreign keys
-                            if (true == numericTypes.Contains(field.TableField.FieldType))
+                            if (true == NumericTypes.Contains(field.TableField.FieldType))
                             {
                                 var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
 
@@ -347,7 +339,7 @@ namespace LyncBillingBase.DataAccess
                         {
                             //
                             // Only update the int/long values to zeros if they are not foreign keys
-                            if (true == numericTypes.Contains(field.TableField.FieldType))
+                            if (true == NumericTypes.Contains(field.TableField.FieldType))
                             {
                                 var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
 
@@ -426,30 +418,21 @@ namespace LyncBillingBase.DataAccess
             // Get the object field that is marked with the IsIDField attribute
             var dataObjectAttr = dataObject.GetType().GetProperty(IDField.Name);
 
-            if (dataObjectAttr == null)
+            var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+            if(dataObjectAttrValue == null)
             {
-                throw new Exception("There is no available ID field. kindly annotate " + typeof(T).Name);
+                throw new Exception("The ID Field's value is to NULL. Kindly set the value of the ID Field for the object of type: " + typeof(T).Name);
             }
-            else 
+            else
             {
-                var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+                //long.TryParse(dataObjectAttrValue.ToString(), out ID);
+                //return DBRoutines.DELETE(tableName: finalDataSourceName, idFieldName: IDField.TableField.ColumnName, ID: ID);
 
-                if(dataObjectAttrValue == null)
-                {
-                    throw new Exception("The ID Field's value is to NULL. Kindly set the value of the ID Field for the object of type: " + typeof(T).Name);
-                }
-                else
-                {
-                    //long.TryParse(dataObjectAttrValue.ToString(), out ID);
-                    //return DBRoutines.DELETE(tableName: finalDataSourceName, idFieldName: IDField.TableField.ColumnName, ID: ID);
+                whereConditions.Add(IDField.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, IDField.TableField.FieldType));
+                return DBRoutines.DELETE(tableName: finalDataSourceName, wherePart: whereConditions);
 
-                    whereConditions.Add(IDField.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, IDField.TableField.FieldType));
-                    return DBRoutines.DELETE(tableName: finalDataSourceName, wherePart: whereConditions);
-
-                }//end-inner-if-else
-
-            }//end-outer-if-else
-
+            }//end-inner-if-else
         }
 
 
