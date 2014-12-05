@@ -43,7 +43,7 @@ namespace LyncBillingBase.Repository
         // NumberingPlan, DIDs, CallTypes and Rates
         public NumberingPlansDataMapper NumberingPlans = new NumberingPlansDataMapper();
         public NumberingPlansForNGNDataMapper NumberingPlansForNGN = new NumberingPlansForNGNDataMapper();
-        public DIDDataMapper DIDs = new DIDDataMapper();
+        public DIDsDataMapper DIDs = new DIDsDataMapper();
         public CallTypesDataMapper CallTypes = new CallTypesDataMapper();
         public RatesDataMapper Rates = new RatesDataMapper();
         public RatesForNGNDataMapper RatesForNGN = new RatesForNGNDataMapper();
