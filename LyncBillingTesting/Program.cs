@@ -27,6 +27,8 @@ namespace LyncBillingTesting
             DataStorage _STORAGE = DataStorage.Instance;
             bool status = false;
 
+
+            
         }
 
 
@@ -35,6 +37,109 @@ namespace LyncBillingTesting
             DataStorage _STORAGE = DataStorage.Instance;
 
             bool status = false;
+
+
+            /***
+             * TESTING SITES DEPARTMENTS DATA MAPPER
+             */
+            var moa_site = _STORAGE.Sites.GetById(29);
+            var raso_site = _STORAGE.Sites.GetById(31);
+            var isd_department = _STORAGE.Departments.GetByName("ISD");
+
+            SiteDepartment siteDepartment = new SiteDepartment()
+            {
+                SiteID = moa_site.ID,
+                DepartmentID = isd_department.ID
+            };
+
+            siteDepartment.ID = _STORAGE.SitesDepartments.Insert(siteDepartment);
+
+            siteDepartment = _STORAGE.SitesDepartments.GetById(siteDepartment.ID);
+
+            siteDepartment.SiteID = raso_site.ID;
+
+            status = _STORAGE.SitesDepartments.Update(siteDepartment);
+
+            siteDepartment = _STORAGE.SitesDepartments.GetById(siteDepartment.ID);
+
+            status = _STORAGE.SitesDepartments.Delete(siteDepartment);
+
+
+
+            /***
+             * TESTING SITES DATA MAPPER
+             */
+            Site site = new Site()
+            {
+                CountryCode = "GRC",
+                Description = "SAMPLE GREECE SITE",
+                Name = "SAMPLE SITE"
+            };
+
+            site.ID = _STORAGE.Sites.Insert(site);
+
+            site = _STORAGE.Sites.GetById(site.ID);
+
+            site.Name = "sample sample site";
+
+            status = _STORAGE.Sites.Update(site);
+            status = _STORAGE.Sites.Delete(site);
+
+
+
+            /***
+             * TESTING ROLES DATA MAPPER
+             */
+            Role role123 = new Role()
+            {
+                RoleDescription = "SAMPLE ROLE",
+                RoleID = 123123,
+                RoleName = "SAMPLE-01"
+            };
+
+            role123.ID = _STORAGE.Roles.Insert(role123);
+
+            role123.RoleName = "sample-02.01";
+
+            status = _STORAGE.Roles.Update(role123);
+            status = _STORAGE.Roles.Delete(role123);
+
+
+
+            /***
+             * TESTING NGN RATES DATA MAPPER
+             */
+            RateForNGN NGNRate = new RateForNGN()
+            {
+                DialingCodeID = 1,
+                Rate = Convert.ToDecimal(15.45)
+            };
+
+            NGNRate.ID = 19; //_STORAGE.RatesForNGN.Insert(NGNRate, 10);
+
+            NGNRate = _STORAGE.RatesForNGN.GetByGatewayID(10).Find(rate => rate.ID == 19);
+
+            NGNRate.Rate = Convert.ToDecimal(20.45);
+
+            status = _STORAGE.RatesForNGN.Update(NGNRate, 10);
+            status = _STORAGE.RatesForNGN.Delete(NGNRate, 10);
+
+
+
+            /***
+             * TESTING POOLS DATA MAPPER
+             */
+            Pool newPool = new Pool()
+            {
+                FQDN = "TESTING POOL FQDN"
+            };
+
+            newPool.ID = _STORAGE.Pools.Insert(newPool);
+
+            newPool.FQDN = "CHANGED FQDN";
+
+            status = _STORAGE.Pools.Update(newPool);
+            status = _STORAGE.Pools.Delete(newPool);
 
 
 
