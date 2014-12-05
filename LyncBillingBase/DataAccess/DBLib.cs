@@ -1122,14 +1122,14 @@ namespace LyncBillingBase.DataAccess
             //Fields and values
             foreach (KeyValuePair<string, object> pair in columnsValues)
             {
-                fields.Append("[" + pair.Key + "],");
-
                 if (pair.Value == null)
                 {
+                    fields.Append("[" + pair.Key + "],");
                     values.Append("NULL" + ",");
                 }
                 else if (pair.Value is int || pair.Value is Double)
                 {
+                    fields.Append("[" + pair.Key + "],");
                     values.Append(pair.Value + ",");
                 }
                 else if (pair.Value is DateTime && (DateTime)pair.Value == DateTime.MinValue)
@@ -1138,6 +1138,7 @@ namespace LyncBillingBase.DataAccess
                 }
                 else
                 {
+                    fields.Append("[" + pair.Key + "],");
                     values.Append("'" + pair.Value.ToString().Replace("'", "`") + "'" + ",");
                 }
             }
@@ -1305,10 +1306,10 @@ namespace LyncBillingBase.DataAccess
             }
             whereStatement.Remove(whereStatement.Length - 5, 5);
 
-            string insertQuery = string.Format("UPDATE  [{0}] SET {1} WHERE {2}", tableName, fieldsValues, whereStatement);
+            string updateQuery = string.Format("UPDATE  [{0}] SET {1} WHERE {2}", tableName, fieldsValues, whereStatement);
 
             OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
-            OleDbCommand comm = new OleDbCommand(insertQuery, conn);
+            OleDbCommand comm = new OleDbCommand(updateQuery, conn);
             comm.CommandTimeout = 360;
 
             try

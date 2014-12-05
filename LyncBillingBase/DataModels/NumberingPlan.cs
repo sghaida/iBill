@@ -13,6 +13,7 @@ namespace LyncBillingBase.DataModels
     public class NumberingPlan : DataModel
     {
         [IsIDField]
+        [AllowIDInsert]
         [DbColumn("Dialing_prefix")]
         public Int64 DialingPrefix { get; set; }
 

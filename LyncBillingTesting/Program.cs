@@ -27,11 +27,26 @@ namespace LyncBillingTesting
             DataStorage _STORAGE = DataStorage.Instance;
             bool status = false;
 
-            
-            /***
-             * 
-             */
 
+            PhoneCallExclusion exclusion = new PhoneCallExclusion()
+            {
+                ExclusionSubject = "aalhour@ccc.gr",
+                Description = "SAMPLE EXCLUSION TEST",
+                ExclusionType = GLOBALS.PhoneCallExclusion.Type.Source.Value(),
+                SiteID = 29,
+                ZeroCost = GLOBALS.PhoneCallExclusion.ZeroCost.No.Value(),
+                AutoMark = GLOBALS.PhoneCallExclusion.AutoMark.Business.Value()
+            };
+
+            //exclusion.ID = _STORAGE.PhoneCallsExclusions.Insert(exclusion);
+
+            exclusion = _STORAGE.PhoneCallsExclusions.GetById(789);
+
+            exclusion.AutoMark = "";
+            exclusion.ZeroCost = GLOBALS.PhoneCallExclusion.ZeroCost.Yes.Value();
+
+            status = _STORAGE.PhoneCallsExclusions.Update(exclusion);
+            status = _STORAGE.PhoneCallsExclusions.Delete(exclusion);
         }
 
 
@@ -42,20 +57,161 @@ namespace LyncBillingTesting
             bool status = false;
 
 
+
+            /***
+             * TESTING PHONE BOOK CONTACTS DATA MAPPER
+             */
+            PhoneBookContact contact = new PhoneBookContact()
+            {
+                DestinationCountry = "JOR",
+                DestinationNumber = "123123123123123123",
+                Name = "SAMPLE CONTACT",
+                SipAccount = "aalhour@ccc.gr",
+                Type = "Personal"
+            };
+
+            contact.ID = _STORAGE.PhoneBooks.Insert(contact);
+
+            var allContacts = _STORAGE.PhoneBooks.GetBySipAccount(contact.SipAccount);
+
+            contact.Name = "SAMPLE PHONE BOOK CONTANCT NAME";
+            contact.Type = "Business";
+
+            status = _STORAGE.PhoneBooks.Update(contact);
+            status = _STORAGE.PhoneBooks.Delete(contact);
+
+
+
+            /***
+             * TESTING NUMBERING PLAN FOR NGN
+             */
+            NumberingPlanForNGN NGN = new NumberingPlanForNGN()
+            {
+                Description = "TEST NGN",
+                DialingCode = "8000000000000",
+                ISO3CountryCode = "GRC",
+                TypeOfServiceID = 6,
+                Provider = "SAMPLE PROVIDER"
+            };
+
+            NGN.ID = _STORAGE.NumberingPlansForNGN.Insert(NGN);
+
+            NGN = _STORAGE.NumberingPlansForNGN.GetById(NGN.ID);
+
+            NGN.Description = "TEST NGN - UPDATED.";
+
+            status = _STORAGE.NumberingPlansForNGN.Update(NGN);
+            status = _STORAGE.NumberingPlansForNGN.Delete(NGN);
+
+
+
+            /***
+             * TESTING NUMBER PLAN DATA MAPPER
+             */
+            NumberingPlan numPlan = new NumberingPlan()
+            {
+                City = "Xin Che Bang",
+                CountryName = "ChinaYaNa",
+                DialingPrefix = 90909,
+                ISO2CountryCode = "CY",
+                ISO3CountryCode = "CYN",
+                Provider = string.Empty,
+                TypeOfService = "countrycode"
+            };
+
+            _STORAGE.NumberingPlans.Insert(numPlan);
+
+            numPlan.CountryName = "ChynaYaNa";
+
+            status = _STORAGE.NumberingPlans.Update(numPlan);
+            status = _STORAGE.NumberingPlans.Delete(numPlan);
+
+
+
+            /***
+             * TESTING MONITORING SERVERS INFO DATA MAPPER
+             */
+            MonitoringServerInfo monServer = new MonitoringServerInfo()
+            {
+                CreatedAt = DateTime.Now,
+                DatabaseName = "asdasdasd",
+                Description = "TESTING MONITORING SERVER",
+                InstanceHostName = "SAMPL INSTANCE HOST NAME",
+                InstanceName = "SAMPLE HOST NAME",
+                Password = "SAMPLE PW",
+                PhoneCallsTable = "PhoneCalls2012310123",
+                TelephonySolutionName = "Lync123124123",
+                Username = "SEMSEM"
+            };
+
+            monServer.ID = _STORAGE.MonitoringServers.Insert(monServer);
+
+            monServer.Username = monServer.Username.ToLower();
+            monServer.Password = "123123";
+
+            status = _STORAGE.MonitoringServers.Update(monServer);
+            status = _STORAGE.MonitoringServers.Delete(monServer);
+
+
+
+            /***
+             * TESTING MAIL TAMPLEATES DATA MAPPER
+             */
+            MailTemplate newTemplate = new MailTemplate()
+            {
+                TemplateBody = "SAMPLE",
+                Subject = "SAMPLE"
+            };
+
+            newTemplate.ID = _STORAGE.MailTemplates.Insert(newTemplate);
+
+            newTemplate.Subject = "TESTING TEMPLATE";
+            newTemplate.TemplateBody = "TESTING TEMPLATE BODY TEXT";
+
+            status = _STORAGE.MailTemplates.Update(newTemplate);
+            status = _STORAGE.MailTemplates.Delete(newTemplate);
+
+
+
+            /***
+             * TESTING GATEWAYS RATES DATA MAPPER
+             */
+            GatewayRate gatewayRateInfo = new GatewayRate()
+            {
+                CurrencyCode = "EUR",
+                StartingDate = DateTime.Now,
+                EndingDate = DateTime.MinValue,
+                RatesTableName = null,
+                NgnRatesTableName = null,
+                ProviderName = "SAMPLE PROVIDER",
+                GatewayID = 10
+            };
+
+            gatewayRateInfo.ID = _STORAGE.GatewaysRates.Insert(gatewayRateInfo);
+
+            gatewayRateInfo = _STORAGE.GatewaysRates.GetById(gatewayRateInfo.ID);
+
+            gatewayRateInfo.CurrencyCode = "USD";
+
+            status = _STORAGE.GatewaysRates.Update(gatewayRateInfo);
+            status = _STORAGE.GatewaysRates.Delete(gatewayRateInfo);
+
+
+
             /***
              * TESTING GATEWAYS INFO DATA MAPPER
              */
-            Gateway newGateway = new Gateway()
+            Gateway sampleGateway = new Gateway()
             {
-                Name = "Sameer"
+                Name = "SAMPLE GATEWAY"
             };
 
-            newGateway.ID = _STORAGE.Gateways.Insert(newGateway);
+            sampleGateway.ID = _STORAGE.Gateways.Insert(sampleGateway);
 
             GatewayInfo newGatewayInfo = new GatewayInfo()
             {
                 Description = "New Info for Gateway",
-                GatewayID = newGateway.ID,
+                GatewayID = sampleGateway.ID,
                 PoolID = 2,
                 SiteID = 29
             };
@@ -68,7 +224,7 @@ namespace LyncBillingTesting
 
             status = _STORAGE.GatewaysInfo.Update(newGatewayInfo);
             status = _STORAGE.GatewaysInfo.Delete(newGatewayInfo);
-            status = _STORAGE.Gateways.Delete(newGateway);
+            status = _STORAGE.Gateways.Delete(sampleGateway);
 
 
 

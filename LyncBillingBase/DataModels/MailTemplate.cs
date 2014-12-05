@@ -14,11 +14,11 @@ namespace LyncBillingBase.DataModels
     {
         [IsIDField]
         [DbColumn("TemplateID")]
-        public int TemplateID { get; set; }
+        public int ID { get; set; }
 
         [AllowNull]
         [DbColumn("TemplateSubject")]
-        public string TemplateSubject { get; set; }
+        public string Subject { get; set; }
 
         [AllowNull]
         [DbColumn("TemplateBody")]
