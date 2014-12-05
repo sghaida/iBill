@@ -15,18 +15,28 @@ namespace LyncBillingBase.Helpers
     {
         private static DBLib DBRoutines = new DBLib();
 
-        public static IEnumerable<T> Include<T, TProperty>(this IEnumerable<T> source, Expression<Func<T, TProperty>> path) where T : DataModel,new() 
+        public static IEnumerable<T> Include<T>(this IEnumerable<T> source, params Expression<Func<T, object>>[] path) where T : DataModel,new() 
         {
              DataSourceSchema<T> Schema = new DataSourceSchema<T>();
             //Table Relations Map
             //To be sent to the DB Lib for SQL Query generation
             List<SqlJoinRelation> TableRelationsMap = new List<SqlJoinRelation>();
 
-            //TableRelationsList
-            //To be used to looking up the relations and extracting information from them and copying them into the TableRelationsMap
-            List<DbRelation> DbRelationsList = Schema.DataFields.
-                Where(field => field.Relation != null && field.Name == typeof(TProperty).Name).
-                Select<DataField, DbRelation>(field => field.Relation).ToList<DbRelation>();
+            List<DbRelation> DbRelationsList = new List<DbRelation>();
+           
+            //This will hold the information about the sub joins object types
+            List<string> classesTypes = new List<string>();
+
+            foreach (var t in path) 
+            {
+                //Fill DataTypes Names
+                classesTypes.Add(t.Body.Type.Name);
+            }
+
+            DbRelationsList = Schema.DataFields.Where(field => field.Relation != null && classesTypes.Contains(field.Name)).
+                Select<DataField,DbRelation>(field=>field.Relation).
+                ToList<DbRelation>();
+
 
             //Start processing the list of table relations
             if (DbRelationsList != null && DbRelationsList.Count() > 0)
@@ -83,7 +93,7 @@ namespace LyncBillingBase.Helpers
             string finalDataSourceName = string.Empty;
 
             List<string> thisModelTableColumns;
-            
+
             //Get our table columns from the schema
             thisModelTableColumns = Schema.DataFields
                 .Where(field => field.TableField != null)
@@ -92,56 +102,10 @@ namespace LyncBillingBase.Helpers
 
             dt = DBRoutines.SELECT_WITH_JOIN(Schema.DataSourceName, thisModelTableColumns, null, TableRelationsMap, 0);
 
-            var data = dt.ConvertToList<T>(true);
+            return dt.ConvertToList<T>(true);
 
-
-            if (source != null && source.Count() > 0)
-            {
-
-                var objProperties = data.Select(item => item.GetType().GetProperties()).FirstOrDefault().ToList<PropertyInfo>();
-                var PropertyName = string.Empty;
-               
-                if(objProperties != null && objProperties.Count() > 0)
-                {
-                    foreach (PropertyInfo property in objProperties) 
-                    {
-                        if (property.GetCustomAttributes<IsIDFieldAttribute>().Where(item => item.Status == true) != null) 
-                        {
-                            PropertyName = property.Name;
-                            break;
-                        }
-                    }
-                }
-
-                //source.AsQueryable().OrderByProperty(PropertyName);
-
-                //source.AsEnumerable().OrderBy(item => item.GetType().GetProperty(PropertyName).GetValue(item, null));
-
-
-                var union = source.Union(data);
-                //union.GroupJoin()
-                
-                //Sort New Data
-                var sortedData = (from obj in data
-                                   orderby obj.GetType().GetProperty(PropertyName).GetValue(obj) select obj).ToList<T>();
-
-                //Sort the Old Data
-                var sortedSource = (from obj in source
-                                   orderby obj.GetType().GetProperty(PropertyName).GetValue(obj) select obj).ToList<T>();
-
-
-
-                PropertyInfo theProperty = objProperties.Where(item => item.Name == typeof(TProperty).Name).FirstOrDefault();
-
-                return union;
-            }
-            else 
-            {
-                return data; 
-            }
-            
-            //return data;
 
         }
+
     }
 }
