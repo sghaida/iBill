@@ -31,24 +31,27 @@ namespace LyncBillingTesting
             /***
              * TESTING PHONE CALLS DATA MAPPER
              */
-            string PhoneCallsTable = "PhoneCalls2013";
-            var phoneCalls = _STORAGE.PhoneCalls.GetChargableCallsPerUser("aalhour@ccc.gr");
+            //string PhoneCallsTable = "PhoneCalls2013";
+            //var phoneCalls = _STORAGE.PhoneCalls.GetChargableCallsPerUser("aalhour@ccc.gr");
 
-            PhoneCall phoneCall = phoneCalls.First();
+            //PhoneCall phoneCall = phoneCalls.First();
 
-            phoneCall.ChargingParty = "sameeer@ccc.gr";
-            phoneCall.SessionIdTime = HelperFunctions.ConvertDate(DateTime.Now, excludeHoursAndMinutes: true);
+            //phoneCall.ChargingParty = "sameeer@ccc.gr";
+            //phoneCall.SessionIdTime = HelperFunctions.ConvertDate(DateTime.Now, excludeHoursAndMinutes: true);
 
-            _STORAGE.PhoneCalls.Insert(phoneCall, dataSourceName: PhoneCallsTable);
+            //_STORAGE.PhoneCalls.Insert(phoneCall, dataSourceName: PhoneCallsTable);
 
-            phoneCalls = _STORAGE.PhoneCalls.GetChargableCallsPerUser(phoneCall.ChargingParty);
+            //phoneCalls = _STORAGE.PhoneCalls.GetChargableCallsPerUser(phoneCall.ChargingParty);
 
-            phoneCall.UI_MarkedOn = HelperFunctions.ConvertDate(DateTime.Now, excludeHoursAndMinutes: true);
-            phoneCall.UI_UpdatedByUser = "sameeer@ccc.gr";
-            phoneCall.UI_CallType = GLOBALS.PhoneCalls.CallTypes.Personal.Value();
+            //phoneCall.UI_MarkedOn = HelperFunctions.ConvertDate(DateTime.Now, excludeHoursAndMinutes: true);
+            //phoneCall.UI_UpdatedByUser = "sameeer@ccc.gr";
+            //phoneCall.UI_CallType = GLOBALS.PhoneCalls.CallTypes.Personal.Value();
 
-            status = _STORAGE.PhoneCalls.Update(phoneCall, dataSourceName: PhoneCallsTable);
-            status = _STORAGE.PhoneCalls.Delete(phoneCall, dataSourceName: PhoneCallsTable);
+            //status = _STORAGE.PhoneCalls.Update(phoneCall, dataSourceName: PhoneCallsTable);
+            //status = _STORAGE.PhoneCalls.Delete(phoneCall, dataSourceName: PhoneCallsTable);
+
+
+            var depheads = _STORAGE.DepartmentHeads.GetAll();
         }
 
 

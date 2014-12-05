@@ -132,13 +132,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override DelegateRole GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override DelegateRole GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             DelegateRole role = null;
 
             try
             {
-                role = base.GetById(id, dataSourceName, dataSource, IncludeDataRelations);
+                role = base.GetById(id, dataSourceName, dataSource);
 
                 if(role != null)
                 {
@@ -156,13 +156,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DelegateRole> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DelegateRole> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             IEnumerable<DelegateRole> roles = null;
 
             try
             { 
-                roles = base.Get(whereConditions, limit, dataSourceName, dataSource, IncludeDataRelations);
+                roles = base.Get(whereConditions, limit, dataSourceName, dataSource);
 
                 if(roles != null && roles.Count() > 0)
                 {
@@ -178,13 +178,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DelegateRole> Get(Expression<Func<DelegateRole, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DelegateRole> Get(Expression<Func<DelegateRole, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             IEnumerable<DelegateRole> roles = null;
 
             try
             { 
-                roles = base.Get(predicate, dataSourceName, dataSource, IncludeDataRelations);
+                roles = base.Get(predicate, dataSourceName, dataSource);
 
                 if (roles != null && roles.Count() > 0)
                 {
@@ -200,13 +200,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<DelegateRole> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<DelegateRole> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             IEnumerable<DelegateRole> roles = null;
 
             try
             {
-                roles = base.GetAll(dataSourceName, dataSource, IncludeDataRelations);
+                roles = base.GetAll(dataSourceName, dataSource);
 
                 if (roles != null && roles.Count() > 0)
                 {

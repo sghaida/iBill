@@ -453,7 +453,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public virtual T GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public virtual T GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             DataTable dt = new DataTable();
             string finalDataSourceName = string.Empty;
@@ -488,18 +488,20 @@ namespace LyncBillingBase.DataAccess
             //Proceed with getting the data
             if (Schema.DataSourceType == GLOBALS.DataSource.Type.DBTable)
             {
-                switch (IncludeDataRelations)
-                {
-                    case true:
-                        //Get our data relations list (SqlJoinRelation objects)
-                        dataRelations = GetDataRelations();
-                        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, condition, dataRelations, maximumLimit);
-                        break;
+                //switch (IncludeDataRelations)
+                //{
+                //    case true:
+                //        //Get our data relations list (SqlJoinRelation objects)
+                //        dataRelations = GetDataRelations();
+                //        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, condition, dataRelations, maximumLimit);
+                //        break;
 
-                    case false:
-                        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, condition, maximumLimit);
-                        break;
-                }
+                //    case false:
+                //        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, condition, maximumLimit);
+                //        break;
+                //}
+
+                dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, condition, maximumLimit);
             }
 
             //It will either return a data table with one row or zero rows
@@ -509,12 +511,12 @@ namespace LyncBillingBase.DataAccess
             }
             else
             {
-                return dt.ConvertToList<T>(IncludeDataRelations).FirstOrDefault<T>() ?? null;
+                return dt.ConvertToList<T>().FirstOrDefault<T>() ?? null;
             }
         }
 
 
-        public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             DataTable dt = new DataTable();
 
@@ -555,11 +557,11 @@ namespace LyncBillingBase.DataAccess
                 }
             }
 
-            return dt.ConvertToList<T>(IncludeDataRelations);
+            return dt.ConvertToList<T>();
         }
 
 
-        public virtual IEnumerable<T> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public virtual IEnumerable<T> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             DataTable dt = new DataTable();
             string finalDataSourceName = string.Empty;
@@ -589,25 +591,27 @@ namespace LyncBillingBase.DataAccess
             //Proceed with getting the data
             if (Schema.DataSourceType == GLOBALS.DataSource.Type.DBTable)
             {
-                switch (IncludeDataRelations)
-                {
-                    case true:
-                        //Get our data relations list (SqlJoinRelation objects)
-                        dataRelations = GetDataRelations();
-                        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, whereConditions, dataRelations, 0);
-                        break;
+                //switch (IncludeDataRelations)
+                //{
+                //    case true:
+                //        //Get our data relations list (SqlJoinRelation objects)
+                //        dataRelations = GetDataRelations();
+                //        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, whereConditions, dataRelations, 0);
+                //        break;
 
-                    case false:
-                        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, limit);
-                        break;
-                }
+                //    case false:
+                //        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, limit);
+                //        break;
+                //}
+
+                dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, limit);
             }
 
-            return dt.ConvertToList<T>(IncludeDataRelations);
+            return dt.ConvertToList<T>();
         }
 
 
-        public virtual IEnumerable<T> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public virtual IEnumerable<T> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             DataTable dt = new DataTable();
             string finalDataSourceName = string.Empty;
@@ -629,21 +633,23 @@ namespace LyncBillingBase.DataAccess
             //Proceed with getting the data
             if (Schema.DataSourceType == GLOBALS.DataSource.Type.DBTable)
             {
-                switch(IncludeDataRelations)
-                { 
-                    case true:
-                        //Get our data relations list (SqlJoinRelation objects)
-                        dataRelations = GetDataRelations();
-                        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, null, dataRelations, 0);
-                        break;
+                //switch(IncludeDataRelations)
+                //{ 
+                //    case true:
+                //        //Get our data relations list (SqlJoinRelation objects)
+                //        dataRelations = GetDataRelations();
+                //        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, null, dataRelations, 0);
+                //        break;
 
-                    case false:
-                        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
-                        break;
-                }
+                //    case false:
+                //        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
+                //        break;
+                //}
+
+                dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
             }
 
-            return dt.ConvertToList<T>(IncludeDataRelations);
+            return dt.ConvertToList<T>();
         }
 
 

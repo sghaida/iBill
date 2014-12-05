@@ -317,13 +317,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override PhoneCallExclusion GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override PhoneCallExclusion GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             PhoneCallExclusion exclusion = null;
 
             try
             {
-                exclusion = base.GetById(id, dataSourceName, dataSource, IncludeDataRelations);
+                exclusion = base.GetById(id, dataSourceName, dataSource);
 
                 if(exclusion != null)
                 {
@@ -341,13 +341,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<PhoneCallExclusion> Get(System.Linq.Expressions.Expression<Func<PhoneCallExclusion, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<PhoneCallExclusion> Get(System.Linq.Expressions.Expression<Func<PhoneCallExclusion, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             List<PhoneCallExclusion> exclusions = null;
 
             try
             { 
-                exclusions = base.Get(predicate, dataSourceName, dataSource, IncludeDataRelations).ToList<PhoneCallExclusion>();
+                exclusions = base.Get(predicate, dataSourceName, dataSource).ToList<PhoneCallExclusion>();
 
                 if (exclusions != null && exclusions.Count > 0)
                 {
@@ -363,13 +363,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<PhoneCallExclusion> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<PhoneCallExclusion> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             List<PhoneCallExclusion> exclusions = null;
 
             try
             { 
-                exclusions = base.Get(whereConditions, limit, dataSourceName, dataSource, IncludeDataRelations).ToList<PhoneCallExclusion>();
+                exclusions = base.Get(whereConditions, limit, dataSourceName, dataSource).ToList<PhoneCallExclusion>();
 
                 if (exclusions != null && exclusions.Count > 0)
                 {
@@ -385,13 +385,13 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<PhoneCallExclusion> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<PhoneCallExclusion> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             List<PhoneCallExclusion> exclusions = null;
 
             try
             { 
-                exclusions = base.GetAll(dataSourceName, dataSource, IncludeDataRelations).ToList<PhoneCallExclusion>();
+                exclusions = base.GetAll(dataSourceName, dataSource).ToList<PhoneCallExclusion>();
 
                 if (exclusions != null && exclusions.Count > 0)
                 {

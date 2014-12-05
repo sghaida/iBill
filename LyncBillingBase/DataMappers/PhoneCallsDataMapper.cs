@@ -30,7 +30,7 @@ namespace LyncBillingBase.DataMappers
 
         public PhoneCallsDataMapper() : base()
         {
-            dbTables = monInfoDA.GetAll().Select(item => item.PhoneCallsTable).ToList<string>();
+            dbTables = monInfoDA.GetAll().Select<MonitoringServerInfo, string>(item => item.PhoneCallsTable).ToList<string>();
         }
 
 
@@ -154,15 +154,15 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override PhoneCall GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override PhoneCall GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
 
-        public override IEnumerable<PhoneCall> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        public override IEnumerable<PhoneCall> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
-            //return base.GetAll(dataSourceName, dataSourceType, IncludeDataRelations);
+            //return base.GetAll(dataSourceName, dataSourceType);
             throw new NotImplementedException();
         }
     }

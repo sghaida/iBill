@@ -59,11 +59,12 @@ namespace LyncBillingBase.Helpers
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
 
             Dictionary<string, string> expressionLookup = new Dictionary<string, string>();
+
+
             foreach (var t in path)
             {
                 expressionLookup.Add((t.Body as MemberExpression).Member.Name, t.Body.Type.Name);
             }
-
 
 
             // Initialize Master the property info fields list
@@ -270,35 +271,40 @@ namespace LyncBillingBase.Helpers
             return dataList;
         }
 
-        /// <summary>
-        /// Converts datatable to list<T> dynamically
-        /// </summary>
-        /// <typeparam name="T">Class name</typeparam>
-        /// <param name="dataTable">data table to convert</param>
-        /// <returns>List<T></returns>
-        public static List<T> ConvertToList_OLD<T>(this DataTable dataTable) where T : class, new()
+
+
+        public static List<T> ConvertToList<T>(this DataTable DataTable) where T : class, new()
         {
             var dataList = new List<T>();
 
             // List of class property infos
-            List<PropertyInfo> propertyInfoFields = new List<PropertyInfo>();
+            List<PropertyInfo> masterPropertyInfoFields = new List<PropertyInfo>();
+            Dictionary<string, List<ObjectPropertyInfoField>> cdtPropertyInfo = new Dictionary<string, List<ObjectPropertyInfoField>>();
 
             //List of T object data fields (DbColumnAttribute Values), and types.
-            List<ObjectPropertyInfoField> objectFields = new List<ObjectPropertyInfoField>();
+            List<ObjectPropertyInfoField> masterObjectFields = new List<ObjectPropertyInfoField>();
 
             //Define what attributes to be read from the class
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
 
-            // Initialize the property info fields list
-            propertyInfoFields = typeof(T).GetProperties(flags)
+            // Initialize Master the property info fields list
+            masterPropertyInfoFields = typeof(T).GetProperties(flags)
                 .Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null)
                 .Cast<PropertyInfo>()
                 .ToList();
 
-            // Initialize the object data fields  list
-            foreach (var item in propertyInfoFields)
+            //Read Datatable column names and types
+            var dtlFieldNames = DataTable.Columns.Cast<DataColumn>()
+                .Select(item => new
+                {
+                    Name = item.ColumnName,
+                    Type = item.DataType
+                }).ToList();
+
+            // Initialize the object data fields  list for Master Object
+            foreach (var item in masterPropertyInfoFields)
             {
-                objectFields.Add(new ObjectPropertyInfoField
+                masterObjectFields.Add(new ObjectPropertyInfoField
                 {
                     Property = item,
                     DataFieldName = item.GetCustomAttribute<DbColumnAttribute>().Name,
@@ -306,68 +312,63 @@ namespace LyncBillingBase.Helpers
                 });
             }
 
-            //Read Datatable column names and types
-            var dtlFieldNames = dataTable.Columns.Cast<DataColumn>()
-                .Select(item => new
-                {
-                    Name = item.ColumnName,
-                    Type = item.DataType
-                }).ToList();
 
-            //Begin data table processing
-            Parallel.ForEach(
-                dataTable.AsEnumerable().ToList(),
-                (datarow) =>
-                {
-                    var classObj = new T();
+            //Fill The data
+            //foreach (var datarow in DataTable.AsEnumerable().ToList())   
+            //{
+            Parallel.ForEach(DataTable.AsEnumerable().ToList(),
+                 (datarow) =>
+                 {
+                     var masterObj = new T();
 
-                    foreach (var dtField in dtlFieldNames)
-                    {
-                        var dataField = objectFields.Find(item => item.DataFieldName == dtField.Name);
+                     //Fill master Object with its related properties values
+                     foreach (var dtField in masterObjectFields)
+                     {
+                         if (dtField != null)
+                         {
+                             // Get the property info object of this field, for easier accessibility
+                             PropertyInfo dataFieldPropertyInfo = dtField.Property;
 
-                        if (dataField != null)
-                        {
-                            // Get the property info object of this field, for easier accessibility
-                            PropertyInfo dataFieldPropertyInfo = dataField.Property;
+                             if (dataFieldPropertyInfo.PropertyType == typeof(DateTime))
+                             {
+                                 dataFieldPropertyInfo.SetValue(masterObj, datarow[dtField.DataFieldName].ReturnDateTimeMinIfNull(), null);
+                             }
+                             else if (dataFieldPropertyInfo.PropertyType == typeof(int))
+                             {
+                                 dataFieldPropertyInfo.SetValue(masterObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
+                             }
+                             else if (dataFieldPropertyInfo.PropertyType == typeof(long))
+                             {
+                                 dataFieldPropertyInfo.SetValue(masterObj, datarow[dtField.DataFieldName].ReturnZeroIfNull(), null);
+                             }
+                             else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
+                             {
+                                 dataFieldPropertyInfo.SetValue(masterObj, Convert.ToDecimal(datarow[dtField.DataFieldName].ReturnZeroIfNull()), null);
+                             }
+                             else if (dataFieldPropertyInfo.PropertyType == typeof(String))
+                             {
+                                 if (datarow[dtField.DataFieldName].GetType() == typeof(DateTime))
+                                 {
+                                     dataFieldPropertyInfo.SetValue(masterObj, ConvertToDateString(datarow[dtField.DataFieldName]), null);
+                                 }
+                                 else
+                                 {
+                                     dataFieldPropertyInfo.SetValue(masterObj, datarow[dtField.DataFieldName].ReturnEmptyIfNull(), null);
+                                 }
+                             }
+                         }//end if
+                     }//end foreach
 
-                            if (dataFieldPropertyInfo.PropertyType == typeof(DateTime))
-                            {
-                                dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnDateTimeMinIfNull(), null);
-                            }
-                            else if (dataFieldPropertyInfo.PropertyType == typeof(int))
-                            {
-                                dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnZeroIfNull(), null);
-                            }
-                            else if (dataFieldPropertyInfo.PropertyType == typeof(long))
-                            {
-                                dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnZeroIfNull(), null);
-                            }
-                            else if (dataFieldPropertyInfo.PropertyType == typeof(decimal))
-                            {
-                                dataFieldPropertyInfo.SetValue(classObj, Convert.ToDecimal(datarow[dtField.Name].ReturnZeroIfNull()), null);
-                            }
-                            else if (dataFieldPropertyInfo.PropertyType == typeof(String))
-                            {
-                                if (datarow[dtField.Name].GetType() == typeof(DateTime))
-                                {
-                                    dataFieldPropertyInfo.SetValue(classObj, ConvertToDateString(datarow[dtField.Name]), null);
-                                }
-                                else
-                                {
-                                    dataFieldPropertyInfo.SetValue(classObj, datarow[dtField.Name].ReturnEmptyIfNull(), null);
-                                }
-                            }
-                        }
-                    }
-
-                    lock (dataList)
-                    {
-                        dataList.Add(classObj);
-                    }
-                });
+                     lock (dataList)
+                     {
+                         dataList.Add(masterObj);
+                     }
+                 });
+            //}
 
             return dataList;
-        }//end-convert-to-list-function
+        }
+
 
 
         /// <summary>
