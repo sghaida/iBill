@@ -33,7 +33,7 @@ namespace LyncBillingBase.DataAccess
         /// <param name="dataSourceName"></param>
         /// <param name="dataSourceType"></param>
         /// <returns></returns>
-        bool Update(T dataObject, Dictionary<string, object> whereConditions = null, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default);
+        bool Update(T dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default);
 
         /// <summary>
         /// 
