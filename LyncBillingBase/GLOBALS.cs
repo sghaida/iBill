@@ -128,6 +128,25 @@ namespace LyncBillingBase
         }
 
 
+        public static class PhoneCalls
+        {
+            public enum CallTypes
+            {
+                [Description("Business Phone Call")]
+                [DefaultValue("Business")]
+                Business,
+
+                [Description("Personal Phone Call")]
+                [DefaultValue("Personal")]
+                Personal,
+
+                [Description("Disputed Phone Call")]
+                [DefaultValue("Disputed")]
+                Disputed
+            }
+        }
+
+
         public enum SpecialDateTime
         {
             [Description("1st Quarter")]

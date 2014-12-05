@@ -12,6 +12,35 @@ namespace LyncBillingBase.DataMappers
 {
     public class RolesDataMapper : DataAccess<Role>
     {
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="RoleID"></param>
+        /// <returns></returns>
+        public Role GetByRoleID(int RoleID)
+        {
+            Role role = null;
+
+            var condition = new Dictionary<string, object>();
+            condition.Add("RoleID", RoleID);
+
+            try
+            {
+                var results = base.Get(whereConditions: condition, limit: 1).ToList<Role>();
+
+                if(results != null && results.Count > 0)
+                {
+                    role = results.First();
+                }
+
+                return role;
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
     }
+
 }

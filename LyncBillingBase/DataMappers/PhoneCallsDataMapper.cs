@@ -138,12 +138,6 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override PhoneCall GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public IEnumerable<PhoneCall> GetChargableCallsPerUser(string sipAccount) 
         {
             string sqlStatemnet = sqlAccessor.ChargableCallsPerUser(dbTables, sipAccount);
@@ -159,6 +153,18 @@ namespace LyncBillingBase.DataMappers
             return base.GetAll(sqlStatemnet);
         }
 
+
+        public override PhoneCall GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public override IEnumerable<PhoneCall> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default, bool IncludeDataRelations = true)
+        {
+            //return base.GetAll(dataSourceName, dataSourceType, IncludeDataRelations);
+            throw new NotImplementedException();
+        }
     }
 
 }

@@ -27,8 +27,28 @@ namespace LyncBillingTesting
             DataStorage _STORAGE = DataStorage.Instance;
             bool status = false;
 
-
             
+            /***
+             * TESTING PHONE CALLS DATA MAPPER
+             */
+            string PhoneCallsTable = "PhoneCalls2013";
+            var phoneCalls = _STORAGE.PhoneCalls.GetChargableCallsPerUser("aalhour@ccc.gr");
+
+            PhoneCall phoneCall = phoneCalls.First();
+
+            phoneCall.ChargingParty = "sameeer@ccc.gr";
+            phoneCall.SessionIdTime = HelperFunctions.ConvertDate(DateTime.Now, excludeHoursAndMinutes: true);
+
+            _STORAGE.PhoneCalls.Insert(phoneCall, dataSourceName: PhoneCallsTable);
+
+            phoneCalls = _STORAGE.PhoneCalls.GetChargableCallsPerUser(phoneCall.ChargingParty);
+
+            phoneCall.UI_MarkedOn = HelperFunctions.ConvertDate(DateTime.Now, excludeHoursAndMinutes: true);
+            phoneCall.UI_UpdatedByUser = "sameeer@ccc.gr";
+            phoneCall.UI_CallType = GLOBALS.PhoneCalls.CallTypes.Personal.Value();
+
+            status = _STORAGE.PhoneCalls.Update(phoneCall, dataSourceName: PhoneCallsTable);
+            status = _STORAGE.PhoneCalls.Delete(phoneCall, dataSourceName: PhoneCallsTable);
         }
 
 
@@ -37,6 +57,65 @@ namespace LyncBillingTesting
             DataStorage _STORAGE = DataStorage.Instance;
 
             bool status = false;
+
+
+
+            /***
+             * TESTING USERS DATA MAPPER
+             */
+            var allUsers = _STORAGE.Users.GetAll();
+
+            User newUser = new User()
+            {
+                EmployeeID = 99887766,
+                SipAccount = "unknown@ccc.gr",
+                FullName = "UNKNOWN SAMPLE USER",
+                DisplayName = "UNKNOWN USER",
+                SiteName = "MOA",
+                DepartmentName = "ISD",
+                NotifyUser = "N",
+                TelephoneNumber = "12334545667",
+                UpdatedAt = DateTime.MinValue,
+                UpdatedByAD = 1,
+                CreatedAt = DateTime.Now
+            };
+
+            _STORAGE.Users.Insert(newUser);
+
+            newUser = _STORAGE.Users.GetBySipAccount(newUser.SipAccount);
+
+            newUser.DisplayName = "UNKNOWN";
+
+            status = _STORAGE.Users.Update(newUser);
+            status = _STORAGE.Users.Delete(newUser);
+
+
+
+            /***
+             * TESTING SYSTEM ROLES
+             */
+            var DEVELOPER_ROLE = _STORAGE.Roles.GetByRoleID(10);
+
+            SystemRole systemRole = new SystemRole()
+            {
+                Description = "TESTING SYSTEM ROLE",
+                RoleID = DEVELOPER_ROLE.RoleID,
+                SipAccount = "nafez@ccc.gr",
+                SiteID = 29
+            };
+
+            systemRole.ID = _STORAGE.SystemRoles.Insert(systemRole);
+
+            systemRole = _STORAGE.SystemRoles.GetById(systemRole.ID);
+
+            systemRole.SiteID = 31;
+
+            status = _STORAGE.SystemRoles.Update(systemRole);
+
+            systemRole = _STORAGE.SystemRoles.GetById(systemRole.ID);
+
+            status = _STORAGE.SystemRoles.Delete(systemRole);
+
 
 
             /***
