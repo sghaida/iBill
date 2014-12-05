@@ -33,7 +33,7 @@ namespace LyncBillingBase.DataModels
         [DataRelation(WithDataModel = typeof(Gateway), OnDataModelKey = "ID", ThisKey = "GatewayID")]
         public Gateway Gateway { get; set; }
 
-        [DataRelation(WithDataModel = typeof(GatewayRate), OnDataModelKey = "GatewayID", ThisKey = "GatewayID")]
+        [DataRelation(WithDataModel = typeof(GatewayRate), OnDataModelKey = "GatewayID", ThisKey = "GatewayID", RelationType = GLOBALS.DataRelation.Type.UNION)]
         public GatewayRate GatewayRatesInfo { get; set; }
 
         [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "SiteID")]

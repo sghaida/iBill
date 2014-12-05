@@ -10,7 +10,7 @@ using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
 {
-    public class DIDDataMapper : DataAccess<DID>
+    public class DIDsDataMapper : DataAccess<DID>
     {
 
     }

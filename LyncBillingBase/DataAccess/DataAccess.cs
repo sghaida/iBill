@@ -285,10 +285,12 @@ namespace LyncBillingBase.DataAccess
                     //
                     // Don't update the ID Field in the Data Source, unless it's marked as AllowIDInsert
                     // Add the data object ID into the WHERE CONDITIONS
-                    if (field.TableField.IsIDField == true && field.TableField.AllowIDInsert == false)
+                    if (field.TableField.IsIDField == true)
                     {
                         var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
 
+                        //
+                        // Put the ID Field in the WHERE CONDITIONS
                         if (dataObjectAttrValue != null)
                         {
                             //
@@ -303,7 +305,13 @@ namespace LyncBillingBase.DataAccess
                             throw new Exception("The Property " + field.TableField.ColumnName + " in the " + dataObject.GetType().Name + " Table is not SET! Kindly please set it to it's original value in order to decide what data to update accordingly.");
                         }
 
-                        continue;
+
+                        //
+                        // DON'T CONTINUE EXECUTION IF THE ID FIELD IS NOT ALLOWED TO BE CHANGED
+                        if(false == field.TableField.AllowIDInsert)
+                        { 
+                            continue;
+                        }
                     }
 
                     // 
