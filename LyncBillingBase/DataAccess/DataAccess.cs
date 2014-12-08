@@ -630,9 +630,7 @@ namespace LyncBillingBase.DataAccess
                 dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
             }
 
-          
-
-            return dt.ConvertToListUsingDelegates<T>();
+            return dt.ConvertToList<T>();
         }
 
 
