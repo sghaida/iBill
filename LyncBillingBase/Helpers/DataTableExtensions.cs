@@ -10,6 +10,7 @@ using LyncBillingBase.Libs;
 using LyncBillingBase.DataAttributes;
 using System.ComponentModel;
 using System.Linq.Expressions;
+using LyncBillingBase.DataAccess;
 
 namespace LyncBillingBase.Helpers
 {
@@ -23,7 +24,7 @@ namespace LyncBillingBase.Helpers
     }
 
 
-    public static class Extensions
+    public static class DataTableExtentions
     {
         //Helper function
         private static string ConvertToDateString(object date)
@@ -277,6 +278,8 @@ namespace LyncBillingBase.Helpers
         {
             var dataList = new List<T>();
 
+            
+
             // List of class property infos
             List<PropertyInfo> masterPropertyInfoFields = new List<PropertyInfo>();
             Dictionary<string, List<ObjectPropertyInfoField>> cdtPropertyInfo = new Dictionary<string, List<ObjectPropertyInfoField>>();
@@ -369,7 +372,67 @@ namespace LyncBillingBase.Helpers
             return dataList;
         }
 
+        public static List<T> ConvertToListUsingDelegates<T>(this DataTable DataTable) where T : class,new() 
+        {
+            List<T> dataList = new List<T>();
 
+            // List which holds the delegate functions for setters
+            List<Action<T, object>> setterList = new List<Action<T, object>>();
+
+            Dictionary<string, Action<T, object>> setters = new Dictionary<string, Action<T, object>>();
+
+            // List of class property infos
+            List<PropertyInfo> masterPropertyInfoFields = new List<PropertyInfo>();
+           
+            //List of T object data fields (DbColumnAttribute Values), and types.
+            List<ObjectPropertyInfoField> masterObjectFields = new List<ObjectPropertyInfoField>();
+
+            //Define what attributes to be read from the class
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+
+            var dtlFieldNames = DataTable.Columns.Cast<DataColumn>()
+               .Select(item => new { Name = item.ColumnName })
+               .ToList();
+
+            masterPropertyInfoFields = typeof(T).GetProperties(flags)
+               .Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null)
+               .Cast<PropertyInfo>()
+               .ToList();
+
+            foreach (var field in masterPropertyInfoFields)
+            {
+                 var propertyInfo = typeof(T).GetProperty(field.Name);
+                 var columnName = field.GetCustomAttribute<DbColumnAttribute>().Name;
+                 setters.Add(columnName, Invoker.BuildUntypedSetter<T>(propertyInfo));
+            }
+
+            Action<T, object>[] ArrayOfSetters = setterList.ToArray();
+
+            Parallel.ForEach(DataTable.AsEnumerable().ToList(),
+                 (datarow) =>
+                 {
+
+                     T masterObj = new T();
+                     
+                     int fieldNumber = 0;
+
+                     
+                     foreach (var setter in setters) 
+                     {
+                         setter.Value(masterObj, datarow[setter.Key]);
+                         fieldNumber++;
+                     }
+
+
+                     lock (dataList)
+                     {
+                         dataList.Add(masterObj);
+                     }
+                 }
+                 );
+
+            return dataList;
+        }
 
         /// <summary>
         /// Gets the Name of DB table Field

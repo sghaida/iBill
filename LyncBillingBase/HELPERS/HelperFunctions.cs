@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -86,16 +84,6 @@ namespace LyncBillingBase.Helpers
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
                 return (T)serializer.Deserialize(sr);
             }
-        }
-
-        public static object ReturnDecimalZeroIfNull(this object value)
-        {
-            if (value == System.DBNull.Value)
-                return Convert.ToDecimal(0.00);
-            else if (value == null)
-                return Convert.ToDecimal(0.00);
-            else
-                return value;
         }
 
         public static object ReturnZeroIfNull(this object value)
@@ -266,5 +254,7 @@ namespace LyncBillingBase.Helpers
 
             return hours_str + ':' + mins_str + ':' + secs_str;
         }
+
+
     }
 }
