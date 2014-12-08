@@ -64,6 +64,21 @@ namespace LyncBillingBase.DataAccess
         public bool IsKey { get; set; }
 
         /// <summary>
+        /// This attribute tells the Repository that it's associated property (DbColumn) can be excluded on Select.
+        /// </summary>
+        public bool ExcludeOnSelect { get; set; }
+
+        /// <summary>
+        /// This attribute tells the Repository that it's associated property (DbColumn) can be excluded on Insert.
+        /// </summary>
+        public bool ExcludeOnInsert { get; set; }
+
+        /// <summary>
+        /// This attribute tells the Repository that it's associated property (DbColumn) can be excluded on Update.
+        /// </summary>
+        public bool ExcludeOnUpdate { get; set; }
+
+        /// <summary>
         /// The reflected field type in the class.
         /// </summary>
         public Type FieldType { get; set; }

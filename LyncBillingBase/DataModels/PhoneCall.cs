@@ -126,7 +126,8 @@ namespace LyncBillingBase.DataModels
         [DbColumn("Marker_CallTypeID")] 
         public long Marker_CallTypeID { set; get; }
 
-        [DbColumn("PhoneCallsTableName")] 
+        [DbColumn("PhoneCallsTableName")]
+        [Exclude(OnInsert = true, OnUpdate = true)]
         public string PhoneCallsTableName { get; set; }
 
         public string PhoneBookName { set; get; }
