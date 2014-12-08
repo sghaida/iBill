@@ -80,13 +80,23 @@ namespace LyncBillingBase.DataAccess
 
                 if (field.GetCustomAttribute<DbColumnAttribute>() != null)
                 {
+                    var dbColumnAttr = field.GetCustomAttribute<DbColumnAttribute>();
+                    var isIDFieldAttr = field.GetCustomAttribute<IsIDFieldAttribute>();
+                    var allowNullAttr = field.GetCustomAttribute<AllowNullAttribute>();
+                    var allowIDInsertAttr = field.GetCustomAttribute<AllowIDInsertAttribute>();
+                    var isKeyAttr = field.GetCustomAttribute<IsKeyAttribute>();
+                    var excludeAttr = field.GetCustomAttribute<ExcludeAttribute>();
+
                     newDataField.TableField = new DbTableField()
                     {
-                        ColumnName = field.GetCustomAttribute<DbColumnAttribute>().Name,
-                        IsIDField = field.GetCustomAttribute<IsIDFieldAttribute>() != null ? field.GetCustomAttribute<IsIDFieldAttribute>().Status : false,
-                        AllowNull = field.GetCustomAttribute<AllowNullAttribute>() != null ? field.GetCustomAttribute<AllowNullAttribute>().Status : false,
-                        AllowIDInsert = field.GetCustomAttribute<AllowIDInsertAttribute>() != null ? field.GetCustomAttribute<AllowIDInsertAttribute>().Status : false,
-                        IsKey = field.GetCustomAttribute<IsKeyAttribute>() != null ? field.GetCustomAttribute<IsKeyAttribute>().Status : false,
+                        ColumnName = dbColumnAttr.Name,
+                        IsIDField = isIDFieldAttr != null ? isIDFieldAttr.Status : false,
+                        AllowNull = allowNullAttr != null ? allowNullAttr.Status : false,
+                        AllowIDInsert = allowIDInsertAttr != null ? allowIDInsertAttr.Status : false,
+                        IsKey = isKeyAttr != null ? isKeyAttr.Status : false,
+                        ExcludeOnSelect = excludeAttr != null ? excludeAttr.OnSelect : false,
+                        ExcludeOnInsert = excludeAttr != null ? excludeAttr.OnInsert : false,
+                        ExcludeOnUpdate = excludeAttr != null ? excludeAttr.OnUpdate : false,
                         FieldType = field.PropertyType
                     };
                 }
