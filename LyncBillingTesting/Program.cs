@@ -24,9 +24,10 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
-            DataStorage _STORAGE = DataStorage.Instance;
+            //DataStorage _STORAGE = DataStorage.Instance;
             bool status = false;
 
+            PhoneCallsDataMapper PCDataMapper = new PhoneCallsDataMapper();
             
             /***
              * TESTING PHONE CALLS DATA MAPPER
@@ -51,7 +52,7 @@ namespace LyncBillingTesting
             //status = _STORAGE.PhoneCalls.Delete(phoneCall, dataSourceName: PhoneCallsTable);
 
 
-            var depheads = _STORAGE.DepartmentHeads.GetAll();
+            //var depheads = _STORAGE.DepartmentHeads.GetAll();
         }
 
 
