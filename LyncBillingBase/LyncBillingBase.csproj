@@ -53,6 +53,7 @@
     <Compile Include="Conf\PhoneCallsTablesSection.cs" />
     <Compile Include="DataAccess\DataField.cs" />
     <Compile Include="DataAccess\DataSourceSchema.cs" />
+    <Compile Include="DataAccess\Invoker.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
     <Compile Include="DataAttributes\ExcludeAttribute.cs" />
     <Compile Include="DataAttributes\IsKeyAttribute.cs" />
