@@ -162,7 +162,10 @@ namespace LyncBillingBase.DataAccess
                 foreach (var field in objectSchemaFields)
                 {
                     // Don't insert the ID Field in the Data Source, unless it's marked as AllowIDInsert
-                    if (field.TableField.IsIDField == true && field.TableField.AllowIDInsert == false)
+                    bool skipIDInsert = (field.TableField.IsIDField == true && field.TableField.AllowIDInsert == false);
+                    bool skipExcludedColumn = (field.TableField.ExcludeOnInsert == true);
+
+                    if (skipIDInsert == true || skipExcludedColumn == true)
                     {
                         continue;
                     }
@@ -305,6 +308,15 @@ namespace LyncBillingBase.DataAccess
                             continue;
                         }
                     }
+
+                    
+                    //
+                    // Skip the column if it was marked as ExcludeOnUpdate
+                    if (field.TableField.ExcludeOnUpdate == true)
+                    {
+                        continue;
+                    }
+
 
                     // 
                     // Add the data object fields into the COLUMNS-VALUES dictionary
