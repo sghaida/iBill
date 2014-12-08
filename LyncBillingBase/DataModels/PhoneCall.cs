@@ -19,16 +19,16 @@ namespace LyncBillingBase.DataModels
 
         [IsIDField]
         [DbColumn("SessionIdTime")] 
-        public string SessionIdTime { set; get; }
+        public DateTime SessionIdTime { set; get; }
 
         [DbColumn("SessionIdSeq")] 
         public int SessionIdSeq { get; set; }
 
-        [DbColumn("ResponseTime")] 
-        public string ResponseTime { set; get; }
+        [DbColumn("ResponseTime")]
+        public DateTime ResponseTime { set; get; }
 
-        [DbColumn("SessionEndTime")] 
-        public string SessionEndTime { set; get; }
+        [DbColumn("SessionEndTime")]
+        public DateTime SessionEndTime { set; get; }
 
         [DbColumn("ChargingParty")] 
         public string ChargingParty { set; get; }
@@ -48,8 +48,8 @@ namespace LyncBillingBase.DataModels
         [DbColumn("UI_UpdatedByUser")] 
         public string UI_UpdatedByUser { set; get; }
 
-        [DbColumn("UI_MarkedOn")] 
-        public string UI_MarkedOn { set; get; }
+        [DbColumn("UI_MarkedOn")]
+        public DateTime UI_MarkedOn { set; get; }
 
         [DbColumn("UI_CallType")] 
         public string UI_CallType { set; get; }
