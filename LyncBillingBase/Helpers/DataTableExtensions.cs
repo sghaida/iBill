@@ -273,8 +273,8 @@ namespace LyncBillingBase.Helpers
         }
 
 
-
-        public static List<T> ConvertToList<T>(this DataTable DataTable) where T : class, new()
+        [Obsolete]
+        public static List<T> ConvertToList_OLD<T>(this DataTable DataTable) where T : class, new()
         {
             var dataList = new List<T>();
 
@@ -372,7 +372,7 @@ namespace LyncBillingBase.Helpers
             return dataList;
         }
 
-        public static List<T> ConvertToListUsingDelegates<T>(this DataTable DataTable) where T : class,new() 
+        public static List<T> ConvertToList<T>(this DataTable DataTable) where T : class,new() 
         {
             List<T> dataList = new List<T>();
 
