@@ -602,8 +602,7 @@ namespace LyncBillingBase.DataAccess
             int maximumLimit = 0;
             List<string> thisModelTableColumns;
             Dictionary<string, object> whereConditions = null;
-            List<SqlJoinRelation> dataRelations;
-
+           
             //Get our table columns from the schema
             thisModelTableColumns = Schema.DataFields
                 .Where(field => field.TableField != null)
@@ -616,23 +615,12 @@ namespace LyncBillingBase.DataAccess
             //Proceed with getting the data
             if (Schema.DataSourceType == GLOBALS.DataSource.Type.DBTable)
             {
-                //switch(IncludeDataRelations)
-                //{ 
-                //    case true:
-                //        //Get our data relations list (SqlJoinRelation objects)
-                //        dataRelations = GetDataRelations();
-                //        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, null, dataRelations, 0);
-                //        break;
-
-                //    case false:
-                //        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
-                //        break;
-                //}
-
                 dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
             }
 
-            return dt.ConvertToList<T>();
+          
+
+            return dt.ConvertToListUsingDelegates<T>();
         }
 
 
