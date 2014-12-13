@@ -213,6 +213,7 @@ namespace LyncBillingBase.DataMappers
                 {
                     //this.FillSiteDepartmentsData(ref roles);
                     roles = roles.Include(
+                        role => role.DelegeeAccount,
                         role => role.ManagedUser, 
                         role => role.ManagedSite, 
                         role => role.ManagedSiteDepartment);
