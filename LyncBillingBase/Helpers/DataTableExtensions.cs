@@ -469,97 +469,96 @@ namespace LyncBillingBase.Helpers
                 }).ToList();
 
 
-            // 
-            // Process the PATH parameters, if they exist.
-            // Construct the dictionary collection of child objects' setters.
-            if (path.Count() > 0)
-            {
-                // Initialize child the property info fields list
-                childPropertInfoFields = typeof(T).GetProperties(flags)
-                    .Where(property => property.GetCustomAttribute<DataRelationAttribute>() != null && expressionLookup.Keys.Contains(property.Name))
-                    .Cast<PropertyInfo>()
-                    .ToList();
 
-                // Fill the childObjectsSetters dictionary with the name of the children class for reflection and their corrospndant attributes
-                foreach (PropertyInfo property in childPropertInfoFields)
-                {
-                    //
-                    // Get the type of the child object
-                    Type typeOfChildObject = property.PropertyType;
-
-                    //
-                    // Construct the dictionary of this child setters
-                    // something like: Dictionary<FieldColumnName, SetterFunction>
-                    // Dictionary Type: Dictionary<string, Action<T, object>>();
-                    // First create the setter Action delegate Type: Action<T, object>
-                    Type reflectionType = typeof(ReflectionHelper<>);
-                    Type genericReflectionType = reflectionType.MakeGenericType(typeOfChildObject);
-                    dynamic childReflection = Activator.CreateInstance(genericReflectionType);
-                    dynamic childSetters = childReflection.GetReflectionDictionary();
-
-                    //
-                    // Get this child-object's relation name
-                    var childRelationName = property.GetCustomAttribute<DataRelationAttribute>().Name;
-
-                    //
-                    // Get this child-object's fields
-                    var childObjectFields = typeOfChildObject.GetProperties(flags)
-                          .Where(item => item.GetCustomAttribute<DbColumnAttribute>() != null)
-                          .Cast<PropertyInfo>()
-                          .ToList();
-
-                    //
-                    // Foreach field in this child-object, add it's setter function to the childSetters dictionary
-                    foreach(var field in childObjectFields)
-                    {
-                        var propertyInfo = typeOfChildObject.GetProperty(field.Name);
-                        var columnName = field.GetCustomAttribute<DbColumnAttribute>().Name;
-
-                        object[] setterMethodParams = new[] { propertyInfo };
-                        MethodInfo buildUntypedSetterMethod = typeof(Invoker).GetMethod("BuildUntypedSetter");
-                        MethodInfo genericSetterMethod = buildUntypedSetterMethod.MakeGenericMethod(typeOfChildObject);
-                        dynamic setter = genericSetterMethod.Invoke(null, setterMethodParams);
-
-                        columnName = String.Format("{0}.{1}", childRelationName, columnName);
-
-                        childSetters.Add(columnName, setter);
-                        //childSetters.Add(columnName, Invoker.BuildUntypedSetter<T>(propertyInfo));
-                    }
-
-                    SETTERS_ChildObjects.Add(childRelationName, childSetters);
-                }
-            }
-
-
-            //Fill The data
-            ////Parallel.ForEach(DataTable.AsEnumerable().ToList(),
-            //     (datarow) =>
-            //     {
-            foreach (var datarow in DataTable.AsEnumerable().ToList())   
+            //
+            // Fill The data
+            //foreach (var datarow in DataTable.AsEnumerable().ToList())
+            //{
+            Parallel.ForEach(DataTable.AsEnumerable().ToList(), (datarow) =>
             {
                 // Create and instance of the master object type
                 T masterObj = new T();
-                    
+
+                //
                 // Process the path, in case there are relations
                 if (path.Count() > 0)
                 {
-                    //Fill the Data for children objects
+                    // Initialize child the property info fields list
+                    childPropertInfoFields = typeof(T).GetProperties(flags)
+                        .Where(property => property.GetCustomAttribute<DataRelationAttribute>() != null && expressionLookup.Keys.Contains(property.Name))
+                        .Cast<PropertyInfo>()
+                        .ToList();
+
+
+                    // Fill the Data for children objects
                     foreach (PropertyInfo property in childPropertInfoFields)
                     {
-                        Type childtypedObject = property.PropertyType;
-                        var childObj = Activator.CreateInstance(childtypedObject);
+                        //
+                        // Get the type of the child object
+                        Type typeOfChildObject = property.PropertyType;
 
+                        //
+                        // Construct the dictionary of this child setters
+                        // something like: Dictionary<FieldColumnName, SetterFunction>
+                        // Dictionary Type: Dictionary<string, Action<T, object>>();
+                        // First create the setter Action delegate Type: Action<T, object>
+                        Type reflectionType = typeof(ReflectionHelper<>);
+                        Type genericReflectionType = reflectionType.MakeGenericType(typeOfChildObject);
+                        dynamic childReflection = Activator.CreateInstance(genericReflectionType);
+                        dynamic childSetters = childReflection.GetReflectionDictionary();
+
+                        //
+                        // Get this child-object's relation name
                         var childRelationName = property.GetCustomAttribute<DataRelationAttribute>().Name;
 
-                        var thisChildSetters = SETTERS_ChildObjects[childRelationName];
+                        //
+                        // Get this child-object's fields
+                        var childObjectFields = typeOfChildObject.GetProperties(flags)
+                              .Where(item => item.GetCustomAttribute<DbColumnAttribute>() != null)
+                              .Cast<PropertyInfo>()
+                              .ToList();
 
-                        foreach(var setter in thisChildSetters)
+                        //
+                        // Foreach field in this child-object, add it's setter function to the childSetters dictionary
+                        foreach (var field in childObjectFields)
                         {
-                            var columnName = String.Format("{0}.{1}", childRelationName, setter.Key);
-                            setter.Value(childObj, datarow[columnName]);
+                            var propertyInfo = typeOfChildObject.GetProperty(field.Name);
+                            var columnName = field.GetCustomAttribute<DbColumnAttribute>().Name;
+
+                            object[] setterMethodParams = new[] { propertyInfo };
+                            MethodInfo buildUntypedSetterMethod = typeof(Invoker).GetMethod("BuildUntypedSetter");
+                            MethodInfo genericSetterMethod = buildUntypedSetterMethod.MakeGenericMethod(typeOfChildObject);
+                            dynamic setter = genericSetterMethod.Invoke(null, setterMethodParams);
+
+                            // Fill the setter in he childSetters dictionary
+                            // childSetters.Add(columnName, Invoker.BuildUntypedSetter<T>(propertyInfo));
+                            // columnName = String.Format("{0}.{1}", childRelationName, columnName);
+                            childSetters.Add(columnName, setter);
                         }
 
-                        //Set the values for the children object
+                        //
+                        // Make an instance of the child-object type
+                        dynamic childObj = Activator.CreateInstance(typeOfChildObject);
+
+                        //
+                        // Fill the child object through calling it's own setters
+                        foreach (var setter in childSetters)
+                        {
+                            string columnName = String.Format("{0}.{1}", childRelationName, setter.Key);
+
+                            try
+                            {
+                                object value = datarow[columnName];
+                                setter.Value(childObj, value);
+                            }
+                            catch(Exception ex)
+                            {
+                                string x = string.Empty;
+                            }
+                        }
+
+                        //
+                        // Set the values for the children-object in the master-object
                         foreach (PropertyInfo masterPropertyInfo in childPropertInfoFields)
                         {
                             if (masterPropertyInfo.PropertyType.Name == childObj.GetType().Name)
@@ -567,10 +566,9 @@ namespace LyncBillingBase.Helpers
                                 masterPropertyInfo.SetValue(masterObj, childObj);
                             }
                         }
-
                     }//end-outer-foreach
-
                 }//end-if
+
 
                 //
                 // Fill master Object with its related properties values
@@ -579,14 +577,16 @@ namespace LyncBillingBase.Helpers
                     setter.Value(masterObj, datarow[setter.Key]);
                 }
 
-                //lock (dataList)
-                //{
+                lock (dataList)
+                {
                     dataList.Add(masterObj);
-                //}
-            }
-            //});
+                }
+            });
+            //}
+
 
             return dataList;
+
         }
 
 

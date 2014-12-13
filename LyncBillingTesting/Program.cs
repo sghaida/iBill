@@ -82,7 +82,7 @@ namespace LyncBillingTesting
                 NotifyUser = "N",
                 TelephoneNumber = "12334545667",
                 UpdatedAt = DateTime.MinValue,
-                UpdatedByAD = 1,
+                //UpdatedByAD = 1,
                 CreatedAt = DateTime.Now
             };
 
