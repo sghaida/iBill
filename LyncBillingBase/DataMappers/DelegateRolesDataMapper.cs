@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
+using LyncBillingBase.Helpers;
 using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
 
@@ -210,7 +211,11 @@ namespace LyncBillingBase.DataMappers
 
                 if (roles != null && roles.Count() > 0)
                 {
-                    this.FillSiteDepartmentsData(ref roles);
+                    //this.FillSiteDepartmentsData(ref roles);
+                    roles = roles.Include(
+                        role => role.ManagedUser, 
+                        role => role.ManagedSite, 
+                        role => role.ManagedSiteDepartment);
                 }
 
                 return roles;
