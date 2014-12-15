@@ -27,7 +27,10 @@ namespace LyncBillingTesting
             //DataStorage _STORAGE = DataStorage.Instance;
             bool status = false;
 
-            PhoneCallsDataMapper PCDataMapper = new PhoneCallsDataMapper();
+            DelegateRolesDataMapper DelegateRoles = new DelegateRolesDataMapper();
+
+            var allDelegates = DelegateRoles.GetAll();
+
             
             /***
              * TESTING PHONE CALLS DATA MAPPER
@@ -36,7 +39,7 @@ namespace LyncBillingTesting
             //var phoneCalls = _STORAGE.PhoneCalls.GetChargableCallsPerUser("aalhour@ccc.gr");
 
             //PhoneCall phoneCall = phoneCalls.First();
-
+               
             //phoneCall.ChargingParty = "sameeer@ccc.gr";
             //phoneCall.SessionIdTime = HelperFunctions.ConvertDate(DateTime.Now, excludeHoursAndMinutes: true);
 
@@ -50,7 +53,6 @@ namespace LyncBillingTesting
 
             //status = _STORAGE.PhoneCalls.Update(phoneCall, dataSourceName: PhoneCallsTable);
             //status = _STORAGE.PhoneCalls.Delete(phoneCall, dataSourceName: PhoneCallsTable);
-
 
             //var depheads = _STORAGE.DepartmentHeads.GetAll();
         }
@@ -80,7 +82,7 @@ namespace LyncBillingTesting
                 NotifyUser = "N",
                 TelephoneNumber = "12334545667",
                 UpdatedAt = DateTime.MinValue,
-                UpdatedByAD = 1,
+                //UpdatedByAD = 1,
                 CreatedAt = DateTime.Now
             };
 
