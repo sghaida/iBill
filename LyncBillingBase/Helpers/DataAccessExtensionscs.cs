@@ -31,11 +31,12 @@ namespace LyncBillingBase.Helpers
                 expressionLookup.Add((t.Body as MemberExpression).Member.Name, t.Body.Type.Name);
             }
 
-            DbRelationsList = Schema.DataFields.Where(field => field.Relation != null &&
-                expressionLookup.Values.Contains(field.Relation.WithDataModel.Name) &&
-                expressionLookup.Keys.Contains(field.Name)
-                ).
-                Select<DataField, DbRelation>(field => field.Relation).
+            DbRelationsList = Schema.DataFields
+                .Where(field => 
+                    field.Relation != null &&
+                    expressionLookup.Values.Contains(field.Relation.WithDataModel.Name) &&
+                    expressionLookup.Keys.Contains(field.Name))
+                .Select<DataField, DbRelation>(field => field.Relation).
                 ToList<DbRelation>();
 
 
@@ -105,9 +106,8 @@ namespace LyncBillingBase.Helpers
             dt = DBRoutines.SELECT_WITH_JOIN(Schema.DataSourceName, thisModelTableColumns, null, TableRelationsMap, 0);
 
             return dt.ConvertToList<T>(path);
-
-
         }
 
     }
+
 }

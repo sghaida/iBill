@@ -162,9 +162,12 @@ namespace LyncBillingBase.DataMappers
 
         public override IEnumerable<PhoneCall> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
-            //return base.GetAll(dataSourceName, dataSourceType);
+            //string sqlStatement = sqlAccessor.GetAllPhoneCalls(dbTables);
+            //return base.GetAll(SQL_QUERY: sqlStatement);
+
             throw new NotImplementedException();
         }
+
     }
 
 }
