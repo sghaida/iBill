@@ -37,14 +37,19 @@ namespace LyncBillingBase.DataAccess
             
             var exValue = Expression.Parameter(typeof(object), "p");
 
+            var condition = Expression.Condition(
+                // test
+                Expression.Equal(exValue, Expression.Constant(DBNull.Value)),
+                // if true
+                Expression.Default(type),
+                // if false
+                Expression.Convert(exValue, type)
+            );
+
             var exBody = Expression.Call(
                Expression.Convert(exTarget, info.DeclaringType),
                info,
-               Expression.Condition(
-                    Expression.Equal(exValue, Expression.Constant(DBNull.Value)),
-                    Expression.Default(type),
-                    Expression.Convert(exValue, type)
-                )
+               condition
             );
 
             var lambda = Expression.Lambda<Action<T, object>>(exBody, exTarget, exValue);

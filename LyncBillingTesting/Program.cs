@@ -24,14 +24,28 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
-            //DataStorage _STORAGE = DataStorage.Instance;
+            DataStorage _STORAGE = DataStorage.Instance;
             bool status = false;
 
             DelegateRolesDataMapper DelegateRoles = new DelegateRolesDataMapper();
 
             var allDelegates = DelegateRoles.GetAll();
 
-            
+
+            allDelegates = allDelegates.Include(item => 
+                item.ManagedSite,
+                item => item.ManagedUser,
+                item => item.DelegeeAccount);
+
+            //allDelegates = allDelegates.Include(item => item.ManagedSite);
+            //allDelegates = allDelegates.Include(item => item.ManagedUser);
+            //allDelegates = allDelegates.Include(item => item.DelegeeAccount);
+
+            allDelegates = allDelegates.IncludeSiteDepartments();
+
+            string x = string.Empty;
+
+
             /***
              * TESTING PHONE CALLS DATA MAPPER
              */
