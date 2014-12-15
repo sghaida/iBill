@@ -19,6 +19,7 @@ namespace LyncBillingBase.DataMappers
         private List<SiteDepartment> _cachedData = new List<SiteDepartment>();
 
 
+
         /***
          * Singleton implementation with an attempted thread-safety using double-check locking
          */
@@ -28,7 +29,7 @@ namespace LyncBillingBase.DataMappers
         // lock for thread-safety laziness
         private static readonly object _mutex = new object();
 
-        // empty constuctor
+        // Empty private constuctor
         private SitesDepartmentsDataMapper() { }
 
         //The only public method, used to obtain an instance of DataStorage
@@ -62,6 +63,10 @@ namespace LyncBillingBase.DataMappers
         }
 
 
+
+        /***
+         * The following are custom functionalities. Found to be needed by the UI project.
+         */
         /// <summary>
         /// Given a Site's ID, return the list of it's Site-Departments.
         /// </summary>
