@@ -468,8 +468,6 @@ namespace LyncBillingBase.Helpers
                     Type = item.DataType
                 }).ToList();
 
-
-
             //
             // Fill The data
             //foreach (var datarow in DataTable.AsEnumerable().ToList())
@@ -553,7 +551,7 @@ namespace LyncBillingBase.Helpers
                             }
                             catch(Exception ex)
                             {
-                                string x = string.Empty;
+                                throw ex.InnerException;
                             }
                         }
 
@@ -584,9 +582,7 @@ namespace LyncBillingBase.Helpers
             });
             //}
 
-
             return dataList;
-
         }
 
 
