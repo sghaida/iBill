@@ -35,9 +35,9 @@ namespace LyncBillingBase.DataModels
         [DbColumn("AD_TelephoneNumber")]
         public string TelephoneNumber { get; set; }
 
-        //[AllowNull]
-        //[DbColumn("UpdatedByAD")]
-        //public int UpdatedByAD { get; set; }
+        [AllowNull]
+        [DbColumn("UpdatedByAD")]
+        public Byte UpdatedByAD { get; set; }
 
         [DbColumn("NotifyUser")]
         public string NotifyUser { get; set; }
