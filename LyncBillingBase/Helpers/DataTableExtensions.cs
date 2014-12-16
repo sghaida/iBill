@@ -389,7 +389,7 @@ namespace LyncBillingBase.Helpers
             {
                 var propertyInfo = typeof(T).GetProperty(field.Name);
                 var columnName = field.GetCustomAttribute<DbColumnAttribute>().Name;
-                setters.Add(columnName, Invoker.BuildUntypedSetter<T>(propertyInfo));
+                setters.Add(columnName, Invoker.CreateSetter<T>(propertyInfo));
             }
 
             Parallel.ForEach(DataTable.AsEnumerable().ToList(),
@@ -457,7 +457,7 @@ namespace LyncBillingBase.Helpers
             {
                 var propertyInfo = typeof(T).GetProperty(field.Name);
                 var columnName = field.GetCustomAttribute<DbColumnAttribute>().Name;
-                SETTERS_MasterObject.Add(columnName, Invoker.BuildUntypedSetter<T>(propertyInfo));
+                SETTERS_MasterObject.Add(columnName, Invoker.CreateSetter<T>(propertyInfo));
             }
 
             // Read Datatable column names and types

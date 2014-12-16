@@ -158,7 +158,7 @@ namespace LyncBillingBase.Helpers
             {
                 var propertyInfo = typeof(T).GetProperty(field.Name);
                 var propertyName = field.Name;
-                setters.Add(propertyName, Invoker.BuildUntypedSetter<T>(propertyInfo));
+                setters.Add(propertyName, Invoker.CreateSetter<T>(propertyInfo));
             }
 
             T obj = new T();
