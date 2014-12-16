@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using System.ComponentModel;
 
+using LyncBillingBase.Helpers;
 using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
-using System.ComponentModel;
 
 namespace LyncBillingBase.DataMappers
 {
@@ -46,8 +47,8 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                DateTime StartingDate = new DateTime(DateTime.Now.Year, 1, 1);
-                DateTime EndingDate = DateTime.Now;
+                string StartingDate = HelperFunctions.ConvertDate((new DateTime(DateTime.Now.Year, 1, 1)), excludeHoursAndMinutes: true);
+                string EndingDate = HelperFunctions.ConvertDate(DateTime.Now, excludeHoursAndMinutes: true);
 
                 string SQL_QUERY = SUMMARIES_SQL_QUERIES.GetCallsSummariesForUser(SipAccount, StartingDate, EndingDate, DBTables);
 
@@ -75,7 +76,11 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                string SQL_QUERY = SUMMARIES_SQL_QUERIES.GetCallsSummariesForUser(SipAccount, StartingDate, EndingDate, DBTables);
+                string SQL_QUERY = SUMMARIES_SQL_QUERIES.GetCallsSummariesForUser(
+                    SipAccount, 
+                    HelperFunctions.ConvertDate(StartingDate, excludeHoursAndMinutes: true), 
+                    HelperFunctions.ConvertDate(EndingDate, excludeHoursAndMinutes: true), 
+                    DBTables);
 
                 summaries = base.GetAll(SQL_QUERY).ToList<CallsSummaryForUser>();
 

@@ -28,7 +28,13 @@ namespace LyncBillingTesting
             DataStorage _STORAGE = DataStorage.Instance;
 
             var CallsSummariesDM = new UsersCallsSummariesDataMapper();
-            //CallsSummariesDM.Get
+
+            DateTime startingDate = new DateTime(2013, 1, 1);
+            DateTime endingDate = new DateTime(2013, 12, 30);
+
+            var summaries = CallsSummariesDM.GetBySipAccount("aalhour@ccc.gr");
+
+            summaries = CallsSummariesDM.GetBySipAccount("aalhour@ccc.gr", startingDate, endingDate);
 
 
 
