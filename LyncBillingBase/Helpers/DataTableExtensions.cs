@@ -524,7 +524,7 @@ namespace LyncBillingBase.Helpers
                             var columnName = field.GetCustomAttribute<DbColumnAttribute>().Name;
 
                             object[] setterMethodParams = new[] { propertyInfo };
-                            MethodInfo buildUntypedSetterMethod = typeof(Invoker).GetMethod("BuildUntypedSetter");
+                            MethodInfo buildUntypedSetterMethod = typeof(Invoker).GetMethod("CreateSetter");
                             MethodInfo genericSetterMethod = buildUntypedSetterMethod.MakeGenericMethod(typeOfChildObject);
                             dynamic setter = genericSetterMethod.Invoke(null, setterMethodParams);
 
