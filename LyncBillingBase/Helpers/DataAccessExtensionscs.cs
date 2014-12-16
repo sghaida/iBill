@@ -20,10 +20,9 @@ namespace LyncBillingBase.Helpers
         {
             DataSourceSchema<T> Schema = new DataSourceSchema<T>();
 
-            //Table Relations Map
-            //To be sent to the DB Lib for SQL Query generation
+            // Table Relations Map
+            // To be sent to the DB Lib for SQL Query generation
             List<SqlJoinRelation> TableRelationsMap = new List<SqlJoinRelation>();
-            List<DbTableField> DbTableFieldsList = new List<DbTableField>();
             List<DbRelation> DbRelationsList = new List<DbRelation>();
 
             //
@@ -35,7 +34,7 @@ namespace LyncBillingBase.Helpers
             Dictionary<string, object> whereConditions = new Dictionary<string, object>();
 
 
-            //This will hold the information about the sub joins object types          
+            // This will hold the information about the sub joins object types          
             Dictionary<string, string> expressionLookup = new Dictionary<string, string>();
 
             foreach (var t in path)
@@ -44,11 +43,8 @@ namespace LyncBillingBase.Helpers
             }
 
 
-            DbTableFieldsList = Schema.DataFields
-                .Where(field => field.TableField != null)
-                .Select<DataField, DbTableField>(field => field.TableField).
-                ToList<DbTableField>();
-
+            //
+            // Get the Relations Fields from the Schema 
             DbRelationsList = Schema.DataFields
                 .Where(field =>
                     field.Relation != null &&
@@ -58,7 +54,8 @@ namespace LyncBillingBase.Helpers
                 ToList<DbRelation>();
 
 
-            //Start processing the list of table relations
+            //
+            // Start processing the list of table relations
             if (DbRelationsList != null && DbRelationsList.Count() > 0)
             {
                 //Foreach relation in the relations list, process it and construct the big TablesRelationsMap
