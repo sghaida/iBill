@@ -15,22 +15,22 @@ namespace LyncBillingBase.DataMappers
         /***
          * Get the phone calls tables list from the MonitoringServersInfo table
          */
-        private DataAccess<MonitoringServerInfo> monInfoDA = new DataAccess<MonitoringServerInfo>();
+        private DataAccess<MonitoringServerInfo> _monitoringServersInfoDataMapper = new DataAccess<MonitoringServerInfo>();
 
         /**
          * The SQL Queries Generator
          */
-        private SQLQueries.PhoneCallsSQL sqlAccessor = new SQLQueries.PhoneCallsSQL();
+        private SQLQueries.PhoneCallsSQL PHONECALLS_SQL_QUERIES = new SQLQueries.PhoneCallsSQL();
 
         /***
          * The list of phone calls tables
          */
-        private List<string> dbTables = new List<string>();
+        private List<string> DBTables = new List<string>();
 
 
         public PhoneCallsDataMapper() : base()
         {
-            dbTables = monInfoDA.GetAll().Select<MonitoringServerInfo, string>(item => item.PhoneCallsTable).ToList<string>();
+            DBTables = _monitoringServersInfoDataMapper.GetAll().Select<MonitoringServerInfo, string>(item => item.PhoneCallsTable).ToList<string>();
         }
 
 
@@ -140,7 +140,7 @@ namespace LyncBillingBase.DataMappers
 
         public IEnumerable<PhoneCall> GetChargableCallsPerUser(string sipAccount) 
         {
-            string sqlStatemnet = sqlAccessor.ChargableCallsPerUser(dbTables, sipAccount);
+            string sqlStatemnet = PHONECALLS_SQL_QUERIES.ChargableCallsPerUser(DBTables, sipAccount);
 
             return base.GetAll(sqlStatemnet);
         }
@@ -148,7 +148,7 @@ namespace LyncBillingBase.DataMappers
 
         public IEnumerable<PhoneCall> GetChargeableCallsForSite(string siteName) 
         {
-            string sqlStatemnet = sqlAccessor.ChargeableCallsForSite(dbTables, siteName);
+            string sqlStatemnet = PHONECALLS_SQL_QUERIES.ChargeableCallsForSite(DBTables, siteName);
 
             return base.GetAll(sqlStatemnet);
         }

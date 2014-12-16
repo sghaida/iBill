@@ -27,6 +27,10 @@ namespace LyncBillingTesting
             bool status = false;
             DataStorage _STORAGE = DataStorage.Instance;
 
+            var CallsSummariesDM = new UsersCallsSummariesDataMapper();
+            //CallsSummariesDM.Get
+
+
 
             /***
              * TESTING PHONE CALLS DATA MAPPER
