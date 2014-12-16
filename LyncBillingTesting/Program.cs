@@ -24,24 +24,65 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
-            DataStorage _STORAGE = DataStorage.Instance;
             bool status = false;
+            DataStorage _STORAGE = DataStorage.Instance;
+            
 
-            DelegateRolesDataMapper DelegateRoles = new DelegateRolesDataMapper();
+            //var allDelegates = _STORAGE.DelegateRoles.GetAll();
+            //allDelegates = allDelegates.Include(item => 
+            //    item.ManagedSite,
+            //    item => item.ManagedUser,
+            //    item => item.DelegeeAccount);
+            //allDelegates = allDelegates.IncludeSiteDepartments();
 
-            var allDelegates = DelegateRoles.GetAll();
-
-
-            allDelegates = allDelegates.Include(item => 
-                item.ManagedSite,
-                item => item.ManagedUser,
-                item => item.DelegeeAccount);
 
             //allDelegates = allDelegates.Include(item => item.ManagedSite);
             //allDelegates = allDelegates.Include(item => item.ManagedUser);
             //allDelegates = allDelegates.Include(item => item.DelegeeAccount);
 
-            allDelegates = allDelegates.IncludeSiteDepartments();
+
+            var allSitesDepartments = _STORAGE.SitesDepartments.GetAll();
+
+
+            Site newSite = new Site()
+            {
+                CountryCode = "GRC",
+                Description = "Sample Description",
+                Name = "TEST-SITE"
+            };
+
+            Department newDepartment = new Department()
+            {
+                Name = "TEST-DEPARTMENT",
+                Description = "Sample Description"
+            };
+
+            newSite.ID = _STORAGE.Sites.Insert(newSite);
+            newDepartment.ID = _STORAGE.Departments.Insert(newDepartment);
+
+            SiteDepartment newSiteDepartment = new SiteDepartment()
+            {
+                SiteID = newSite.ID,
+                DepartmentID = newDepartment.ID
+            };
+
+            newSiteDepartment.ID = _STORAGE.SitesDepartments.Insert(newSiteDepartment);
+
+            allSitesDepartments = _STORAGE.SitesDepartments.GetAll();
+
+            newSiteDepartment.SiteID = 29;
+
+            status = _STORAGE.SitesDepartments.Update(newSiteDepartment);
+
+            newSiteDepartment = _STORAGE.SitesDepartments.GetById(newSiteDepartment.ID);
+
+            allSitesDepartments = _STORAGE.SitesDepartments.GetAll();
+
+            status = _STORAGE.SitesDepartments.Delete(newSiteDepartment);
+
+            status = _STORAGE.Departments.Delete(newDepartment);
+
+            status = _STORAGE.Sites.Delete(newSite);
 
             string x = string.Empty;
 

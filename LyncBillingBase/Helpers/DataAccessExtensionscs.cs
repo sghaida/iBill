@@ -23,8 +23,17 @@ namespace LyncBillingBase.Helpers
             //Table Relations Map
             //To be sent to the DB Lib for SQL Query generation
             List<SqlJoinRelation> TableRelationsMap = new List<SqlJoinRelation>();
-
+            List<DbTableField> DbTableFieldsList = new List<DbTableField>();
             List<DbRelation> DbRelationsList = new List<DbRelation>();
+
+            //
+            // Database related
+            // Where conditions dictionary
+            DataTable dt = new DataTable();
+            string finalDataSourceName = string.Empty;
+            List<string> thisModelTableColumns = new List<string>();
+            Dictionary<string, object> whereConditions = new Dictionary<string, object>();
+
 
             //This will hold the information about the sub joins object types          
             Dictionary<string, string> expressionLookup = new Dictionary<string, string>();
@@ -33,6 +42,12 @@ namespace LyncBillingBase.Helpers
             {
                 expressionLookup.Add((t.Body as MemberExpression).Member.Name, t.Body.Type.Name);
             }
+
+
+            DbTableFieldsList = Schema.DataFields
+                .Where(field => field.TableField != null)
+                .Select<DataField, DbTableField>(field => field.TableField).
+                ToList<DbTableField>();
 
             DbRelationsList = Schema.DataFields
                 .Where(field =>
@@ -94,20 +109,44 @@ namespace LyncBillingBase.Helpers
 
             }//end-outer-if
 
-            DataTable dt = new DataTable();
 
-            string finalDataSourceName = string.Empty;
+            //
+            // Get the ID Field to find the relations for.
+            // If the ID Field was not found, return an empty instance of the object.
+            var IDField = Schema.DataFields.Find(field => field.TableField != null && field.TableField.IsIDField == true);
 
-            List<string> thisModelTableColumns;
+            if(IDField != null)
+            {
+                var dataObjectAttr = source.GetType().GetProperty(IDField.Name);
 
-            //Get our table columns from the schema
+                var dataObjectAttrValue = dataObjectAttr.GetValue(source, null);
+
+                // Put the ID Field in the WHERE CONDITIONS
+                if (dataObjectAttrValue != null)
+                {
+                    whereConditions.Add(IDField.TableField.ColumnName, Convert.ChangeType(dataObjectAttrValue, IDField.TableField.FieldType));
+                }
+                else
+                {
+                    return source;
+                }
+            }
+            else
+            {
+                return source;
+            }
+
+            //
+            // Get our table columns from the schema
             thisModelTableColumns = Schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select<DataField, string>(
                 field => field.TableField.ColumnName)
                 .ToList<string>();
 
-            dt = DBRoutines.SELECT_WITH_JOIN(Schema.DataSourceName, thisModelTableColumns, null, TableRelationsMap, 0);
+            //
+            // Query the data-srouce
+            dt = DBRoutines.SELECT_WITH_JOIN(Schema.DataSourceName, thisModelTableColumns, whereConditions, TableRelationsMap, 1);
 
             // Return data
             var data = dt.ConvertToList<T>(path);
@@ -118,7 +157,7 @@ namespace LyncBillingBase.Helpers
             }
             else
             {
-                return (T)(Activator.CreateInstance(typeof(T)));
+                return source;
             }
         }
 
