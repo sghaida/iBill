@@ -12,6 +12,7 @@ namespace LyncBillingBase.DataModels
     [DataSource(Name = "MonitoringServersInfo", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
     public class CallsSummaryForUser : DataModel
     {
+        [IsIDField]
         [DbColumn("Date")]
         public DateTime Date { get; set; }
 
@@ -27,29 +28,32 @@ namespace LyncBillingBase.DataModels
         [DbColumn("AC_IsInvoiced")]
         public string IsInvoiced { get; set; }
 
+        // Business
         [DbColumn("BusinessCallsCount")]
-        public int BusinessCallsCount { get; set; }
+        public long BusinessCallsCount { get; set; }
+
+        [DbColumn("BusinessCallsDuration")]
+        public long BusinessCallsDuration { get; set; }
 
         [DbColumn("BusinessCallsCost")]
         public decimal BusinessCallsCost { get; set; }
 
-        [DbColumn("BusinessCallsDuration")]
-        public int BusinessCallsDuration { get; set; }
-
+        // Personal
         [DbColumn("PersonalCallsCount")]
-        public int PersonalCallsCount { get; set; }
+        public long PersonalCallsCount { get; set; }
 
         [DbColumn("PersonalCallsDuration")]
-        public int PersonalCallsDuration { get; set; }
+        public long PersonalCallsDuration { get; set; }
 
         [DbColumn("PersonalCallsCost")]
         public decimal PersonalCallsCost { get; set; }
 
+        // Unmarked
         [DbColumn("UnmarkedCallsCount")]
-        public int UnmarkedCallsCount { get; set; }
+        public long UnmarkedCallsCount { get; set; }
 
         [DbColumn("UnmarkedCallsDuration")]
-        public int UnmarkedCallsDuration { get; set; }
+        public long UnmarkedCallsDuration { get; set; }
 
         [DbColumn("UnmarkedCallsCost")]
         public decimal UnmarkedCallsCost { get; set; }
