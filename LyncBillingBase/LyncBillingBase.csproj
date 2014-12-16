@@ -60,6 +60,8 @@
     <Compile Include="DataMappers\AnnouncementsDataMapper.cs" />
     <Compile Include="DataMappers\BundledAccountsDataMapper.cs" />
     <Compile Include="DataMappers\CallMarkerStatusDataMapper.cs" />
+    <Compile Include="DataMappers\SQLQueries\CallsSummariesSQL.cs" />
+    <Compile Include="DataMappers\UsersCallsSummariesDataMapper.cs" />
     <Compile Include="DataMappers\CallTypesDataMapper.cs" />
     <Compile Include="DataMappers\CountriesDataMapper.cs" />
     <Compile Include="DataMappers\CurrenciesDataMapper.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="DataModels\Announcement.cs" />
     <Compile Include="DataModels\BundledAccount.cs" />
     <Compile Include="DataModels\CallMarkerStatus.cs" />
+    <Compile Include="DataModels\CallsSummaryForUsersInSite.cs" />
     <Compile Include="DataModels\CallType.cs" />
     <Compile Include="DataModels\Country.cs" />
     <Compile Include="DataModels\Currency.cs" />
@@ -102,6 +105,7 @@
     <Compile Include="DataMappers\PhoneCallsDataMapper.cs" />
     <Compile Include="DataAccess\Evaluator.cs" />
     <Compile Include="DataAccess\IDataAccess.cs" />
+    <Compile Include="DataModels\CallsSummaryForUser.cs" />
     <Compile Include="GLOBALS.cs" />
     <Compile Include="DataModels\PhoneCallExclusion.cs" />
     <Compile Include="DataAttributes\DbColumnAttribute.cs" />
