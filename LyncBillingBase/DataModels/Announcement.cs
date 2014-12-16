@@ -9,7 +9,6 @@ using LyncBillingBase.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [Serializable]
     [DataSource(Name = "Announcements", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
     public class Announcement : DataModel
     {
