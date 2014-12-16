@@ -69,6 +69,10 @@ namespace LyncBillingTesting
             //status = _STORAGE.PhoneCalls.Delete(phoneCall, dataSourceName: PhoneCallsTable);
 
             //var depheads = _STORAGE.DepartmentHeads.GetAll();
+
+            RandomObjectsGenerator<User> user = new RandomObjectsGenerator<User>();
+            var users = RandomObjectsGenerator<User>.GenerateRandomObject();
+
         }
 
 
@@ -688,6 +692,8 @@ namespace LyncBillingTesting
             
             status = _STORAGE.Announcements.Update(ann);
             status = _STORAGE.Announcements.Delete(ann);
+
+         
         }
 
     }
