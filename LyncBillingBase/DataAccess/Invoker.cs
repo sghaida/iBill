@@ -25,7 +25,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public  static Action<T, object> BuildUntypedSetter<T>(PropertyInfo propertyInfo)
+        public  static Action<T, object> CreateSetter<T>(PropertyInfo propertyInfo)
         {
             var targetType = propertyInfo.DeclaringType;
             
@@ -33,26 +33,26 @@ namespace LyncBillingBase.DataAccess
 
             Type type = propertyInfo.PropertyType;
 
-            var exTarget = Expression.Parameter(targetType, "t");
+            var target = Expression.Parameter(targetType, "t");
             
-            var exValue = Expression.Parameter(typeof(object), "p");
+            var value = Expression.Parameter(typeof(object), "st");
 
             var condition = Expression.Condition(
                 // test
-                Expression.Equal(exValue, Expression.Constant(DBNull.Value)),
+                Expression.Equal(value, Expression.Constant(DBNull.Value)),
                 // if true
                 Expression.Default(type),
                 // if false
-                Expression.Convert(exValue, type)
+                Expression.Convert(value, type)
             );
 
-            var exBody = Expression.Call(
-               Expression.Convert(exTarget, info.DeclaringType),
+            var body = Expression.Call(
+               Expression.Convert(target, info.DeclaringType),
                info,
                condition
             );
 
-            var lambda = Expression.Lambda<Action<T, object>>(exBody, exTarget, exValue);
+            var lambda = Expression.Lambda<Action<T, object>>(body, target, value);
             
             var action = lambda.Compile();
 
@@ -60,7 +60,7 @@ namespace LyncBillingBase.DataAccess
         }
 
 
-        public  static Func<T, object > BuildUntypedGetter<T>(PropertyInfo propertyInfo)
+        public  static Func<T, object > CreateGetter<T>(PropertyInfo propertyInfo)
         {
             var targetType = propertyInfo.DeclaringType;
             
