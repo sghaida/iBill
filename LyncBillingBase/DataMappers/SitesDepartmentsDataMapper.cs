@@ -131,6 +131,9 @@ namespace LyncBillingBase.DataMappers
             {
                 rowId = base.Insert(dataObject, dataSourceName, dataSourceType);
 
+                dataObject.ID = rowId;
+                dataObject = dataObject.Include(item => item.Site, item => item.Department);
+
                 _cachedData.Add(dataObject);
 
                 return rowId;
@@ -152,8 +155,16 @@ namespace LyncBillingBase.DataMappers
 
                 if(status == true)
                 {
+                    // Remove the old site department
                     var oldSiteDepartment = _cachedData.Find(item => item.ID == dataObject.ID);
-                    _cachedData.Remove(oldSiteDepartment);
+                    
+                    if (oldSiteDepartment != null)
+                    { 
+                        _cachedData.Remove(oldSiteDepartment);
+                    }
+
+                    // Get the Site and Department relations of the new site department
+                    dataObject = dataObject.Include(item => item.Site, item => item.Department);
                     _cachedData.Add(dataObject);
                 }
 
@@ -177,7 +188,11 @@ namespace LyncBillingBase.DataMappers
                 if (status == true)
                 {
                     var oldSiteDepartment = _cachedData.Find(item => item.ID == dataObject.ID);
-                    _cachedData.Remove(oldSiteDepartment);
+
+                    if (oldSiteDepartment != null)
+                    {
+                        _cachedData.Remove(oldSiteDepartment);
+                    }
                 }
 
                 return status;
