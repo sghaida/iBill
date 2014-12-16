@@ -25,17 +25,20 @@ namespace LyncBillingTesting
         public static void Main(string[] args)
         {
             bool status = false;
-            DataStorage _STORAGE = DataStorage.Instance;
+            //DataStorage _STORAGE = DataStorage.Instance;
 
             var CallsSummariesDM = new UsersCallsSummariesDataMapper();
 
             DateTime startingDate = new DateTime(2013, 1, 1);
             DateTime endingDate = new DateTime(2013, 12, 30);
 
-            var summaries = CallsSummariesDM.GetBySipAccount("aalhour@ccc.gr");
+            var summaries = CallsSummariesDM.GetBySite("MOA");
 
-            summaries = CallsSummariesDM.GetBySipAccount("aalhour@ccc.gr", startingDate, endingDate);
+            summaries = CallsSummariesDM.GetBySite("MOA", startingDate, endingDate);
 
+            summaries = CallsSummariesDM.GetBySite("MOA", startingDate, endingDate, GLOBALS.CallsSummary.GroupBy.UserOnly);
+
+            summaries = CallsSummariesDM.GetBySite("MOA", startingDate, endingDate, GLOBALS.CallsSummary.GroupBy.UserAndInvoiceFlag);
 
 
             /***

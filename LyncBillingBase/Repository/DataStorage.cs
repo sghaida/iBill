@@ -57,6 +57,8 @@ namespace LyncBillingBase.Repository
         public CallMarkerStatusDataMapper CallMarkers = new CallMarkerStatusDataMapper();
         public MonitoringServersDataMapper MonitoringServers = new MonitoringServersDataMapper();
 
+        // Calls Summaries
+        public UsersCallsSummariesDataMapper UsersCallsSummaries = new UsersCallsSummariesDataMapper();
 
 
         /***
