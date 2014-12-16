@@ -128,6 +128,7 @@ namespace LyncBillingBase
         }
 
 
+        // The Phone Calls GLOBALS
         public static class PhoneCalls
         {
             public enum CallTypes
@@ -143,6 +144,26 @@ namespace LyncBillingBase
                 [Description("Disputed Phone Call")]
                 [DefaultValue("Disputed")]
                 Disputed
+            }
+        }
+
+
+        // The CallsSummary GLOBALS
+        public static class CallsSummary
+        {
+            public enum GroupBy
+            {
+                [Description("Group By User Only")]
+                [DefaultValue("GroupByUserOnly")]
+                DontGroup,
+
+                [Description("Group By User Only")]
+                [DefaultValue("GroupByUserOnly")]
+                UserOnly,
+
+                [Description("Group By User And Invoice Flag")]
+                [DefaultValue("GroupByUserAndInvoiceFlag")]
+                UserAndInvoiceFlag
             }
         }
 
