@@ -62,7 +62,7 @@ namespace LyncBillingTesting
 
             //var depheads = _STORAGE.DepartmentHeads.GetAll();
 
-            RandomObjectsGenerator<User> user = new RandomObjectsGenerator<User>();
+         
             var users = RandomObjectsGenerator<User>.GenerateRandomObject();
 
         }
