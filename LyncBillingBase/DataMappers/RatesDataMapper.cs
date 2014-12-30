@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using LyncBillingBase.Helpers;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.DataAccess;
+using System.Linq.Expressions;
 
 namespace LyncBillingBase.DataMappers
 {
@@ -27,7 +28,7 @@ namespace LyncBillingBase.DataMappers
          * The SQL Queries Repository
          */
         private SQLQueries.RatesSQL RATES_SQL_QUERIES = new SQLQueries.RatesSQL();
-        
+
 
         /// <summary>
         /// Given a list of Rates Objects, fill their Numbering Plan objects with the Numbering Plan's Data Relations.
@@ -177,6 +178,12 @@ namespace LyncBillingBase.DataMappers
                 var tableName = GetTableNameByGatewayID(GatewayID);
                 var SQL = RATES_SQL_QUERIES.GetInternationalRates(tableName);
 
+                //Check if there is a rates table to get the rates from
+                if (string.IsNullOrEmpty(tableName)) 
+                {
+                    return null;
+                }
+
                 return _interRatesDataMapper.GetAll(SQL_QUERY: SQL).ToList<Rates_International>();
             }
             catch (Exception ex)
@@ -184,31 +191,47 @@ namespace LyncBillingBase.DataMappers
                 throw ex.InnerException;
             }
         }
-        
+
 
         /// <summary>
-        /// 
+        /// Returns all Gateways International Rates Info Key value Per and the key is the Gateway ID
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<int, List<Rates_International>> GetAllGatewaysRatesList()
+        public  Dictionary<int, List<Rates_International>> GetGatewaysRatesByID()
         {
-            //if(!allRates.Keys.Contains(GatewayRateTable.GatewayID))
-                //allRates.Add(GatewayRateTable.GatewayID, ratesPerGateway);
+            List<GatewayRate> gatewayRateInfo = _gatewaysRatesDataMapper.GetAll().ToList();
+            Dictionary<int, List<Rates_International>> internationalRates = new Dictionary<int, List<Rates_International>>();
 
-            throw new NotImplementedException();
+            Parallel.ForEach(gatewayRateInfo, (item) => 
+            {
+                lock (internationalRates)
+                {
+                    internationalRates.Add(item.Gateway.ID, GetInternationalRatesByGatewayID(item.Gateway.ID));
+                }
+            });
+
+            return internationalRates;
         }
 
 
         /// <summary>
-        /// 
+        /// Returns All Gateways International Rates Info Key value Per and the key is the Gateway name
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, List<Rates_International>> GetAllGatewaysRatesDictionary()
+        public Dictionary<string, List<Rates_International>> GetGatewaysRatesByName()
         {
-            //if(!allRates.Keys.Contains(gatewayName))
-            //  allRates.Add(gatewayName, ratesPerGateway)
+            List<GatewayRate> gatewayRateInfo = _gatewaysRatesDataMapper.GetAll().ToList();
+            Dictionary<string, List<Rates_International>> internationalRates = new Dictionary<string, List<Rates_International>>();
 
-            throw new NotImplementedException();
+            Parallel.ForEach(gatewayRateInfo, (item) => 
+            {
+                lock (internationalRates)
+                {
+                    internationalRates.Add(item.Gateway.Name, GetInternationalRatesByGatewayID(item.Gateway.ID));
+                }
+            });
+
+            return internationalRates;
         }
 
         
@@ -309,7 +332,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override IEnumerable<Rate> Get(System.Linq.Expressions.Expression<Func<Rate, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override IEnumerable<Rate> Get(Expression<Func<Rate, bool>> predicate, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }

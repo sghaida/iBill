@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.Helpers;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.DataAccess;
 
@@ -97,14 +98,20 @@ namespace LyncBillingBase.DataMappers
         /// <returns></returns>
         public List<RateForNGN> GetByGatewayID(int GatewayID)
         {
+            List<RateForNGN> gatewayNGNRates = new List<RateForNGN>();
+
             try
             {
                 var tableName = GetTableNameByGatewayID(GatewayID);
+
+                if (string.IsNullOrEmpty(tableName)) 
+                {
+                    return null;
+                }
+                
                 var SQL = RATES_SQL_QUERIES.GetNGNRates(tableName);
-
-                //return base.GetAll(SQL_QUERY: SQL).ToList<RateForNGN>();
-
-                return base.GetAll(dataSourceName: tableName, dataSourceType: GLOBALS.DataSource.Type.DBTable).ToList<RateForNGN>();
+                return gatewayNGNRates.IncludeM(tableName, item => item.NumberingPlanForNGN).ToList();
+                //return base.GetAll(dataSourceName: tableName, dataSourceType: GLOBALS.DataSource.Type.DBTable).IncludeM(tableName, item => item.NumberingPlanForNGN).ToList<RateForNGN>();
             }
             catch (Exception ex)
             {
@@ -112,102 +119,48 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-
         /// <summary>
-        /// 
+        /// Returns All Gateways Rates Info Key value Per and the key is the Gateway ID
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<int, List<RateForNGN>> GetAllGatewaysRatesList()
+        public Dictionary<int, List<RateForNGN>> GetGatewaysNGNRatesByID()
         {
-            throw new NotImplementedException();
 
-            //Dictionary<int, List<RateForNGN>> allRates = new Dictionary<int, List<RateForNGN>>();
-            //List<RateForNGN> ratesPerGateway;
+            Dictionary<int, List<RateForNGN>> ngnlRates = new Dictionary<int, List<RateForNGN>>();
 
-            ////Get Entire GatewaysRates to be able to get all the rates  
+            List<GatewayRate> gatewayRatesInfo = _gatewaysRatesDataMapper.GetAll().ToList();
 
-            //if (StoreLoader.gatewayRates.Count > 0)
-            //{
-            //    foreach (GatewaysRates GatewayRateTable in StoreLoader.gatewayRates)
-            //    {
-            //        // Check RateTable Exists and Rates_International ending time is not null or set : to get uptodate rates table
-            //        if (GatewayRateTable.NgnRatesTableName != null &&
-            //            (GatewayRateTable.EndingDate != DateTime.MinValue ||
-            //            GatewayRateTable.EndingDate != null))
-            //        {
-            //            ratesPerGateway = new List<RatesNGN>();
-            //            ratesPerGateway = GetRates(GatewayRateTable.NgnRatesTableName);
-            //        }
-            //        else
-            //        {
-            //            continue;
-            //        }
+            Parallel.ForEach(gatewayRatesInfo, (item) =>
+            {
+                lock (ngnlRates)
+                {
+                    ngnlRates.Add(item.Gateway.ID, GetByGatewayID(item.Gateway.ID));
+                }
+            });
 
-            //        allRates.Add(GatewayRateTable.GatewayID, ratesPerGateway);
-            //    }
-            //}
+            return ngnlRates;
 
-            //return allRates;
         }
 
-
         /// <summary>
-        /// 
+        /// Returns All Gateways NGN Rates Info Key value Per and the key is the Gateway name
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, List<RateForNGN>> GetAllGatewaysRatesDictionary()
+        public Dictionary<string, List<RateForNGN>> GetGatewaysNGNRatesByName()
         {
-            throw new NotImplementedException();
+            Dictionary<string, List<RateForNGN>> ngnlRates = new Dictionary<string, List<RateForNGN>>();
 
-            //List<RatesNGN> ratesPerGateway;
-            //string gatewayName = string.Empty;
-            //Dictionary<string, List<RatesNGN>> allRates = new Dictionary<string, List<RatesNGN>>();
+            List<GatewayRate> gatewayRatesInfo = _gatewaysRatesDataMapper.GetAll().ToList();
 
-            ////Get Entire GatewaysRates to be able to get all the rates  
+            Parallel.ForEach(gatewayRatesInfo, (item) =>
+            {
+                lock (ngnlRates)
+                {
+                    ngnlRates.Add(item.Gateway.Name, GetByGatewayID(item.Gateway.ID));
+                }
+            });
 
-            //if (StoreLoader.gatewayRates.Count > 0)
-            //{
-            //    foreach (GatewaysRates GatewayRateTable in StoreLoader.gatewayRates)
-            //    {
-            //        gatewayName = string.Empty;
-
-            //        // Check RateTable Exists and Rates_International ending time is not null or set : to get uptodate rates table
-            //        if (GatewayRateTable.NgnRatesTableName != null &&
-            //            (GatewayRateTable.EndingDate != DateTime.MinValue ||
-            //            GatewayRateTable.EndingDate != null))
-            //        {
-            //            ratesPerGateway = new List<RatesNGN>();
-            //            ratesPerGateway = GetRates(GatewayRateTable.NgnRatesTableName);
-            //        }
-            //        else
-            //        {
-            //            continue;
-            //        }
-
-            //        //Example:
-            //        // GatewayRateTable.RatesTableName := "Rates_10.1.1.3_2013_04_02"
-            //        // after splitting ===> gatewayRatesTableName := ["Rates_International", "10.1.1.3", "2013", "04", "02"] or ["Rates_International", "NGN","10.1.1.3", "2013", "04", "02"]
-            //        var gatewayRatesTableName = GatewayRateTable.NgnRatesTableName.Split('_');
-
-            //        if (gatewayRatesTableName.Contains("NGN"))
-            //        {
-
-            //            gatewayName = gatewayRatesTableName[2];
-            //        }
-            //        else
-            //        {
-
-            //            gatewayName = gatewayRatesTableName[1];
-            //        }
-
-
-
-            //        if (!allRates.Keys.Contains(gatewayName))
-            //            allRates.Add(gatewayName, ratesPerGateway);
-            //    }
-            //}
-
-            //return allRates;
+            return ngnlRates;
         }
 
 

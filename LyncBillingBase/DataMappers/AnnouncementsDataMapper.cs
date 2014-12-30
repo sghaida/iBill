@@ -25,7 +25,7 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                return Get(whereConditions: conditions, limit: 0).Include(item=>item.Role).Include(item=>item.Site).ToList<Announcement>();
+                return Get(whereConditions: conditions, limit: 0).IncludeM(item=>item.Role).IncludeM(item=>item.Site).ToList<Announcement>();
             }
             catch (Exception ex)
             {

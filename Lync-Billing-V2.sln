@@ -3,11 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lync-Billing-V2", "Lync-Billing-V2\Lync-Billing-V2.csproj", "{D149B989-FF20-48F1-94F4-0313BF7007AA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyncBillingBase", "LyncBillingBase\LyncBillingBase.csproj", "{4D303F14-08ED-4F92-B7E1-377569A8D7EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyncBillingTesting", "LyncBillingTesting\LyncBillingTesting.csproj", "{4F427DAD-07E0-4F67-9F35-6F05E04025C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneCallsProcessorLoader", "PhoneCallsProcessorLoader\PhoneCallsProcessorLoader.csproj", "{18063064-DCE8-455C-8935-F9A81FB206A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lync2013Plugin", "Lync2013Plugin\Lync2013Plugin.csproj", "{67E57230-E57D-4179-A420-77A9EB4AB2E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{928F8B44-FDDE-4DA1-BA7E-1BECA7C2AD99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{F0C3494D-03C6-4FB8-8A81-C5DE62767E51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneCallsProcessor", "PhoneCallsProcessor\PhoneCallsProcessor.csproj", "{ECBEB87A-859D-4AEC-8529-7AC23581CB65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D149B989-FF20-48F1-94F4-0313BF7007AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D149B989-FF20-48F1-94F4-0313BF7007AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D149B989-FF20-48F1-94F4-0313BF7007AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D149B989-FF20-48F1-94F4-0313BF7007AA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4D303F14-08ED-4F92-B7E1-377569A8D7EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4D303F14-08ED-4F92-B7E1-377569A8D7EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D303F14-08ED-4F92-B7E1-377569A8D7EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,8 +31,24 @@ Global
 		{4F427DAD-07E0-4F67-9F35-6F05E04025C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F427DAD-07E0-4F67-9F35-6F05E04025C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F427DAD-07E0-4F67-9F35-6F05E04025C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18063064-DCE8-455C-8935-F9A81FB206A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18063064-DCE8-455C-8935-F9A81FB206A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18063064-DCE8-455C-8935-F9A81FB206A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18063064-DCE8-455C-8935-F9A81FB206A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67E57230-E57D-4179-A420-77A9EB4AB2E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67E57230-E57D-4179-A420-77A9EB4AB2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67E57230-E57D-4179-A420-77A9EB4AB2E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67E57230-E57D-4179-A420-77A9EB4AB2E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECBEB87A-859D-4AEC-8529-7AC23581CB65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECBEB87A-859D-4AEC-8529-7AC23581CB65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECBEB87A-859D-4AEC-8529-7AC23581CB65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECBEB87A-859D-4AEC-8529-7AC23581CB65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4F427DAD-07E0-4F67-9F35-6F05E04025C4} = {F0C3494D-03C6-4FB8-8A81-C5DE62767E51}
+		{67E57230-E57D-4179-A420-77A9EB4AB2E1} = {928F8B44-FDDE-4DA1-BA7E-1BECA7C2AD99}
 	EndGlobalSection
 EndGlobal
