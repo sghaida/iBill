@@ -85,12 +85,8 @@ namespace LyncBillingBase.Helpers
 
         private bool GetBool() 
         {
-            int value = rand.Next(100);
-
-            if (value <= 50)
-                return true;
-            else
-                return false;
+            int value = rand.Next(256);
+            return value >= 128;
         }
 
         private string GetString() 

@@ -64,9 +64,14 @@ namespace LyncBillingTesting
             //status = _STORAGE.PhoneCalls.Delete(phoneCall, dataSourceName: PhoneCallsTable);
 
             //var depheads = _STORAGE.DepartmentHeads.GetAll();
+            
+           //var users = RandomObjectsGenerator<User>.GenerateRandomObject();
 
-         
-            var users = RandomObjectsGenerator<User>.GenerateRandomObject();
+            RatesDataMapper rates = new RatesDataMapper();
+            RatesForNGNDataMapper ngnRates = new RatesForNGNDataMapper();
+
+            //Dictionary<string, List<Rates_International>> ratesInterNational = rates.GetGatewaysRatesByName();
+            Dictionary<int, List<RateForNGN>> ratesForNGN = ngnRates.GetGatewaysNGNRatesByID();
 
         }
 

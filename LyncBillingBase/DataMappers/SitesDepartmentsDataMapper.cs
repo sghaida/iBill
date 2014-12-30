@@ -59,7 +59,7 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         private void InitializeCacheStore()
         {
-            this._cachedData = base.GetAll().Include(item => item.Site, item => item.Department).ToList<SiteDepartment>();
+            this._cachedData = base.GetAll().IncludeM(item => item.Site, item => item.Department).ToList<SiteDepartment>();
         }
 
 
@@ -132,7 +132,7 @@ namespace LyncBillingBase.DataMappers
                 rowId = base.Insert(dataObject, dataSourceName, dataSourceType);
 
                 dataObject.ID = rowId;
-                dataObject = dataObject.Include(item => item.Site, item => item.Department);
+                dataObject = dataObject.IncludeS(item => item.Site, item => item.Department);
 
                 _cachedData.Add(dataObject);
 
@@ -164,7 +164,7 @@ namespace LyncBillingBase.DataMappers
                     }
 
                     // Get the Site and Department relations of the new site department
-                    dataObject = dataObject.Include(item => item.Site, item => item.Department);
+                    dataObject = dataObject.IncludeS(item => item.Site, item => item.Department);
                     _cachedData.Add(dataObject);
                 }
 

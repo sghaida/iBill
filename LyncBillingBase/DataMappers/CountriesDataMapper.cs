@@ -11,6 +11,13 @@ namespace LyncBillingBase.DataMappers
 {
     public class CountriesDataMapper : DataAccess<Country>
     {
+        private static List<Country> _Countries = new List<Country>();
+
+        public CountriesDataMapper() 
+        {
+            FillCountries();
+        }
+
         /// <summary>
         /// Given an ISO2 Country Code, return the Country object.
         /// </summary>
@@ -47,26 +54,64 @@ namespace LyncBillingBase.DataMappers
         /// <param name="ISO3Code">ISO3 Code, such as: GRC, USA, GBR, JOR, ARE.</param>
         /// <returns>Country object.</returns>
         public Country GetByISO3Code(string ISO3Code)
-        {
-            Country country = null;
+        {  
+            return _Countries.FirstOrDefault(item => item.ISO3Code == ISO3Code);
+        }
 
-            var condition = new Dictionary<string, object>();
-            condition.Add("ISO3Code", ISO3Code);
+        public override IEnumerable<Country> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        { 
+            return _Countries;
+        }
 
-            try
+        public override int Insert(Country dataObject, string dataSourceName = null, LyncBillingBase.GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {  
+            if (_Countries.Contains(dataObject) || _Countries.Exists(item => item.ISO3Code == dataObject.ISO3Code || item.ISO2Code == dataObject.ISO2Code))
             {
-                var results = Get(whereConditions: condition, limit: 1).ToList<Country>();
-
-                if (results != null && results.Count() > 0)
-                {
-                    country = results.First();
-                }
-
-                return country;
+                return -1;
             }
-            catch (Exception ex)
+            else
             {
-                throw ex.InnerException;
+                _Countries.Add(dataObject);
+
+                return base.Insert(dataObject, dataSourceName, dataSourceType);
+            }
+        }
+
+        public override bool Update(Country dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        { 
+            if (_Countries.Exists(item => item.ID == dataObject.ID))
+            {
+                var country = _Countries.FirstOrDefault(item => item.ID == dataObject.ID);
+                
+                _Countries.Remove(country);
+                _Countries.Add(dataObject);
+
+                return base.Update(dataObject, dataSourceName, dataSourceType);
+            }
+            else { return false; }
+            
+        }
+
+        public override bool Delete(Country dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            if (_Countries.Exists(item => item.ID == dataObject.ID))
+            {
+                var country = _Countries.FirstOrDefault(item => item.ID == dataObject.ID);
+                
+                _Countries.Remove(country);
+               
+                return base.Delete(dataObject, dataSourceName, dataSourceType);
+            }
+            else { return false; }
+
+            
+        }
+
+        private void FillCountries() 
+        {
+            if (_Countries == null || _Countries.Count() == 0) 
+            {
+               _Countries = base.GetAll().ToList();
             }
         }
 
