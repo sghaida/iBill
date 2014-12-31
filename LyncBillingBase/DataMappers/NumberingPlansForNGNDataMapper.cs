@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
+using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DataMappers
 {
@@ -247,16 +248,17 @@ namespace LyncBillingBase.DataMappers
 
         public override IEnumerable<NumberingPlanForNGN> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
-            IEnumerable<NumberingPlanForNGN> ngnNumberingPlan = null;
+            IEnumerable<NumberingPlanForNGN> ngnNumberingPlan = new List<NumberingPlanForNGN>();
 
             try
             {
-                ngnNumberingPlan = base.GetAll(dataSourceName, dataSource);
+                //ngnNumberingPlan = base.GetAll(dataSourceName, dataSource);
+                ngnNumberingPlan = ngnNumberingPlan.IncludeM(item => item.Country);
 
-                if (null != ngnNumberingPlan && ngnNumberingPlan.Count() > 0)
-                {
-                    this.FillCountriesAndCurrenciesData(ref ngnNumberingPlan);
-                }
+                //if (null != ngnNumberingPlan && ngnNumberingPlan.Count() > 0)
+                //{
+                //    this.FillCountriesAndCurrenciesData(ref ngnNumberingPlan);
+                //}
 
                 return ngnNumberingPlan;
             }
