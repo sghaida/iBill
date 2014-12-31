@@ -116,7 +116,9 @@
     <Compile Include="Exceptions\NoDataSourceNameException.cs" />
     <Compile Include="Helpers\DataAccessExtensionscs.cs" />
     <Compile Include="Helpers\DataMapperExtensions.cs" />
+    <Compile Include="Helpers\DataReaderExtension.cs" />
     <Compile Include="Helpers\HelperFunctions.cs" />
+    <Compile Include="Helpers\ObjectPropertyInfoField.cs" />
     <Compile Include="Helpers\RandomObjectsGenerator.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Repository\DataStorage.cs" />

@@ -39,8 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ENUMS.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Implementation\ExtensionMethods.cs" />
+    <Compile Include="Implementation\ImporterSQL.cs" />
     <Compile Include="Implementation\Lync2013.cs" />
     <Compile Include="Implementation\PhoneCallsImpl.cs" />
     <Compile Include="Implementation\Repo.cs" />

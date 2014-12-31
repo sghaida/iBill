@@ -12,6 +12,13 @@ namespace LyncBillingBase.DataMappers
 {
     public class CallMarkerStatusDataMapper : DataAccess<CallMarkerStatus>
     {
+        private static List<CallMarkerStatus> _CallMarkerStatus;
+
+        public CallMarkerStatusDataMapper() 
+        {
+            SetData();
+        }
+
         /// <summary>
         /// Given a PhoneCalls Table Name, return all the CallMarkerStatus objects associated with it.
         /// </summary>
@@ -43,15 +50,11 @@ namespace LyncBillingBase.DataMappers
         {
             CallMarkerStatus markerStatus = null;
 
-            var conditions = new Dictionary<string, object>();
-            conditions.Add("phoneCallsTable", PhoneCallsTable);
-            conditions.Add("type", Type);
-
             try
             {
-                var results = Get(whereConditions: conditions, limit: 1).ToList<CallMarkerStatus>();
-
-                if (results != null && results.Count > 0)
+                var results = _CallMarkerStatus.Where(item => item.PhoneCallsTable == PhoneCallsTable && item.Type == Type);
+                
+                if (results != null && results.Count() > 0)
                 {
                     markerStatus = results.First();
                 }
@@ -64,33 +67,80 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-
-        public void UpdateCallMarkerStatus(string phoneCallTable, string type, string timestamp, bool Update = true)
+        public void UpdateCallMarkerStatus(string phoneCallTable, string type, string timestamp, bool update = true)
         {
-            throw new NotImplementedException();
+            if (update == true)
+            {
 
-            //if (Update == true)
-            //{
-            //    Dictionary<string, object> callMarkerStatusData = new Dictionary<string, object>
-            //    {
-            //        {Enums.GetDescription(Enums.CallMarkerStatus.Type), type},
-            //        {Enums.GetDescription(Enums.CallMarkerStatus.Timestamp), timestamp},
-            //        {Enums.GetDescription(Enums.CallMarkerStatus.PhoneCallsTable), phoneCallTable}
+                CallMarkerStatus markerStatus = new CallMarkerStatus();
 
-            //    };
+                markerStatus.PhoneCallsTable = phoneCallTable;
+                markerStatus.Type = type;
+                markerStatus.Timestamp = Convert.ToDateTime(timestamp);
+               
 
-            //    var existingMarkerStatus = CallMarkerStatus.GetCallMarkerStatus(phoneCallTable, type);
+                var existingMarkerStatus = GetByPhoneCallsTableAndType(phoneCallTable, type);
 
-            //    if (existingMarkerStatus == null)
-            //    {
-            //        DBRoutines.INSERT(Enums.GetDescription(Enums.CallMarkerStatus.TableName), callMarkerStatusData);
-            //    }
-            //    else
-            //    {
-            //        //DBRoutines.UPDATE(Enums.GetDescription(Enums.CallMarkerStatus.TableName), callMarkerStatusData, whereClause);
-            //        DBRoutines.UPDATE(Enums.GetDescription(Enums.CallMarkerStatus.TableName), callMarkerStatusData, Enums.GetDescription(Enums.CallMarkerStatus.MarkerId), existingMarkerStatus.MarkerId, ref conn);
-            //    }
-            //}
+                if (existingMarkerStatus == null)
+                {
+                    Insert(markerStatus);
+                }
+                else
+                {
+                    markerStatus.ID = existingMarkerStatus.ID;
+                    Update(markerStatus);
+                }
+            }
+        }
+
+        public override IEnumerable<CallMarkerStatus> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            return _CallMarkerStatus;
+        }
+
+        public override bool Update(CallMarkerStatus dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+
+            var markerstatus = _CallMarkerStatus.FirstOrDefault(item => item.ID == dataObject.ID);
+
+            if (markerstatus != null)
+            {
+                _CallMarkerStatus.Remove(markerstatus);
+                _CallMarkerStatus.Add(dataObject);
+                return base.Update(dataObject, dataSourceName, dataSourceType);
+            }
+            else { return false; }
+            
+        }
+
+        public override int Insert(CallMarkerStatus dataObject, string dataSourceName = null, LyncBillingBase.GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            var markerstatus = _CallMarkerStatus.FirstOrDefault(
+                item => 
+                    item.PhoneCallsTable == dataObject.PhoneCallsTable || 
+                    item.Type == dataObject.Type || 
+                    item.Timestamp == dataObject.Timestamp
+            );
+
+            if (markerstatus == null)
+            {
+                int rowID = base.Insert(dataObject, dataSourceName, dataSourceType);
+                dataObject.ID = rowID;
+
+                _CallMarkerStatus.Add(dataObject);
+
+                return rowID;
+
+            }
+            else { return -1; }
+        }
+
+        public void SetData() 
+        {
+            if (_CallMarkerStatus == null || _CallMarkerStatus.Count() == 0) 
+            {
+                _CallMarkerStatus = base.GetAll().ToList();
+            }
         }
 
     }

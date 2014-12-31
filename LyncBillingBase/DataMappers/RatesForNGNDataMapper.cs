@@ -111,7 +111,6 @@ namespace LyncBillingBase.DataMappers
                 
                 var SQL = RATES_SQL_QUERIES.GetNGNRates(tableName);
                 return gatewayNGNRates.IncludeM(tableName, item => item.NumberingPlanForNGN).ToList();
-                //return base.GetAll(dataSourceName: tableName, dataSourceType: GLOBALS.DataSource.Type.DBTable).IncludeM(tableName, item => item.NumberingPlanForNGN).ToList<RateForNGN>();
             }
             catch (Exception ex)
             {

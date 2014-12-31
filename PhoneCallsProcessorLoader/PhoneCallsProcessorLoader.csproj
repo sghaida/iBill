@@ -52,6 +52,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LyncBillingBase\LyncBillingBase.csproj">
+      <Project>{4d303f14-08ed-4f92-b7e1-377569a8d7eb}</Project>
+      <Name>LyncBillingBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PhoneCallsProcessor\PhoneCallsProcessor.csproj">
       <Project>{ecbeb87a-859d-4aec-8529-7ac23581cb65}</Project>
       <Name>PhoneCallsProcessor</Name>

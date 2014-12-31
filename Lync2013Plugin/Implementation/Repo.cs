@@ -24,6 +24,7 @@ namespace Lync2013Plugin.Implementation
         public static List<Gateway> gateways = repo.Gateways.GetAll().ToList();
         public static List<GatewayRate> gatewayRates = repo.GatewaysRates.GetAll().ToList();
         public static List<PhoneCallExclusion> phoneCallsExclusions = repo.PhoneCallsExclusions.GetAll().ToList();
+        public static Dictionary<string,MonitoringServerInfo> monitoringServerInfo = repo.MonitoringServers.GetMonitoringServersInfoMap();
 
         //TYPEID was Considered instead of ID
         public static List<int> ListofChargeableCallTypes = new List<int>() { 1, 2, 3, 4, 5, 6, 19, 21, 22, 24 };
@@ -31,14 +32,12 @@ namespace Lync2013Plugin.Implementation
         public static List<int> ListOfMobileLinesIDs = new List<int>() { 3, 5, 22 };
         public static List<int> ListOfNGNIDs = new List<int>() { 6, 24 };
         
-        
         //To be Implemented 
         public static Dictionary<int, List<RateForNGN>> ngnRatesPerGateway = repo.RatesForNGN.GetGatewaysNGNRatesByID();
         public static Dictionary<string, List<RateForNGN>> ngnGatewaysRates = repo.RatesForNGN.GetGatewaysNGNRatesByName();
 
         public static Dictionary<int, List<Rates_International>> ratesPerGatway = repo.Rates.GetGatewaysRatesByID();
         public static Dictionary<string, Dictionary<string, List<Rates_National>>> nationalRates = new Dictionary<string,Dictionary<string,List<Rates_National>>>();
-
 
         public static List<Rates_National> GetNationalRates(Gateway gateway, string CountryCodeISO3)
         {
@@ -84,6 +83,6 @@ namespace Lync2013Plugin.Implementation
             
             return tempNationalRates;
         }
-
+        
     }
 }

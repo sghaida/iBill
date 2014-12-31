@@ -18,6 +18,7 @@ namespace LyncBillingBase.DataModels
         public PhoneCall() { }
 
         [IsIDField]
+        [AllowIDInsert]
         [DbColumn("SessionIdTime")] 
         public DateTime SessionIdTime { set; get; }
 
@@ -30,12 +31,15 @@ namespace LyncBillingBase.DataModels
         [DbColumn("SessionEndTime")]
         public DateTime SessionEndTime { set; get; }
 
+        [AllowNull]
         [DbColumn("ChargingParty")] 
         public string ChargingParty { set; get; }
 
+        [AllowNull]
         [DbColumn("DestinationNumberUri")] 
         public string DestinationNumberUri { set; get; }
 
+        [AllowNull]
         [DbColumn("Marker_CallToCountry")] 
         public string Marker_CallToCountry { set; get; }
 
@@ -45,60 +49,77 @@ namespace LyncBillingBase.DataModels
         [DbColumn("Duration")] 
         public decimal Duration { set; get; }
 
+        [AllowNull]
         [DbColumn("UI_UpdatedByUser")] 
         public string UI_UpdatedByUser { set; get; }
 
+        [AllowNull]
         [DbColumn("UI_MarkedOn")]
         public DateTime UI_MarkedOn { set; get; }
 
+        [AllowNull]
         [DbColumn("UI_CallType")] 
         public string UI_CallType { set; get; }
 
+        [AllowNull]
         [DbColumn("UI_AssignedByUser")] 
         public string UI_AssignedByUser { set; get; }
 
+        [AllowNull]
         [DbColumn("UI_AssignedToUser")] 
         public string UI_AssignedToUser { set; get; }
 
+        [AllowNull]
         [DbColumn("UI_AssignedOn")] 
         public DateTime UI_AssignedOn { set; get; }
 
+        [AllowNull]
         [DbColumn("AC_DisputeStatus")] 
         public string AC_DisputeStatus { set; get; }
 
+        [AllowNull]
         [DbColumn("AC_DisputeResolvedOn")] 
         public DateTime AC_DisputeResolvedOn { set; get; }
 
+        [AllowNull]
         [DbColumn("AC_IsInvoiced")] 
         public string AC_IsInvoiced { set; get; }
 
+        [AllowNull]
         [DbColumn("AC_InvoiceDate")] 
         public DateTime AC_InvoiceDate { set; get; }
 
         [DbColumn("SourceUserUri")] 
         public string SourceUserUri { set; get; }
 
+        [AllowNull]
         [DbColumn("SourceNumberUri")] 
         public string SourceNumberUri { set; get; }
 
         [DbColumn("DestinationUserUri")] 
         public string DestinationUserUri { get; set; }
 
+        [AllowNull]
         [DbColumn("FromMediationServer")] 
         public string FromMediationServer { set; get; }
 
+        [AllowNull]
         [DbColumn("ToMediationServer")] 
         public string ToMediationServer { set; get; }
 
+        [AllowNull]
         [DbColumn("FromGateway")] 
         public string FromGateway { set; get; }
 
+        [AllowNull]
         [DbColumn("ToGateway")] 
         public string ToGateway { set; get; }
 
+        [AllowNull]
         [DbColumn("SourceUserEdgeServer")] 
         public string SourceUserEdgeServer { set; get; }
 
+        [AllowNull]
         [DbColumn("DestinationUserEdgeServer")] 
         public string DestinationUserEdgeServer { set; get; }
 
@@ -108,21 +129,27 @@ namespace LyncBillingBase.DataModels
         [DbColumn("PoolFQDN")] 
         public string PoolFQDN { set; get; }
 
+        [AllowNull]
         [DbColumn("OnBehalf")] 
         public string OnBehalf { set; get; }
 
+        [AllowNull]
         [DbColumn("ReferredBy")] 
         public string ReferredBy { set; get; }
 
+        [AllowNull]
         [DbColumn("CalleeURI")] 
         public string CalleeURI { get; set; }
-
+        
+        [AllowNull]
         [DbColumn("Marker_CallFrom")] 
         public long Marker_CallFrom { set; get; }
 
+        [AllowNull]
         [DbColumn("Marker_CallTo")] 
         public long Marker_CallTo { set; get; }
 
+        [AllowNull]
         [DbColumn("Marker_CallTypeID")] 
         public long Marker_CallTypeID { set; get; }
 

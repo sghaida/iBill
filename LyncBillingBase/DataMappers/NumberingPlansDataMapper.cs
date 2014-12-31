@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LyncBillingBase.Helpers;
 
 using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
@@ -29,8 +30,8 @@ namespace LyncBillingBase.DataMappers
                 IEnumerable<Country> allCountries = _countriesDataMapper.GetAll();
 
                 // Enable parallelization on the enumerable collection
-                allCountries = allCountries.AsParallel<Country>();
-                numberingPlan = numberingPlan.AsParallel<NumberingPlan>();
+                //allCountries = allCountries.AsParallel<Country>();
+                //numberingPlan = numberingPlan.AsParallel<NumberingPlan>();
 
                 numberingPlan = 
                     (from dialingRecord in numberingPlan
@@ -47,7 +48,7 @@ namespace LyncBillingBase.DataMappers
                          TypeOfService = dialingRecord.TypeOfService,
                          //RELATIONS
                          Country = countryObject
-                     }).AsEnumerable<NumberingPlan>();
+                     });
             }
             catch(Exception ex)
             {
@@ -267,16 +268,17 @@ namespace LyncBillingBase.DataMappers
 
         public override IEnumerable<NumberingPlan> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
-            IEnumerable<NumberingPlan> numberingPlan = null;
+            IEnumerable<NumberingPlan> numberingPlan = new List<NumberingPlan>() ;
 
             try
             {
                 numberingPlan = base.GetAll(dataSourceName, dataSource);
+                //numberingPlan = numberingPlan.IncludeM(item => item.Country);
 
-                if (null != numberingPlan && numberingPlan.Count() > 0)
-                {
-                    this.FillCountriesAndCurrenciesData(ref numberingPlan);
-                }
+                //if (null != numberingPlan && numberingPlan.Count() > 0)
+                //{
+                //    this.FillCountriesAndCurrenciesData(ref numberingPlan);
+                //}
 
                 return numberingPlan;
             }
