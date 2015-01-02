@@ -63,19 +63,19 @@ namespace LyncBillingBase.DataAccess
         public  static Func<T, object > CreateGetter<T>(PropertyInfo propertyInfo)
         {
             var targetType = propertyInfo.DeclaringType;
-            
-            var info = propertyInfo.GetGetMethod();
-            
-            var type = info.ReturnType;
- 
-            var exTarget = Expression.Parameter (targetType, "t" );
-            var exBody = Expression.Call (exTarget, info);
-            var exBody2 = Expression.Convert (exBody, typeof(object));
-            var lambda = Expression.Lambda<Func<T, object>>(exBody2, exTarget);
-            
-            var action = lambda.Compile ();
 
-            return action;
+            var info = propertyInfo.GetGetMethod();
+
+            var type = info.ReturnType;
+
+            var exTarget = Expression.Parameter(targetType, "t");
+            var exBody = Expression.Call(exTarget, info);
+            var exBody2 = Expression.Convert(exBody, typeof(object));
+            var lambda = Expression.Lambda<Func<T, object>>(exBody2, exTarget);
+
+            var action = lambda.Compile();
+
+            return (Func<T, object>)action;
         }
 
     }

@@ -11,6 +11,7 @@ using LyncBillingBase.DataAttributes;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using LyncBillingBase.DataAccess;
+using System.Data.SqlTypes;
 
 namespace LyncBillingBase.Helpers
 {
@@ -389,7 +390,15 @@ namespace LyncBillingBase.Helpers
 
                      foreach (var setter in setters)
                      {
-                         setter.Value(masterObj, datarow[setter.Key]);
+                         if (!datarow.Table.Columns.Contains(setter.Key) || datarow[setter.Key] == null || datarow[setter.Key] == DBNull.Value) 
+                         {
+                             continue; 
+                         }
+                         else
+                         { 
+                             setter.Value(masterObj, datarow[setter.Key]); 
+                             
+                         }
                      }
 
                      lock (dataList)
@@ -573,6 +582,106 @@ namespace LyncBillingBase.Helpers
             //}
 
             return dataList;
+        }
+
+
+        /// <summary>
+        /// Converts List<T> to Datatable
+        /// </summary>
+        /// <typeparam name="T">ClassName</typeparam>
+        /// <param name="list">List to be converted</param>
+        /// <returns>Populated DataTable</returns>
+        public static DataTable ConvertToDataTable<T>(this List<T> list) where T: class,new()
+        {
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+
+            Dictionary<string, Func<T, object>> getters = new Dictionary<string, Func<T, object>>();
+
+            DataTable dt = new DataTable(typeof(T).Name);
+
+            //Get all the properties
+            List<PropertyInfo> masterPropertyInfoFields = typeof(T).GetProperties(flags)
+                .Where(property => 
+                    property.GetCustomAttribute<DbColumnAttribute>() != null &&
+                    property.GetCustomAttribute<DbColumnAttribute>().Name != "PhoneCallsTableName")  //this is the only exception in the who solution 
+                .Cast<PropertyInfo>()
+               .ToList();
+
+            int propertiesLength = masterPropertyInfoFields.ToArray().Length;
+
+            foreach (var field in masterPropertyInfoFields)
+            {
+                var propertyInfo = typeof(T).GetProperty(field.Name);
+                var columnName = field.GetCustomAttribute<DbColumnAttribute>().Name;
+
+                var getter = Invoker.CreateGetter<T>(propertyInfo);
+
+                getters.Add(columnName, getter);
+
+                DataColumn col = new DataColumn(columnName);
+                col.DataType = propertyInfo.PropertyType;
+
+                if (col.DataType == typeof(decimal))
+                {
+                    col.DefaultValue = Convert.ToDecimal(0);
+                }
+                else if (col.DataType == typeof(string))
+                {
+                    col.DefaultValue = DBNull.Value;
+                }
+                else if (col.DataType == typeof(DateTime))
+                {
+                    col.DefaultValue = SqlDateTime.MinValue.Value;
+                }
+                
+                
+                //Add Columns 
+                dt.Columns.Add(col);
+            }
+            
+
+            //Add Rows
+            Parallel.ForEach(list, (phonecall) => 
+            {
+                int index = 0;
+
+                var values = new object[propertiesLength];
+                DataRow row = dt.NewRow();
+
+                lock (dt)
+                {
+                    foreach (var getter in getters)
+                    {
+                        row[getter.Key] = getter.Value(phonecall);
+                        index++;
+                    }
+
+                    dt.Rows.Add(row);
+                }
+
+            });
+
+            //foreach (T item in list) 
+            //{
+            //    int index = 0;
+
+            //    var values = new object[propertiesLength];
+
+            //    DataRow row = dt.NewRow();
+
+            //    foreach (var getter in getters) 
+            //    {
+            //        row[getter.Key] = getter.Value(item);
+            //        //values[index] = getter.Value(item);
+            //        index++;
+            //    }
+
+            //    //dt.Rows.Add(values);
+            //    dt.Rows.Add(row);
+            //}
+
+
+            return dt;
         }
 
 
