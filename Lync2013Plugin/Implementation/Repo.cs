@@ -44,8 +44,8 @@ namespace Lync2013Plugin.Implementation
             List<Rates_National> tempNationalRates = repo.Rates.GetNationalRatesForCountryByGatewayID(gateway.ID,CountryCodeISO3).ToList();
 
             //Check of the nationalRates container is instantiated
-            if (StoreLoader.nationalRates == null)
-                StoreLoader.nationalRates = new Dictionary<string, Dictionary<string, List<Rates_National>>>();
+            if (Repo.nationalRates == null)
+                Repo.nationalRates = new Dictionary<string, Dictionary<string, List<Rates_National>>>();
 
             //Temporary Containers
           
@@ -54,7 +54,7 @@ namespace Lync2013Plugin.Implementation
             var gatewayRatesObj = Repo.gatewayRates.Find(item => item.GatewayID == gateway.ID);
 
 
-            if (StoreLoader.nationalRates.Keys.Contains(gateway.Name) == true)
+            if (Repo.nationalRates.Keys.Contains(gateway.Name) == true)
             {
                 tempCountryRates = Repo.nationalRates[gateway.Name];
 

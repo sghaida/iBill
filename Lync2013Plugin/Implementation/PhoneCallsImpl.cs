@@ -13,7 +13,7 @@ namespace Lync2013Plugin.Implementation
     {
         private Helpers PhoneCallHelper = new Helpers();
 
-        public PhoneCall SetCallType(PhoneCall thisCall)
+        public PhoneCall SetCallType(PhoneCall phoneCall)
         {
             string srcCountry = string.Empty;
             string dstCountry = string.Empty;
@@ -27,6 +27,8 @@ namespace Lync2013Plugin.Implementation
             string ngnDstCountry = string.Empty;
 
             char[] destinationNumberLeadingChars = new char[2] { '0', '0' };
+
+            PhoneCall thisCall = phoneCall; 
 
             PhoneCallHelper.MatchDID(thisCall.SourceNumberUri, out srcDIDdsc, sipAccount: thisCall.SourceUserUri);
             PhoneCallHelper.MatchDID(thisCall.DestinationNumberUri, out dstDIDdsc, sipAccount: thisCall.DestinationUserUri);
@@ -57,7 +59,7 @@ namespace Lync2013Plugin.Implementation
             if (string.IsNullOrEmpty(thisCall.SourceUserUri) || !PhoneCallHelper.IsValidEmail(thisCall.SourceUserUri))
             {
                 thisCall.Marker_CallType = "INCOMING-CALL";
-                thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                 return thisCall;
             }
@@ -66,7 +68,7 @@ namespace Lync2013Plugin.Implementation
             if (thisCall.SourceUserUri == thisCall.DestinationUserUri || thisCall.SourceNumberUri == thisCall.DestinationNumberUri)
             {
                 thisCall.Marker_CallType = "VOICE-MAIL";
-                thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                 return thisCall;
             }
@@ -82,7 +84,10 @@ namespace Lync2013Plugin.Implementation
                 else
                     thisCall.Marker_CallType = "UNKNOWN-TO-" + dstDIDdsc;
 
-                thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == "SITE-TO-SITE").ID;
+                thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == "SITE-TO-SITE").TypeID;
+               
+                thisCall.Marker_CallTo = 0;
+                thisCall.Marker_CallToCountry = null;
 
                 return thisCall;
                
@@ -92,7 +97,10 @@ namespace Lync2013Plugin.Implementation
             if (string.IsNullOrEmpty(thisCall.FromGateway) && string.IsNullOrEmpty(thisCall.ToGateway) && string.IsNullOrEmpty(thisCall.FromMediationServer) && string.IsNullOrEmpty(thisCall.ToMediationServer))
             {
                 thisCall.Marker_CallType = "LYNC-TO-LYNC";
-                thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
+
+                thisCall.Marker_CallTo = 0;
+                thisCall.Marker_CallToCountry = null;
 
                 return thisCall;
             }
@@ -114,7 +122,10 @@ namespace Lync2013Plugin.Implementation
                         else
                             thisCall.Marker_CallType = "TO-" + dstDIDdsc;
 
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == "SITE-TO-SITE").ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == "SITE-TO-SITE").TypeID;
+
+                        thisCall.Marker_CallTo = 0;
+                        thisCall.Marker_CallToCountry = null;
 
                         return thisCall;
                     }
@@ -122,42 +133,42 @@ namespace Lync2013Plugin.Implementation
                     if (dstCallType == "fixedline")
                     {
                         thisCall.Marker_CallType = "NATIONAL-FIXEDLINE";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
                     else if (dstCallType == "gsm")
                     {
                         thisCall.Marker_CallType = "NATIONAL-MOBILE";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
                     else if (dstCallType == "NGN")
                     {
                         thisCall.Marker_CallType = "NGN";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
                     else if (dstCallType == "TOLL-FREE")
                     {
                         thisCall.Marker_CallType = "TOLL-FREE";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
                     else if (dstCallType == "PUSH-TO-TALK")
                     {
                         thisCall.Marker_CallType = "PUSH-TO-TALK";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
                     else
                     {
                         thisCall.Marker_CallType = "NATIONAL-FIXEDLINE";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
@@ -172,7 +183,10 @@ namespace Lync2013Plugin.Implementation
                         else
                             thisCall.Marker_CallType = "TO-" + dstDIDdsc;
 
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == "SITE-TO-SITE").ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == "SITE-TO-SITE").TypeID;
+
+                        thisCall.Marker_CallTo = 0;
+                        thisCall.Marker_CallToCountry = null;
 
                         return thisCall;
                     }
@@ -180,42 +194,42 @@ namespace Lync2013Plugin.Implementation
                     if (dstCallType == "fixedline")
                     {
                         thisCall.Marker_CallType = "INTERNATIONAL-FIXEDLINE";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
                     else if (dstCallType == "gsm")
                     {
                         thisCall.Marker_CallType = "INTERNATIONAL-MOBILE";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
                     else if (dstCallType == "NGN")
                     {
                         thisCall.Marker_CallType = "NGN";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
                     else if (dstCallType == "TOLL-FREE")
                     {
                         thisCall.Marker_CallType = "TOLL-FREE";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
                     else if (dstCallType == "PUSH-TO-TALK")
                     {
                         thisCall.Marker_CallType = "PUSH-TO-TALK";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
                     else
                     {
                         thisCall.Marker_CallType = "INTERNATIONAL-FIXEDLINE";
-                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                        thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
 
                         return PhoneCallHelper.UpdateChargingPartyField(thisCall);
                     }
@@ -232,12 +246,18 @@ namespace Lync2013Plugin.Implementation
                 if (PhoneCallHelper.IsIMEmail(thisCall.DestinationUserUri))
                 {
                     thisCall.Marker_CallType = "LYNC-TO-IM";
-                    thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                    thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
+
+                    thisCall.Marker_CallTo = 0;
+                    thisCall.Marker_CallToCountry = null;
                 }
                 else
                 {
                     thisCall.Marker_CallType = "LYNC-TO-LYNC";
-                    thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).ID;
+                    thisCall.Marker_CallTypeID = Repo.callTypes.Find(type => type.Name == thisCall.Marker_CallType).TypeID;
+
+                    thisCall.Marker_CallTo = 0;
+                    thisCall.Marker_CallToCountry = null;
                 }
 
                 return thisCall;
@@ -252,10 +272,15 @@ namespace Lync2013Plugin.Implementation
 
         public PhoneCall ApplyRate(PhoneCall thisCall)
         {
-            if (!string.IsNullOrEmpty(thisCall.ToGateway))
+            string Marker_CallToCountry = thisCall.Marker_CallToCountry;
+            string DestinationNumberUri = thisCall.DestinationNumberUri;
+            string  ToGateway = thisCall.ToGateway;
+
+
+            if (!string.IsNullOrEmpty(ToGateway))
             {
                 // Check if we can apply the rates for this phone-call
-                var gateway = Repo.gateways.Find(g => g.Name == thisCall.ToGateway.ToString());
+                var gateway = Repo.gateways.Find(g => g.Name == ToGateway);
 
                 if (gateway != null)
                 {
@@ -268,10 +293,10 @@ namespace Lync2013Plugin.Implementation
                     {
                         //Apply the rate for this phone call
 
-                        var rate = (from r in rates where r.ISO3CountryCode == thisCall.Marker_CallToCountry select r).SingleOrDefault<Rates_International>();
+                        var rate = (from r in rates where r.ISO3CountryCode == Marker_CallToCountry select r).SingleOrDefault<Rates_International>();
 
                         var ngnRate = (from r in ngnRates
-                                       where r.NumberingPlanForNGN.ISO3CountryCode == thisCall.Marker_CallToCountry && Regex.IsMatch(thisCall.DestinationNumberUri.Trim('+'), r.NumberingPlanForNGN.DialingCode.ToString())
+                                       where r.NumberingPlanForNGN.ISO3CountryCode == Marker_CallToCountry && Regex.IsMatch(DestinationNumberUri.Trim('+'), r.NumberingPlanForNGN.DialingCode.ToString())
                                        select r).SingleOrDefault<RateForNGN>();
 
                         //if the call is of type national/international MOBILE then apply the Mobile-Rate, otherwise apply the Fixedline-Rate
@@ -330,7 +355,10 @@ namespace Lync2013Plugin.Implementation
 
         public PhoneCall ApplyExceptions(PhoneCall thisCall)
         {
-            User userInfo = Repo.users.FirstOrDefault(user => user.SipAccount.ToLower() == thisCall.ChargingParty.ToLower());
+            
+            string ChargingParty = thisCall.ChargingParty.ToLower();
+
+            User userInfo = Repo.users.FirstOrDefault(user => user.SipAccount.ToLower() == ChargingParty);
 
             Site site = new Site();
 

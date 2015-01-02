@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastMember">
+      <HintPath>..\packages\FastMember.1.0.0.11\lib\net40\FastMember.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +44,7 @@
   <ItemGroup>
     <Compile Include="ENUMS.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="Implementation\DB.cs" />
     <Compile Include="Implementation\ExtensionMethods.cs" />
     <Compile Include="Implementation\ImporterSQL.cs" />
     <Compile Include="Implementation\Lync2013.cs" />
@@ -58,6 +62,9 @@
       <Project>{ecbeb87a-859d-4aec-8529-7ac23581cb65}</Project>
       <Name>PhoneCallsProcessor</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

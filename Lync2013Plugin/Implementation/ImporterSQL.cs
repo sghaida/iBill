@@ -8,12 +8,14 @@ namespace Lync2013Plugin.Implementation
 {
     public static class SQLs
     {
-        public static string CreateImportCallsQueryLync2013(string LastImportedPhoneCallDate = null)
+        public static string CreateImportCallsQueryLync2013(DateTime LastImportedPhoneCallDate)
         {
             string SQL = string.Empty;
             string WHERE_STATEMENT = string.Empty;
             string SELECT_STATEMENT = string.Empty;
             string ORDER_BY = string.Empty;
+
+            string oneDayAfter = LastImportedPhoneCallDate.AddDays(+1).ToString("yyyy-MM-dd HH:mm:ss.fff");
 
             SELECT_STATEMENT = String.Format
             (
@@ -92,7 +94,9 @@ namespace Lync2013Plugin.Implementation
                         "Users_1.UserUri NOT LIKE '+%@%' AND " +
                         "SessionDetails.ResponseCode = 200 AND " +
                         "SessionDetails.MediaTypes = 16 AND " +
-                        "VoipDetails.SessionIdTime > '{0}'", LastImportedPhoneCallDate
+                        "VoipDetails.SessionIdTime between  '{0}' AND '{1}'",
+                        LastImportedPhoneCallDate.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                        oneDayAfter
                 );
             }
             else
@@ -104,7 +108,7 @@ namespace Lync2013Plugin.Implementation
                     "Users_1.UserUri NOT LIKE '%;user%' AND " +
                     "Users_1.UserUri NOT LIKE '+%@%' AND " +
                     "SessionDetails.ResponseCode = 200 AND " +
-                    "SessionDetails.MediaTypes = 16 "
+                    "SessionDetails.MediaTypes = 16 "                    
                 );
             }
 

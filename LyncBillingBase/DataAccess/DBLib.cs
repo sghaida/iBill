@@ -9,6 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using LyncBillingBase.Libs;
+using System.Data.SqlClient;
+using FastMember;
+
 
 
 namespace LyncBillingBase.DataAccess
@@ -1079,7 +1082,16 @@ namespace LyncBillingBase.DataAccess
                 }
                 else
                 {
-                    values.Append("'" + pair.Value.ToString().Replace("'", "`") + "'" + ",");
+                    //Date should inclue Milliseconds
+                    if (valueType == typeof(DateTime))
+                    {
+                        string value = ((DateTime)pair.Value).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                        values.Append("'" + value.Replace("'", "`") + "'" + ",");
+                    }
+                    else
+                    {
+                        values.Append("'" + pair.Value.ToString().Replace("'", "`") + "'" + ",");
+                    }
                 }
             }
 

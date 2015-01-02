@@ -67,30 +67,28 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public void UpdateCallMarkerStatus(string phoneCallTable, string type, string timestamp, bool update = true)
+        public void UpdateCallMarkerStatus(string phoneCallTable, string type, string timestamp)
         {
-            if (update == true)
-            {
 
-                CallMarkerStatus markerStatus = new CallMarkerStatus();
+            CallMarkerStatus markerStatus = new CallMarkerStatus();
 
-                markerStatus.PhoneCallsTable = phoneCallTable;
-                markerStatus.Type = type;
-                markerStatus.Timestamp = Convert.ToDateTime(timestamp);
+            markerStatus.PhoneCallsTable = phoneCallTable;
+            markerStatus.Type = type;
+            markerStatus.Timestamp = Convert.ToDateTime(timestamp);
                
 
-                var existingMarkerStatus = GetByPhoneCallsTableAndType(phoneCallTable, type);
+            var existingMarkerStatus = GetByPhoneCallsTableAndType(phoneCallTable, type);
 
-                if (existingMarkerStatus == null)
-                {
-                    Insert(markerStatus);
-                }
-                else
-                {
-                    markerStatus.ID = existingMarkerStatus.ID;
-                    Update(markerStatus);
-                }
+            if (existingMarkerStatus == null)
+            {
+                Insert(markerStatus);
             }
+            else
+            {
+                markerStatus.ID = existingMarkerStatus.ID;
+                Update(markerStatus);
+            }
+            
         }
 
         public override IEnumerable<CallMarkerStatus> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
