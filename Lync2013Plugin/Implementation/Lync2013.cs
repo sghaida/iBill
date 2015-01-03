@@ -60,32 +60,33 @@ namespace Lync2013Plugin.Implementation
 
             OleDbDataReader dataReader = null;
            
-
-            CallMarkerStatusDataMapper callMarkerStatusMapper = new CallMarkerStatusDataMapper();
-            PhoneCallsDataMapper PhoneCallsMapper = new PhoneCallsDataMapper();
-
             PhoneCall phoneCallObj = new PhoneCall();
             Dictionary<string, object> phoneCallDic = null;
 
-            int dataRowCounter = 0;
+            var exceptions = new ConcurrentQueue<Exception>();
           
             string column = string.Empty;
 
             DateTime lastImportedPhoneCallDate = DateTime.MinValue;
             
-
             //OPEN CONNECTIONS
             sourceDBConnector.Open();
             DestinationDBConnector.Open();
 
-            dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName), DestinationDBConnector);
-
+            dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName,isRemote:false), DestinationDBConnector);
 
             if (dataReader.Read() && !dataReader.IsDBNull(0))
                 lastImportedPhoneCallDate = dataReader.GetDateTime(dataReader.GetOrdinal("SessionIdTime"));
             else
-                lastImportedPhoneCallDate = DateTime.MinValue;
+            {
+                //Table is empty in this case we need to read from the source that we will import the data from
+                dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate("DialogsView",isRemote:true), sourceDBConnector);
 
+                if (dataReader.Read() && !dataReader.IsDBNull(0))
+                {
+                    lastImportedPhoneCallDate = dataReader.GetDateTime(dataReader.GetOrdinal("SessionIdTime"));
+                }
+            }
 
             while (lastImportedPhoneCallDate <= DateTime.Now.AddDays(-1)) 
             {
@@ -106,13 +107,7 @@ namespace Lync2013Plugin.Implementation
 
                 //Convert Datatable to list of objects
                 List<PhoneCall> phoneCalls = dt.ConvertToList<PhoneCall>();
-                List<PhoneCall> toBeInserted = new List<PhoneCall>();
-
-                object status = new object();
-
-                //To continue the loop even if exception was presented
-                var exceptions = new ConcurrentQueue<Exception>();
-
+               
                 Parallel.ForEach(phoneCalls, (phoneCall) => 
                 {
                     //Set Initial Charging Party Part
@@ -128,108 +123,46 @@ namespace Lync2013Plugin.Implementation
                     phoneCallsFunc.SetCallType(phoneCall);
                     phoneCallsFunc.ApplyRate(phoneCall);
                     phoneCallsFunc.ApplyExceptions(phoneCall);
-
-                    //Fix DateMin Casting to SQL DateMin
-                    //if (phoneCall.SessionEndTime == DateTime.MinValue)
-                    //    phoneCall.SessionEndTime = SqlDateTime.MinValue.Value;
-
-                    //if (phoneCall.ResponseTime == DateTime.MinValue)
-                    //    phoneCall.ResponseTime = SqlDateTime.MinValue.Value;
-
-                    //if (phoneCall.AC_DisputeResolvedOn == DateTime.MinValue)
-                    //    phoneCall.AC_DisputeResolvedOn = SqlDateTime.MinValue.Value;
-
-                    //if (phoneCall.AC_InvoiceDate == DateTime.MinValue)
-                    //    phoneCall.AC_InvoiceDate = SqlDateTime.MinValue.Value;
-
-                    //if (phoneCall.UI_AssignedOn == DateTime.MinValue)
-                    //    phoneCall.UI_AssignedOn = SqlDateTime.MinValue.Value;
-
-                    //if (phoneCall.UI_MarkedOn == DateTime.MinValue)
-                    //    phoneCall.UI_MarkedOn = SqlDateTime.MinValue.Value;
-
-                    lock (status) 
-                    {
-                        //toBeInserted.Add(phoneCall);
-
-                        //This part should be removed after fixing the bulk insert
-                        phoneCallDic = Helpers.ConvertPhoneCallToDictionary(phoneCall);
-
-                        try
-                        {
-                            DBRoutines.INSERT(PhoneCallsTableName, phoneCallDic);
-                        }
-                        catch (Exception e)
-                        {
-                            exceptions.Enqueue(e);
-                        }
-                    }
+                    
                 });
 
-                //toBeInserted.ConvertToDataTable<PhoneCall>().BulkInsert(PhoneCallsTableName);
+                //phoneCalls.ConvertToDataTable<PhoneCall>().BulkInsert(PhoneCallsTableName);
                 //toBeInserted.BulkInsert(PhoneCallsTableName);
 
-               
+                foreach (PhoneCall phoneCall in phoneCalls)
+                {
+                    phoneCallDic = Helpers.ConvertPhoneCallToDictionary(phoneCall);
 
+                    try
+                    {
+                        DBRoutines.INSERT(PhoneCallsTableName, phoneCallDic);
+                    }
+                    catch (Exception e)
+                    {
+                        exceptions.Enqueue(e);
+                    }
+                }
+
+
+                //GarbageCollect the datatable
+                dt.Dispose(); 
+                GC.Collect();
+                
                 //Refresh the date
-                dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName), DestinationDBConnector);
+                dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName,isRemote:false), DestinationDBConnector);
                 
                 if (dataReader.Read() && !dataReader.IsDBNull(0))
                     lastImportedPhoneCallDate = dataReader.GetDateTime(dataReader.GetOrdinal("SessionIdTime"));
 
+                dataReader.Close();
+                dataReader.Dispose();
             }
 
+            //Close All Connection and DataReaders
             sourceDBConnector.Close();
+            DestinationDBConnector.Close();
 
-            Console.WriteLine("Finish importing Calls from " + PhoneCallsTableName);
-
-          
-
-            //while (dataReader.Read())
-            //{
-            //    phoneCallObj = Helpers.FillPhoneCallFromOleDataReader(dataReader);
-
-            //    //Set Initial Charging Party Part
-            //    if (!string.IsNullOrEmpty(phoneCallObj.ReferredBy))
-            //    {
-            //        phoneCallObj.ChargingParty = phoneCallObj.ReferredBy;
-            //    }
-            //    else if (!string.IsNullOrEmpty(phoneCallObj.SourceUserUri))
-            //    {
-            //        phoneCallObj.ChargingParty = phoneCallObj.SourceUserUri;
-            //    }
-
-            //    phoneCallsFunc.SetCallType(phoneCallObj);
-            //    phoneCallsFunc.ApplyRate(phoneCallObj);
-            //    phoneCallsFunc.ApplyExceptions(phoneCallObj);
-
-            //    lastMarkedPhoneCallDate = phoneCallObj.SessionIdTime.ToLongDateString();
-
-            //    phoneCallDic = Helpers.ConvertPhoneCallToDictionary(phoneCallObj);
-
-            //    try
-            //    {
-                    
-            //        //This Solution is better because of the overhead of reflection for millions of records
-            //        DBRoutines.INSERT(PhoneCallsTableName, phoneCallDic);
-
-            //        //Update the CallMarkerStatus table fro this PhoneCall table.
-            //        if (dataRowCounter % 10000 == 0)
-            //        {
-            //            callMarkerStatusMapper.UpdateCallMarkerStatus(PhoneCallsTableName, "Marking", lastMarkedPhoneCallDate);
-            //            callMarkerStatusMapper.UpdateCallMarkerStatus(PhoneCallsTableName, "ApplyingRates", lastMarkedPhoneCallDate);
-            //        }
-
-            //        dataRowCounter += 1;
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        continue;
-            //    }
-
-            //}
-
-            sourceDBConnector.Close();
+            if (dataReader.IsClosed == false) { dataReader.Close(); }
 
             Console.WriteLine("Finish importing Calls from " + PhoneCallsTableName);
 

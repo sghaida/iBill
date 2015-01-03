@@ -60,11 +60,30 @@ namespace Lync2013Plugin.Implementation
 
         public static void BulkInsert(this DataTable dt, string tableName) 
         {
-            using (var bcp = new SqlBulkCopy(DBLib.ConnectionString_Lync.Replace(@"Provider=SQLOLEDB.1;", "")))
+            try
             {
-                bcp.DestinationTableName = tableName;
-                bcp.WriteToServer(dt);
+              
+                using (SqlBulkCopy bcp = new SqlBulkCopy(DBLib.ConnectionString_Lync.Replace(@"Provider=SQLOLEDB.1;", "")
+                    , SqlBulkCopyOptions.TableLock | SqlBulkCopyOptions.KeepNulls | SqlBulkCopyOptions.KeepIdentity)) 
+                {
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(dc.ColumnName, dc.ColumnName));
+                    }
+
+                    bcp.BulkCopyTimeout = 120;
+                    bcp.BatchSize = 1000;
+                    bcp.DestinationTableName = tableName;
+                    bcp.WriteToServer(dt.Select());
+
+                }
+              
             }
+            catch (Exception e) 
+            {
+                throw e.InnerException;
+            }
+
         }
 
     }

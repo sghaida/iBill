@@ -2,6 +2,7 @@
 using LyncBillingBase.DataModels;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -457,6 +458,29 @@ namespace Lync2013Plugin.Implementation
             return thisCall;
         }
 
+        public PhoneCall FixEmptyDates(PhoneCall thisCall) 
+        {
+            //Fix DateMin Casting to SQL DateMin
+            if (thisCall.SessionEndTime == DateTime.MinValue)
+                thisCall.SessionEndTime = SqlDateTime.MinValue.Value;
+
+            if (thisCall.ResponseTime == DateTime.MinValue)
+                thisCall.ResponseTime = SqlDateTime.MinValue.Value;
+
+            if (thisCall.AC_DisputeResolvedOn == DateTime.MinValue)
+                thisCall.AC_DisputeResolvedOn = SqlDateTime.MinValue.Value;
+
+            if (thisCall.AC_InvoiceDate == DateTime.MinValue)
+                thisCall.AC_InvoiceDate = SqlDateTime.MinValue.Value;
+
+            if (thisCall.UI_AssignedOn == DateTime.MinValue)
+                thisCall.UI_AssignedOn = SqlDateTime.MinValue.Value;
+            
+            if (thisCall.UI_MarkedOn == DateTime.MinValue)
+                thisCall.UI_MarkedOn = SqlDateTime.MinValue.Value;
+
+            return thisCall;
+        }
         
     }
 }
