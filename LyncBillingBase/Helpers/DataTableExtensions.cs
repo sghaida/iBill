@@ -598,7 +598,7 @@ namespace LyncBillingBase.Helpers
             Dictionary<string, Func<T, object>> getters = new Dictionary<string, Func<T, object>>();
 
             DataTable dt = new DataTable(typeof(T).Name);
-
+            
             //Get all the properties
             List<PropertyInfo> masterPropertyInfoFields = typeof(T).GetProperties(flags)
                 .Where(property => 
@@ -632,56 +632,44 @@ namespace LyncBillingBase.Helpers
                 else if (col.DataType == typeof(DateTime))
                 {
                     col.DefaultValue = SqlDateTime.MinValue.Value;
+                    col.DateTimeMode = DataSetDateTime.UnspecifiedLocal;
                 }
                 
                 
                 //Add Columns 
                 dt.Columns.Add(col);
             }
-            
+
+            //only for Compisite Primary Key in our case it is phonecalls
+            //dt.PrimaryKey = new[] { dt.Columns[0], dt.Columns[1] };
+
+            //this object will be loacked during parallel loop
+            object status = new object();
 
             //Add Rows
             Parallel.ForEach(list, (phonecall) => 
-            {
-                int index = 0;
-
-                var values = new object[propertiesLength];
-                DataRow row = dt.NewRow();
-
+            {   
                 lock (dt)
                 {
+                    if (phonecall == null)
+                        return;
+                    DataRow row = dt.NewRow();
                     foreach (var getter in getters)
                     {
-                        row[getter.Key] = getter.Value(phonecall);
-                        index++;
+                        //Validate DatetimeMIn and convert it to SQLDateTimeMin
+                        if (dt.Columns[getter.Key].DataType == typeof(DateTime) && (DateTime)getter.Value(phonecall) == DateTime.MinValue)
+                            row[getter.Key] = SqlDateTime.MinValue.Value;
+                        else
+                            row[getter.Key] = getter.Value(phonecall);
                     }
-
+                    
                     dt.Rows.Add(row);
                 }
 
             });
 
-            //foreach (T item in list) 
-            //{
-            //    int index = 0;
-
-            //    var values = new object[propertiesLength];
-
-            //    DataRow row = dt.NewRow();
-
-            //    foreach (var getter in getters) 
-            //    {
-            //        row[getter.Key] = getter.Value(item);
-            //        //values[index] = getter.Value(item);
-            //        index++;
-            //    }
-
-            //    //dt.Rows.Add(values);
-            //    dt.Rows.Add(row);
-            //}
-
-
             return dt;
+
         }
 
 

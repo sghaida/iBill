@@ -15,6 +15,9 @@ namespace Lync2013Plugin.Implementation
             string SELECT_STATEMENT = string.Empty;
             string ORDER_BY = string.Empty;
 
+            //add 1 ms  LastImportedPhoneCallDate to Inorder not to import the same call 2 time
+            LastImportedPhoneCallDate = LastImportedPhoneCallDate.AddMilliseconds(+1);
+            
             string oneDayAfter = LastImportedPhoneCallDate.AddDays(+1).ToString("yyyy-MM-dd HH:mm:ss.fff");
 
             SELECT_STATEMENT = String.Format
@@ -117,9 +120,14 @@ namespace Lync2013Plugin.Implementation
             return SELECT_STATEMENT + WHERE_STATEMENT + ORDER_BY;
         }
 
-        public static string GetLastImportedPhonecallDate(string tableName)
+        public static string GetLastImportedPhonecallDate(string tableName, bool isRemote )
         {
-            return string.Format("SELECT MAX(SessionIdTime) as SessionIdTime FROM {0}", tableName);
+            if(isRemote == false)
+                return string.Format("SELECT MAX(SessionIdTime) as SessionIdTime FROM {0}", tableName);
+            else
+                return string.Format("SELECT MIN(LsCDRSessionIdTime) as SessionIdTime FROM {0}", tableName);
         }
+
+        
     }
 }
