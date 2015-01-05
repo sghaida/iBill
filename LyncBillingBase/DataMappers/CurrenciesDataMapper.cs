@@ -12,7 +12,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class CurrenciesDataMapper : DataAccess<Currency>
     {
-        private List<Currency> _Currencies = new List<Currency>();
+        private static List<Currency> _Currencies = new List<Currency>();
 
 
         public CurrenciesDataMapper()
@@ -64,11 +64,7 @@ namespace LyncBillingBase.DataMappers
         public override int Insert(Currency dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             bool isContained = _Currencies.Contains(dataObject);
-            bool itExists = _Currencies.Exists(
-                item =>
-                    item.Name == dataObject.Name ||
-                    item.ISO3Code == dataObject.ISO3Code
-                );
+            bool itExists = _Currencies.Exists(item => item.Name == dataObject.Name || item.ISO3Code == dataObject.ISO3Code);
 
             if(isContained || itExists)
             {
