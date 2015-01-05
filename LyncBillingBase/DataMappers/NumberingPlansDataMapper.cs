@@ -272,7 +272,7 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                numberingPlan = numberingPlan.IncludeM(item => item.Country);
+                numberingPlan = numberingPlan.GetWithRelations(item => item.Country);
 
                 //if (null != numberingPlan && numberingPlan.Count() > 0)
                 //{

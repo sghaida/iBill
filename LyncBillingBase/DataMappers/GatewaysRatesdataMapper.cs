@@ -28,7 +28,7 @@ namespace LyncBillingBase.DataMappers
         {
             if (_GatewaysRates == null || _GatewaysRates.Count == 0)
             {
-                _GatewaysRates = base.GetAll().IncludeM(item => item.Gateway).ToList();
+                _GatewaysRates = base.GetAll().GetWithRelations(item => item.Gateway).ToList();
             }
         }
 

@@ -25,7 +25,7 @@ namespace LyncBillingBase.DataMappers
         {
             if (_Countries == null || _Countries.Count == 0)
             {
-                _Countries = _Countries.IncludeM(item => item.Currency).ToList();
+                _Countries = _Countries.GetWithRelations(item => item.Currency).ToList();
             }
         }
 

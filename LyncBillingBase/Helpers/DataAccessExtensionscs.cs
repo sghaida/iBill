@@ -15,7 +15,7 @@ namespace LyncBillingBase.Helpers
     {
         private static DBLib DBRoutines = new DBLib();
 
-        public static T IncludeS<T>(this T source, params Expression<Func<T, object>>[] path) where T : DataModel, new()
+        public static T GetWithRelations<T>(this T source, params Expression<Func<T, object>>[] path) where T : DataModel, new()
         {
             DataSourceSchema<T> Schema = new DataSourceSchema<T>();
 
@@ -165,7 +165,7 @@ namespace LyncBillingBase.Helpers
         /// <param name="DataSourceName">The DataSource that you wish to select from incase of Distributed Datasources</param>
         /// <param name="path">the path of the relation such as item=>item.x</param>
         /// <returns>IEnumerable with populated relation </returns>
-        public static IEnumerable<T> IncludeM<T>(this IEnumerable<T> source, string DataSourceName,params Expression<Func<T, object>>[] path) where T : DataModel, new()
+        public static IEnumerable<T> GetWithRelations<T>(this IEnumerable<T> source, string DataSourceName,params Expression<Func<T, object>>[] path) where T : DataModel, new()
         {
             DataSourceSchema<T> Schema = new DataSourceSchema<T>();
 
@@ -284,7 +284,7 @@ namespace LyncBillingBase.Helpers
         /// <param name="source">IEnumerable data which to be evaluated and filled by the extension method</param>
         /// <param name="path">the path of the relation such as item=>item.x</param>
         /// <returns>IEnumerable with populated relation </returns>
-        public static IEnumerable<T> IncludeM<T>(this IEnumerable<T> source, params Expression<Func<T, object>>[] path) where T : DataModel, new()
+        public static IEnumerable<T> GetWithRelations<T>(this IEnumerable<T> source, params Expression<Func<T, object>>[] path) where T : DataModel, new()
         {
             DataSourceSchema<T> Schema = new DataSourceSchema<T>();
 
