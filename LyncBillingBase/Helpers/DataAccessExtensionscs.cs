@@ -379,7 +379,7 @@ namespace LyncBillingBase.Helpers
         }
 
 
-        [Obsolete("This Function is deprecated. kindly use IncludeM() or IncludeS() instead")]
+        [Obsolete("This Function is deprecated. kindly use GetWithRelations instead")]
         public static IEnumerable<T> IncludeRelation<T>(this IEnumerable<T> source,string DataSourceName, params Expression<Func<T, object>>[] path) where T : DataModel, new()
         {
             DataSourceSchema<T> Schema = new DataSourceSchema<T>();
