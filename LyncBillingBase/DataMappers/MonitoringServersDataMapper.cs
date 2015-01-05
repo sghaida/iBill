@@ -11,7 +11,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class MonitoringServersDataMapper : DataAccess<MonitoringServerInfo>
     {
-        private List<MonitoringServerInfo> _MonitoringServers = new List<MonitoringServerInfo>();
+        private static List<MonitoringServerInfo> _MonitoringServers = new List<MonitoringServerInfo>();
 
 
         public MonitoringServersDataMapper()

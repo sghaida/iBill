@@ -12,6 +12,24 @@ namespace LyncBillingBase.DataMappers
 {
     public class RolesDataMapper : DataAccess<Role>
     {
+        private static List<Role> _Roles = new List<Role>();
+
+
+        public RolesDataMapper()
+        {
+            LoadRoles();
+        }
+
+
+        private void LoadRoles()
+        {
+            if(_Roles == null || _Roles.Count == 0)
+            {
+                _Roles = base.GetAll().ToList();
+            }
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -19,25 +37,73 @@ namespace LyncBillingBase.DataMappers
         /// <returns></returns>
         public Role GetByRoleID(int RoleID)
         {
-            Role role = null;
-
-            var condition = new Dictionary<string, object>();
-            condition.Add("RoleID", RoleID);
-
             try
             {
-                var results = base.Get(whereConditions: condition, limit: 1).ToList<Role>();
-
-                if(results != null && results.Count > 0)
-                {
-                    role = results.First();
-                }
-
-                return role;
+                return _Roles.FirstOrDefault(item => item.RoleID == RoleID);
             }
             catch(Exception ex)
             {
                 throw ex.InnerException;
+            }
+        }
+
+
+        public override IEnumerable<Role> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            return _Roles;
+        }
+
+
+        public override int Insert(Role dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            bool isContained = _Roles.Contains(dataObject);
+            bool itExists = _Roles.Exists(item => item.RoleID == dataObject.RoleID && item.RoleName == dataObject.RoleName);
+
+            if (isContained || itExists)
+            {
+                return -1;
+            }
+            else
+            {
+                dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
+                _Roles.Add(dataObject);
+
+                return dataObject.ID;
+            }
+        }
+
+
+        public override bool Update(Role dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            var role = _Roles.Find(item => item.ID == dataObject.ID);
+
+            if (role != null)
+            {
+                _Roles.Remove(role);
+                _Roles.Add(dataObject);
+
+                return base.Update(dataObject, dataSourceName, dataSourceType);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public override bool Delete(Role dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            var role = _Roles.Find(item => item.ID == dataObject.ID);
+
+            if (role != null)
+            {
+                _Roles.Remove(role);
+
+                return base.Delete(dataObject, dataSourceName, dataSourceType);
+            }
+            else
+            {
+                return false;
             }
         }
 
