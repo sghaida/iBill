@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.Helpers;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.DataAccess;
 
@@ -24,7 +25,7 @@ namespace LyncBillingBase.DataMappers
         {
             if (_Countries == null || _Countries.Count == 0)
             {
-                _Countries = base.GetAll().ToList();
+                _Countries = _Countries.IncludeM(item => item.Currency).ToList();
             }
         }
 
