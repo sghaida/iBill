@@ -13,10 +13,22 @@ namespace LyncBillingBase.DataMappers
     {
         private static List<Country> _Countries = new List<Country>();
 
+
         public CountriesDataMapper() 
         {
-            FillCountries();
+            LoadCountries();
         }
+
+
+        private void LoadCountries()
+        {
+            if (_Countries == null || _Countries.Count == 0)
+            {
+                _Countries = base.GetAll().ToList();
+            }
+        }
+
+
 
         /// <summary>
         /// Given an ISO2 Country Code, return the Country object.
@@ -58,60 +70,64 @@ namespace LyncBillingBase.DataMappers
             return _Countries.FirstOrDefault(item => item.ISO3Code == ISO3Code);
         }
 
+
         public override IEnumerable<Country> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         { 
             return _Countries;
         }
 
+
         public override int Insert(Country dataObject, string dataSourceName = null, LyncBillingBase.GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
-        {  
-            if (_Countries.Contains(dataObject) || _Countries.Exists(item => item.ISO3Code == dataObject.ISO3Code || item.ISO2Code == dataObject.ISO2Code))
+        {
+            bool isContained = _Countries.Contains(dataObject);
+            bool itExists = _Countries.Exists(item => item.ISO3Code == dataObject.ISO3Code || item.ISO2Code == dataObject.ISO2Code || item.Name == dataObject.Name);
+
+
+            if (isContained || itExists)
             {
                 return -1;
             }
             else
             {
+                dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
                 _Countries.Add(dataObject);
 
-                return base.Insert(dataObject, dataSourceName, dataSourceType);
+                return dataObject.ID;
             }
         }
+
 
         public override bool Update(Country dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
-        { 
-            if (_Countries.Exists(item => item.ID == dataObject.ID))
+        {
+            var country = _Countries.Find(item => item.ID == dataObject.ID);
+
+            if (country != null)
             {
-                var country = _Countries.FirstOrDefault(item => item.ID == dataObject.ID);
-                
                 _Countries.Remove(country);
                 _Countries.Add(dataObject);
-
+                
                 return base.Update(dataObject, dataSourceName, dataSourceType);
             }
-            else { return false; }
-            
+            else
+            {
+                return false;
+            }
         }
+
 
         public override bool Delete(Country dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
-            if (_Countries.Exists(item => item.ID == dataObject.ID))
+            var country = _Countries.Find(item => item.ID == dataObject.ID);
+
+            if (country != null)
             {
-                var country = _Countries.FirstOrDefault(item => item.ID == dataObject.ID);
-                
                 _Countries.Remove(country);
-               
+                
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }
-            else { return false; }
-
-            
-        }
-
-        private void FillCountries() 
-        {
-            if (_Countries == null || _Countries.Count() == 0) 
+            else
             {
-               _Countries = base.GetAll().ToList();
+                return false;
             }
         }
 

@@ -11,9 +11,26 @@ namespace LyncBillingBase.DataMappers
 {
     public class MonitoringServersDataMapper : DataAccess<MonitoringServerInfo>
     {
+        private List<MonitoringServerInfo> _MonitoringServers = new List<MonitoringServerInfo>();
+
+
+        public MonitoringServersDataMapper()
+        {
+            LoadMonitoringServersInfo();
+        }
+
+
+        private void LoadMonitoringServersInfo()
+        {
+            if(_MonitoringServers == null || _MonitoringServers.Count == 0)
+            { 
+                _MonitoringServers = base.GetAll().ToList();
+            }
+        }
+
+
         public string CreateConnectionString(MonitoringServerInfo monInfo)
         {
-            
             string ConnectionString = null;
 
             if (monInfo.InstanceName != null)
@@ -48,14 +65,12 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                var allServersInfo = base.GetAll().ToList<MonitoringServerInfo>();
-
-                if(allServersInfo != null && allServersInfo.Count > 0)
+                if(_MonitoringServers.Count > 0)
                 {
                     monitoringServersInfoMap = new Dictionary<string, MonitoringServerInfo>();
 
                     Parallel.ForEach(
-                        allServersInfo,
+                        _MonitoringServers,
                         (server) =>
                         {
                             lock(monitoringServersInfoMap)
@@ -81,6 +96,73 @@ namespace LyncBillingBase.DataMappers
             catch(Exception ex)
             {
                 throw ex.InnerException;
+            }
+        }
+
+
+        public override IEnumerable<MonitoringServerInfo> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            return _MonitoringServers;
+        }
+
+
+        public override int Insert(MonitoringServerInfo dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            bool isContained = _MonitoringServers.Contains(dataObject);
+            bool itExists = _MonitoringServers.Exists(
+                item => 
+                    item.InstanceHostName == dataObject.InstanceHostName &&
+                    item.InstanceName == dataObject.InstanceName &&
+                    item.DatabaseName == dataObject.DatabaseName &&
+                    item.PhoneCallsTable == dataObject.PhoneCallsTable
+                );
+
+
+            if(isContained || itExists)
+            {
+                return -1;
+            }
+            else
+            {
+                dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
+                _MonitoringServers.Add(dataObject);
+
+                return dataObject.ID;
+            }
+        }
+
+
+        public override bool Update(MonitoringServerInfo dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            var server = _MonitoringServers.Find(item => item.ID == dataObject.ID);
+
+            if(server != null)
+            {
+                _MonitoringServers.Remove(server);
+                _MonitoringServers.Add(dataObject);
+                
+                return base.Update(dataObject, dataSourceName, dataSourceType);
+            }
+            else
+            {
+                return false; 
+            }
+        }
+
+
+        public override bool Delete(MonitoringServerInfo dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            var server = _MonitoringServers.Find(item => item.ID == dataObject.ID);
+
+            if(server != null)
+            {
+                _MonitoringServers.Remove(server);
+                
+                return base.Delete(dataObject, dataSourceName, dataSourceType);
+            }
+            else
+            {
+                return false;
             }
         }
 
