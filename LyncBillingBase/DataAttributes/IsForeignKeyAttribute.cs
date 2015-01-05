@@ -11,11 +11,11 @@ namespace LyncBillingBase.DataAttributes
     /// </summary>
 
     [System.AttributeUsage(System.AttributeTargets.Property)]
-    public class IsKeyAttribute : Attribute
+    public class IsForeignKeyAttribute : Attribute
     {
         public bool Status { get; private set; }
 
-        public IsKeyAttribute(bool status = true) 
+        public IsForeignKeyAttribute(bool status = true) 
         {
             this.Status = status;
         }

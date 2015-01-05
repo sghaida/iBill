@@ -16,11 +16,11 @@ namespace LyncBillingBase.DataModels
         [DbColumn("ID")]
         public int ID { get; set; }
 
-        [IsKey]
+        [IsForeignKey]
         [DbColumn("SiteID")]
         public int SiteID { get; set; }
 
-        [IsKey]
+        [IsForeignKey]
         [DbColumn("DepartmentID")]
         public int DepartmentID { get; set; }
 

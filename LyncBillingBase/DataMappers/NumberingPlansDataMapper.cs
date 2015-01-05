@@ -272,7 +272,6 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                //numberingPlan = base.GetAll(dataSourceName, dataSource);
                 numberingPlan = numberingPlan.IncludeM(item => item.Country);
 
                 //if (null != numberingPlan && numberingPlan.Count() > 0)
