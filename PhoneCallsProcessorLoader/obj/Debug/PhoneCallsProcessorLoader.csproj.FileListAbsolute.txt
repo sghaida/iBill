@@ -9,6 +9,3 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCall
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.csprojResolveAssemblyReference.cache
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.exe
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\PhoneCallsProcessorLoader.exe.config
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.exe
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.pdb

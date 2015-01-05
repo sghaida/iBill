@@ -24,7 +24,7 @@ namespace LyncBillingBase.DataModels
         [DbColumn("RoleID")]
         public int RoleID { get; set; }
 
-        [IsKey]
+        [IsForeignKey]
         [DbColumn("SiteID")]
         public int SiteID { get; set; }
 

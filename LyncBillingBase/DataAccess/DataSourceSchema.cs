@@ -84,7 +84,7 @@ namespace LyncBillingBase.DataAccess
                     var isIDFieldAttr = field.GetCustomAttribute<IsIDFieldAttribute>();
                     var allowNullAttr = field.GetCustomAttribute<AllowNullAttribute>();
                     var allowIDInsertAttr = field.GetCustomAttribute<AllowIDInsertAttribute>();
-                    var isKeyAttr = field.GetCustomAttribute<IsKeyAttribute>();
+                    var isKeyAttr = field.GetCustomAttribute<IsForeignKeyAttribute>();
                     var excludeAttr = field.GetCustomAttribute<ExcludeAttribute>();
 
                     newDataField.TableField = new DbTableField()
