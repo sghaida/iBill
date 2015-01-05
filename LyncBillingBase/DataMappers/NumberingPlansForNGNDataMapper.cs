@@ -253,7 +253,7 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 //ngnNumberingPlan = base.GetAll(dataSourceName, dataSource);
-                ngnNumberingPlan = ngnNumberingPlan.IncludeM(item => item.Country,item=>item.TypeOfService);
+                ngnNumberingPlan = ngnNumberingPlan.GetWithRelations(item => item.Country,item=>item.TypeOfService);
 
                 //if (null != ngnNumberingPlan && ngnNumberingPlan.Count() > 0)
                 //{
