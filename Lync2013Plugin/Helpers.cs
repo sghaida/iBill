@@ -551,6 +551,19 @@ namespace Lync2013Plugin
             return number;
         }
 
+        private static void ParallelWhile(Func<bool> condition, Action<ParallelLoopState> body)
+        {
+            Parallel.ForEach(Infinite(), (ignored, loopState) =>
+            {
+                if (condition()) body(loopState);
+                else loopState.Stop();
+            });
+        }
+
+        private static IEnumerable<bool> Infinite()
+        {
+            while (true) yield return true;
+        }
     }
 
 
