@@ -109,7 +109,7 @@ namespace LyncBillingBase.DataMappers
                     return null;
                 }
                 
-                var SQL = RATES_SQL_QUERIES.GetNGNRates(tableName);
+                //var SQL = RATES_SQL_QUERIES.GetNGNRates(tableName);
                 return gatewayNGNRates.IncludeM(tableName, item => item.NumberingPlanForNGN).ToList();
             }
             catch (Exception ex)
