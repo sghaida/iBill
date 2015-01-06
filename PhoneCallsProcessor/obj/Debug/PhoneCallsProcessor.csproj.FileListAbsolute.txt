@@ -3,12 +3,13 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\IphoneCal
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\IphoneCallsProcessor\obj\Debug\PhoneCallsProcessor.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\IphoneCallsProcessor\obj\Debug\PhoneCallsProcessor.pdb
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\IphoneCallsProcessor\obj\Debug\PhoneCallsProcessor.csprojResolveAssemblyReference.cache
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessor\bin\Debug\PhoneCallsProcessor.dll
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessor\bin\Debug\PhoneCallsProcessor.pdb
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.dll
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.pdb
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessor\bin\Debug\PhoneCallsProcessor.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessor\bin\Debug\PhoneCallsProcessor.pdb
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.csprojResolveAssemblyReference.cache
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessor\bin\Debug\PhoneCallsProcessor.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessor\bin\Debug\PhoneCallsProcessor.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.csprojResolveAssemblyReference.cache
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.pdb

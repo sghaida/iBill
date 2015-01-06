@@ -80,8 +80,6 @@ namespace LyncBillingBase.DataAccess
             return _whereClause;
         }
 
-
-
         private static Expression StripQuotes(Expression e)
         {
             while (e.NodeType == ExpressionType.Quote)
@@ -136,17 +134,14 @@ namespace LyncBillingBase.DataAccess
             {
                 if (this.ParseToLowerExpression(m, "LOWER"))
                 {
-
-                    Expression nextExpression = m;
-                    return this.Visit(nextExpression);
-                    
+                    return null;
                 }
             }
             else if (m.Method.Name == "ToUpper")
             {   
                 if (this.ParseToUpperExpression(m, "UPPER"))
                 {
-                    Expression nextExpression = m;
+                    Expression nextExpression = m.Arguments[0];
                     return this.Visit(nextExpression);
                 }
             }
@@ -157,8 +152,6 @@ namespace LyncBillingBase.DataAccess
 
             throw new NotSupportedException(string.Format("The method '{0}' is not supported", m.Method.Name));
         }
-
-       
 
         protected override Expression VisitUnary(UnaryExpression u)
         {
@@ -307,7 +300,6 @@ namespace LyncBillingBase.DataAccess
             throw new NotSupportedException(string.Format("The member '{0}' is not supported", m.Member.Name));
         }
 
-
         protected bool IsNullConstant(Expression exp)
         {
             return (exp.NodeType == ExpressionType.Constant && ((ConstantExpression)exp).Value == null);
@@ -368,45 +360,30 @@ namespace LyncBillingBase.DataAccess
 
         private bool ParseToUpperExpression(MethodCallExpression expression, string toUpper)
         {
-            UnaryExpression unary = (UnaryExpression)expression.Arguments[1];
-            LambdaExpression lambdaExpression = (LambdaExpression)unary.Operand;
+            _toUpper = string.Format("{0}({1})", toUpper, ((MemberExpression)expression.Object).Member.Name);
+            sb.Append(_toUpper);
 
-            MemberExpression body = lambdaExpression.Body as MemberExpression;
-
-            if (body != null)
-            {
-                _toUpper = string.Format("({0}{1})", toUpper,body);
-
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         private bool ParseToLowerExpression(MethodCallExpression expression, string toLower)
-        {
-            var member = ((MemberExpression)expression.Object).Member.Name;
+        {  
+            _toLower = string.Format("{0}({1})", toLower,((MemberExpression)expression.Object).Member.Name);
+            sb.Append(_toLower);
            
-
-            _toLower = string.Format("{0}({1})", toLower,member);
-                
             return true;
-           
         }
-
-      
-
 
         //protected override Expression VisitConstant(ConstantExpression node)
         //{
-            
-        //    st.Append(node.Value);
+
+        //    sb.Append(node.Value);
         //    return node;
         //}
 
         //protected override Expression VisitParameter(ParameterExpression node)
         //{
-        //    st.Append(node.Name);
+        //    sb.Append(node.Name);
         //    return node;
         //}
 
