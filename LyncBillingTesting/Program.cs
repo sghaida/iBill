@@ -47,7 +47,20 @@ namespace LyncBillingTesting
             NumberingPlansDataMapper numberingPlan = new NumberingPlansDataMapper();
             var data = numberingPlan.GetAll();
 
-            numberingPlan.Get(item => item.City.ToLower() == "athens");
+
+            string city = "athens";
+            NumberingPlan x = new NumberingPlan();
+            x.City = "athens";
+
+            //Parameter.Input<String>(city)
+            Expression<Func<NumberingPlan, bool>> exp = (item) => item.City.ToLower() == city;
+
+
+            CustomExpressionVisitor ev = new CustomExpressionVisitor();
+
+            string whereClause = ev.Translate(exp);
+
+            //numberingPlan.Get(exp);
 
             /***
              * TESTING PHONE CALLS DATA MAPPER

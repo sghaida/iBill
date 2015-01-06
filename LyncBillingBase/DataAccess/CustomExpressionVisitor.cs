@@ -149,6 +149,10 @@ namespace LyncBillingBase.DataAccess
             {
                 m.Method.Invoke(null,null);
             }
+            else if (m.Method.Name == "Input") 
+            {
+                string x = string.Empty;
+            }
 
             throw new NotSupportedException(string.Format("The method '{0}' is not supported", m.Method.Name));
         }
@@ -296,6 +300,26 @@ namespace LyncBillingBase.DataAccess
                 sb.Append(m.Member.Name);
                 return m;
             }
+            else if(m.Expression != null && m.Expression.NodeType == ExpressionType.Constant)
+            {  
+                var value = GetValue(m);
+                sb.Append(value);
+                
+                return null;
+            }
+            else if (m.Expression != null && m.Expression.NodeType == ExpressionType.MemberAccess) 
+            {
+                string x = string.Empty;
+
+                string memberName = m.Member.Name;
+
+                var value = GetValue(m);
+
+                sb.Append(value);
+
+                return null;
+
+            }
 
             throw new NotSupportedException(string.Format("The member '{0}' is not supported", m.Member.Name));
         }
@@ -372,6 +396,17 @@ namespace LyncBillingBase.DataAccess
             sb.Append(_toLower);
            
             return true;
+        }
+
+        private object GetValue(MemberExpression member)
+        {
+            var objectMember = Expression.Convert(member, typeof(object));
+
+            var getterLambda = Expression.Lambda<Func<object>>(objectMember);
+
+            var getter = getterLambda.Compile();
+
+            return getter();
         }
 
         //protected override Expression VisitConstant(ConstantExpression node)
