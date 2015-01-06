@@ -61,3 +61,8 @@ PhoneCallsProcessorLoader/obj/Debug/PhoneCallsProcessorLoader.csprojResolveAssem
 PhoneCallsProcessorLoader/obj/Debug/PhoneCallsProcessorLoader.exe
 PhoneCallsProcessorLoader/obj/Debug/PhoneCallsProcessorLoader.pdb
 PhoneCallsProcessor/bin/Debug/PhoneCallsProcessor.dll
+PhoneCallsProcessor/bin/Debug/PhoneCallsProcessor.dll
+PhoneCallsProcessor/bin/Debug/PhoneCallsProcessor.pdb
+PhoneCallsProcessor/obj/Debug/PhoneCallsProcessor.dll
+PhoneCallsProcessor/obj/Debug/PhoneCallsProcessor.pdb
+PhoneCallsProcessorLoader/obj/Debug/PhoneCallsProcessorLoader.csproj.FileListAbsolute.txt
