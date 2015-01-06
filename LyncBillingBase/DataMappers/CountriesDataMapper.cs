@@ -90,10 +90,16 @@ namespace LyncBillingBase.DataMappers
             }
             else
             {
-                dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
-                _Countries.Add(dataObject);
+                int rowID = base.Insert(dataObject, dataSourceName, dataSourceType);
 
-                return dataObject.ID;
+                if (rowID > 0)
+                {
+                    dataObject.ID = rowID;
+                    dataObject = dataObject.GetWithRelations(item => item.Currency);
+                    _Countries.Add(dataObject);
+                }
+
+                return rowID;
             }
         }
 
@@ -104,10 +110,17 @@ namespace LyncBillingBase.DataMappers
 
             if (country != null)
             {
-                _Countries.Remove(country);
-                _Countries.Add(dataObject);
-                
-                return base.Update(dataObject, dataSourceName, dataSourceType);
+                bool status = base.Update(dataObject, dataSourceName, dataSourceType);
+
+                if (status == true)
+                {
+                    _Countries.Remove(country);
+
+                    dataObject = dataObject.GetWithRelations(item => item.Currency);
+                    _Countries.Add(dataObject);
+                }
+
+                return status;
             }
             else
             {
