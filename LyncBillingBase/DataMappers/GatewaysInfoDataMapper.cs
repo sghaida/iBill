@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
+using LyncBillingBase.Helpers;
 using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
 
@@ -12,6 +13,28 @@ namespace LyncBillingBase.DataMappers
 {
     public class GatewaysInfoDataMapper : DataAccess<GatewayInfo>
     {
+        private static List<GatewayInfo> _GatewaysInfo = new List<GatewayInfo>();
+
+        private void LoadGatewaysInfo()
+        {
+            if(_GatewaysInfo == null || _GatewaysInfo.Count == 0)
+            {
+                _GatewaysInfo = _GatewaysInfo.GetWithRelations(
+                    item => item.Gateway, 
+                    item => item.GatewayRatesInfo,
+                    item => item.Site, 
+                    item => item.Pool)
+                .ToList();
+            }
+        }
+
+
+        public GatewaysInfoDataMapper()
+        {
+            LoadGatewaysInfo();
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -19,12 +42,9 @@ namespace LyncBillingBase.DataMappers
         /// <returns></returns>
         public List<GatewayInfo> GetByGatewayID(int GatewayID)
         {
-            Dictionary<string, object> conditions = new Dictionary<string, object>();
-            conditions.Add("GatewayID", GatewayID);
-
             try
             {
-                return base.Get(whereConditions: conditions, limit: 0).ToList<GatewayInfo>();
+                return _GatewaysInfo.Where(item => item.GatewayID == GatewayID).ToList();
             }
             catch (Exception ex)
             {
@@ -43,12 +63,9 @@ namespace LyncBillingBase.DataMappers
             List<Gateway> gateways = null;
             List<GatewayInfo> gatewaysInfo = null;
 
-            Dictionary<string, object> conditions = new Dictionary<string, object>();
-            conditions.Add("SiteID", SiteID);
-
             try
             {
-                gatewaysInfo = Get(whereConditions: conditions, limit: 0).ToList<GatewayInfo>();
+                gatewaysInfo = _GatewaysInfo.Where(item => item.SiteID == SiteID).ToList();
 
                 if(gatewaysInfo != null && gatewaysInfo.Count > 0)
                 { 
@@ -74,12 +91,9 @@ namespace LyncBillingBase.DataMappers
             List<Site> sites = null;
             List<GatewayInfo> gatewaysInfo = null;
 
-            Dictionary<string, object> conditions = new Dictionary<string, object>();
-            conditions.Add("GatewayID", GatewayID);
-
             try
             {
-                gatewaysInfo = Get(whereConditions: conditions, limit: 0).ToList<GatewayInfo>();
+                gatewaysInfo = _GatewaysInfo.Where(item => item.GatewayID == GatewayID).ToList();
 
                 if (gatewaysInfo != null && gatewaysInfo.Count > 0)
                 {
@@ -91,6 +105,88 @@ namespace LyncBillingBase.DataMappers
             catch (Exception ex)
             {
                 throw ex.InnerException;
+            }
+        }
+
+
+        public override IEnumerable<GatewayInfo> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            return _GatewaysInfo;
+        }
+
+
+        public override int Insert(GatewayInfo dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            bool isContained = _GatewaysInfo.Contains(dataObject);
+            bool itExists = _GatewaysInfo.Exists(item => item.GatewayID == dataObject.GatewayID && item.SiteID == dataObject.SiteID);
+
+            if (isContained || itExists)
+            {
+                return -1;
+            }
+            else
+            {
+                int rowID = base.Insert(dataObject, dataSourceName, dataSourceType);
+                
+                if(rowID > 0)
+                {
+                    dataObject = dataObject.GetWithRelations(
+                        item => item.Gateway,
+                        item => item.GatewayRatesInfo,
+                        item => item.Site,
+                        item => item.Pool);
+                }
+
+                _GatewaysInfo.Add(dataObject);
+
+                return rowID;
+            }
+        }
+
+
+        public override bool Update(GatewayInfo dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            var gatewayInfo = _GatewaysInfo.Find(item => item.GatewayID == dataObject.GatewayID && item.SiteID == dataObject.SiteID);
+
+            if (gatewayInfo != null)
+            {
+                bool status = base.Update(dataObject, dataSourceName, dataSourceType);
+
+                if(status == true)
+                {
+                    _GatewaysInfo.Remove(gatewayInfo);
+
+                    dataObject = dataObject.GetWithRelations(
+                            item => item.Gateway,
+                            item => item.GatewayRatesInfo,
+                            item => item.Site,
+                            item => item.Pool);
+
+                    _GatewaysInfo.Add(dataObject);
+                }
+
+                return status;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public override bool Delete(GatewayInfo dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        {
+            var gatewayInfo = _GatewaysInfo.Find(item => item.GatewayID == dataObject.GatewayID && item.SiteID == dataObject.SiteID && item.PoolID == dataObject.PoolID);
+
+            if (gatewayInfo != null)
+            {
+                _GatewaysInfo.Remove(gatewayInfo);
+
+                return base.Delete(dataObject, dataSourceName, dataSourceType);
+            }
+            else
+            {
+                return false;
             }
         }
 
