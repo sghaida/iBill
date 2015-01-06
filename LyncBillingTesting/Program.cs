@@ -47,7 +47,7 @@ namespace LyncBillingTesting
             NumberingPlansDataMapper numberingPlan = new NumberingPlansDataMapper();
             var data = numberingPlan.GetAll();
 
-
+            numberingPlan.Get(item => item.City.ToLower() == "athens");
 
             /***
              * TESTING PHONE CALLS DATA MAPPER
@@ -80,6 +80,9 @@ namespace LyncBillingTesting
 
             //Dictionary<string, List<Rates_International>> ratesInterNational = rates.GetGatewaysRatesByName();
             Dictionary<int, List<RateForNGN>> ratesForNGN = ngnRates.GetGatewaysNGNRatesByID();
+
+
+            
 
         }
 
