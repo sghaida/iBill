@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+using LyncBillingBase.DataAttributes;
+
 namespace LyncBillingBase.DataAccess
 {
     public class CustomExpressionVisitor : ExpressionVisitor
@@ -77,11 +79,6 @@ namespace LyncBillingBase.DataAccess
             this.sb = new StringBuilder();
             this.Visit(expression);
             
-            if (!sb.ToString().Contains("Where")) 
-            {
-                sb.Insert(0, "Where ");
-            }
-
             return this.sb.ToString();
         }
 
@@ -300,9 +297,12 @@ namespace LyncBillingBase.DataAccess
 
         protected override Expression VisitMember(MemberExpression m)
         {
+            string fieldName = GetMemberName(m);
+
             if (m.Expression != null && m.Expression.NodeType == ExpressionType.Parameter)
             {
-                sb.Append(m.Member.Name);
+                //sb.Append(m.Member.Name);
+                sb.Append(fieldName);
                 return m;
             }
             else if(m.Expression != null && m.Expression.NodeType == ExpressionType.Constant)
@@ -345,28 +345,34 @@ namespace LyncBillingBase.DataAccess
             throw new NotSupportedException(string.Format("The member '{0}' is not supported", m.Member.Name));
         }
 
+        
         protected bool IsNullConstant(Expression exp)
         {
             return (exp.NodeType == ExpressionType.Constant && ((ConstantExpression)exp).Value == null);
         }
 
+
         private bool ParseOrderByExpression(MethodCallExpression expression, string order)
         {
+            string fieldName = GetMemberName(expression);
             UnaryExpression unary = (UnaryExpression)expression.Arguments[1];
             LambdaExpression lambdaExpression = (LambdaExpression)unary.Operand;
 
             lambdaExpression = (LambdaExpression)Evaluator.PartialEval(lambdaExpression);
 
             MemberExpression body = lambdaExpression.Body as MemberExpression;
+
             if (body != null)
             {
                 if (string.IsNullOrEmpty(_orderBy))
                 {
-                    _orderBy = string.Format("{0} {1}", body.Member.Name, order);
+                    //_orderBy = string.Format("{0} {1}", body.Member.Name, order);
+                    _orderBy = string.Format("{0} {1}", fieldName, order);
                 }
                 else
                 {
-                    _orderBy = string.Format("{0}, {1} {2}", _orderBy, body.Member.Name, order);
+                    //_orderBy = string.Format("{0}, {1} {2}", _orderBy, body.Member.Name, order);
+                    _orderBy = string.Format("{0}, {1} {2}", _orderBy, fieldName, order);
                 }
 
                 return true;
@@ -375,8 +381,10 @@ namespace LyncBillingBase.DataAccess
             return false;
         }
 
+
         private bool ParseSkipExpression(MethodCallExpression expression)
         {
+            string fieldName = GetMemberName(expression);
             ConstantExpression sizeExpression = (ConstantExpression)expression.Arguments[1];
 
             int size;
@@ -389,8 +397,10 @@ namespace LyncBillingBase.DataAccess
             return false;
         }
 
+
         private bool ParseTakeExpression(MethodCallExpression expression)
         {
+            string fieldName = GetMemberName(expression);
             ConstantExpression sizeExpression = (ConstantExpression)expression.Arguments[1];
 
             int size;
@@ -403,31 +413,93 @@ namespace LyncBillingBase.DataAccess
             return false;
         }
 
+
         private bool ParseToUpperExpression(MethodCallExpression expression, string toUpper)
         {
-            _toUpper = string.Format("{0}({1})", toUpper, ((MemberExpression)expression.Object).Member.Name);
+            string fieldName = GetMemberName(expression);
+
+            _toUpper = string.Format("{0}({1})", toUpper, fieldName);
             sb.Append(_toUpper);
 
             return true;
         }
 
+
         private bool ParseToLowerExpression(MethodCallExpression expression, string toLower)
-        {  
-            _toLower = string.Format("{0}({1})", toLower,((MemberExpression)expression.Object).Member.Name);
+        {
+            string fieldName = GetMemberName(expression);
+
+            _toLower = string.Format("{0}({1})", toLower, fieldName);
             sb.Append(_toLower);
            
             return true;
         }
+        
+
+        private string GetMemberName(MethodCallExpression expression)
+        {
+            string fieldName = string.Empty;
+            var member = ((MemberExpression)expression.Object).Member;
+
+            if (member != null && member.CustomAttributes != null && member.CustomAttributes.Count() > 0)
+            {
+                var dbColumn = member.CustomAttributes.FirstOrDefault(item => item.AttributeType == typeof(DbColumnAttribute));
+
+                if (dbColumn != null && dbColumn.ConstructorArguments.Count > 0)
+                {
+                    fieldName = Convert.ToString(dbColumn.ConstructorArguments.First().Value);
+                }
+                else
+                {
+                    fieldName = member.Name;
+                }
+            }
+            else
+            {
+                fieldName = member.Name;
+            }
+
+            return fieldName;
+        }
+
+
+        private string GetMemberName(MemberExpression expression)
+        {
+            string fieldName = string.Empty;
+            var member = expression.Member;
+
+            if (member != null && member.CustomAttributes != null && member.CustomAttributes.Count() > 0)
+            {
+                var dbColumn = member.CustomAttributes.FirstOrDefault(item => item.AttributeType == typeof(DbColumnAttribute));
+
+                if (dbColumn != null && dbColumn.ConstructorArguments.Count > 0)
+                {
+                    fieldName = Convert.ToString(dbColumn.ConstructorArguments.First().Value);
+                }
+                else
+                {
+                    fieldName = member.Name;
+                }
+            }
+            else
+            {
+                fieldName = member.Name;
+            }
+
+            return fieldName;
+        }
+
 
         private object GetValue(MemberExpression member)
-        {   
-                var objectMember = Expression.Convert(member, typeof(object));
-                var getterLambda = Expression.Lambda<Func<object>>(objectMember);
+        {
+            var objectMember = Expression.Convert(member, typeof(object));
+            var getterLambda = Expression.Lambda<Func<object>>(objectMember);
 
-                var getter = getterLambda.Compile();
+            var getter = getterLambda.Compile();
 
-                return getter();
+            return getter();
         }
+
 
         //protected override Expression VisitConstant(ConstantExpression node)
         //{

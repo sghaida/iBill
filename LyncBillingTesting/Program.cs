@@ -24,29 +24,11 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
-            bool status = false;
-            //DataStorage _STORAGE = DataStorage.Instance;
-
-            //var CallsSummariesDM = new UsersCallsSummariesDataMapper();
-
-            //DateTime startingDate = new DateTime(2013, 1, 1);
-            //DateTime endingDate = new DateTime(2013, 12, 30);
-
-            //var summaries = CallsSummariesDM.GetBySite("MOA");
-
-            //summaries = CallsSummariesDM.GetBySite("MOA", startingDate, endingDate);
-
-            //summaries = CallsSummariesDM.GetBySite("MOA", startingDate, endingDate, GLOBALS.CallsSummary.GroupBy.UserOnly);
-
-            //summaries = CallsSummariesDM.GetBySite("MOA", startingDate, endingDate, GLOBALS.CallsSummary.GroupBy.UserAndInvoiceFlag);
-
-
             /***
              * TESTING NUMBERING PLAN
              */
             NumberingPlansDataMapper numberingPlan = new NumberingPlansDataMapper();
-            var data = numberingPlan.GetAll();
-            
+
             string athens = "athens";
             string kaz = "kaz";
 
@@ -54,61 +36,25 @@ namespace LyncBillingTesting
             plan.City = athens;
             plan.ISO3CountryCode = kaz;
 
-
             CustomExpressionVisitor ev = new CustomExpressionVisitor();
 
             Expression<Func<NumberingPlan, bool>> exp1 = (item) => item.City.ToLower() == athens;
-            //string whereClause1 = ev.Translate(exp1);
-            
-            List<NumberingPlan> np = new List<NumberingPlan>();
+            string whereClause1 = ev.Translate(exp1);
 
-            Expression<Func<NumberingPlan, bool>> exp2 = (item) => item.ISO3CountryCode.ToLower()  == kaz;
+            Expression<Func<NumberingPlan, bool>> exp2 = ((item) => item.ISO3CountryCode.ToLower() == kaz);
             string whereClause2 = ev.Translate(exp2);
+
             Expression<Func<NumberingPlan, bool>> exp3 = (item) => item.City.ToLower() == plan.City;
             string whereClause3 = ev.Translate(exp3);
+
             Expression<Func<NumberingPlan, bool>> exp4 = (item) => item.ISO3CountryCode.ToLower() == plan.ISO3CountryCode;
             string whereClause4 = ev.Translate(exp4);
-            numberingPlan.Get(exp1);
-           
 
 
-            //numberingPlan.Get(exp);
+            string x = string.Empty;
 
-            /***
-             * TESTING PHONE CALLS DATA MAPPER
-             */
-            //string PhoneCallsTable = "PhoneCalls2013";
-            //var phoneCalls = _STORAGE.PhoneCalls.GetChargableCallsPerUser("aalhour@ccc.gr");
-
-            //PhoneCall phoneCall = phoneCalls.First();
-               
-            //phoneCall.ChargingParty = "sameeer@ccc.gr";
-            //phoneCall.SessionIdTime = HelperFunctions.ConvertDate(DateTime.Now, excludeHoursAndMinutes: true);
-
-            //_STORAGE.PhoneCalls.Insert(phoneCall, dataSourceName: PhoneCallsTable);
-
-            //phoneCalls = _STORAGE.PhoneCalls.GetChargableCallsPerUser(phoneCall.ChargingParty);
-
-            //phoneCall.UI_MarkedOn = HelperFunctions.ConvertDate(DateTime.Now, excludeHoursAndMinutes: true);
-            //phoneCall.UI_UpdatedByUser = "sameeer@ccc.gr";
-            //phoneCall.UI_CallType = GLOBALS.PhoneCalls.CallTypes.Personal.Value();
-
-            //status = _STORAGE.PhoneCalls.Update(phoneCall, dataSourceName: PhoneCallsTable);
-            //status = _STORAGE.PhoneCalls.Delete(phoneCall, dataSourceName: PhoneCallsTable);
-
-            //var depheads = _STORAGE.DepartmentHeads.GetAll();
-            
-           //var users = RandomObjectsGenerator<User>.GenerateRandomObject();
-
-            RatesDataMapper rates = new RatesDataMapper();
-            RatesForNGNDataMapper ngnRates = new RatesForNGNDataMapper();
-
-            //Dictionary<string, List<Rates_International>> ratesInterNational = rates.GetGatewaysRatesByName();
-            Dictionary<int, List<RateForNGN>> ratesForNGN = ngnRates.GetGatewaysNGNRatesByID();
-
-
-            
-
+            var data1 = numberingPlan.Get(exp1).ToList();
+            var data2 = numberingPlan.Get(exp2).ToList();
         }
 
 
