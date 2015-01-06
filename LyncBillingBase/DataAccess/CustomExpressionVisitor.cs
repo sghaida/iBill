@@ -76,8 +76,13 @@ namespace LyncBillingBase.DataAccess
         {
             this.sb = new StringBuilder();
             this.Visit(expression);
-            _whereClause = this.sb.ToString();
-            return _whereClause;
+            
+            if (!sb.ToString().Contains("Where")) 
+            {
+                sb.Insert(0, "Where ");
+            }
+
+            return this.sb.ToString();
         }
 
         private static Expression StripQuotes(Expression e)
@@ -303,19 +308,35 @@ namespace LyncBillingBase.DataAccess
             else if(m.Expression != null && m.Expression.NodeType == ExpressionType.Constant)
             {  
                 var value = GetValue(m);
-                sb.Append(value);
-                
+
+                if (m.Type == typeof(string) || m.Type == typeof(char))
+                {
+                    sb.Append("'" + value + "'");
+                }
+                else if (m.Type == typeof(DateTime)) 
+                {
+                    sb.Append("'" + Convert.ToDateTime(value).ToString("yyyy-MM-dd hh:mm:ss.fff") + "'");
+                }
+                else
+                {
+                    sb.Append(value);
+                }
+
                 return null;
             }
             else if (m.Expression != null && m.Expression.NodeType == ExpressionType.MemberAccess) 
             {
-                string x = string.Empty;
-
-                string memberName = m.Member.Name;
 
                 var value = GetValue(m);
 
-                sb.Append(value);
+                if (m.Type == typeof(string) || m.Type == typeof(char))
+                {
+                    sb.Append("'" + value + "'");
+                }
+                else
+                {
+                    sb.Append(value);
+                }
 
                 return null;
 
@@ -399,14 +420,13 @@ namespace LyncBillingBase.DataAccess
         }
 
         private object GetValue(MemberExpression member)
-        {
-            var objectMember = Expression.Convert(member, typeof(object));
+        {   
+                var objectMember = Expression.Convert(member, typeof(object));
+                var getterLambda = Expression.Lambda<Func<object>>(objectMember);
 
-            var getterLambda = Expression.Lambda<Func<object>>(objectMember);
+                var getter = getterLambda.Compile();
 
-            var getter = getterLambda.Compile();
-
-            return getter();
+                return getter();
         }
 
         //protected override Expression VisitConstant(ConstantExpression node)

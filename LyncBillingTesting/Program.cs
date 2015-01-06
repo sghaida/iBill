@@ -46,19 +46,31 @@ namespace LyncBillingTesting
              */
             NumberingPlansDataMapper numberingPlan = new NumberingPlansDataMapper();
             var data = numberingPlan.GetAll();
+            
+            string athens = "athens";
+            string kaz = "kaz";
 
-
-            string city = "athens";
-            NumberingPlan x = new NumberingPlan();
-            x.City = "athens";
-
-            //Parameter.Input<String>(city)
-            Expression<Func<NumberingPlan, bool>> exp = (item) => item.City.ToLower() == city;
+            NumberingPlan plan = new NumberingPlan();
+            plan.City = athens;
+            plan.ISO3CountryCode = kaz;
 
 
             CustomExpressionVisitor ev = new CustomExpressionVisitor();
 
-            string whereClause = ev.Translate(exp);
+            Expression<Func<NumberingPlan, bool>> exp1 = (item) => item.City.ToLower() == athens;
+            //string whereClause1 = ev.Translate(exp1);
+            
+            List<NumberingPlan> np = new List<NumberingPlan>();
+
+            Expression<Func<NumberingPlan, bool>> exp2 = (item) => item.ISO3CountryCode.ToLower()  == kaz;
+            string whereClause2 = ev.Translate(exp2);
+            Expression<Func<NumberingPlan, bool>> exp3 = (item) => item.City.ToLower() == plan.City;
+            string whereClause3 = ev.Translate(exp3);
+            Expression<Func<NumberingPlan, bool>> exp4 = (item) => item.ISO3CountryCode.ToLower() == plan.ISO3CountryCode;
+            string whereClause4 = ev.Translate(exp4);
+            numberingPlan.Get(exp1);
+           
+
 
             //numberingPlan.Get(exp);
 
