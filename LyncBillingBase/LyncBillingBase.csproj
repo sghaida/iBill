@@ -59,6 +59,7 @@
     <Compile Include="DataAccess\Invoker.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
     <Compile Include="DataAttributes\ExcludeAttribute.cs" />
+    <Compile Include="DataAttributes\IsKeyAttribute.cs" />
     <Compile Include="DataAttributes\IsForeignKeyAttribute.cs" />
     <Compile Include="DataMappers\AnnouncementsDataMapper.cs" />
     <Compile Include="DataMappers\BundledAccountsDataMapper.cs" />

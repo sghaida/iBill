@@ -17,11 +17,13 @@ namespace LyncBillingBase.DataModels
     {
         public PhoneCall() { }
 
+        [IsKey]
         [IsIDField]
         [AllowIDInsert]
         [DbColumn("SessionIdTime")] 
         public DateTime SessionIdTime { set; get; }
 
+        [IsKey]
         [DbColumn("SessionIdSeq")] 
         public int SessionIdSeq { get; set; }
 
