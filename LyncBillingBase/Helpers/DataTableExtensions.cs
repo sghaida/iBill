@@ -392,12 +392,11 @@ namespace LyncBillingBase.Helpers
                      {
                          if (!datarow.Table.Columns.Contains(setter.Key) || datarow[setter.Key] == null || datarow[setter.Key] == DBNull.Value) 
                          {
-                             continue; 
+                             continue;
                          }
                          else
                          { 
-                             setter.Value(masterObj, datarow[setter.Key]); 
-                             
+                             setter.Value(masterObj, datarow[setter.Key]);
                          }
                      }
 
