@@ -39,16 +39,11 @@ namespace LyncBillingTesting
             CustomExpressionVisitor ev = new CustomExpressionVisitor();
 
             Expression<Func<NumberingPlan, bool>> exp1 = (item) => item.City.ToLower() == athens;
-            string whereClause1 = ev.Translate(exp1);
-
             Expression<Func<NumberingPlan, bool>> exp2 = ((item) => item.ISO3CountryCode.ToLower() == kaz);
-            string whereClause2 = ev.Translate(exp2);
+            //Expression<Func<NumberingPlan, bool>> exp3 = (item) => item.City.OrderByDescending();
 
-            Expression<Func<NumberingPlan, bool>> exp3 = (item) => item.City.ToLower() == plan.City;
-            string whereClause3 = ev.Translate(exp3);
-
-            Expression<Func<NumberingPlan, bool>> exp4 = (item) => item.ISO3CountryCode.ToLower() == plan.ISO3CountryCode;
-            string whereClause4 = ev.Translate(exp4);
+            //string whereClause1 = ev.Translate(exp1);
+            //string whereClause2 = ev.Translate(exp2);
 
 
             string x = string.Empty;
