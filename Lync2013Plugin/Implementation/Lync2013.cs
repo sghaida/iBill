@@ -116,22 +116,22 @@ namespace Lync2013Plugin.Implementation
                     //Convert Datatable to list of objects
                     List<PhoneCall> phoneCalls = ImportingDataTable.ConvertToList<PhoneCall>();
 
-                    Parallel.ForEach(phoneCalls, (phoneCall) =>
+
+                    var partitionsize = Partitioner.Create(0, phoneCalls.Count);
+
+                    Parallel.ForEach(partitionsize, (range, loopStet) =>
                     {
-                        //Set Initial Charging Party Part
-                        if (!string.IsNullOrEmpty(phoneCall.ReferredBy))
+                        for (int i = range.Item1; i < range.Item2; i++)
                         {
-                            phoneCall.ChargingParty = phoneCall.ReferredBy;
-                        }
-                        else if (!string.IsNullOrEmpty(phoneCall.SourceUserUri))
-                        {
-                            phoneCall.ChargingParty = phoneCall.SourceUserUri;
+                            phoneCallsFunc.ProcessPhoneCall(phoneCalls[i]);
                         }
 
-                        phoneCallsFunc.SetCallType(phoneCall);
-                        phoneCallsFunc.ApplyRate(phoneCall);
-                        phoneCallsFunc.ApplyExceptions(phoneCall);
                     });
+
+                    //Parallel.ForEach(phoneCalls, (phoneCall) =>
+                    //{
+                    //    phoneCallsFunc.ProcessPhoneCall(phoneCall);
+                    //});
 
                     // Bulk insert
                     ToBeInsertedDataTable = phoneCalls.ConvertToDataTable<PhoneCall>();
