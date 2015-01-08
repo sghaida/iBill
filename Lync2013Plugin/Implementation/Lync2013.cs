@@ -19,10 +19,10 @@ using System.Collections.Concurrent;
 
 namespace Lync2013Plugin.Implementation
 {
-    class Lync2013 : ICallProcessor
+    public class Lync2013 : ICallProcessor
     {
         private static DBLib DBRoutines = new DBLib();
-        private static OleDbConnection sourceDBConnector;
+        private static OleDbConnection SourceDBConnector;
         private static OleDbConnection DestinationDBConnector;
 
         private ENUMS enums = new ENUMS();
@@ -48,7 +48,7 @@ namespace Lync2013Plugin.Implementation
         {
             try
             {
-                sourceDBConnector = new OleDbConnection(ConstructConnectionString());
+                SourceDBConnector = new OleDbConnection(ConstructConnectionString());
                 DestinationDBConnector = new OleDbConnection(DBLib.ConnectionString_Lync);
             }
             catch (Exception e) { throw e.InnerException; }
@@ -58,9 +58,9 @@ namespace Lync2013Plugin.Implementation
         {
             PhoneCallsImpl phoneCallsFunc = new PhoneCallsImpl();
 
+            DataTable ImportingDataTable;
+            DataTable ToBeInsertedDataTable;
             OleDbDataReader dataReader = null;
-           
-            PhoneCall phoneCallObj = new PhoneCall();
             Dictionary<string, object> phoneCallDic = null;
 
             var exceptions = new ConcurrentQueue<Exception>();
@@ -70,17 +70,20 @@ namespace Lync2013Plugin.Implementation
             DateTime lastImportedPhoneCallDate = DateTime.MinValue;
             
             //OPEN CONNECTIONS
-            sourceDBConnector.Open();
+            SourceDBConnector.Open();
             DestinationDBConnector.Open();
 
             dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName,isRemote:false), DestinationDBConnector);
 
             if (dataReader.Read() && !dataReader.IsDBNull(0))
+            {
                 lastImportedPhoneCallDate = dataReader.GetDateTime(dataReader.GetOrdinal("SessionIdTime"));
+                lastImportedPhoneCallDate = lastImportedPhoneCallDate.AddDays(+1);
+            }
             else
             {
                 //Table is empty in this case we need to read from the source that we will import the data from
-                dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate("DialogsView",isRemote:true), sourceDBConnector);
+                dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate("DialogsView",isRemote:true), SourceDBConnector);
 
                 if (dataReader.Read() && !dataReader.IsDBNull(0))
                 {
@@ -88,78 +91,85 @@ namespace Lync2013Plugin.Implementation
                 }
             }
 
-            while (lastImportedPhoneCallDate <= DateTime.Now.AddDays(-1)) 
+
+            while (lastImportedPhoneCallDate <= DateTime.Now)
             {
                 //Construct CREATE_IMPORT_PHONE_CALLS_QUERY
                 string SQL = SQLs.CreateImportCallsQueryLync2013(lastImportedPhoneCallDate);
 
-                dataReader = DBRoutines.EXECUTEREADER(SQL, sourceDBConnector);
+                dataReader = DBRoutines.EXECUTEREADER(SQL, SourceDBConnector);
 
                 if (lastImportedPhoneCallDate > DateTime.MinValue)
-                    Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + "since " + lastImportedPhoneCallDate);
+                    Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + " since " + lastImportedPhoneCallDate);
                 else
-                    Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + "since the begining");
+                    Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + " since the begining");
 
-                DataTable dt = new DataTable();
+                ImportingDataTable = new DataTable();
 
                 //Load data into Datatable
-                dt.Load(dataReader);
+                ImportingDataTable.Load(dataReader);
 
-                //Convert Datatable to list of objects
-                List<PhoneCall> phoneCalls = dt.ConvertToList<PhoneCall>();
-               
-                Parallel.ForEach(phoneCalls, (phoneCall) => 
+                if (ImportingDataTable.Rows.Count > 0)
                 {
-                    //Set Initial Charging Party Part
-                    if (!string.IsNullOrEmpty(phoneCallObj.ReferredBy))
-                    {
-                        phoneCall.ChargingParty = phoneCall.ReferredBy;
-                    }
-                    else if (!string.IsNullOrEmpty(phoneCall.SourceUserUri))
-                    {
-                        phoneCall.ChargingParty = phoneCall.SourceUserUri;
-                    }
+                    object status = new object();
 
-                    phoneCallsFunc.SetCallType(phoneCall);
-                    phoneCallsFunc.ApplyRate(phoneCall);
-                    phoneCallsFunc.ApplyExceptions(phoneCall);
-                    
-                });
+                    //Convert Datatable to list of objects
+                    List<PhoneCall> phoneCalls = ImportingDataTable.ConvertToList<PhoneCall>();
 
-                //phoneCalls.ConvertToDataTable<PhoneCall>().BulkInsert(PhoneCallsTableName);
-                //toBeInserted.BulkInsert(PhoneCallsTableName);
-
-                foreach (PhoneCall phoneCall in phoneCalls)
-                {
-                    phoneCallDic = Helpers.ConvertPhoneCallToDictionary(phoneCall);
-
-                    try
+                    Parallel.ForEach(phoneCalls, (phoneCall) =>
                     {
-                        DBRoutines.INSERT(PhoneCallsTableName, phoneCallDic);
-                    }
-                    catch (Exception e)
-                    {
-                        exceptions.Enqueue(e);
-                    }
+                        //Set Initial Charging Party Part
+                        if (!string.IsNullOrEmpty(phoneCall.ReferredBy))
+                        {
+                            phoneCall.ChargingParty = phoneCall.ReferredBy;
+                        }
+                        else if (!string.IsNullOrEmpty(phoneCall.SourceUserUri))
+                        {
+                            phoneCall.ChargingParty = phoneCall.SourceUserUri;
+                        }
+
+                        phoneCallsFunc.SetCallType(phoneCall);
+                        phoneCallsFunc.ApplyRate(phoneCall);
+                        phoneCallsFunc.ApplyExceptions(phoneCall);
+                    });
+
+                    // Bulk insert
+                    ToBeInsertedDataTable = phoneCalls.ConvertToDataTable<PhoneCall>();
+                    ToBeInsertedDataTable.BulkInsert(PhoneCallsTableName);
+
+                    ToBeInsertedDataTable.Dispose();
+
+                    //Parallel.ForEach(phoneCalls, (phoneCall) =>
+                    //{
+                    //    phoneCallDic = Helpers.ConvertPhoneCallToDictionary(phoneCall);
+
+                    //    try
+                    //    {
+                    //        DBRoutines.INSERT(PhoneCallsTableName, phoneCallDic);
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        exceptions.Enqueue(e);
+                    //    }
+                    //});
+                        
+                    Console.WriteLine("   [+] Imported: " + phoneCalls.Count + " phone calls.");
                 }
 
 
-                //GarbageCollect the datatable
-                dt.Dispose(); 
-                GC.Collect();
-                
-                //Refresh the date
-                dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName,isRemote:false), DestinationDBConnector);
-                
-                if (dataReader.Read() && !dataReader.IsDBNull(0))
-                    lastImportedPhoneCallDate = dataReader.GetDateTime(dataReader.GetOrdinal("SessionIdTime"));
+                // Increment the datetime object by 1 day.
+                lastImportedPhoneCallDate = lastImportedPhoneCallDate.AddDays(+1);
 
+
+                //GarbageCollect the datatable
+                ImportingDataTable.Dispose();
                 dataReader.Close();
                 dataReader.Dispose();
+                GC.Collect();
             }
 
             //Close All Connection and DataReaders
-            sourceDBConnector.Close();
+            SourceDBConnector.Close();
             DestinationDBConnector.Close();
 
             if (dataReader.IsClosed == false) { dataReader.Close(); }

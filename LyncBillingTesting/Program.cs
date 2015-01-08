@@ -12,6 +12,8 @@ using LyncBillingBase.DataMappers;
 using LyncBillingBase.Helpers;
 using LyncBillingBase.Repository;
 
+using Lync2013Plugin.Implementation;
+
 namespace LyncBillingTesting
 {
     class Program
@@ -24,6 +26,19 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
+            Lync2013 processor = new Lync2013();
+            processor.ProcessPhoneCalls();
+        }
+
+
+        public static void InsertUpdateDeleteTests()
+        {
+            DataStorage _STORAGE = DataStorage.Instance;
+
+            bool status = false;
+
+
+
             /***
              * TESTING NUMBERING PLAN
              */
@@ -39,30 +54,11 @@ namespace LyncBillingTesting
             CustomExpressionVisitor ev = new CustomExpressionVisitor();
 
             Expression<Func<NumberingPlan, bool>> exp1 = (item) => item.City.ToLower() == athens;
-            string whereClause1 = ev.Translate(exp1);
-
             Expression<Func<NumberingPlan, bool>> exp2 = ((item) => item.ISO3CountryCode.ToLower() == kaz);
-            string whereClause2 = ev.Translate(exp2);
-
-            Expression<Func<NumberingPlan, bool>> exp3 = (item) => item.City.ToLower() == plan.City;
-            string whereClause3 = ev.Translate(exp3);
-
-            Expression<Func<NumberingPlan, bool>> exp4 = (item) => item.ISO3CountryCode.ToLower() == plan.ISO3CountryCode;
-            string whereClause4 = ev.Translate(exp4);
-
-
-            string x = string.Empty;
 
             var data1 = numberingPlan.Get(exp1).ToList();
             var data2 = numberingPlan.Get(exp2).ToList();
-        }
 
-
-        public static void InsertUpdateDeleteTests()
-        {
-            DataStorage _STORAGE = DataStorage.Instance;
-
-            bool status = false;
 
 
 
