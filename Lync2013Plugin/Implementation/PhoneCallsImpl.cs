@@ -285,7 +285,6 @@ namespace Lync2013Plugin.Implementation
 
                 if (gateway != null)
                 {
-
                     var rates = (from keyValuePair in Repo.ratesPerGatway where keyValuePair.Key == gateway.ID select keyValuePair.Value).SingleOrDefault<List<Rates_International>>() ?? (new List<Rates_International>());
 
                     var ngnRates = (from KeyValuePair in Repo.ngnRatesPerGateway where KeyValuePair.Key == gateway.ID select KeyValuePair.Value).SingleOrDefault<List<RateForNGN>>() ?? (new List<RateForNGN>());
@@ -310,7 +309,12 @@ namespace Lync2013Plugin.Implementation
                             string sourceCountryCodeISO3 = "N/A";
 
                             if (thisCall.Marker_CallFrom > 0)
-                                sourceCountryCodeISO3 = (Repo.numberingPlan.Find(item => item.DialingPrefix == thisCall.Marker_CallFrom)).ISO3CountryCode;
+                            {
+                                var numPlan = Repo.numberingPlan.AsParallel().First(item => item.DialingPrefix == thisCall.Marker_CallFrom);
+
+                                if(numPlan != null)
+                                    sourceCountryCodeISO3 = numPlan.ISO3CountryCode;
+                            }
 
                             //In case it's a national call
                             if (sourceCountryCodeISO3 == thisCall.Marker_CallToCountry)
@@ -356,21 +360,18 @@ namespace Lync2013Plugin.Implementation
 
         public PhoneCall ApplyExceptions(PhoneCall thisCall)
         {
-            
             string ChargingParty = thisCall.ChargingParty.ToLower();
 
-            User userInfo = Repo.users.FirstOrDefault(user => user.SipAccount.ToLower() == ChargingParty);
+            User userInfo = Repo.users.Find(user => user.SipAccount.ToLower() == ChargingParty);
 
             Site site = new Site();
 
             if (thisCall.Marker_CallTypeID.In(1, 2, 3, 4, 5, 6, 19, 21, 22, 24))
             {
-
                 if (userInfo != null)
                 {
                     site = Repo.sites.Find(item => item.Name == userInfo.SiteName);
                 }
-
 
                 if (site != null && !string.IsNullOrEmpty(site.Name))
                 {
@@ -385,21 +386,36 @@ namespace Lync2013Plugin.Implementation
 
 
                     //Check if there is a source excpetion that applies to this phone call
-                    var srcSiteExceptions = thisSiteExceptions.Find(
-                            item =>
-                                (item.ExclusionType == 'S'.ToString()) &&
-                                (Regex.IsMatch(formattedChargingParty, @"^" + item.ExclusionSubject.ToLower()))
-                            );
+                    //var srcSiteExceptions = thisSiteExceptions.FirstOrDefault(
+                    //        item =>
+                    //            (item.ExclusionType == 'S'.ToString()) &&
+                    //            (Regex.IsMatch(formattedChargingParty, @"^" + item.ExclusionSubject.ToLower()))
+                    //        );
+
+                    var srcSiteExceptions = Repo.phoneCallsExclusions.Find(
+                        item =>
+                            (item.SiteID == site.ID) &&
+                            (item.ExclusionType == 'S'.ToString()) &&
+                            (Regex.IsMatch(formattedChargingParty, @"^" + item.ExclusionSubject.ToLower())));
 
                     //Check if there is a destination exception that applies to this phone call
-                    var dstSiteExceptions = thisSiteExceptions.Find(
+                    //var dstSiteExceptions = thisSiteExceptions.FirstOrDefault(
+                    //        item =>
+                    //            (item.ExclusionType == 'D'.ToString()) &&
+                    //            (
+                    //                Regex.IsMatch(formattedDestinationNumber, @"^" + item.ExclusionSubject) ||
+                    //                Regex.IsMatch(formattedDestinationUserUri, @"^" + item.ExclusionSubject.ToLower())
+                    //            )
+                    //        );
+
+                    var dstSiteExceptions = Repo.phoneCallsExclusions.Find(
                             item =>
+                                (item.SiteID == site.ID) &&
                                 (item.ExclusionType == 'D'.ToString()) &&
                                 (
                                     Regex.IsMatch(formattedDestinationNumber, @"^" + item.ExclusionSubject) ||
                                     Regex.IsMatch(formattedDestinationUserUri, @"^" + item.ExclusionSubject.ToLower())
-                                )
-                            );
+                                ));
 
 
                     //If any exception case applies continue

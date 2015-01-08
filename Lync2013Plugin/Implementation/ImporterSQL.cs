@@ -15,10 +15,15 @@ namespace Lync2013Plugin.Implementation
             string SELECT_STATEMENT = string.Empty;
             string ORDER_BY = string.Empty;
 
-            //add 1 ms  LastImportedPhoneCallDate to Inorder not to import the same call 2 time
-            LastImportedPhoneCallDate = LastImportedPhoneCallDate.AddMilliseconds(+1);
-            
-            string oneDayAfter = LastImportedPhoneCallDate.AddDays(+1).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Reset the time part in the date time object
+            Helpers.ResetTime(ref LastImportedPhoneCallDate);
+
+            //Process the LastImportedPhoneCallDate as it is.
+            string fromDate = LastImportedPhoneCallDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+            //The toDate is one day after the last date
+            string toDate = LastImportedPhoneCallDate.AddDays(+1).ToString("yyyy-MM-dd HH:mm:ss.fff");
+
 
             SELECT_STATEMENT = String.Format
             (
@@ -98,8 +103,8 @@ namespace Lync2013Plugin.Implementation
                         "SessionDetails.ResponseCode = 200 AND " +
                         "SessionDetails.MediaTypes = 16 AND " +
                         "VoipDetails.SessionIdTime between  '{0}' AND '{1}'",
-                        LastImportedPhoneCallDate.ToString("yyyy-MM-dd HH:mm:ss.fff"),
-                        oneDayAfter
+                        fromDate,
+                        toDate
                 );
             }
             else

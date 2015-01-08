@@ -17,10 +17,44 @@ namespace Lync2013Plugin
 {
     public class Helpers
     {
-
         private ADLib adRoutines = new ADLib();
 
         private static ENUMS enums = new ENUMS();
+
+        private static void ParallelWhile(Func<bool> condition, Action<ParallelLoopState> body)
+        {
+            Parallel.ForEach(Infinite(), (ignored, loopState) =>
+            {
+                if (condition()) body(loopState);
+                else loopState.Stop();
+            });
+        }
+
+        private static IEnumerable<bool> Infinite()
+        {
+            while (true) yield return true;
+        }
+
+        private static bool ValidateColumnName(ref OleDbDataReader dataReader, ref string columnName)
+        {
+            try
+            {
+                if (dataReader.GetOrdinal(columnName) >= 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        /***
+         * PUBLIC STATIC METHODS
+         */
+        #region Static-Public-Methods
 
         public static string ConvertDate(DateTime datetTime)
         {
@@ -241,21 +275,19 @@ namespace Lync2013Plugin
             return phoneCall;
         }
 
-        private static bool ValidateColumnName(ref OleDbDataReader dataReader, ref string columnName)
+        public static void ResetTime(ref DateTime dateTime)
         {
-            try
-            {
-                if (dataReader.GetOrdinal(columnName) >= 0)
-                    return true;
-                else
-                    return false;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            dateTime = dateTime.AddHours(-dateTime.Hour);
+            dateTime = dateTime.AddMinutes(-dateTime.Minute);
+            dateTime = dateTime.AddSeconds(-dateTime.Second);
+            dateTime = dateTime.AddMilliseconds(-dateTime.Millisecond);
         }
+        #endregion
 
+        /***
+         * PUBLIC NON-STATIC METHODS
+         */
+        #region Non-Static-Public-Methods
 
         public string FixNumberType(string number)
         {
@@ -551,20 +583,7 @@ namespace Lync2013Plugin
             return number;
         }
 
-        private static void ParallelWhile(Func<bool> condition, Action<ParallelLoopState> body)
-        {
-            Parallel.ForEach(Infinite(), (ignored, loopState) =>
-            {
-                if (condition()) body(loopState);
-                else loopState.Stop();
-            });
-        }
-
-        private static IEnumerable<bool> Infinite()
-        {
-            while (true) yield return true;
-        }
+        #endregion
     }
-
 
 }
