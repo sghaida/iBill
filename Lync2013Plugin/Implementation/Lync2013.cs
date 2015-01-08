@@ -19,7 +19,7 @@ using System.Collections.Concurrent;
 
 namespace Lync2013Plugin.Implementation
 {
-    class Lync2013 : ICallProcessor
+    public class Lync2013 : ICallProcessor
     {
         private static DBLib DBRoutines = new DBLib();
         private static OleDbConnection SourceDBConnector;
@@ -58,9 +58,9 @@ namespace Lync2013Plugin.Implementation
         {
             PhoneCallsImpl phoneCallsFunc = new PhoneCallsImpl();
 
+            DataTable ImportingDataTable;
+            DataTable ToBeInsertedDataTable;
             OleDbDataReader dataReader = null;
-           
-            PhoneCall phoneCallObj = new PhoneCall();
             Dictionary<string, object> phoneCallDic = null;
 
             var exceptions = new ConcurrentQueue<Exception>();
@@ -104,20 +104,22 @@ namespace Lync2013Plugin.Implementation
                 else
                     Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + " since the begining");
 
-                DataTable dt = new DataTable();
+                ImportingDataTable = new DataTable();
 
                 //Load data into Datatable
-                dt.Load(dataReader);
+                ImportingDataTable.Load(dataReader);
 
-                if (dt.Rows.Count > 0)
+                if (ImportingDataTable.Rows.Count > 0)
                 {
+                    object status = new object();
+
                     //Convert Datatable to list of objects
-                    List<PhoneCall> phoneCalls = dt.ConvertToList<PhoneCall>();
+                    List<PhoneCall> phoneCalls = ImportingDataTable.ConvertToList<PhoneCall>();
 
                     Parallel.ForEach(phoneCalls, (phoneCall) =>
                     {
                         //Set Initial Charging Party Part
-                        if (!string.IsNullOrEmpty(phoneCallObj.ReferredBy))
+                        if (!string.IsNullOrEmpty(phoneCall.ReferredBy))
                         {
                             phoneCall.ChargingParty = phoneCall.ReferredBy;
                         }
@@ -129,29 +131,28 @@ namespace Lync2013Plugin.Implementation
                         phoneCallsFunc.SetCallType(phoneCall);
                         phoneCallsFunc.ApplyRate(phoneCall);
                         phoneCallsFunc.ApplyExceptions(phoneCall);
-
                     });
 
-                    //phoneCalls.ConvertToDataTable<PhoneCall>().BulkInsert(PhoneCallsTableName);
-                    //toBeInserted.BulkInsert(PhoneCallsTableName);
+                    // Bulk insert
+                    ToBeInsertedDataTable = phoneCalls.ConvertToDataTable<PhoneCall>();
+                    ToBeInsertedDataTable.BulkInsert(PhoneCallsTableName);
 
-                    //var tempDT = phoneCalls.ConvertToDataTable();
+                    ToBeInsertedDataTable.Dispose();
 
+                    //Parallel.ForEach(phoneCalls, (phoneCall) =>
+                    //{
+                    //    phoneCallDic = Helpers.ConvertPhoneCallToDictionary(phoneCall);
 
-                    foreach (PhoneCall phoneCall in phoneCalls)
-                    {
-                        phoneCallDic = Helpers.ConvertPhoneCallToDictionary(phoneCall);
-
-                        try
-                        {
-                            DBRoutines.INSERT(PhoneCallsTableName, phoneCallDic);
-                        }
-                        catch (Exception e)
-                        {
-                            exceptions.Enqueue(e);
-                        }
-                    }
-
+                    //    try
+                    //    {
+                    //        DBRoutines.INSERT(PhoneCallsTableName, phoneCallDic);
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        exceptions.Enqueue(e);
+                    //    }
+                    //});
+                        
                     Console.WriteLine("   [+] Imported: " + phoneCalls.Count + " phone calls.");
                 }
 
@@ -161,7 +162,7 @@ namespace Lync2013Plugin.Implementation
 
 
                 //GarbageCollect the datatable
-                dt.Dispose();
+                ImportingDataTable.Dispose();
                 dataReader.Close();
                 dataReader.Dispose();
                 GC.Collect();
