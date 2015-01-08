@@ -497,6 +497,25 @@ namespace Lync2013Plugin.Implementation
 
             return thisCall;
         }
-        
+
+        public PhoneCall ProcessPhoneCall(PhoneCall phoneCall)
+        {
+            //Set Initial Charging Party Part
+            if (!string.IsNullOrEmpty(phoneCall.ReferredBy))
+            {
+                phoneCall.ChargingParty = phoneCall.ReferredBy;
+            }
+            else if (!string.IsNullOrEmpty(phoneCall.SourceUserUri))
+            {
+                phoneCall.ChargingParty = phoneCall.SourceUserUri;
+            }
+
+           phoneCall = SetCallType(phoneCall);
+           phoneCall = ApplyRate(phoneCall);
+           phoneCall = ApplyExceptions(phoneCall);
+
+            return phoneCall;
+        }
+
     }
 }
