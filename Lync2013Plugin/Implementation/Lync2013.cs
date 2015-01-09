@@ -102,12 +102,23 @@ namespace Lync2013Plugin.Implementation
                 else
                     Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + " since the begining");
 
+                
+                //DataTable ImportingDataTable = new DataTable();
+
+                //Load data into Datatable
+                //ImportingDataTable.BeginLoadData();
+                //ImportingDataTable.Load(dataReader);
+                //ImportingDataTable.EndLoadData();
+
+                //Read DB and map it to List of PhoneCalls
                 var phoneCalls = DB.ReadSqlData<PhoneCall>(dataReader, DB.PhoneCallsSelector).ToList();
 
+                
                 //ImportingDataTable = new DataTable();
 
                 //Load data into Datatable
                 //ImportingDataTable.Load(dataReader);
+
 
                 if (phoneCalls.Count() > 0)
                 {
