@@ -5,6 +5,7 @@ using LyncBillingBase.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
@@ -82,6 +83,15 @@ namespace Lync2013Plugin.Implementation
             catch (Exception e) 
             {
                 throw e.InnerException;
+            }
+
+        }
+
+        public static IEnumerable<T> ReadSqlData<T>( OleDbDataReader reader, Func<IDataRecord, T> selector)
+        {
+            while (reader.Read()) 
+            {
+               yield return selector(reader);
             }
 
         }
