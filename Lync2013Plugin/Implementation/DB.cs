@@ -86,10 +86,15 @@ namespace Lync2013Plugin.Implementation
         
         public static IEnumerable<T> ReadSqlData<T>(OleDbDataReader reader, Func<IDataRecord, T> selector)
         {
-            while (reader.Read()) 
+            //List<T> results = new List<T>();
+
+            while(reader.Read()) 
             {
                 yield return selector(reader);
+                //results.Add(selector(reader));
             }
+
+           //return results;
         }
 
 
@@ -127,6 +132,17 @@ namespace Lync2013Plugin.Implementation
             OnBehalf = (record["OnBehalf"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("OnBehalf")),
             CalleeURI = (record["CalleeURI"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("CalleeURI"))
         };
+
+        public static void CloseDataReader(this OleDbDataReader dataReader)
+        {
+            if (dataReader.IsClosed == false)
+            {
+                dataReader.Close();
+                dataReader.Dispose();
+            }
+        }
     }
+
+    
 
 }
