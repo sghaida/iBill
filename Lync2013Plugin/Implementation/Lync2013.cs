@@ -91,7 +91,6 @@ namespace Lync2013Plugin.Implementation
                 }
             }
 
-
             while (lastImportedPhoneCallDate <= DateTime.Now)
             {
                 //Construct CREATE_IMPORT_PHONE_CALLS_QUERY
@@ -104,20 +103,69 @@ namespace Lync2013Plugin.Implementation
                 else
                     Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + " since the begining");
 
-                ImportingDataTable = new DataTable();
+                var phoneCalls = DB.ReadSqlData<PhoneCall>(dataReader, (record) => new PhoneCall
+                {
+                    SessionIdTime = record.GetDateTime(record.GetOrdinal("SessionIdTime")),
+                    SessionIdSeq = record.GetInt32(record.GetOrdinal("SessionIdSeq")),
+                    ResponseTime = record.GetDateTime(record.GetOrdinal("ResponseTime")),
+                    SessionEndTime = record.GetDateTime(record.GetOrdinal("SessionEndTime")),
+
+                    Duration = record.GetDecimal(record.GetOrdinal("Duration")),
+
+                    SourceUserUri = record.GetString(record.GetOrdinal("SourceUserUri")),
+                    DestinationUserUri = record.GetString(record.GetOrdinal("DestinationUserUri")),
+                    
+                    SourceNumberUri = record.GetString(record.GetOrdinal("SourceNumberUri")),
+                    DestinationNumberUri = record.GetString(record.GetOrdinal("DestinationNumberUri")),
+                    
+                    FromMediationServer = record.GetString(record.GetOrdinal("FromMediationServer")),
+                    ToMediationServer = record.GetString(record.GetOrdinal("ToMediationServer")),
+                    
+                    FromGateway = record.GetString(record.GetOrdinal("FromGateway")),
+                    ToGateway = record.GetString(record.GetOrdinal("ToGateway")),
+                    
+                    SourceUserEdgeServer = record.GetString(record.GetOrdinal("SourceUserEdgeServer")),
+                    DestinationUserEdgeServer = record.GetString(record.GetOrdinal("DestinationUserEdgeServer")),
+                   
+                    ServerFQDN = record.GetString(record.GetOrdinal("ServerFQDN")),
+                    PoolFQDN = record.GetString(record.GetOrdinal("PoolFQDN")),
+                    OnBehalf = record.GetString(record.GetOrdinal("OnBehalf")),
+                    ChargingParty = record.GetString(record.GetOrdinal("ChargingParty")),
+                   
+                    Marker_CallFrom = (record["Marker_CallFrom"] != null && record["Marker_CallFrom"] != DBNull.Value) ? record.GetInt64(record.GetOrdinal("Marker_CallFrom")) : 0,
+                    Marker_CallTo = record.GetInt64(record.GetOrdinal("Marker_CallTo")),
+                    Marker_CallToCountry = record.GetString(record.GetOrdinal("Marker_CallToCountry")),
+                    Marker_CallCost = record.GetDecimal(record.GetOrdinal("Marker_CallCost")),
+                    Marker_CallTypeID = record.GetInt64(record.GetOrdinal("Marker_CallTypeID")),
+                    Marker_CallType = record.GetString(record.GetOrdinal("Marker_CallType")),
+                    
+                    UI_MarkedOn = record.GetDateTime(record.GetOrdinal("UI_MarkedOn")),
+                    UI_UpdatedByUser = record.GetString(record.GetOrdinal("UI_UpdatedByUser")),
+                    UI_AssignedByUser = record.GetString(record.GetOrdinal("UI_AssignedByUser")),
+                    UI_AssignedOn = record.GetDateTime(record.GetOrdinal("UI_AssignedOn")),
+                    UI_CallType = record.GetString(record.GetOrdinal("UI_CallType")),
+                    AC_DisputeStatus = record.GetString(record.GetOrdinal("AC_DisputeStatus")),
+                    AC_DisputeResolvedOn = record.GetDateTime(record.GetOrdinal("AC_DisputeResolvedOn")),
+                    AC_IsInvoiced = record.GetString(record.GetOrdinal("AC_IsInvoiced")),
+                    AC_InvoiceDate = record.GetDateTime(record.GetOrdinal("AC_InvoiceDate")),
+
+                    CalleeURI = record.GetString(record.GetOrdinal("CalleeURI")),
+                    UI_AssignedToUser = record.GetString(record.GetOrdinal("UI_AssignedToUser")),
+                    PhoneCallsTableName = "phonecalls2013"
+
+                    
+                }).ToList();
+
+                //ImportingDataTable = new DataTable();
 
                 //Load data into Datatable
-                ImportingDataTable.Load(dataReader);
+                //ImportingDataTable.Load(dataReader);
 
-                if (ImportingDataTable.Rows.Count > 0)
+                if (phoneCalls.Count() > 0)
                 {
                     object status = new object();
 
-                    //Convert Datatable to list of objects
-                    List<PhoneCall> phoneCalls = ImportingDataTable.ConvertToList<PhoneCall>();
-
-
-                    var partitionsize = Partitioner.Create(0, phoneCalls.Count);
+                    var partitionsize = Partitioner.Create(0, phoneCalls.Count());
 
                     Parallel.ForEach(partitionsize, (range, loopStet) =>
                     {
@@ -128,31 +176,12 @@ namespace Lync2013Plugin.Implementation
 
                     });
 
-                    //Parallel.ForEach(phoneCalls, (phoneCall) =>
-                    //{
-                    //    phoneCallsFunc.ProcessPhoneCall(phoneCall);
-                    //});
-
                     // Bulk insert
                     ToBeInsertedDataTable = phoneCalls.ConvertToDataTable<PhoneCall>();
                     ToBeInsertedDataTable.BulkInsert(PhoneCallsTableName);
 
                     ToBeInsertedDataTable.Dispose();
-
-                    //Parallel.ForEach(phoneCalls, (phoneCall) =>
-                    //{
-                    //    phoneCallDic = Helpers.ConvertPhoneCallToDictionary(phoneCall);
-
-                    //    try
-                    //    {
-                    //        DBRoutines.INSERT(PhoneCallsTableName, phoneCallDic);
-                    //    }
-                    //    catch (Exception e)
-                    //    {
-                    //        exceptions.Enqueue(e);
-                    //    }
-                    //});
-                        
+    
                     Console.WriteLine("   [+] Imported: " + phoneCalls.Count + " phone calls.");
                 }
 
@@ -162,7 +191,7 @@ namespace Lync2013Plugin.Implementation
 
 
                 //GarbageCollect the datatable
-                ImportingDataTable.Dispose();
+                //ImportingDataTable.Dispose();
                 dataReader.Close();
                 dataReader.Dispose();
                 GC.Collect();
