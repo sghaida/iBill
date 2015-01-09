@@ -97,53 +97,35 @@ namespace Lync2013Plugin.Implementation
         {
             PhoneCallsTableName = "PhoneCalls2013",
 
-            SessionIdTime = Helpers.IsNull(record["SessionIdTime"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("SessionIdTime")),
-            SessionIdSeq = Helpers.IsNull(record["SessionIdSeq"]) ? Convert.ToInt32(0) : record.GetInt32(record.GetOrdinal("SessionIdSeq")),
-            ResponseTime = Helpers.IsNull(record["ResponseTime"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("ResponseTime")),
-            SessionEndTime = Helpers.IsNull(record["SessionEndTime"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("SessionEndTime")),
+            SessionIdTime = record.GetDateTime(record.GetOrdinal("SessionIdTime")),
+            SessionIdSeq = record.GetInt32(record.GetOrdinal("SessionIdSeq")),
 
-            Duration = Helpers.IsNull(record["Duration"]) ? Convert.ToDecimal(0) : record.GetDecimal(record.GetOrdinal("Duration")),
 
-            SourceUserUri = Helpers.IsNull(record["SourceUserUri"]) ? string.Empty : record.GetString(record.GetOrdinal("SourceUserUri")),
-            DestinationUserUri = Helpers.IsNull("DestinationUserUri") ? string.Empty : record.GetString(record.GetOrdinal("DestinationUserUri")),
+            ResponseTime = (record["ResponseTime"] == DBNull.Value) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("ResponseTime")),
+            SessionEndTime = (record["SessionEndTime"] == DBNull.Value) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("SessionEndTime")),
 
-            SourceNumberUri = Helpers.IsNull(record["SourceNumberUri"]) ? string.Empty : record.GetString(record.GetOrdinal("SourceNumberUri")),
-            DestinationNumberUri = Helpers.IsNull(record["DestinationNumberUri"]) ? string.Empty : record.GetString(record.GetOrdinal("DestinationNumberUri")),
+            Duration = (record["Duration"] == DBNull.Value) ? Convert.ToDecimal(0) : record.GetDecimal(record.GetOrdinal("Duration")),
 
-            FromMediationServer = Helpers.IsNull(record["FromMediationServer"]) ? string.Empty : record.GetString(record.GetOrdinal("FromMediationServer")),
-            ToMediationServer = Helpers.IsNull(record["ToMediationServer"]) ? string.Empty : record.GetString(record.GetOrdinal("ToMediationServer")),
+            SourceUserUri = (record["SourceUserUri"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("SourceUserUri")),
+            DestinationUserUri = (record["DestinationUserUri"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("DestinationUserUri")),
 
-            FromGateway = Helpers.IsNull(record["FromGateway"]) ? string.Empty : record.GetString(record.GetOrdinal("FromGateway")),
-            ToGateway = Helpers.IsNull(record["ToGateway"]) ? string.Empty : record.GetString(record.GetOrdinal("ToGateway")),
+            SourceNumberUri = (record["SourceNumberUri"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("SourceNumberUri")),
+            DestinationNumberUri = (record["DestinationNumberUri"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("DestinationNumberUri")),
 
-            SourceUserEdgeServer = Helpers.IsNull(record["SourceUserEdgeServer"]) ? string.Empty : record.GetString(record.GetOrdinal("SourceUserEdgeServer")),
-            DestinationUserEdgeServer = Helpers.IsNull(record["DestinationUserEdgeServer"]) ? string.Empty : record.GetString(record.GetOrdinal("DestinationUserEdgeServer")),
+            FromMediationServer = (record["FromMediationServer"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("FromMediationServer")),
+            ToMediationServer = (record["ToMediationServer"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("ToMediationServer")),
 
-            ServerFQDN = Helpers.IsNull(record["ServerFQDN"]) ? string.Empty : record.GetString(record.GetOrdinal("ServerFQDN")),
-            PoolFQDN = Helpers.IsNull(record["PoolFQDN"]) ? string.Empty : record.GetString(record.GetOrdinal("PoolFQDN")),
-            ReferredBy = Helpers.IsNull(record["ReferredBy"]) ? string.Empty : record.GetString(record.GetOrdinal("ReferredBy")),
-            OnBehalf = Helpers.IsNull(record["OnBehalf"]) ? string.Empty : record.GetString(record.GetOrdinal("OnBehalf")),
-            CalleeURI = Helpers.IsNull(record["CalleeURI"]) ? string.Empty : record.GetString(record.GetOrdinal("CalleeURI")),
-            
-            //ChargingParty = Helpers.IsNull(record["ChargingParty"]) ? string.Empty : record.GetString(record.GetOrdinal("ChargingParty")),
-            
-            //Marker_CallFrom = Helpers.IsNull(record["Marker_CallFrom"]) ? Convert.ToInt64(0) : record.GetInt64(record.GetOrdinal("Marker_CallFrom")),
-            //Marker_CallTo = Helpers.IsNull(record["Marker_CallTo"]) ? Convert.ToInt64(0) : record.GetInt64(record.GetOrdinal("Marker_CallTo")),
-            //Marker_CallToCountry = Helpers.IsNull(record["Marker_CallToCountry"]) ? string.Empty : record.GetString(record.GetOrdinal("Marker_CallToCountry")),
-            //Marker_CallCost = Helpers.IsNull(record["Marker_CallCost"]) ? Convert.ToDecimal(0) : record.GetDecimal(record.GetOrdinal("Marker_CallCost")),
-            //Marker_CallTypeID = Helpers.IsNull(record["Marker_CallTypeID"]) ? Convert.ToInt64(0) : record.GetInt64(record.GetOrdinal("Marker_CallTypeID")),
-            //Marker_CallType = Helpers.IsNull(record["Marker_CallType"]) ? string.Empty : record.GetString(record.GetOrdinal("Marker_CallType")),
+            FromGateway = (record["FromGateway"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("FromGateway")),
+            ToGateway = (record["ToGateway"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("ToGateway")),
 
-            //UI_MarkedOn = Helpers.IsNull(record["UI_MarkedOn"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("UI_MarkedOn")),
-            //UI_UpdatedByUser = Helpers.IsNull(record["UI_UpdatedByUser"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_UpdatedByUser")),
-            //UI_AssignedByUser = Helpers.IsNull(record["UI_AssignedByUser"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_AssignedByUser")),
-            //UI_AssignedOn = Helpers.IsNull(record["UI_AssignedOn"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("UI_AssignedOn")),
-            //UI_CallType = Helpers.IsNull(record["UI_CallType"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_CallType")),
-            //AC_DisputeStatus = Helpers.IsNull(record["AC_DisputeStatus"]) ? string.Empty : record.GetString(record.GetOrdinal("AC_DisputeStatus")),
-            //AC_DisputeResolvedOn = Helpers.IsNull(record["AC_DisputeResolvedOn"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("AC_DisputeResolvedOn")),
-            //AC_IsInvoiced = Helpers.IsNull(record["AC_IsInvoiced"]) ? string.Empty : record.GetString(record.GetOrdinal("AC_IsInvoiced")),
-            //AC_InvoiceDate = Helpers.IsNull(record["AC_InvoiceDate"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("AC_InvoiceDate")),
-            //UI_AssignedToUser = Helpers.IsNull(record["UI_AssignedToUser"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_AssignedToUser"))
+            SourceUserEdgeServer = (record["SourceUserEdgeServer"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("SourceUserEdgeServer")),
+            DestinationUserEdgeServer = (record["DestinationUserEdgeServer"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("DestinationUserEdgeServer")),
+
+            ServerFQDN = (record["ServerFQDN"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("ServerFQDN")),
+            PoolFQDN = (record["PoolFQDN"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("PoolFQDN")),
+            ReferredBy = (record["ReferredBy"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("ReferredBy")),
+            OnBehalf = (record["OnBehalf"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("OnBehalf")),
+            CalleeURI = (record["CalleeURI"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("CalleeURI"))
         };
     }
 
