@@ -56,6 +56,14 @@ namespace Lync2013Plugin
          */
         #region Static-Public-Methods
 
+        public static bool IsNull(object value)
+        {
+            if (value == null || value == DBNull.Value)
+                return true;
+            else
+                return false;
+        }
+
         public static string ConvertDate(DateTime datetTime)
         {
             if (datetTime != DateTime.MinValue || datetTime != null)
