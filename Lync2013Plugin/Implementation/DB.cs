@@ -123,26 +123,27 @@ namespace Lync2013Plugin.Implementation
             PoolFQDN = Helpers.IsNull(record["PoolFQDN"]) ? string.Empty : record.GetString(record.GetOrdinal("PoolFQDN")),
             ReferredBy = Helpers.IsNull(record["ReferredBy"]) ? string.Empty : record.GetString(record.GetOrdinal("ReferredBy")),
             OnBehalf = Helpers.IsNull(record["OnBehalf"]) ? string.Empty : record.GetString(record.GetOrdinal("OnBehalf")),
-            ChargingParty = Helpers.IsNull(record["ChargingParty"]) ? string.Empty : record.GetString(record.GetOrdinal("ChargingParty")),
             CalleeURI = Helpers.IsNull(record["CalleeURI"]) ? string.Empty : record.GetString(record.GetOrdinal("CalleeURI")),
             
-            Marker_CallFrom = Helpers.IsNull(record["Marker_CallFrom"]) ? Convert.ToInt64(0) : record.GetInt64(record.GetOrdinal("Marker_CallFrom")),
-            Marker_CallTo = Helpers.IsNull(record["Marker_CallTo"]) ? Convert.ToInt64(0) : record.GetInt64(record.GetOrdinal("Marker_CallTo")),
-            Marker_CallToCountry = Helpers.IsNull(record["Marker_CallToCountry"]) ? string.Empty : record.GetString(record.GetOrdinal("Marker_CallToCountry")),
-            Marker_CallCost = Helpers.IsNull(record["Marker_CallCost"]) ? Convert.ToDecimal(0) : record.GetDecimal(record.GetOrdinal("Marker_CallCost")),
-            Marker_CallTypeID = Helpers.IsNull(record["Marker_CallTypeID"]) ? Convert.ToInt64(0) : record.GetInt64(record.GetOrdinal("Marker_CallTypeID")),
-            Marker_CallType = Helpers.IsNull(record["Marker_CallType"]) ? string.Empty : record.GetString(record.GetOrdinal("Marker_CallType")),
+            //ChargingParty = Helpers.IsNull(record["ChargingParty"]) ? string.Empty : record.GetString(record.GetOrdinal("ChargingParty")),
+            
+            //Marker_CallFrom = Helpers.IsNull(record["Marker_CallFrom"]) ? Convert.ToInt64(0) : record.GetInt64(record.GetOrdinal("Marker_CallFrom")),
+            //Marker_CallTo = Helpers.IsNull(record["Marker_CallTo"]) ? Convert.ToInt64(0) : record.GetInt64(record.GetOrdinal("Marker_CallTo")),
+            //Marker_CallToCountry = Helpers.IsNull(record["Marker_CallToCountry"]) ? string.Empty : record.GetString(record.GetOrdinal("Marker_CallToCountry")),
+            //Marker_CallCost = Helpers.IsNull(record["Marker_CallCost"]) ? Convert.ToDecimal(0) : record.GetDecimal(record.GetOrdinal("Marker_CallCost")),
+            //Marker_CallTypeID = Helpers.IsNull(record["Marker_CallTypeID"]) ? Convert.ToInt64(0) : record.GetInt64(record.GetOrdinal("Marker_CallTypeID")),
+            //Marker_CallType = Helpers.IsNull(record["Marker_CallType"]) ? string.Empty : record.GetString(record.GetOrdinal("Marker_CallType")),
 
-            UI_MarkedOn = Helpers.IsNull(record["UI_MarkedOn"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("UI_MarkedOn")),
-            UI_UpdatedByUser = Helpers.IsNull(record["UI_UpdatedByUser"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_UpdatedByUser")),
-            UI_AssignedByUser = Helpers.IsNull(record["UI_AssignedByUser"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_AssignedByUser")),
-            UI_AssignedOn = Helpers.IsNull(record["UI_AssignedOn"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("UI_AssignedOn")),
-            UI_CallType = Helpers.IsNull(record["UI_CallType"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_CallType")),
-            AC_DisputeStatus = Helpers.IsNull(record["AC_DisputeStatus"]) ? string.Empty : record.GetString(record.GetOrdinal("AC_DisputeStatus")),
-            AC_DisputeResolvedOn = Helpers.IsNull(record["AC_DisputeResolvedOn"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("AC_DisputeResolvedOn")),
-            AC_IsInvoiced = Helpers.IsNull(record["AC_IsInvoiced"]) ? string.Empty : record.GetString(record.GetOrdinal("AC_IsInvoiced")),
-            AC_InvoiceDate = Helpers.IsNull(record["AC_InvoiceDate"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("AC_InvoiceDate")),
-            UI_AssignedToUser = Helpers.IsNull(record["UI_AssignedToUser"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_AssignedToUser"))
+            //UI_MarkedOn = Helpers.IsNull(record["UI_MarkedOn"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("UI_MarkedOn")),
+            //UI_UpdatedByUser = Helpers.IsNull(record["UI_UpdatedByUser"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_UpdatedByUser")),
+            //UI_AssignedByUser = Helpers.IsNull(record["UI_AssignedByUser"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_AssignedByUser")),
+            //UI_AssignedOn = Helpers.IsNull(record["UI_AssignedOn"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("UI_AssignedOn")),
+            //UI_CallType = Helpers.IsNull(record["UI_CallType"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_CallType")),
+            //AC_DisputeStatus = Helpers.IsNull(record["AC_DisputeStatus"]) ? string.Empty : record.GetString(record.GetOrdinal("AC_DisputeStatus")),
+            //AC_DisputeResolvedOn = Helpers.IsNull(record["AC_DisputeResolvedOn"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("AC_DisputeResolvedOn")),
+            //AC_IsInvoiced = Helpers.IsNull(record["AC_IsInvoiced"]) ? string.Empty : record.GetString(record.GetOrdinal("AC_IsInvoiced")),
+            //AC_InvoiceDate = Helpers.IsNull(record["AC_InvoiceDate"]) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("AC_InvoiceDate")),
+            //UI_AssignedToUser = Helpers.IsNull(record["UI_AssignedToUser"]) ? string.Empty : record.GetString(record.GetOrdinal("UI_AssignedToUser"))
         };
     }
 
