@@ -78,6 +78,8 @@ namespace Lync2013Plugin.Implementation
             {
                 lastImportedPhoneCallDate = dataReader.GetDateTime(dataReader.GetOrdinal("SessionIdTime"));
                 lastImportedPhoneCallDate = lastImportedPhoneCallDate.AddDays(+1);
+
+                dataReader.CloseDataReader();
             }
             else
             {
@@ -88,6 +90,8 @@ namespace Lync2013Plugin.Implementation
                 {
                     lastImportedPhoneCallDate = dataReader.GetDateTime(dataReader.GetOrdinal("SessionIdTime"));
                 }
+
+                dataReader.CloseDataReader();
             }
 
             while (lastImportedPhoneCallDate <= DateTime.Now)
@@ -102,7 +106,8 @@ namespace Lync2013Plugin.Implementation
                 else
                     Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + " since the begining");
 
-                
+                dataReader.CloseDataReader();
+
                 //DataTable ImportingDataTable = new DataTable();
 
                 //Load data into Datatable
@@ -112,8 +117,7 @@ namespace Lync2013Plugin.Implementation
 
                 //Read DB and map it to List of PhoneCalls
                 var phoneCalls = DB.ReadSqlData<PhoneCall>(dataReader, DB.PhoneCallsSelector).ToList();
-
-                
+               
                 //ImportingDataTable = new DataTable();
 
                 //Load data into Datatable
@@ -144,15 +148,9 @@ namespace Lync2013Plugin.Implementation
                     Console.WriteLine("   [+] Imported: " + phoneCalls.Count + " phone calls.");
                 }
 
-
                 // Increment the datetime object by 1 day.
                 lastImportedPhoneCallDate = lastImportedPhoneCallDate.AddDays(+1);
 
-
-                //GarbageCollect the datatable
-                //ImportingDataTable.Dispose();
-                dataReader.Close();
-                dataReader.Dispose();
                 GC.Collect();
             }
 
