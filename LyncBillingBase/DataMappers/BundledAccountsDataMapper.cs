@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using LyncBillingBase.DataModels;
-using LyncBillingBase.DataAccess;
+using DALDotNet.DataAccess;
 
 namespace LyncBillingBase.DataMappers
 {

@@ -44,7 +44,7 @@ namespace Lync2013Plugin
                 else
                     return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

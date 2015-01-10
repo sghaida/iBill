@@ -9,6 +9,5 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCall
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.pdb
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessor\bin\Debug\PhoneCallsProcessor.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessor\bin\Debug\PhoneCallsProcessor.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.csprojResolveAssemblyReference.cache
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessor\obj\Debug\PhoneCallsProcessor.pdb
