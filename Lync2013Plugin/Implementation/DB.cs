@@ -1,7 +1,4 @@
 ﻿using FastMember;
-using LyncBillingBase.DataAccess;
-using LyncBillingBase.DataAttributes;
-using LyncBillingBase.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,6 +8,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+
+using DALDotNet;
+using DALDotNet.DataAccess;
+using DALDotNet.DataAttributes;
+using LyncBillingBase.DataModels;
 
 namespace Lync2013Plugin.Implementation
 {

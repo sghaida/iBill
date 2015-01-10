@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
+using DALDotNet;
+using DALDotNet.DataAccess;
+using DALDotNet.Helpers;
 using LyncBillingBase.Helpers;
-using LyncBillingBase.DataAccess;
 using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
@@ -51,7 +53,6 @@ namespace LyncBillingBase.DataMappers
         /// <returns>List of DepartmentHeadRole objects.</returns>
         public List<DepartmentHeadRole> GetBySiteDepartmentID(int SiteDepartmentID)
         {
-            List<DepartmentHeadRole> roles = null;
             Dictionary<string, object> condition = new Dictionary<string, object>();
             condition.Add("SiteDepartmentID", SiteDepartmentID);
 

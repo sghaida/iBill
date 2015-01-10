@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6FCD2469-2B10-419B-BD55-C42B486B6869}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ORMDotNet</RootNamespace>
+    <AssemblyName>ORMDotNet</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FastMember">
+      <HintPath>..\packages\FastMember.1.0.0.11\lib\net40\FastMember.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccess\CustomExpressionVisitor.cs" />
+    <Compile Include="DataAccess\DataAccess.cs" />
+    <Compile Include="DataAccess\DataField.cs" />
+    <Compile Include="DataAccess\DataModel.cs" />
+    <Compile Include="DataAccess\DataSourceSchema.cs" />
+    <Compile Include="DataAccess\DBLib.cs" />
+    <Compile Include="DataAccess\Evaluator.cs" />
+    <Compile Include="DataAccess\IDataAccess.cs" />
+    <Compile Include="DataAccess\Invoker.cs" />
+    <Compile Include="DataAttributes\AllowIDInsertAttribute.cs" />
+    <Compile Include="DataAttributes\AllowNullAttribute.cs" />
+    <Compile Include="DataAttributes\DataRelationAttribute.cs" />
+    <Compile Include="DataAttributes\DataSourceAttribute.cs" />
+    <Compile Include="DataAttributes\DbColumnAttribute.cs" />
+    <Compile Include="DataAttributes\ExcludeAttribute.cs" />
+    <Compile Include="DataAttributes\IsForeignKeyAttribute.cs" />
+    <Compile Include="DataAttributes\IsIDFieldAttribute.cs" />
+    <Compile Include="Exceptions\NoDataSourceNameException.cs" />
+    <Compile Include="Exceptions\NoTableFieldsException.cs" />
+    <Compile Include="Exceptions\NoTableIDFieldException.cs" />
+    <Compile Include="GLOBALS.cs" />
+    <Compile Include="Helpers\DataAccessExtensionscs.cs" />
+    <Compile Include="Helpers\DataReaderExtension.cs" />
+    <Compile Include="Helpers\DataTableExtensions.cs" />
+    <Compile Include="Helpers\HelperFunctions.cs" />
+    <Compile Include="Helpers\MatchingExtention.cs" />
+    <Compile Include="Helpers\ObjectPropertyInfoField.cs" />
+    <Compile Include="Helpers\RandomObjectsGenerator.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
+    <Compile Include="Libs\ADLib.cs" />
+    <Compile Include="Libs\JsonTranslator.cs" />
+    <Compile Include="Libs\LoadConfigs.cs" />
+    <Compile Include="Libs\Mailer.cs" />
+    <Compile Include="Libs\SpecialDateTime.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DALDotNet.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

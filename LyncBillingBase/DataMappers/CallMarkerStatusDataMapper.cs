@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-using LyncBillingBase.DataAccess;
+using DALDotNet;
+using DALDotNet.DataAccess;
 using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
@@ -111,7 +112,7 @@ namespace LyncBillingBase.DataMappers
             
         }
 
-        public override int Insert(CallMarkerStatus dataObject, string dataSourceName = null, LyncBillingBase.GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override int Insert(CallMarkerStatus dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             var markerstatus = _CallMarkerStatus.FirstOrDefault(
                 item => 

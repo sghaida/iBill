@@ -54,12 +54,6 @@
     <Compile Include="Conf\PDFReportColumnsDescriptions.cs" />
     <Compile Include="Conf\PDFReportsPropertiesSection.cs" />
     <Compile Include="Conf\PhoneCallsTablesSection.cs" />
-    <Compile Include="DataAccess\DataField.cs" />
-    <Compile Include="DataAccess\DataSourceSchema.cs" />
-    <Compile Include="DataAccess\Invoker.cs" />
-    <Compile Include="DataAttributes\DataRelationAttribute.cs" />
-    <Compile Include="DataAttributes\ExcludeAttribute.cs" />
-    <Compile Include="DataAttributes\IsForeignKeyAttribute.cs" />
     <Compile Include="DataMappers\AnnouncementsDataMapper.cs" />
     <Compile Include="DataMappers\BundledAccountsDataMapper.cs" />
     <Compile Include="DataMappers\CallMarkerStatusDataMapper.cs" />
@@ -98,42 +92,19 @@
     <Compile Include="DataModels\CallType.cs" />
     <Compile Include="DataModels\Country.cs" />
     <Compile Include="DataModels\Currency.cs" />
-    <Compile Include="DataAccess\DataModel.cs" />
     <Compile Include="DataModels\Department.cs" />
     <Compile Include="DataModels\DialingPrefixRate.cs" />
     <Compile Include="DataModels\DID.cs" />
     <Compile Include="DataMappers\SQLQueries\PhoneCallsSQL.cs" />
-    <Compile Include="DataAccess\CustomExpressionVisitor.cs" />
-    <Compile Include="DataAccess\DataAccess.cs" />
     <Compile Include="DataMappers\PhoneCallsDataMapper.cs" />
-    <Compile Include="DataAccess\Evaluator.cs" />
-    <Compile Include="DataAccess\IDataAccess.cs" />
     <Compile Include="DataModels\CallsSummaryForUser.cs" />
-    <Compile Include="GLOBALS.cs" />
     <Compile Include="DataModels\PhoneCallExclusion.cs" />
-    <Compile Include="DataAttributes\DbColumnAttribute.cs" />
-    <Compile Include="DataAttributes\AllowIDInsertAttribute.cs" />
-    <Compile Include="DataAttributes\IsIDFieldAttribute.cs" />
-    <Compile Include="Exceptions\NoTableIDFieldException.cs" />
-    <Compile Include="Exceptions\NoTableFieldsException.cs" />
-    <Compile Include="Exceptions\NoDataSourceNameException.cs" />
-    <Compile Include="Helpers\DataAccessExtensionscs.cs" />
     <Compile Include="Helpers\DataMapperExtensions.cs" />
-    <Compile Include="Helpers\DataReaderExtension.cs" />
-    <Compile Include="Helpers\HelperFunctions.cs" />
-    <Compile Include="Helpers\ObjectPropertyInfoField.cs" />
-    <Compile Include="Helpers\RandomObjectsGenerator.cs" />
-    <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Repository\DataStorage.cs" />
-    <Compile Include="DataAttributes\AllowNullAttribute.cs" />
-    <Compile Include="DataAttributes\DataSourceAttribute.cs" />
-    <Compile Include="Helpers\DataTableExtensions.cs" />
     <Compile Include="DataModels\Gateway.cs" />
     <Compile Include="DataModels\GatewayInfo.cs" />
     <Compile Include="DataModels\GatewayRate.cs" />
     <Compile Include="DataModels\MailTemplate.cs" />
-    <Compile Include="Helpers\MatchingExtention.cs" />
-    <Compile Include="DataModels\Misc.cs" />
     <Compile Include="DataModels\MonitoringServerInfo.cs" />
     <Compile Include="DataModels\NumberingPlan.cs" />
     <Compile Include="DataModels\NumberingPlanForNGN.cs" />
@@ -149,13 +120,7 @@
     <Compile Include="DataModels\StoreLoader.cs" />
     <Compile Include="DataModels\User.cs" />
     <Compile Include="SessionManagement\UserSession.cs" />
-    <Compile Include="Libs\ADLib.cs" />
-    <Compile Include="DataAccess\DBLib.cs" />
-    <Compile Include="Libs\JsonTranslator.cs" />
-    <Compile Include="Libs\LoadConfigs.cs" />
-    <Compile Include="Libs\Mailer.cs" />
     <Compile Include="Libs\PDFLib.cs" />
-    <Compile Include="Libs\SpecialDateTime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\DepartmentCallsSummary.cs" />
     <Compile Include="Reports\DetailedReport.cs" />
@@ -178,6 +143,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ORMDotNet\DALDotNet.csproj">
+      <Project>{6fcd2469-2b10-419b-bd55-c42b486b6869}</Project>
+      <Name>DALDotNet</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
