@@ -99,30 +99,13 @@ namespace Lync2013Plugin.Implementation
                 //Construct CREATE_IMPORT_PHONE_CALLS_QUERY
                 string SQL = SQLs.CreateImportCallsQueryLync2013(lastImportedPhoneCallDate);
 
-                dataReader = DBRoutines.EXECUTEREADER(SQL, SourceDBConnector);
-
                 if (lastImportedPhoneCallDate > DateTime.MinValue)
                     Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + " since " + lastImportedPhoneCallDate);
                 else
                     Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + " since the begining");
 
-                dataReader.CloseDataReader();
-
-                //DataTable ImportingDataTable = new DataTable();
-
-                //Load data into Datatable
-                //ImportingDataTable.BeginLoadData();
-                //ImportingDataTable.Load(dataReader);
-                //ImportingDataTable.EndLoadData();
-
                 //Read DB and map it to List of PhoneCalls
-                var phoneCalls = DB.ReadSqlData<PhoneCall>(dataReader, DB.PhoneCallsSelector).ToList();
-               
-                //ImportingDataTable = new DataTable();
-
-                //Load data into Datatable
-                //ImportingDataTable.Load(dataReader);
-
+                var phoneCalls = DB.ReadSqlData<PhoneCall>(DBRoutines.EXECUTEREADER(SQL, SourceDBConnector), DB.PhoneCallsSelector).ToList();
 
                 if (phoneCalls.Count() > 0)
                 {
