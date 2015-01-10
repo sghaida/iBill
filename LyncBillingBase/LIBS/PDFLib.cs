@@ -9,10 +9,10 @@ using System.Collections.Generic;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
+using DALDotNet;
+using DALDotNet.Helpers;
 using LyncBillingBase.Conf;
 using LyncBillingBase.Reports;
-using LyncBillingBase.Helpers;
-
 
 namespace LyncBillingBase.Libs
 {

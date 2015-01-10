@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using LyncBillingBase.Helpers;
-using LyncBillingBase.DataAccess;
+using DALDotNet;
+using DALDotNet.DataAccess;
+using DALDotNet.Helpers;
 using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers

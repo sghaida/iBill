@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using LyncBillingBase.Helpers;
+using DALDotNet;
+using DALDotNet.Helpers;
+using DALDotNet.DataAccess;
 using LyncBillingBase.DataModels;
-using LyncBillingBase.DataAccess;
 
 namespace LyncBillingBase.DataMappers
 {
@@ -78,7 +79,7 @@ namespace LyncBillingBase.DataMappers
         }
 
 
-        public override int Insert(Country dataObject, string dataSourceName = null, LyncBillingBase.GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override int Insert(Country dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             bool isContained = _Countries.Contains(dataObject);
             bool itExists = _Countries.Exists(item => item.ISO3Code == dataObject.ISO3Code || item.ISO2Code == dataObject.ISO2Code || item.Name == dataObject.Name);
