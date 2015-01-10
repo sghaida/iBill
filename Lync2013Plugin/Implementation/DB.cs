@@ -86,15 +86,12 @@ namespace Lync2013Plugin.Implementation
         
         public static IEnumerable<T> ReadSqlData<T>(OleDbDataReader reader, Func<IDataRecord, T> selector)
         {
-            //List<T> results = new List<T>();
-
             while(reader.Read()) 
             {
                 yield return selector(reader);
-                //results.Add(selector(reader));
             }
 
-           //return results;
+            reader.CloseDataReader();
         }
 
 
