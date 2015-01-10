@@ -16,6 +16,7 @@ namespace DALDotNet.DataAccess
 {
     public class DBLib
     {
+        
         /// <summary>
         /// Given a table name and a list of it's column names, return a list of column names in the following format: TableName#ColumnName.
         /// Example:
@@ -43,16 +44,21 @@ namespace DALDotNet.DataAccess
             return formattedColumnsNames;
         }
 
-
-        //Load DLL Configs
-        public  static LoadConfigs config = new LoadConfigs();
-
-        //Get the connection String
-        public static string ConnectionString_Lync = config.DllConfig.ConnectionStrings.ConnectionStrings["LyncConnectionString"].ConnectionString;
-
         private OleDbConnection DBInitializeConnection(string connectionString)
         {
             return new OleDbConnection(connectionString);
+        }
+
+        //Load DLL Configs
+        public static LoadConfigs config = new LoadConfigs();
+
+        //Get the connection String
+        //public static string ConnectionString_Lync = config.DllConfig.ConnectionStrings.ConnectionStrings["LyncConnectionString"].ConnectionString;
+        public static string ConnectionString_Lync = string.Empty;
+
+        public DBLib()
+        {
+
         }
 
 

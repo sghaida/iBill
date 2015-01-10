@@ -29,8 +29,17 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
-            Lync2013 processor = new Lync2013();
-            processor.ProcessPhoneCalls();
+            //Lync2013 processor = new Lync2013();
+            //processor.ProcessPhoneCalls();
+
+            var DelegatesRolesDM = new DelegateRolesDataMapper();
+            var DepartmentHeadsDM = new DepartmentHeadRolesDataMapper();
+
+            var allDelegates = DelegatesRolesDM.GetAll();
+            allDelegates = allDelegates.IncludeSiteDepartments();
+
+            var allDepartmentHeads = DepartmentHeadsDM.GetAll();
+            allDepartmentHeads = allDepartmentHeads.IncludeSiteDepartments();
         }
 
 

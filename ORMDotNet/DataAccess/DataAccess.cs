@@ -11,7 +11,6 @@ using DALDotNet.Helpers;
 using DALDotNet.DataAttributes;
 using DALDotNet.Exceptions;
 
-
 namespace DALDotNet.DataAccess
 {
     public class DataAccess<T> : IDataAccess<T> where T : DataModel, new()
