@@ -26,6 +26,6 @@ namespace CCC.UTILS.Libs
             return LoadConfigsSection(sectionName).Settings[key].Value; 
         }
 
-        
     }
+
 }

@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using FastMember;
 
+// Get the DLL-LoadConfigs library from CCC.UTILS.Libs
 using CCC.UTILS.Libs;
 
 namespace CCC.ORM.DataAccess
 {
     public class DBLib
     {
-        
         /// <summary>
         /// Given a table name and a list of it's column names, return a list of column names in the following format: TableName#ColumnName.
         /// Example:

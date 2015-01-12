@@ -12,7 +12,6 @@ namespace CCC.ORM.DataAccess
 {
     public class CustomExpressionVisitor : ExpressionVisitor
     {
-
         private StringBuilder sb;
         private string _orderBy = string.Empty;
         private int? _skip = null;
