@@ -7,11 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CCC.ORM.DataAttributes;
-using CCC.ORM.Helpers;
 
 namespace CCC.ORM.Helpers
 {
-   
     public static class DataReaderExtension
     {
         public static T ConvertToObject<T>(this OleDbDataReader dataReader) where T : class, new()

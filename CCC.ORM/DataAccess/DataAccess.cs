@@ -20,7 +20,7 @@ namespace CCC.ORM.DataAccess
          */
         private DataSourceSchema<T> Schema;
 
-        private static DBLib DBRoutines = new DBLib();
+        private static CCC.ORM.DataAccess.DBLib DBRoutines = new DBLib();
         private static readonly List<Type> NumericTypes = new List<Type>() { typeof(int), typeof(long), typeof(Int16), typeof(Int32), typeof(Int64) };
 
 

@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Data.SqlTypes;
 
-using CCC.UTILS.Libs;
 using CCC.ORM.DataAttributes;
 using CCC.ORM.DataAccess;
 using CCC.ORM.Helpers;
