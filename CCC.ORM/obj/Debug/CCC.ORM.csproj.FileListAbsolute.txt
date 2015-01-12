@@ -1,0 +1,1 @@
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\ORMDotNet\obj\Debug\CCC.ORM.csprojResolveAssemblyReference.cache

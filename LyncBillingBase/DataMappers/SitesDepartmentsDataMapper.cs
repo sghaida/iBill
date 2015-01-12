@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-using DALDotNet;
-using DALDotNet.Helpers;
-using DALDotNet.DataAccess;
+using CCC.ORM;
+using CCC.ORM.Helpers;
+using CCC.ORM.DataAccess;
 using LyncBillingBase.DataModels;
-using DALDotNet.Helpers;
 
 namespace LyncBillingBase.DataMappers
 {

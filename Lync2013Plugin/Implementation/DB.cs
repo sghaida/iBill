@@ -9,9 +9,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-using DALDotNet;
-using DALDotNet.DataAccess;
-using DALDotNet.DataAttributes;
+using CCC.ORM;
+using CCC.ORM.DataAccess;
+using CCC.ORM.DataAttributes;
 using LyncBillingBase.DataModels;
 
 namespace Lync2013Plugin.Implementation
