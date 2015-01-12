@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CCC.ORM;
+using CCC.ORM.Helpers;
 using CCC.ORM.DataAccess;
 using LyncBillingBase.DataModels;
-using CCC.ORM.Helpers;
 
 namespace LyncBillingBase.DataMappers
 {

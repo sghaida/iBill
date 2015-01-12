@@ -117,7 +117,6 @@
     <Compile Include="DataModels\Rates_National.cs" />
     <Compile Include="DataModels\Site.cs" />
     <Compile Include="DataModels\SiteDepartment.cs" />
-    <Compile Include="DataModels\StoreLoader.cs" />
     <Compile Include="DataModels\User.cs" />
     <Compile Include="SessionManagement\UserSession.cs" />
     <Compile Include="Libs\PDFLib.cs" />

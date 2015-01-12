@@ -72,7 +72,7 @@ namespace Lync2013Plugin.Implementation
             SourceDBConnector.Open();
             DestinationDBConnector.Open();
 
-            dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName,isRemote:false), DestinationDBConnector);
+            dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName, isRemote:false), DestinationDBConnector);
 
             if (dataReader.Read() && !dataReader.IsDBNull(0))
             {
@@ -124,7 +124,7 @@ namespace Lync2013Plugin.Implementation
 
                     // Bulk insert
                     ToBeInsertedDataTable = phoneCalls.ConvertToDataTable<PhoneCall>();
-                    ToBeInsertedDataTable.BulkInsert(PhoneCallsTableName);
+                    ToBeInsertedDataTable.BulkInsert(PhoneCallsTableName, DestinationDBConnector.ConnectionString);
 
                     ToBeInsertedDataTable.Dispose();
     
