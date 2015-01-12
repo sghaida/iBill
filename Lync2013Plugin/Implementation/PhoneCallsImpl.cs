@@ -1,12 +1,13 @@
-﻿using Lync2013Plugin.Interfaces;
-using LyncBillingBase.DataModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+using LyncBillingBase.DataModels;
+using Lync2013Plugin.Interfaces;
 
 namespace Lync2013Plugin.Implementation
 {
