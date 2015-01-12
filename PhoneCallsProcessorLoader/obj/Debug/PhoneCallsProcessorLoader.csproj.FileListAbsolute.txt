@@ -9,17 +9,3 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCall
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\PhoneCallsProcessor.pdb
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.exe
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\DALDotNet.dll.config
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\LyncBillingBase.dll.config
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\PhoneCallsProcessorLoader.exe.config
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\PhoneCallsProcessorLoader.exe
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\PhoneCallsProcessorLoader.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\LyncBillingBase.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\PhoneCallsProcessor.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\ORMDotNet.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\LyncBillingBase.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\PhoneCallsProcessor.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\ORMDotNet.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.csprojResolveAssemblyReference.cache
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.exe
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.pdb

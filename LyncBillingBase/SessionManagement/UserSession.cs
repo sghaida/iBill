@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using LyncBillingBase.DataModels;
-using DALDotNet.DataAccess;
+using CCC.ORM.DataAccess;
 using LyncBillingBase.DataMappers;
 
 namespace LyncBillingBase.SessionManagement
