@@ -49,7 +49,7 @@ namespace Lync2013Plugin.Implementation
             try
             {
                 SourceDBConnector = new OleDbConnection(ConstructConnectionString());
-                DestinationDBConnector = new OleDbConnection(DBLib.ConnectionString_Lync);
+                DestinationDBConnector = new OleDbConnection(DBLib.ConnectionString);
             }
             catch (Exception e) { throw e.InnerException; }
         }
