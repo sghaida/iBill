@@ -8,11 +8,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using FastMember;
 
-using CCC.ORM.Libs;
-
-namespace CCC.ORM.DataAccess
+namespace CCC.UTILS.Libs
 {
     public class DBLib
     {
