@@ -10,13 +10,24 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using FastMember;
 
-// Get the DLL-LoadConfigs library from CCC.UTILS.Libs
-using CCC.UTILS.Libs;
+using CCC.ORM.Libs;
 
 namespace CCC.ORM.DataAccess
 {
     public class DBLib
     {
+        //Get the connection String
+        //public static string ConnectionString_Lync = config.DllConfig.ConnectionStrings.ConnectionStrings["LyncConnectionString"].ConnectionString;
+        public static string ConnectionString { get; set; }
+
+        //Load DLL Configs
+        public static LoadConfigs config = new LoadConfigs();
+
+        private OleDbConnection DBInitializeConnection(string connectionString)
+        {
+            return new OleDbConnection(connectionString);
+        }
+
         /// <summary>
         /// Given a table name and a list of it's column names, return a list of column names in the following format: TableName#ColumnName.
         /// Example:
@@ -44,21 +55,25 @@ namespace CCC.ORM.DataAccess
             return formattedColumnsNames;
         }
 
-        private OleDbConnection DBInitializeConnection(string connectionString)
-        {
-            return new OleDbConnection(connectionString);
-        }
-
-        //Load DLL Configs
-        public static LoadConfigs config = new LoadConfigs();
-
-        //Get the connection String
-        //public static string ConnectionString_Lync = config.DllConfig.ConnectionStrings.ConnectionStrings["LyncConnectionString"].ConnectionString;
-        public static string ConnectionString_Lync = string.Empty;
 
         public DBLib()
         {
+            var connectionStringsSection = config.DllConfig.ConnectionStrings;
 
+            if (connectionStringsSection != null && connectionStringsSection.ConnectionStrings.Count > 0)
+            {
+                ConnectionString = connectionStringsSection.ConnectionStrings[0].ConnectionString;
+            }
+            else
+            {
+                throw new Exception("No connection string was found in the DLL Config File.");
+            }
+        }
+
+
+        public DBLib(string connectionString)
+        {
+            ConnectionString = connectionString;
         }
 
 
@@ -73,7 +88,7 @@ namespace CCC.ORM.DataAccess
             if (!string.IsNullOrEmpty(customConnectionString))
                 conn = DBInitializeConnection(customConnectionString);
             else
-                conn = DBInitializeConnection(ConnectionString_Lync);
+                conn = DBInitializeConnection(ConnectionString);
 
             //Execute SQL Query
             OleDbCommand comm = new OleDbCommand(sqlQuery, conn);
@@ -299,7 +314,7 @@ namespace CCC.ORM.DataAccess
             
 
             //Initialize the connection and command
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(FinalSelectQuery, conn);
 
             try
@@ -330,7 +345,7 @@ namespace CCC.ORM.DataAccess
             if (!string.IsNullOrEmpty(customConnectionString))
                 conn = DBInitializeConnection(customConnectionString);
             else
-                conn = DBInitializeConnection(ConnectionString_Lync);
+                conn = DBInitializeConnection(ConnectionString);
 
             string sqlQuery = string.Format("SELECT * FROM {0} WHERE {1}",tableName,wherePart);
 
@@ -385,7 +400,7 @@ namespace CCC.ORM.DataAccess
             else
                 selectQuery = string.Format("SELECT * FROM  [{0}] WHERE [{1}]='{2}'", tableName, whereField, whereValue);
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(selectQuery, conn);
 
             try
@@ -414,7 +429,7 @@ namespace CCC.ORM.DataAccess
 
             selectQuery = string.Format("SELECT * FROM  [{0}]", tableName);
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(selectQuery, conn);
 
             try
@@ -521,7 +536,7 @@ namespace CCC.ORM.DataAccess
                     selectQuery = string.Format("SELECT TOP({0}) {1} FROM [{2}] {3}", limits, selectedfields.ToString(), tableName, orderBy);
             }
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(selectQuery, conn);
 
             try
@@ -703,7 +718,7 @@ namespace CCC.ORM.DataAccess
                     selectQuery = string.Format("SELECT TOP({0}) {1} FROM [{2}] {3}", limits, selectedfields.ToString(), tableName, orderBy);
             }
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(selectQuery, conn);
 
             try
@@ -769,7 +784,7 @@ namespace CCC.ORM.DataAccess
                 selectQuery = string.Format("SELECT * FROM [{0}] ({1})", tableName, Parameters);
 
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(selectQuery, conn);
 
             try
@@ -928,7 +943,7 @@ namespace CCC.ORM.DataAccess
                 FinalSelectQuery = string.Format("{0}", FinalSelectQuery);
 
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(FinalSelectQuery, conn);
 
             try
@@ -987,7 +1002,7 @@ namespace CCC.ORM.DataAccess
 
             //Establish DB connection and create a command.
             //Set the connection timeout to 20 minutes in case there is no timeout already defined.
-            var localConnectionString = ConnectionString_Lync;
+            var localConnectionString = ConnectionString;
             if (!localConnectionString.Contains("ConnectionTimout"))
             {
                 localConnectionString += ";ConnectionTimeout=1800";
@@ -1025,7 +1040,7 @@ namespace CCC.ORM.DataAccess
         /// <returns></returns>
         public int INSERT(string SQL) 
         {
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(SQL, conn);
 
             int recordID = 0;
@@ -1104,7 +1119,7 @@ namespace CCC.ORM.DataAccess
 
             string insertQuery = string.Format("INSERT INTO [{0}] {1} VALUES {2}", tableName, fields, values);
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(insertQuery, conn);
 
             int recordID = 0;
@@ -1164,7 +1179,7 @@ namespace CCC.ORM.DataAccess
 
             string insertQuery = string.Format("INSERT INTO [{0}] {1} OUTPUT INSERTED.{2}  VALUES {3}", tableName, fields, idFieldName, values);
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(insertQuery, conn);
 
             int recordID = 0;
@@ -1190,7 +1205,7 @@ namespace CCC.ORM.DataAccess
         /// <returns></returns>
         public bool UPDATE(string SQL) 
         {
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(SQL, conn);
             comm.CommandTimeout = 360;
 
@@ -1237,7 +1252,7 @@ namespace CCC.ORM.DataAccess
 
             string insertQuery = string.Format("UPDATE  [{0}] SET {1} WHERE [{2}]={3}", tableName, fieldsValues, idFieldName, ID);
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(insertQuery, conn);
             comm.CommandTimeout = 360;
 
@@ -1324,7 +1339,7 @@ namespace CCC.ORM.DataAccess
 
             string updateQuery = string.Format("UPDATE  [{0}] SET {1} WHERE {2}", tableName, fieldsValues, whereStatement);
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(updateQuery, conn);
             comm.CommandTimeout = 360;
 
@@ -1515,7 +1530,7 @@ namespace CCC.ORM.DataAccess
         /// <returns></returns>
         public bool DELETE(string SQL) 
         {
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(SQL, conn);
 
             try
@@ -1542,7 +1557,7 @@ namespace CCC.ORM.DataAccess
         {
             string deleteQuery = string.Format("DELETE FROM [{0}] WHERE [{1}]={2}", tableName, idFieldName, ID);
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(deleteQuery, conn);
 
             try
@@ -1570,7 +1585,7 @@ namespace CCC.ORM.DataAccess
         {
             string deleteQuery = string.Format("DELETE FROM [{0}] WHERE [{1}]={2}", tableName, idFieldName, ID);
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(deleteQuery, conn);
 
             try
@@ -1619,7 +1634,7 @@ namespace CCC.ORM.DataAccess
             // Final DELETE SQL Statement
             string deleteQuery = string.Format("DELETE FROM [{0}] WHERE {1}", tableName, whereStatement);
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(deleteQuery, conn);
 
             try
@@ -1648,7 +1663,7 @@ namespace CCC.ORM.DataAccess
                     " WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]",
                 tablename);
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(createTableQuery.ToString(), conn);
 
             try
@@ -1685,7 +1700,7 @@ namespace CCC.ORM.DataAccess
             createTableQuery.Length -= 2;   //Remove trailing ", "
             createTableQuery.Append(")");
 
-            OleDbConnection conn = DBInitializeConnection(ConnectionString_Lync);
+            OleDbConnection conn = DBInitializeConnection(ConnectionString);
             OleDbCommand comm = new OleDbCommand(createTableQuery.ToString(), conn);
 
             try

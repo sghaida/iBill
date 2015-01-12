@@ -35,11 +35,8 @@ namespace LyncBillingTesting
             var DelegatesRolesDM = new DelegateRolesDataMapper();
             var DepartmentHeadsDM = new DepartmentHeadRolesDataMapper();
 
-            var allDelegates = DelegatesRolesDM.GetAll();
-            allDelegates = allDelegates.IncludeSiteDepartments();
-
-            var allDepartmentHeads = DepartmentHeadsDM.GetAll();
-            allDepartmentHeads = allDepartmentHeads.IncludeSiteDepartments();
+            var allDelegates = DelegatesRolesDM.GetAll().ToList();
+            var allDepartmentHeads = DepartmentHeadsDM.GetAll().ToList();
         }
 
 

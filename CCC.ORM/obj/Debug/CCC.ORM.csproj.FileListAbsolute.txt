@@ -1,12 +1,1 @@
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\ORMDotNet\obj\Debug\CCC.ORM.csprojResolveAssemblyReference.cache
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\DALDotNet.dll.config
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\CCC.ORM.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\CCC.ORM.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\CCC.UTILS.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\FastMember.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\CCC.UTILS.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\FastMember.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\FastMember.xml
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\obj\Debug\CCC.ORM.csprojResolveAssemblyReference.cache
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\obj\Debug\CCC.ORM.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\obj\Debug\CCC.ORM.pdb

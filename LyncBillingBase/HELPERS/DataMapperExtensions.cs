@@ -159,7 +159,7 @@ namespace LyncBillingBase.Helpers
                 //Fitler, join, and project
                 departmentHeadsRoles =
                     (from role in departmentHeadsRoles
-                     where (role.SiteDepartmentID > 0 && (role.SiteDepartment != null && role.SiteDepartment.ID > 0))
+                     where (role.SiteDepartmentID > 0)
                      join siteDepartment in allSitesDepartments on role.SiteDepartmentID equals siteDepartment.ID
                      select new DepartmentHeadRole
                      {
