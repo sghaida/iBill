@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using DALDotNet;
-using DALDotNet.DataAccess;
+using ORM;
+using ORM.DataAccess;
 using LyncBillingBase.DataModels;
-using DALDotNet.Helpers;
+using ORM.Helpers;
 
 namespace LyncBillingBase.DataMappers
 {

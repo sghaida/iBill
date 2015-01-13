@@ -8,8 +8,8 @@ using System.Data.OleDb;
 using System.Data.SqlTypes;
 using System.Collections.Concurrent;
 
-using DALDotNet.Helpers;
-using DALDotNet.DataAccess;
+using ORM.Helpers;
+using ORM.DataAccess;
 using LyncBillingBase;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;

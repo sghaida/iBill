@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.ComponentModel;
 
-using DALDotNet;
-using DALDotNet.Helpers;
-using DALDotNet.DataAccess;
-using DALDotNet.Helpers;
+using ORM;
+using ORM.Helpers;
+using ORM.DataAccess;
+using ORM.Helpers;
 using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers

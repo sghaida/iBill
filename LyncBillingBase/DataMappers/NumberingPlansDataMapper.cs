@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DALDotNet.Helpers;
+using ORM.Helpers;
 
-using DALDotNet;
-using DALDotNet.DataAccess;
+using ORM;
+using ORM.DataAccess;
 using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers

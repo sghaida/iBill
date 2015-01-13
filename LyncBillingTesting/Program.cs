@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-using DALDotNet;
-using DALDotNet.DataAccess;
-using DALDotNet.Helpers;
+using ORM;
+using ORM.DataAccess;
+using ORM.Helpers;
 
 using LyncBillingBase;
 using LyncBillingBase.DataModels;

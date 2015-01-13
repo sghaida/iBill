@@ -1,21 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyncBillingBase", "LyncBillingBase\LyncBillingBase.csproj", "{4D303F14-08ED-4F92-B7E1-377569A8D7EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyncBillingTesting", "LyncBillingTesting\LyncBillingTesting.csproj", "{4F427DAD-07E0-4F67-9F35-6F05E04025C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneCallsProcessorLoader", "PhoneCallsProcessorLoader\PhoneCallsProcessorLoader.csproj", "{18063064-DCE8-455C-8935-F9A81FB206A0}"
-	ProjectSection(ProjectDependencies) = postProject
-		{6FCD2469-2B10-419B-BD55-C42B486B6869} = {6FCD2469-2B10-419B-BD55-C42B486B6869}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lync2013Plugin", "Lync2013Plugin\Lync2013Plugin.csproj", "{67E57230-E57D-4179-A420-77A9EB4AB2E1}"
-	ProjectSection(ProjectDependencies) = postProject
-		{6FCD2469-2B10-419B-BD55-C42B486B6869} = {6FCD2469-2B10-419B-BD55-C42B486B6869}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{928F8B44-FDDE-4DA1-BA7E-1BECA7C2AD99}"
 EndProject
@@ -23,9 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{F0C3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneCallsProcessor", "PhoneCallsProcessor\PhoneCallsProcessor.csproj", "{ECBEB87A-859D-4AEC-8529-7AC23581CB65}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{07E2B51E-22B8-4A19-AF1B-8826D928603F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DALDotNet", "ORMDotNet\DALDotNet.csproj", "{6FCD2469-2B10-419B-BD55-C42B486B6869}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ORM", "ORM\ORM.csproj", "{6FCD2469-2B10-419B-BD55-C42B486B6869}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +56,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4F427DAD-07E0-4F67-9F35-6F05E04025C4} = {F0C3494D-03C6-4FB8-8A81-C5DE62767E51}
 		{67E57230-E57D-4179-A420-77A9EB4AB2E1} = {928F8B44-FDDE-4DA1-BA7E-1BECA7C2AD99}
-		{6FCD2469-2B10-419B-BD55-C42B486B6869} = {07E2B51E-22B8-4A19-AF1B-8826D928603F}
 	EndGlobalSection
 EndGlobal

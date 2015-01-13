@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
-using DALDotNet;
-using DALDotNet.Helpers;
+using ORM;
+using ORM.Helpers;
 using LyncBillingBase.Conf;
 using LyncBillingBase.Reports;
 
