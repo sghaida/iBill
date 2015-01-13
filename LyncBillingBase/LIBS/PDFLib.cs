@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Web;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
-using System.Collections.Generic;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-
-
-
-
-
+using System.Web;
 using CCC.ORM;
 using CCC.ORM.Helpers;
 using CCC.UTILS.Libs;
-
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using LyncBillingBase.Conf;
 using LyncBillingBase.Reports;
 
@@ -24,27 +16,19 @@ namespace LyncBillingBase.Libs
 {
     public class PDFLib
     {
-        private static IElement titleParagraph { get; set; }
-        private static Font titleFont = FontFactory.GetFont("Arial", 20, Font.BOLD);
-        private static Font subTitleFont = FontFactory.GetFont("Arial", 16, Font.BOLD);
-        private static Font headerCommentsFont = FontFactory.GetFont("Arial", 9, Font.ITALIC);
-        private static Font boldTableFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+        private static readonly Font titleFont = FontFactory.GetFont("Arial", 20, Font.BOLD);
+        private static readonly Font subTitleFont = FontFactory.GetFont("Arial", 16, Font.BOLD);
+        private static readonly Font headerCommentsFont = FontFactory.GetFont("Arial", 9, Font.ITALIC);
+        private static readonly Font boldTableFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
         private static Font endingMessageFont = FontFactory.GetFont("Arial", 10, Font.ITALIC);
-        private static Font bodyFont = FontFactory.GetFont("Arial", 12, Font.NORMAL);
-        private static Font bodyFontSmall = FontFactory.GetFont("Arial", 10, Font.NORMAL);
-
-        //Get the whole section with it's methods
-        private static PDFReportColumnsDescriptionsSection ReportColumnsDescriptionsSection = 
-            (PDFReportColumnsDescriptionsSection)ConfigurationManager.GetSection(PDFReportColumnsDescriptionsSection.ConfigurationSectionName);
-
-        //Get the Report Columns Descriptions from the Configuration file.
-        public static Dictionary<string, string> ReportColumnsDescriptions = ReportColumnsDescriptionsSection.PDFReportColumnsDescriptionsMap;
-
+        private static readonly Font bodyFont = FontFactory.GetFont("Arial", 12, Font.NORMAL);
+        private static readonly Font bodyFontSmall = FontFactory.GetFont("Arial", 10, Font.NORMAL);
+        private static IElement titleParagraph { get; set; }
 
         public static Document InitializePDFDocument(HttpResponse response)
         {
-            Document document = new Document();
-            PdfWriter writer = PdfWriter.GetInstance(document, response.OutputStream);
+            var document = new Document();
+            var writer = PdfWriter.GetInstance(document, response.OutputStream);
             document.Open();
 
             return document;
@@ -53,7 +37,7 @@ namespace LyncBillingBase.Libs
         public static PdfPTable InitializePDFTable(int ColumnsCount, int[] widths)
         {
             //Create the actual data table
-            PdfPTable pdfTable = new PdfPTable(ColumnsCount);
+            var pdfTable = new PdfPTable(ColumnsCount);
             pdfTable.HorizontalAlignment = 0;
             pdfTable.SpacingBefore = 30;
             pdfTable.SpacingAfter = 30;
@@ -78,7 +62,7 @@ namespace LyncBillingBase.Libs
             {
                 if (headers.ContainsKey("title"))
                 {
-                    Paragraph titleParagraph = new Paragraph("iBill | " + headers["title"], titleFont);
+                    var titleParagraph = new Paragraph("iBill | " + headers["title"], titleFont);
                     titleParagraph.SpacingAfter = 5;
                     document.Add(titleParagraph);
                 }
@@ -87,7 +71,8 @@ namespace LyncBillingBase.Libs
                     Paragraph subTitleParagraph;
                     if (headers.ContainsKey("siteName"))
                     {
-                        subTitleParagraph = new Paragraph(headers["siteName"] + " | " + headers["subTitle"], subTitleFont);
+                        subTitleParagraph = new Paragraph(headers["siteName"] + " | " + headers["subTitle"],
+                            subTitleFont);
                     }
                     else
                     {
@@ -110,7 +95,7 @@ namespace LyncBillingBase.Libs
 
         public static Document AddPDFTableContents(ref Document document, ref PdfPTable pdfTable, DataTable dt)
         {
-            string cellText = string.Empty;
+            var cellText = string.Empty;
 
             foreach (DataColumn c in dt.Columns)
             {
@@ -130,9 +115,11 @@ namespace LyncBillingBase.Libs
                         cellText = "N/A";
 
                     //Format the cell text if it's the case of Duration
-                    if (ReportColumnsDescriptionsSection.GetDescription(column.ColumnName) == "Duration" && cellText != "N/A")
+                    if (ReportColumnsDescriptionsSection.GetDescription(column.ColumnName) == "Duration" &&
+                        cellText != "N/A")
                     {
-                        entryCell = new PdfPCell(new Phrase(Convert.ToInt32(cellText).ConvertSecondsToReadable(), bodyFontSmall));
+                        entryCell =
+                            new PdfPCell(new Phrase(Convert.ToInt32(cellText).ConvertSecondsToReadable(), bodyFontSmall));
                     }
                     else
                     {
@@ -154,22 +141,24 @@ namespace LyncBillingBase.Libs
             return document;
         }
 
-        public static Document AddPDFTableContents(ref Document document, ref PdfPTable pdfTable, DataTable dt, List<string> pdfColumnsSchema)
+        public static Document AddPDFTableContents(ref Document document, ref PdfPTable pdfTable, DataTable dt,
+            List<string> pdfColumnsSchema)
         {
             if (pdfColumnsSchema != null && pdfColumnsSchema.Count > 0)
             {
-                foreach (string column in pdfColumnsSchema)
+                foreach (var column in pdfColumnsSchema)
                 {
                     if (dt.Columns.Contains(column))
                     {
-                        pdfTable.AddCell(new Phrase(ReportColumnsDescriptionsSection.GetDescription(column), boldTableFont));
+                        pdfTable.AddCell(new Phrase(ReportColumnsDescriptionsSection.GetDescription(column),
+                            boldTableFont));
                     }
                 }
 
                 foreach (DataRow r in dt.Rows)
                 {
                     //foreach (DataColumn column in dt.Columns)
-                    foreach (string column in pdfColumnsSchema)
+                    foreach (var column in pdfColumnsSchema)
                     {
                         //Declare the pdfTable cell and fill it.
                         PdfPCell entryCell;
@@ -179,11 +168,13 @@ namespace LyncBillingBase.Libs
                         {
                             if (ReportColumnsDescriptionsSection.GetDescription(column) == "Duration")
                             {
-                                entryCell = new PdfPCell(new Phrase(Convert.ToInt32(r[column]).ConvertSecondsToReadable(), bodyFontSmall));
+                                entryCell =
+                                    new PdfPCell(new Phrase(Convert.ToInt32(r[column]).ConvertSecondsToReadable(),
+                                        bodyFontSmall));
                             }
                             else
                             {
-                                string rowText = r[column].ToString();
+                                var rowText = r[column].ToString();
 
                                 if (string.IsNullOrEmpty(rowText))
                                     rowText = "N/A";
@@ -209,21 +200,22 @@ namespace LyncBillingBase.Libs
             return document;
         }
 
-        public static Document AddCombinedPDFTablesContents(ref Document document, DataTable dt, int[] pdfColumnsWidths, List<string> handles)
+        public static Document AddCombinedPDFTablesContents(ref Document document, DataTable dt, int[] pdfColumnsWidths,
+            List<string> handles)
         {
-            string cellText = string.Empty;
+            var cellText = string.Empty;
             DataRow[] selectedDataRows;
-            string selectExpression = string.Empty;
+            var selectExpression = string.Empty;
             handles.Sort();
 
             if (handles != null && handles.Count > 0)
             {
-                foreach (string handleItem in handles)
+                foreach (var handleItem in handles)
                 {
-                    PdfPTable pdfTable = InitializePDFTable(dt.Columns.Count, pdfColumnsWidths);
+                    var pdfTable = InitializePDFTable(dt.Columns.Count, pdfColumnsWidths);
                     document.NewPage();
 
-                    Paragraph pageTitleParagraph = new Paragraph(handleItem.Split('@')[0].ToUpper(), subTitleFont);
+                    var pageTitleParagraph = new Paragraph(handleItem.Split('@')[0].ToUpper(), subTitleFont);
                     pageTitleParagraph.SpacingAfter = 25;
                     document.Add(pageTitleParagraph);
 
@@ -232,10 +224,11 @@ namespace LyncBillingBase.Libs
 
                     foreach (DataColumn c in dt.Columns)
                     {
-                        pdfTable.AddCell(new Phrase(ReportColumnsDescriptionsSection.GetDescription(c.ColumnName), boldTableFont));
+                        pdfTable.AddCell(new Phrase(ReportColumnsDescriptionsSection.GetDescription(c.ColumnName),
+                            boldTableFont));
                     }
 
-                    foreach (DataRow r in selectedDataRows)
+                    foreach (var r in selectedDataRows)
                     {
                         foreach (DataColumn column in dt.Columns)
                         {
@@ -248,9 +241,12 @@ namespace LyncBillingBase.Libs
                                 cellText = "N/A";
 
                             //Format the cell text if it's the case of Duration
-                            if (ReportColumnsDescriptionsSection.GetDescription(column.ColumnName) == "Duration" && cellText != "N/A")
+                            if (ReportColumnsDescriptionsSection.GetDescription(column.ColumnName) == "Duration" &&
+                                cellText != "N/A")
                             {
-                                entryCell = new PdfPCell(new Phrase(Convert.ToInt32(cellText).ConvertSecondsToReadable(), bodyFontSmall));
+                                entryCell =
+                                    new PdfPCell(new Phrase(Convert.ToInt32(cellText).ConvertSecondsToReadable(),
+                                        bodyFontSmall));
                             }
                             else
                             {
@@ -276,9 +272,10 @@ namespace LyncBillingBase.Libs
             return document;
         }
 
-        public static Document AddPDFTableTotalsRow(ref Document document, Dictionary<string, object> totals, DataTable dt, int[] widths)
+        public static Document AddPDFTableTotalsRow(ref Document document, Dictionary<string, object> totals,
+            DataTable dt, int[] widths)
         {
-            PdfPTable pdfTable = new PdfPTable(dt.Columns.Count);
+            var pdfTable = new PdfPTable(dt.Columns.Count);
             pdfTable.HorizontalAlignment = 0;
             pdfTable.DefaultCell.Border = 0;
             pdfTable.DefaultCell.PaddingBottom = 5;
@@ -311,7 +308,7 @@ namespace LyncBillingBase.Libs
 
         private static Document AddAccountingDetailedReportTotalsRow(ref Document document, UserCallsSummary userSummary)
         {
-            PdfPTable pdfTable = new PdfPTable(5);
+            var pdfTable = new PdfPTable(5);
             pdfTable.HorizontalAlignment = 0;
             pdfTable.DefaultCell.Border = 0;
             pdfTable.DefaultCell.PaddingBottom = 5;
@@ -320,7 +317,7 @@ namespace LyncBillingBase.Libs
             pdfTable.DefaultCell.PaddingRight = 2;
             pdfTable.WidthPercentage = 100;
 
-            int[] widths = new int[] { 8, 5, 8, 8, 8 };
+            int[] widths = {8, 5, 8, 8, 8};
             pdfTable.SetWidths(widths);
 
             //int year = ((DateTime)extraParams["StartDate"]).YearNumber;
@@ -343,15 +340,15 @@ namespace LyncBillingBase.Libs
             pdfTable.AddCell(new Phrase(string.Empty, bodyFont));
             pdfTable.AddCell(new Phrase("Personal", bodyFont));
             pdfTable.AddCell(new Phrase(Decimal.Round(userSummary.PersonalCallsCost, 2).ToString(), bodyFontSmall));
-            pdfTable.AddCell(new Phrase(userSummary.PersonalCallsDuration.ConvertSecondsToReadable().ToString(), bodyFontSmall));
-            pdfTable.CompleteRow();  
+            pdfTable.AddCell(new Phrase(userSummary.PersonalCallsDuration.ConvertSecondsToReadable(), bodyFontSmall));
+            pdfTable.CompleteRow();
 
             //Business Calls Totals
             pdfTable.AddCell(new Phrase(string.Empty, bodyFont));
             pdfTable.AddCell(new Phrase(string.Empty, bodyFont));
             pdfTable.AddCell(new Phrase("Business", bodyFont));
             pdfTable.AddCell(new Phrase(Decimal.Round(userSummary.BusinessCallsCost, 2).ToString(), bodyFontSmall));
-            pdfTable.AddCell(new Phrase(userSummary.BusinessCallsDuration.ConvertSecondsToReadable().ToString(), bodyFontSmall));
+            pdfTable.AddCell(new Phrase(userSummary.BusinessCallsDuration.ConvertSecondsToReadable(), bodyFontSmall));
             pdfTable.CompleteRow();
 
             //Unallocated Calls Totals
@@ -359,7 +356,7 @@ namespace LyncBillingBase.Libs
             pdfTable.AddCell(new Phrase(string.Empty, bodyFont));
             pdfTable.AddCell(new Phrase("Unallocated", bodyFont));
             pdfTable.AddCell(new Phrase(Decimal.Round(userSummary.UnmarkedCallsCost, 2).ToString(), bodyFontSmall));
-            pdfTable.AddCell(new Phrase(userSummary.UnmarkedCallsDuration.ConvertSecondsToReadable().ToString(), bodyFontSmall));
+            pdfTable.AddCell(new Phrase(userSummary.UnmarkedCallsDuration.ConvertSecondsToReadable(), bodyFontSmall));
             pdfTable.CompleteRow();
 
             document.Add(pdfTable);
@@ -370,7 +367,6 @@ namespace LyncBillingBase.Libs
         {
             document.Close();
         }
-
 
         //Ready-made reports functions.
 
@@ -386,7 +382,10 @@ namespace LyncBillingBase.Libs
          * 
          * @return @variable document of type Document.
          */
-        public static Document CreateAccountingSummaryReport(HttpResponse ResponseStream, DataTable SourceDataTable, Dictionary<string, object> CallsCostsTotals, List<string> PDFColumnsSchema, int[] PDFColumnsWidths, Dictionary<string, string> PDFDocumentHeaders)
+
+        public static Document CreateAccountingSummaryReport(HttpResponse ResponseStream, DataTable SourceDataTable,
+            Dictionary<string, object> CallsCostsTotals, List<string> PDFColumnsSchema, int[] PDFColumnsWidths,
+            Dictionary<string, string> PDFDocumentHeaders)
         {
             //----------------------------------
             //INITIALIZE THE REQUIRED VARIABLES
@@ -399,7 +398,7 @@ namespace LyncBillingBase.Libs
                 subTitleParagraph,
                 commentsParagraph;
 
-            string cellText = string.Empty;
+            var cellText = string.Empty;
 
 
             //--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -409,8 +408,10 @@ namespace LyncBillingBase.Libs
                 SourceDataTable == null || SourceDataTable.Rows.Count == 0 ||
                 CallsCostsTotals == null || CallsCostsTotals.Count == 0 ||
                 PDFDocumentHeaders == null || PDFDocumentHeaders.Count == 0 ||
-                PDFColumnsSchema == null || PDFColumnsSchema.Count == 0 || PDFColumnsSchema.Count > SourceDataTable.Columns.Count ||
-                PDFColumnsWidths == null || PDFColumnsWidths.Length == 0 || PDFColumnsWidths.Length > SourceDataTable.Columns.Count)
+                PDFColumnsSchema == null || PDFColumnsSchema.Count == 0 ||
+                PDFColumnsSchema.Count > SourceDataTable.Columns.Count ||
+                PDFColumnsWidths == null || PDFColumnsWidths.Length == 0 ||
+                PDFColumnsWidths.Length > SourceDataTable.Columns.Count)
             {
                 return null;
             }
@@ -457,7 +458,9 @@ namespace LyncBillingBase.Libs
             {
                 if (PDFDocumentHeaders.ContainsKey("siteName"))
                 {
-                    subTitleParagraph = new Paragraph(PDFDocumentHeaders["siteName"] + " | " + PDFDocumentHeaders["subTitle"], subTitleFont);
+                    subTitleParagraph =
+                        new Paragraph(PDFDocumentHeaders["siteName"] + " | " + PDFDocumentHeaders["subTitle"],
+                            subTitleFont);
                 }
                 else
                 {
@@ -478,18 +481,19 @@ namespace LyncBillingBase.Libs
             //--------------------------------------------------
             //INITIALIZE THE MAIN CONTENT TABLE
             //--------------------------------------------------
-            foreach (string column in PDFColumnsSchema)
+            foreach (var column in PDFColumnsSchema)
             {
                 if (SourceDataTable.Columns.Contains(column))
                 {
-                    pdfMainTable.AddCell(new Phrase(ReportColumnsDescriptionsSection.GetDescription(column), boldTableFont));
+                    pdfMainTable.AddCell(new Phrase(ReportColumnsDescriptionsSection.GetDescription(column),
+                        boldTableFont));
                 }
             }
 
             foreach (DataRow r in SourceDataTable.Rows)
             {
                 //foreach (DataColumn column in dt.Columns)
-                foreach (string column in PDFColumnsSchema)
+                foreach (var column in PDFColumnsSchema)
                 {
                     //Declare the pdfMainTable cell and fill it.
                     PdfPCell entryCell;
@@ -497,13 +501,16 @@ namespace LyncBillingBase.Libs
                     //Format the cell text if it's the case of Duration
                     if (SourceDataTable.Columns.Contains(column))
                     {
-                        if (ReportColumnsDescriptionsSection.GetDescription(column) == GLOBALS.PhoneCallSummary.Duration.Description())
+                        if (ReportColumnsDescriptionsSection.GetDescription(column) ==
+                            GLOBALS.PhoneCallSummary.Duration.Description())
                         {
-                            entryCell = new PdfPCell(new Phrase(Convert.ToInt32(r[column]).ConvertSecondsToReadable(), bodyFontSmall));
+                            entryCell =
+                                new PdfPCell(new Phrase(Convert.ToInt32(r[column]).ConvertSecondsToReadable(),
+                                    bodyFontSmall));
                         }
                         else
                         {
-                            string rowText = r[column].ToString();
+                            var rowText = r[column].ToString();
 
                             if (string.IsNullOrEmpty(rowText))
                                 rowText = "N/A";
@@ -572,7 +579,6 @@ namespace LyncBillingBase.Libs
             return document;
         }
 
-
         /**
          * Create Accounting Detailed Report
          * 
@@ -586,23 +592,27 @@ namespace LyncBillingBase.Libs
          * 
          * @return @variable document of type Document.
          */
-        public static Document CreateAccountingDetailedReport(HttpResponse ResponseStream, DataTable SourceDataTable, List<string> PDFColumnsSchema, int[] PDFColumnsWidths, Dictionary<string, string> PDFDocumentHeaders, string DataSeparatorName, Dictionary<string, Dictionary<string, object>> UsersInfoCollections, Dictionary<string, UserCallsSummary> UsersSummariesMap)
+
+        public static Document CreateAccountingDetailedReport(HttpResponse ResponseStream, DataTable SourceDataTable,
+            List<string> PDFColumnsSchema, int[] PDFColumnsWidths, Dictionary<string, string> PDFDocumentHeaders,
+            string DataSeparatorName, Dictionary<string, Dictionary<string, object>> UsersInfoCollections,
+            Dictionary<string, UserCallsSummary> UsersSummariesMap)
         {
             //----------------------------------
             //INITIALIZE THE REQUIRED VARIABLES
             //----------------------------------
             DataRow[] selectedDataRows;
-            string selectExpression = string.Empty;
-            string selectOrder = string.Empty;
-            string pageTitleText = string.Empty;
-            string cellText = string.Empty;
+            var selectExpression = string.Empty;
+            var selectOrder = string.Empty;
+            var pageTitleText = string.Empty;
+            var cellText = string.Empty;
             Paragraph pageTitleParagraph;
             Paragraph pageSubTitleParagraph;
-            ADUserInfo userInfo = new ADUserInfo();
+            var userInfo = new ADUserInfo();
 
-            string employeeIDKey = GLOBALS.PhoneCallSummary.EmployeeID.Description();
-            string displayNameKey = GLOBALS.PhoneCallSummary.DisplayName.Description();
-            string sipAccountKey = GLOBALS.PhoneCallSummary.ChargingParty.Description();
+            var employeeIDKey = GLOBALS.PhoneCallSummary.EmployeeID.Description();
+            var displayNameKey = GLOBALS.PhoneCallSummary.DisplayName.Description();
+            var sipAccountKey = GLOBALS.PhoneCallSummary.ChargingParty.Description();
 
 
             //--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -613,7 +623,8 @@ namespace LyncBillingBase.Libs
                 UsersSummariesMap == null || UsersSummariesMap.Count == 0 ||
                 UsersInfoCollections == null || UsersInfoCollections.Count == 0 ||
                 PDFDocumentHeaders == null || PDFDocumentHeaders.Count == 0 ||
-                PDFColumnsSchema == null || PDFColumnsSchema.Count == 0 || PDFColumnsSchema.Count > SourceDataTable.Columns.Count)
+                PDFColumnsSchema == null || PDFColumnsSchema.Count == 0 ||
+                PDFColumnsSchema.Count > SourceDataTable.Columns.Count)
             {
                 return null;
             }
@@ -622,8 +633,8 @@ namespace LyncBillingBase.Libs
             //----------------------------------
             //INITIALIZE THE PDF DOCUMENT
             //----------------------------------
-            Document document = new Document();
-            PdfWriter writer = PdfWriter.GetInstance(document, ResponseStream.OutputStream);
+            var document = new Document();
+            var writer = PdfWriter.GetInstance(document, ResponseStream.OutputStream);
             document.Open();
 
 
@@ -634,7 +645,7 @@ namespace LyncBillingBase.Libs
             {
                 if (PDFDocumentHeaders.ContainsKey("title"))
                 {
-                    Paragraph titleParagraph = new Paragraph("iBill | " + PDFDocumentHeaders["title"], titleFont);
+                    var titleParagraph = new Paragraph("iBill | " + PDFDocumentHeaders["title"], titleFont);
                     titleParagraph.SpacingAfter = 5;
                     document.Add(titleParagraph);
                 }
@@ -643,7 +654,9 @@ namespace LyncBillingBase.Libs
                     Paragraph subTitleParagraph;
                     if (PDFDocumentHeaders.ContainsKey("siteName"))
                     {
-                        subTitleParagraph = new Paragraph(PDFDocumentHeaders["siteName"] + " | " + PDFDocumentHeaders["subTitle"], subTitleFont);
+                        subTitleParagraph =
+                            new Paragraph(PDFDocumentHeaders["siteName"] + " | " + PDFDocumentHeaders["subTitle"],
+                                subTitleFont);
                     }
                     else
                     {
@@ -666,24 +679,24 @@ namespace LyncBillingBase.Libs
             //START CREATING THE REPORT DOCUMENT
             //--------------------------------------
             //start by sorting the handles array.
-            List<string> SipAccounts = UsersInfoCollections.Keys.ToList();
+            var SipAccounts = UsersInfoCollections.Keys.ToList();
             SipAccounts.Sort();
 
             //Begin the construction of the document.
-            foreach (string sipAccount in SipAccounts)
+            foreach (var sipAccount in SipAccounts)
             {
-                PdfPTable pdfTable = InitializePDFTable(PDFColumnsSchema.Count, PDFColumnsWidths);
+                var pdfTable = InitializePDFTable(PDFColumnsSchema.Count, PDFColumnsWidths);
                 document.NewPage();
 
                 if (DataSeparatorName == sipAccountKey)
                 {
-                    string name = UsersInfoCollections[sipAccount][displayNameKey].ToString();
-                    string groupNo = UsersInfoCollections[sipAccount][employeeIDKey].ToString();
+                    var name = UsersInfoCollections[sipAccount][displayNameKey].ToString();
+                    var groupNo = UsersInfoCollections[sipAccount][employeeIDKey].ToString();
 
                     if (string.IsNullOrEmpty(name))
                         name = sipAccount.ToLower();
                     if (!string.IsNullOrEmpty(groupNo))
-                        groupNo = " [Group No. " + UsersInfoCollections[sipAccount][employeeIDKey].ToString() + "]";
+                        groupNo = " [Group No. " + UsersInfoCollections[sipAccount][employeeIDKey] + "]";
 
                     pageTitleText = name + groupNo;
                 }
@@ -707,18 +720,19 @@ namespace LyncBillingBase.Libs
                 selectedDataRows = SourceDataTable.Select(selectExpression, selectOrder);
 
                 //Print the report table columns headers
-                foreach (string column in PDFColumnsSchema)
+                foreach (var column in PDFColumnsSchema)
                 {
                     if (SourceDataTable.Columns.Contains(column))
                     {
-                        pdfTable.AddCell(new Phrase(ReportColumnsDescriptionsSection.GetDescription(column), boldTableFont));
+                        pdfTable.AddCell(new Phrase(ReportColumnsDescriptionsSection.GetDescription(column),
+                            boldTableFont));
                     }
                 }
 
                 //Bind the data cells to the respective columns
-                foreach (DataRow r in selectedDataRows)
+                foreach (var r in selectedDataRows)
                 {
-                    foreach (string column in PDFColumnsSchema)
+                    foreach (var column in PDFColumnsSchema)
                     {
                         if (SourceDataTable.Columns.Contains(column))
                         {
@@ -731,9 +745,12 @@ namespace LyncBillingBase.Libs
                                 cellText = "N/A";
 
                             //Format the cell text if it's the case of Duration
-                            if (ReportColumnsDescriptionsSection.GetDescription(column) == GLOBALS.PhoneCallSummary.Duration.Description() && cellText != "N/A")
+                            if (ReportColumnsDescriptionsSection.GetDescription(column) ==
+                                GLOBALS.PhoneCallSummary.Duration.Description() && cellText != "N/A")
                             {
-                                entryCell = new PdfPCell(new Phrase(Convert.ToInt32(cellText).ConvertSecondsToReadable(),  bodyFontSmall));
+                                entryCell =
+                                    new PdfPCell(new Phrase(Convert.ToInt32(cellText).ConvertSecondsToReadable(),
+                                        bodyFontSmall));
                             }
                             else
                             {
@@ -775,6 +792,13 @@ namespace LyncBillingBase.Libs
             return document;
         }
 
+        //Get the whole section with it's methods
+        private static readonly PDFReportColumnsDescriptionsSection ReportColumnsDescriptionsSection =
+            (PDFReportColumnsDescriptionsSection)
+                ConfigurationManager.GetSection(PDFReportColumnsDescriptionsSection.ConfigurationSectionName);
 
+        //Get the Report Columns Descriptions from the Configuration file.
+        public static Dictionary<string, string> ReportColumnsDescriptions =
+            ReportColumnsDescriptionsSection.PDFReportColumnsDescriptionsMap;
     }
 }

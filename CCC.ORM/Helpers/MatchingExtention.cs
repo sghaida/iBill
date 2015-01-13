@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CCC.ORM.Helpers
+﻿namespace CCC.ORM.Helpers
 {
     public static class MatchingExtention
     {
         public static bool In<T>(this T x, params T[] values)
         {
-            foreach (T value in values)
+            foreach (var value in values)
             {
                 if (x.Equals(value))
                     return true;

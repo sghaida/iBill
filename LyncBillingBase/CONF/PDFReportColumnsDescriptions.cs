@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LyncBillingBase.Conf
 {
@@ -31,7 +28,7 @@ namespace LyncBillingBase.Conf
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((PDFReportColumnDescriptionElement)element).Name;
+            return ((PDFReportColumnDescriptionElement) element).Name;
         }
     }
 
@@ -45,14 +42,14 @@ namespace LyncBillingBase.Conf
         [ConfigurationProperty("PDFReportColumnsDescriptions")]
         public PDFReportColumnsDescriptionsCollection PDFReportColumnsDescriptions
         {
-            get { return (PDFReportColumnsDescriptionsCollection)this["PDFReportColumnsDescriptions"]; }
+            get { return (PDFReportColumnsDescriptionsCollection) this["PDFReportColumnsDescriptions"]; }
         }
 
         public Dictionary<string, string> PDFReportColumnsDescriptionsMap
         {
             get
             {
-                Dictionary<string, string> columnsDescription = new Dictionary<string, string>();
+                var columnsDescription = new Dictionary<string, string>();
 
                 foreach (PDFReportColumnDescriptionElement element in PDFReportColumnsDescriptions)
                 {
@@ -67,9 +64,7 @@ namespace LyncBillingBase.Conf
         {
             if (PDFReportColumnsDescriptionsMap.Keys.Contains(columnName))
                 return PDFReportColumnsDescriptionsMap[columnName];
-            else
-                return columnName;
+            return columnName;
         }
     }
-
 }

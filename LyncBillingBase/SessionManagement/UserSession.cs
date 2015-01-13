@@ -1,68 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using LyncBillingBase.DataModels;
-
-
-
-using CCC.ORM.DataAccess;
-
 using LyncBillingBase.DataMappers;
+using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.SessionManagement
 {
     public class UserSession
     {
+        private static readonly List<UserSession> usersSessions = new List<UserSession>();
         //The delegates roles data mapper - used for data access
         private DelegateRolesDataMapper DelegateRoleAccessor = new DelegateRolesDataMapper();
-
-        private static List<UserSession> usersSessions = new List<UserSession>();
         private List<DelegateRole> userDelegees = new List<DelegateRole>();
-
-
-        //Normal user data
-        public User NormalUserInfo { get; set; }
-        public string TelephoneNumber { set; get; }
-        public string IPAddress { set; get; }
-        public string UserAgent { set; get; }
-
-        //Bundled Accounts List
-        public List<string> BundledAccountsList { get; set; }
-
-        //Roles Related
-        public string ActiveRoleName { set; get; }
-        public List<SystemRole> SystemRoles { set; get; }
-        public List<DelegateRole> UserDelegateRoles { get; set; }
-        public List<DelegateRole> SiteDelegateRoles { get; set; }
-        public List<DelegateRole> DepartmentDelegateRoles { get; set; }
-
-        public DelegeeAccountInfo DelegeeAccount { get; set; }
-
-        //Phone Calls and Phone Book Related
-        public string PhonecallsPerPage { set; get; }
-        public List<PhoneCall> Phonecalls { set; get; }
-        public List<PhoneCall> PhonecallsHistory { set; get; }
-        public Dictionary<string, PhoneBookContact> Addressbook { set; get; }
-
-        //Generic Users SystemRoles
-        public bool IsDeveloper { set; get; }
-
-        //System Roles
-        public bool IsSystemAdmin { set; get; }
-        public bool IsSiteAdmin { set; get; }
-        public bool IsSiteAccountant { set; get; }
-
-        //Departments Head Role
-        public bool IsDepartmentHead { get; set; }
-
-        //Delegates Roles
-        public bool IsDelegee { set; get; }
-        public bool IsUserDelegate { set; get; }
-        public bool IsDepartmentDelegate { set; get; }
-        public bool IsSiteDelegate { set; get; }
 
         public UserSession()
         {
@@ -101,6 +49,38 @@ namespace LyncBillingBase.SessionManagement
             SiteDelegateRoles = new List<DelegateRole>();
         }
 
+        //Normal user data
+        public User NormalUserInfo { get; set; }
+        public string TelephoneNumber { set; get; }
+        public string IPAddress { set; get; }
+        public string UserAgent { set; get; }
+        //Bundled Accounts List
+        public List<string> BundledAccountsList { get; set; }
+        //Roles Related
+        public string ActiveRoleName { set; get; }
+        public List<SystemRole> SystemRoles { set; get; }
+        public List<DelegateRole> UserDelegateRoles { get; set; }
+        public List<DelegateRole> SiteDelegateRoles { get; set; }
+        public List<DelegateRole> DepartmentDelegateRoles { get; set; }
+        public DelegeeAccountInfo DelegeeAccount { get; set; }
+        //Phone Calls and Phone Book Related
+        public string PhonecallsPerPage { set; get; }
+        public List<PhoneCall> Phonecalls { set; get; }
+        public List<PhoneCall> PhonecallsHistory { set; get; }
+        public Dictionary<string, PhoneBookContact> Addressbook { set; get; }
+        //Generic Users SystemRoles
+        public bool IsDeveloper { set; get; }
+        //System Roles
+        public bool IsSystemAdmin { set; get; }
+        public bool IsSiteAdmin { set; get; }
+        public bool IsSiteAccountant { set; get; }
+        //Departments Head Role
+        public bool IsDepartmentHead { get; set; }
+        //Delegates Roles
+        public bool IsDelegee { set; get; }
+        public bool IsUserDelegate { set; get; }
+        public bool IsDepartmentDelegate { set; get; }
+        public bool IsSiteDelegate { set; get; }
 
         private void InitializeSystemRoles(List<SystemRole> SystemRoles = null)
         {
@@ -108,7 +88,7 @@ namespace LyncBillingBase.SessionManagement
             {
                 this.SystemRoles = SystemRoles;
 
-                foreach (SystemRole role in SystemRoles)
+                foreach (var role in SystemRoles)
                 {
                     //if (Role.IsDeveloper(role.RoleID)) IsDeveloper = true;
                     //else if (Role.IsSystemAdmin(role.RoleID)) IsSystemAdmin = true;
@@ -118,21 +98,21 @@ namespace LyncBillingBase.SessionManagement
             }
         }
 
-
         /***
          * Please note that this function depends on the state of the "PrimarySipAccount" variable
          * So, don't call this function before at least initializing these instance variables unless you pass the SipAccount directly
          */
+
         private void InitializeDelegeesInformation(string userSipAccount = "")
         {
             //This is a mandatory check, because we can't go on with the procedure without a SipAccount!!
-            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(this.NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(NormalUserInfo.SipAccount))
             {
                 throw new Exception("No SipAccount was assigned to this session instance!");
             }
-            else if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(this.NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(NormalUserInfo.SipAccount))
             {
-                userSipAccount = this.NormalUserInfo.SipAccount;
+                userSipAccount = NormalUserInfo.SipAccount;
             }
 
             //Initialize the Delegees SystemRoles Flags
@@ -140,7 +120,7 @@ namespace LyncBillingBase.SessionManagement
             //this.IsSiteDelegate = DelegateRoleAccessor.IsSiteDelegate(userSipAccount);
             //this.IsDepartmentDelegate = DelegateRoleAccessor.IsSiteDepartmentDelegate(userSipAccount);
 
-            this.IsDelegee = this.IsUserDelegate || this.IsDepartmentDelegate || this.IsSiteDelegate;
+            IsDelegee = IsUserDelegate || IsDepartmentDelegate || IsSiteDelegate;
 
             //Initialize the Delegees Information Lists
             //if (IsUserDelegate)
@@ -151,29 +131,27 @@ namespace LyncBillingBase.SessionManagement
 
             //if (IsSiteDelegate)
             //    this.SiteDelegateRoles = DelegateRoleAccessor.GetDelegees(userSipAccount, Role.SiteDelegeeTypeID);
-
         }
-
 
         /***
          * Please note that this function depends on the state of the "PrimarySipAccount" variable
          * So, don't call this function before at least initializing these instance variables unless you pass the SipAccount directly
          */
+
         private void InitializeDepartmentHeadRoles(string userSipAccount = "")
         {
             //This is a mandatory check, because we can't go on with the procedure without a SipAccount!!
-            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(this.NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(NormalUserInfo.SipAccount))
             {
                 throw new Exception("No SipAccount was assigned to this session instance!");
             }
-            else if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(this.NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(NormalUserInfo.SipAccount))
             {
-                userSipAccount = this.NormalUserInfo.SipAccount;
+                userSipAccount = NormalUserInfo.SipAccount;
             }
 
-           //IsDepartmentHead = DepartmentHeadRole.IsDepartmentHead(userSipAccount);
+            //IsDepartmentHead = DepartmentHeadRole.IsDepartmentHead(userSipAccount);
         }
-
 
         public void AddUserSession(UserSession userSession)
         {
@@ -183,7 +161,6 @@ namespace LyncBillingBase.SessionManagement
             }
         }
 
-
         public void RemoveUserSession(UserSession userSession)
         {
             if (!usersSessions.Contains(userSession))
@@ -192,34 +169,32 @@ namespace LyncBillingBase.SessionManagement
             }
         }
 
-
         //Initialize the BundledAccounts List
         public void InitializeBundledAccountsList(string userSipAccount)
         {
             //Make sure the parameter was given
-            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(this.NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(NormalUserInfo.SipAccount))
             {
                 throw new Exception("No SipAccount was assigned to this session instance!");
             }
-            else if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(this.NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(NormalUserInfo.SipAccount))
             {
-                userSipAccount = this.NormalUserInfo.SipAccount;
+                userSipAccount = NormalUserInfo.SipAccount;
             }
 
-           // this.BundledAccountsList = BundledAccounts.GetBundledAccountsForUser(userSipAccount);
+            // this.BundledAccountsList = BundledAccounts.GetBundledAccountsForUser(userSipAccount);
         }
-
 
         public void InitializeAllRolesInformation(string userSipAccount)
         {
             //This is a mandatory check, because we can't go on with the procedure without a SipAccount!!
-            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(this.NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(NormalUserInfo.SipAccount))
             {
                 throw new Exception("No SipAccount was assigned to this session instance!");
             }
-            else if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(this.NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(NormalUserInfo.SipAccount))
             {
-                userSipAccount = this.NormalUserInfo.SipAccount;
+                userSipAccount = NormalUserInfo.SipAccount;
             }
 
             //SystemRoles = SystemRole.GetSystemRolesPerSipAccount(userSipAccount);
@@ -230,52 +205,32 @@ namespace LyncBillingBase.SessionManagement
             //ActiveRoleName = Enums.GetDescription(Enums.ActiveRoleNames.NormalUser);
         }
 
-
         //Get the user sipaccount.
         public string GetEffectiveSipAccount()
         {
-            List<string> DelegeesRoleNames = new List<string>()
-            {
-                //Enums.GetDescription(Enums.ActiveRoleNames.UserDelegee),
-                //Enums.GetDescription(Enums.ActiveRoleNames.DepartmentDelegee),
-                //Enums.GetDescription(Enums.ActiveRoleNames.SiteDelegee)
-            };
+            var DelegeesRoleNames = new List<string>();
 
             //if the user is a user-delegee return the delegate sipaccount.
-            if (DelegeesRoleNames.Contains(this.ActiveRoleName) && this.DelegeeAccount != null)
+            if (DelegeesRoleNames.Contains(ActiveRoleName) && DelegeeAccount != null)
             {
-                return (this.DelegeeAccount.DelegeeUserAccount.SipAccount);
+                return (DelegeeAccount.DelegeeUserAccount.SipAccount);
             }
-            //else then the user is a normal one, just return the normal user sipaccount.
-            else
-            {
-                return (this.NormalUserInfo.SipAccount);
-            }
+                //else then the user is a normal one, just return the normal user sipaccount.
+            return (NormalUserInfo.SipAccount);
         }
-
 
         //Get the user displayname.
         public string GetEffectiveDisplayName()
         {
-            List<string> DelegeesRoleNames = new List<string>()
-            {
-                //Enums.GetDescription(Enums.ActiveRoleNames.UserDelegee),
-                //Enums.GetDescription(Enums.ActiveRoleNames.DepartmentDelegee),
-                //Enums.GetDescription(Enums.ActiveRoleNames.SiteDelegee)
-            };
+            var DelegeesRoleNames = new List<string>();
 
             //if the user is a user-delegee return the delegate sipaccount.
-            if (DelegeesRoleNames.Contains(this.ActiveRoleName) && this.DelegeeAccount != null)
+            if (DelegeesRoleNames.Contains(ActiveRoleName) && DelegeeAccount != null)
             {
-                return (this.DelegeeAccount.DelegeeUserAccount.DisplayName);
+                return (DelegeeAccount.DelegeeUserAccount.DisplayName);
             }
-            //else then the user is a normal one, just return the normal user sipaccount.
-            else
-            {
-                return (this.NormalUserInfo.DisplayName);
-            }
+                //else then the user is a normal one, just return the normal user sipaccount.
+            return (NormalUserInfo.DisplayName);
         }
-
     }
-
 }

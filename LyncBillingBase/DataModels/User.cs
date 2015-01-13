@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
 using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "ActiveDirectoryUsers", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "ActiveDirectoryUsers", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
     public class User : DataModel
     {
         [IsIDField]
@@ -55,16 +45,16 @@ namespace LyncBillingBase.DataModels
 
         [DbColumn("CreatedAt")]
         public DateTime CreatedAt { get; set; }
-        
+
         public string FullName { get; set; }
-
-
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "Name", ThisKey = "SiteName", RelationType = GLOBALS.DataRelation.Type.UNION)]
+        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "Name", ThisKey = "SiteName",
+            RelationType = GLOBALS.DataRelation.Type.UNION)]
         public Site Site { get; set; }
 
-        [DataRelation(WithDataModel = typeof(Department), OnDataModelKey = "Name", ThisKey = "DepartmentName", RelationType = GLOBALS.DataRelation.Type.UNION)]
+        [DataRelation(WithDataModel = typeof (Department), OnDataModelKey = "Name", ThisKey = "DepartmentName",
+            RelationType = GLOBALS.DataRelation.Type.UNION)]
         public Department Department { get; set; }
     }
 }

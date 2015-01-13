@@ -2,23 +2,18 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
 using CCC.UTILS.Libs;
-using LyncBillingBase.DataMappers;
-using LyncBillingBase.DataModels;
-using LyncBillingBase.Repository;
 using Lync2013Plugin.Implementation;
+using LyncBillingBase.DataModels;
 
 namespace Lync2013Plugin
 {
     public class Helpers
     {
-        private ADLib adRoutines = new ADLib();
-
-        private static ENUMS enums = new ENUMS();
+        private static readonly ENUMS enums = new ENUMS();
+        private readonly ADLib adRoutines = new ADLib();
 
         private static void ParallelWhile(Func<bool> condition, Action<ParallelLoopState> body)
         {
@@ -40,8 +35,7 @@ namespace Lync2013Plugin
             {
                 if (dataReader.GetOrdinal(columnName) >= 0)
                     return true;
-                else
-                    return false;
+                return false;
             }
             catch (Exception)
             {
@@ -49,34 +43,33 @@ namespace Lync2013Plugin
             }
         }
 
-
         /***
          * PUBLIC STATIC METHODS
          */
+
         #region Static-Public-Methods
 
         public static bool IsNull(object value)
         {
             if (value == null || value == DBNull.Value)
                 return true;
-            else
-                return false;
+            return false;
         }
 
         public static string ConvertDate(DateTime datetTime)
         {
             if (datetTime != DateTime.MinValue || datetTime != null)
                 return datetTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            else
-                return null;
+            return null;
         }
 
         /***
         * This converts a PhoneCall object to a dictionary.
         */
+
         public static Dictionary<string, object> ConvertPhoneCallToDictionary(PhoneCall phoneCall)
         {
-            Dictionary<string, object> phoneCallDict = new Dictionary<string, object>();
+            var phoneCallDict = new Dictionary<string, object>();
 
             phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.SessionIdTime), phoneCall.SessionIdTime);
 
@@ -95,13 +88,16 @@ namespace Lync2013Plugin
                 phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.SourceNumberUri), phoneCall.SourceNumberUri);
 
             if (!string.IsNullOrEmpty(phoneCall.DestinationNumberUri))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.DestinationNumberUri), phoneCall.DestinationNumberUri);
+                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.DestinationNumberUri),
+                    phoneCall.DestinationNumberUri);
 
             if (!string.IsNullOrEmpty(phoneCall.DestinationUserUri))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.DestinationUserUri), phoneCall.DestinationUserUri);
+                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.DestinationUserUri),
+                    phoneCall.DestinationUserUri);
 
             if (!string.IsNullOrEmpty(phoneCall.FromMediationServer))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.FromMediationServer), phoneCall.FromMediationServer);
+                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.FromMediationServer),
+                    phoneCall.FromMediationServer);
 
             if (!string.IsNullOrEmpty(phoneCall.ToMediationServer))
                 phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.ToMediationServer), phoneCall.ToMediationServer);
@@ -113,10 +109,12 @@ namespace Lync2013Plugin
                 phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.ToGateway), phoneCall.ToGateway);
 
             if (!string.IsNullOrEmpty(phoneCall.SourceUserEdgeServer))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.SourceUserEdgeServer), phoneCall.SourceUserEdgeServer);
+                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.SourceUserEdgeServer),
+                    phoneCall.SourceUserEdgeServer);
 
             if (!string.IsNullOrEmpty(phoneCall.DestinationUserEdgeServer))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.DestinationUserEdgeServer), phoneCall.DestinationUserEdgeServer);
+                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.DestinationUserEdgeServer),
+                    phoneCall.DestinationUserEdgeServer);
 
             if (!string.IsNullOrEmpty(phoneCall.ServerFQDN))
                 phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.ServerFQDN), phoneCall.ServerFQDN);
@@ -137,7 +135,8 @@ namespace Lync2013Plugin
                 phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.ChargingParty), phoneCall.ChargingParty);
 
             if (!string.IsNullOrEmpty(phoneCall.Marker_CallToCountry))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.Marker_CallToCountry), phoneCall.Marker_CallToCountry);
+                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.Marker_CallToCountry),
+                    phoneCall.Marker_CallToCountry);
 
             if (!string.IsNullOrEmpty(phoneCall.Marker_CallType))
                 phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.Marker_CallType), phoneCall.Marker_CallType);
@@ -164,18 +163,21 @@ namespace Lync2013Plugin
         /***
          * This is used in the CallMarker classes, to fill the PhoneCall objects from the database reader.
          */
+
         public static PhoneCall FillPhoneCallFromOleDataReader(OleDbDataReader dataReader)
         {
-            string column = string.Empty;
-            PhoneCall phoneCall = new PhoneCall();
+            var column = string.Empty;
+            var phoneCall = new PhoneCall();
 
 
             //Start filling the PhoneCall object
 
-            phoneCall.SessionIdTime = dataReader.GetDateTime(dataReader.GetOrdinal(enums.GetDescription(ENUMS.PhoneCalls.SessionIdTime)));
+            phoneCall.SessionIdTime =
+                dataReader.GetDateTime(dataReader.GetOrdinal(enums.GetDescription(ENUMS.PhoneCalls.SessionIdTime)));
 
             //phoneCall.SessionIdTime = Convert.ToDateTime(dataReader[enums.GetDescription(ENUMS.PhoneCalls.SessionIdTime)].ToString());
-            phoneCall.SessionIdSeq = dataReader.GetInt32(dataReader.GetOrdinal(enums.GetDescription(ENUMS.PhoneCalls.SessionIdSeq)));
+            phoneCall.SessionIdSeq =
+                dataReader.GetInt32(dataReader.GetOrdinal(enums.GetDescription(ENUMS.PhoneCalls.SessionIdSeq)));
 
             column = enums.GetDescription(ENUMS.PhoneCalls.ResponseTime);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
@@ -223,7 +225,7 @@ namespace Lync2013Plugin
 
             column = enums.GetDescription(ENUMS.PhoneCalls.DestinationUserEdgeServer);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
-                phoneCall.DestinationUserEdgeServer =dataReader.GetString(dataReader.GetOrdinal(column));
+                phoneCall.DestinationUserEdgeServer = dataReader.GetString(dataReader.GetOrdinal(column));
 
             column = enums.GetDescription(ENUMS.PhoneCalls.ServerFQDN);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
@@ -246,7 +248,8 @@ namespace Lync2013Plugin
                 phoneCall.CalleeURI = dataReader.GetString(dataReader.GetOrdinal(column));
 
             column = enums.GetDescription(ENUMS.PhoneCalls.ChargingParty);
-            if (ValidateColumnName(ref dataReader, ref column) == true && (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
+            if (ValidateColumnName(ref dataReader, ref column) &&
+                (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
                 phoneCall.ChargingParty = dataReader.GetString(dataReader.GetOrdinal(column));
 
             column = enums.GetDescription(ENUMS.PhoneCalls.Duration);
@@ -254,27 +257,33 @@ namespace Lync2013Plugin
                 phoneCall.Duration = dataReader.GetDecimal(dataReader.GetOrdinal(column));
 
             column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallFrom);
-            if (ValidateColumnName(ref dataReader, ref column) == true && (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
+            if (ValidateColumnName(ref dataReader, ref column) &&
+                (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
                 phoneCall.Marker_CallFrom = dataReader.GetInt64(dataReader.GetOrdinal(column));
 
             column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallTo);
-            if (ValidateColumnName(ref dataReader, ref column) == true && (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
+            if (ValidateColumnName(ref dataReader, ref column) &&
+                (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
                 phoneCall.Marker_CallTo = dataReader.GetInt64(dataReader.GetOrdinal(column));
 
             column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallToCountry);
-            if (ValidateColumnName(ref dataReader, ref column) == true && (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
+            if (ValidateColumnName(ref dataReader, ref column) &&
+                (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
                 phoneCall.Marker_CallToCountry = dataReader.GetString(dataReader.GetOrdinal(column));
 
             column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallTypeID);
-            if (ValidateColumnName(ref dataReader, ref column) == true && (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
+            if (ValidateColumnName(ref dataReader, ref column) &&
+                (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
                 phoneCall.Marker_CallTypeID = dataReader.GetInt32(dataReader.GetOrdinal(column));
 
             column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallCost);
-            if (ValidateColumnName(ref dataReader, ref column) == true && (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
+            if (ValidateColumnName(ref dataReader, ref column) &&
+                (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
                 phoneCall.Marker_CallCost = dataReader.GetInt32(dataReader.GetOrdinal(column));
 
             column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallType);
-            if (ValidateColumnName(ref dataReader, ref column) == true && (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
+            if (ValidateColumnName(ref dataReader, ref column) &&
+                (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
                 phoneCall.Marker_CallType = dataReader.GetString(dataReader.GetOrdinal(column));
 
 
@@ -289,11 +298,13 @@ namespace Lync2013Plugin
             dateTime = dateTime.AddSeconds(-dateTime.Second);
             dateTime = dateTime.AddMilliseconds(-dateTime.Millisecond);
         }
+
         #endregion
 
         /***
          * PUBLIC NON-STATIC METHODS
          */
+
         #region Non-Static-Public-Methods
 
         public string FixNumberType(string number)
@@ -303,7 +314,7 @@ namespace Lync2013Plugin
 
             if (number.Contains(";"))
             {
-                number = number.Split(';')[0].ToString();
+                number = number.Split(';')[0];
             }
 
             number = number.Trim('+');
@@ -312,7 +323,8 @@ namespace Lync2013Plugin
             return number;
         }
 
-        public string GetCountryAndTypeOfServiceFromNumber(string phoneNumber, out long dialingPrefix, out string typeOfService)
+        public string GetCountryAndTypeOfServiceFromNumber(string phoneNumber, out long dialingPrefix,
+            out string typeOfService)
         {
             long numberToParse = 0;
             dialingPrefix = 0;
@@ -330,11 +342,7 @@ namespace Lync2013Plugin
                     dialingPrefix = number.DialingPrefix;
                     return number.ISO3CountryCode;
                 }
-                else
-                {
-                    numberToParse = numberToParse / 10;
-                    continue;
-                }
+                numberToParse = numberToParse/10;
             }
 
             return "N/A";
@@ -342,17 +350,14 @@ namespace Lync2013Plugin
 
         public bool MatchDID(string phoneNumber, out string site, string sipAccount = null)
         {
-
-            string tmpPhoneNumber = string.Empty;
+            var tmpPhoneNumber = string.Empty;
 
 
             if (string.IsNullOrEmpty(phoneNumber) && !string.IsNullOrEmpty(sipAccount))
             {
-
                 var userInfo = Repo.users.Find(item => item.SipAccount.ToLower() == sipAccount.ToLower());
 
                 tmpPhoneNumber = userInfo != null ? FixNumberType(userInfo.TelephoneNumber) : @"N/A";
-
             }
             else if (string.IsNullOrEmpty(phoneNumber) && string.IsNullOrEmpty(sipAccount))
             {
@@ -361,13 +366,12 @@ namespace Lync2013Plugin
             }
             else
             {
-
                 tmpPhoneNumber = phoneNumber;
             }
 
-            foreach (DID didEntry in Repo.dids)
+            foreach (var didEntry in Repo.dids)
             {
-                string did = didEntry.Regex;
+                var did = didEntry.Regex;
 
                 if (Regex.IsMatch(tmpPhoneNumber.Trim('+'), @"^" + did))
                 {
@@ -375,7 +379,6 @@ namespace Lync2013Plugin
 
                     if (siteEntry != null)
                     {
-
                         site = siteEntry.Name;
                         return true;
                     }
@@ -383,24 +386,21 @@ namespace Lync2013Plugin
                     site = didEntry.Description;
                     return true;
                 }
-                else
-                {
-                    continue;
-                }
             }
 
             site = string.Empty;
             return false;
         }
 
-        public long GetDialingPrefixInfo(string phoneNumber, out string callType, out string countryCode, string gatewayName = null, string sipAccount = null, string did = null)
+        public long GetDialingPrefixInfo(string phoneNumber, out string callType, out string countryCode,
+            string gatewayName = null, string sipAccount = null, string did = null)
         {
             long dialingPrefix = 0;
 
             callType = "N/A";
             countryCode = "N/A";
 
-            string tmpPhoneNumber = string.Empty;
+            var tmpPhoneNumber = string.Empty;
 
             if (phoneNumber == @"N/A" && !string.IsNullOrEmpty(sipAccount))
             {
@@ -419,7 +419,8 @@ namespace Lync2013Plugin
             return dialingPrefix;
         }
 
-        public bool GetNGNDialingInfo(string phoneNumber, string sourceCountry, out long dialingPrefix, out string countryCode, out string callType)
+        public bool GetNGNDialingInfo(string phoneNumber, string sourceCountry, out long dialingPrefix,
+            out string countryCode, out string callType)
         {
             dialingPrefix = 0;
             callType = "N/A";
@@ -432,7 +433,7 @@ namespace Lync2013Plugin
                     item =>
                         item.ISO3CountryCode == Convert.ToString(ReturnEmptyIfNull(sourceCountry)) &&
                         Regex.IsMatch(phoneNumber, item.DialingCode)
-                );
+                    );
 
                 //Try to figure NGN call type
                 if (numberNGN != null)
@@ -450,54 +451,56 @@ namespace Lync2013Plugin
 
         public PhoneCall UpdateChargingPartyField(PhoneCall phoneCall)
         {
-            List<char> destinationNumberLeadingChars = new List<char>() { '+', '0' };
+            var destinationNumberLeadingChars = new List<char> {'+', '0'};
 
             if (phoneCall.CalleeURI == phoneCall.DestinationNumberUri || phoneCall.CalleeURI == null)
             {
                 return phoneCall;
             }
 
-            else if (Regex.IsMatch(phoneCall.CalleeURI, @"\d{1,}@\w{1,}.*") || Regex.IsMatch(phoneCall.CalleeURI, @"\d{1,};\w{1,}.*"))
+            if (Regex.IsMatch(phoneCall.CalleeURI, @"\d{1,}@\w{1,}.*") ||
+                Regex.IsMatch(phoneCall.CalleeURI, @"\d{1,};\w{1,}.*"))
             {
                 //Try to fetch the calleeUri phone number
                 //Two cases for matching two versions of the calleeUri
-                string calleeUriCase1 = ReplaceStringWithPattern(phoneCall.CalleeURI, @"@\w{1,}.*", charactersToBeTrimmed: destinationNumberLeadingChars);
-                string calleeUriCase2 = ReplaceStringWithPattern(phoneCall.CalleeURI, @";\w{1,}.*", charactersToBeTrimmed: destinationNumberLeadingChars);
+                var calleeUriCase1 = ReplaceStringWithPattern(phoneCall.CalleeURI, @"@\w{1,}.*",
+                    charactersToBeTrimmed: destinationNumberLeadingChars);
+                var calleeUriCase2 = ReplaceStringWithPattern(phoneCall.CalleeURI, @";\w{1,}.*",
+                    charactersToBeTrimmed: destinationNumberLeadingChars);
 
-                if (calleeUriCase1 == phoneCall.DestinationNumberUri.Trim('+') || calleeUriCase2 == phoneCall.DestinationNumberUri.Trim('+'))
+                if (calleeUriCase1 == phoneCall.DestinationNumberUri.Trim('+') ||
+                    calleeUriCase2 == phoneCall.DestinationNumberUri.Trim('+'))
                 {
                     return phoneCall;
                 }
 
-                else if (IsValidEmail(phoneCall.CalleeURI))
+                if (IsValidEmail(phoneCall.CalleeURI))
                 {
                     phoneCall.ChargingParty = phoneCall.CalleeURI;
                     return phoneCall;
                 }
 
-                else
-                {
-                    string newChargingParty = NormalizePhoneNumber(phoneCall.CalleeURI);
+                var newChargingParty = NormalizePhoneNumber(phoneCall.CalleeURI);
 
-                    if (IsValidEmail(newChargingParty))
-                        phoneCall.ChargingParty = newChargingParty;
+                if (IsValidEmail(newChargingParty))
+                    phoneCall.ChargingParty = newChargingParty;
 
-                    return phoneCall;
-                }
+                return phoneCall;
             }
 
             return phoneCall;
         }
 
-        public string ReplaceStringWithPattern(string sourceString, string regexPattern, string replaceWith = "", List<char> charactersToBeTrimmed = null)
+        public string ReplaceStringWithPattern(string sourceString, string regexPattern, string replaceWith = "",
+            List<char> charactersToBeTrimmed = null)
         {
-            string result = string.Empty;
+            var result = string.Empty;
 
             result = Regex.Replace(sourceString, regexPattern, replaceWith);
 
             if (charactersToBeTrimmed != null)
             {
-                foreach (char character in charactersToBeTrimmed)
+                foreach (var character in charactersToBeTrimmed)
                 {
                     result = result.Trim().TrimStart(character);
                 }
@@ -510,7 +513,8 @@ namespace Lync2013Plugin
         {
             emailAddress = emailAddress.ToLower();
 
-            string pattern = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
+            var pattern =
+                @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
 
             return Regex.IsMatch(emailAddress, pattern);
         }
@@ -524,56 +528,51 @@ namespace Lync2013Plugin
             {
                 return true;
             }
-            else { return false; }
+            return false;
         }
 
         public object ReturnZeroIfNull(object value)
         {
-            if (value == System.DBNull.Value)
+            if (value == DBNull.Value)
                 return 0;
-            else
-                return value;
+            return value;
         }
 
         public object ReturnEmptyIfNull(object value)
         {
-            if (value == System.DBNull.Value)
+            if (value == DBNull.Value)
                 return string.Empty;
-            else if (value == null)
+            if (value == null)
                 return string.Empty;
-            else
-                return value;
+            return value;
         }
 
         public object ReturnNullIfDBNull(object value)
         {
-            if (value == System.DBNull.Value)
+            if (value == DBNull.Value)
                 return '\0';
-            else if (value == null)
+            if (value == null)
                 return '\0';
-            else
-                return value;
+            return value;
         }
 
         public object ReturnFalseIfNull(object value)
         {
-            if (value == System.DBNull.Value)
+            if (value == DBNull.Value)
                 return false;
-            else
-                return value;
+            return value;
         }
 
         public object ReturnDateTimeMinIfNull(object value)
         {
-            if (value == System.DBNull.Value)
+            if (value == DBNull.Value)
                 return DateTime.MinValue;
-            else
-                return value;
+            return value;
         }
 
         public string NormalizePhoneNumber(string phoneNumber)
         {
-            string number = string.Empty;
+            var number = string.Empty;
 
             if (phoneNumber.StartsWith("+"))
             {
@@ -581,8 +580,9 @@ namespace Lync2013Plugin
 
                 var userInfo = adRoutines.getUsersAttributesFromPhone(number);
 
-                number = (userInfo != null && userInfo.SipAccount != null) ? userInfo.SipAccount.Replace("sip:", "") : number;
-
+                number = (userInfo != null && userInfo.SipAccount != null)
+                    ? userInfo.SipAccount.Replace("sip:", "")
+                    : number;
             }
             else
                 number = phoneNumber;
@@ -592,5 +592,4 @@ namespace Lync2013Plugin
 
         #endregion
     }
-
 }

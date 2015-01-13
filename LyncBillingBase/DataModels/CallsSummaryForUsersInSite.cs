@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
 using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
-    class CallsSummaryForUsersInSite : DataModel
+    [DataSource(Name = "", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    internal class CallsSummaryForUsersInSite : DataModel
     {
         [DbColumn("Date")]
         public DateTime Date { get; set; }
@@ -61,29 +51,24 @@ namespace LyncBillingBase.DataModels
         [DbColumn("UnmarkedCallsCost")]
         public decimal UnmarkedCallsCost { get; set; }
 
-
-        public decimal TotalCallsCost 
+        public decimal TotalCallsCost
         {
-            get { return (this.BusinessCallsCost + this.PersonalCallsCost + this.UnmarkedCallsCost); }
+            get { return (BusinessCallsCost + PersonalCallsCost + UnmarkedCallsCost); }
         }
 
         public long TotalCallsDuration
         {
-            get { return (this.BusinessCallsDuration + this.PersonalCallsDuration + this.UnmarkedCallsDuration); }
+            get { return (BusinessCallsDuration + PersonalCallsDuration + UnmarkedCallsDuration); }
         }
 
         public long TotalCallsCount
         {
-            get { return (this.BusinessCallsCount + this.PersonalCallsCount + this.UnmarkedCallsCount); }
+            get { return (BusinessCallsCount + PersonalCallsCount + UnmarkedCallsCount); }
         }
-
-
 
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "SipAccount")]
+        [DataRelation(WithDataModel = typeof (User), OnDataModelKey = "SipAccount", ThisKey = "SipAccount")]
         public User User { get; set; }
-
     }
-
 }

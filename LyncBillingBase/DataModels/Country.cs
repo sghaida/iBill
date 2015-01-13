@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
-using CCC.ORM;
+﻿using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NEW_Countries", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "NEW_Countries", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
     public class Country : DataModel
     {
         [IsIDField]
@@ -35,10 +24,9 @@ namespace LyncBillingBase.DataModels
         [DbColumn("CurrencyID")]
         public int CurrencyID { get; set; }
 
-
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(Currency), OnDataModelKey = "ID", ThisKey = "CurrencyID")]
+        [DataRelation(WithDataModel = typeof (Currency), OnDataModelKey = "ID", ThisKey = "CurrencyID")]
         public Currency Currency { get; set; }
     }
 }

@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
-
-
-
-
-
 using CCC.ORM;
 using CCC.ORM.DataAccess;
-
 using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
@@ -20,24 +11,20 @@ namespace LyncBillingBase.DataMappers
     {
         private static List<Role> _Roles = new List<Role>();
 
-
         public RolesDataMapper()
         {
             LoadRoles();
         }
 
-
         private void LoadRoles()
         {
-            if(_Roles == null || _Roles.Count == 0)
+            if (_Roles == null || _Roles.Count == 0)
             {
                 _Roles = base.GetAll().ToList();
             }
         }
 
-
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="RoleID"></param>
         /// <returns></returns>
@@ -47,39 +34,37 @@ namespace LyncBillingBase.DataMappers
             {
                 return _Roles.FirstOrDefault(item => item.RoleID == RoleID);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex.InnerException;
             }
         }
 
-
-        public override IEnumerable<Role> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override IEnumerable<Role> GetAll(string dataSourceName = null,
+            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             return _Roles;
         }
 
-
-        public override int Insert(Role dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override int Insert(Role dataObject, string dataSourceName = null,
+            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
-            bool isContained = _Roles.Contains(dataObject);
-            bool itExists = _Roles.Exists(item => item.RoleID == dataObject.RoleID && item.RoleName == dataObject.RoleName);
+            var isContained = _Roles.Contains(dataObject);
+            var itExists =
+                _Roles.Exists(item => item.RoleID == dataObject.RoleID && item.RoleName == dataObject.RoleName);
 
             if (isContained || itExists)
             {
                 return -1;
             }
-            else
-            {
-                dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
-                _Roles.Add(dataObject);
+            dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
+            _Roles.Add(dataObject);
 
-                return dataObject.ID;
-            }
+            return dataObject.ID;
         }
 
-
-        public override bool Update(Role dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override bool Update(Role dataObject, string dataSourceName = null,
+            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             var role = _Roles.Find(item => item.ID == dataObject.ID);
 
@@ -90,14 +75,11 @@ namespace LyncBillingBase.DataMappers
 
                 return base.Update(dataObject, dataSourceName, dataSourceType);
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
-
-        public override bool Delete(Role dataObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override bool Delete(Role dataObject, string dataSourceName = null,
+            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             var role = _Roles.Find(item => item.ID == dataObject.ID);
 
@@ -107,12 +89,7 @@ namespace LyncBillingBase.DataMappers
 
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
-
     }
-
 }

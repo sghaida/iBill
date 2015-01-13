@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
 using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "GatewaysRates", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "GatewaysRates", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
     public class GatewayRate : DataModel
     {
         [IsIDField]
@@ -50,7 +40,6 @@ namespace LyncBillingBase.DataModels
         [DbColumn("CurrencyCode")]
         public string CurrencyCode { set; get; }
 
-
         //TODO: Refactor the table to include a Currency ID foreign key rather than a Currency ISO Code.
         //[AllowNull]
         //[DbColumn("CurrencyID")]
@@ -59,10 +48,7 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(Gateway), OnDataModelKey = "ID", ThisKey = "GatewayID")]
+        [DataRelation(WithDataModel = typeof (Gateway), OnDataModelKey = "ID", ThisKey = "GatewayID")]
         public Gateway Gateway { get; set; }
-
-        //[DataRelation(Name = "CurrencyID_Currency.ID", WithDataModel = typeof(Currency), OnDataModelKey = "ID", ThisKey = "CurrencyID")]
-        //public Currency RatesCurrency { get; set; }
     }
 }

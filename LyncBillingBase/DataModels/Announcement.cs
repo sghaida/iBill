@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
 using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Announcements", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "Announcements", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
     public class Announcement : DataModel
     {
         [IsIDField]
@@ -37,13 +27,12 @@ namespace LyncBillingBase.DataModels
         [DbColumn("ForSite")]
         public int ForSite { get; set; }
 
-
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(Role), OnDataModelKey = "RoleID", ThisKey = "ForRole")]
+        [DataRelation(WithDataModel = typeof (Role), OnDataModelKey = "RoleID", ThisKey = "ForRole")]
         public Role Role { get; set; }
 
-        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "ForSite")]
+        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "ID", ThisKey = "ForSite")]
         public Site Site { get; set; }
     }
 }

@@ -1,34 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
 using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "MonitoringServersInfo", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
+    [DataSource(Name = "MonitoringServersInfo", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
     public class PhoneCall : DataModel
     {
-        public PhoneCall() { }
+        //This is used to tell where to find and update this PhoneCalls
+
+
+        private decimal _Marker_CallCost;
 
         [IsIDField]
         [AllowIDInsert]
-        [DbColumn("SessionIdTime")] 
+        [DbColumn("SessionIdTime")]
         public DateTime SessionIdTime { set; get; }
 
-        [DbColumn("SessionIdSeq")] 
+        [DbColumn("SessionIdSeq")]
         public int SessionIdSeq { get; set; }
 
         [DbColumn("ResponseTime")]
@@ -38,25 +29,25 @@ namespace LyncBillingBase.DataModels
         public DateTime SessionEndTime { set; get; }
 
         [AllowNull]
-        [DbColumn("ChargingParty")] 
+        [DbColumn("ChargingParty")]
         public string ChargingParty { set; get; }
 
         [AllowNull]
-        [DbColumn("DestinationNumberUri")] 
+        [DbColumn("DestinationNumberUri")]
         public string DestinationNumberUri { set; get; }
 
         [AllowNull]
-        [DbColumn("Marker_CallToCountry")] 
+        [DbColumn("Marker_CallToCountry")]
         public string Marker_CallToCountry { set; get; }
 
-        [DbColumn("Marker_CallType")] 
+        [DbColumn("Marker_CallType")]
         public string Marker_CallType { set; get; }
 
-        [DbColumn("Duration")] 
+        [DbColumn("Duration")]
         public decimal Duration { set; get; }
 
         [AllowNull]
-        [DbColumn("UI_UpdatedByUser")] 
+        [DbColumn("UI_UpdatedByUser")]
         public string UI_UpdatedByUser { set; get; }
 
         [AllowNull]
@@ -64,99 +55,99 @@ namespace LyncBillingBase.DataModels
         public DateTime UI_MarkedOn { set; get; }
 
         [AllowNull]
-        [DbColumn("UI_CallType")] 
+        [DbColumn("UI_CallType")]
         public string UI_CallType { set; get; }
 
         [AllowNull]
-        [DbColumn("UI_AssignedByUser")] 
+        [DbColumn("UI_AssignedByUser")]
         public string UI_AssignedByUser { set; get; }
 
         [AllowNull]
-        [DbColumn("UI_AssignedToUser")] 
+        [DbColumn("UI_AssignedToUser")]
         public string UI_AssignedToUser { set; get; }
 
         [AllowNull]
-        [DbColumn("UI_AssignedOn")] 
+        [DbColumn("UI_AssignedOn")]
         public DateTime UI_AssignedOn { set; get; }
 
         [AllowNull]
-        [DbColumn("AC_DisputeStatus")] 
+        [DbColumn("AC_DisputeStatus")]
         public string AC_DisputeStatus { set; get; }
 
         [AllowNull]
-        [DbColumn("AC_DisputeResolvedOn")] 
+        [DbColumn("AC_DisputeResolvedOn")]
         public DateTime AC_DisputeResolvedOn { set; get; }
 
         [AllowNull]
-        [DbColumn("AC_IsInvoiced")] 
+        [DbColumn("AC_IsInvoiced")]
         public string AC_IsInvoiced { set; get; }
 
         [AllowNull]
-        [DbColumn("AC_InvoiceDate")] 
+        [DbColumn("AC_InvoiceDate")]
         public DateTime AC_InvoiceDate { set; get; }
 
-        [DbColumn("SourceUserUri")] 
+        [DbColumn("SourceUserUri")]
         public string SourceUserUri { set; get; }
 
         [AllowNull]
-        [DbColumn("SourceNumberUri")] 
+        [DbColumn("SourceNumberUri")]
         public string SourceNumberUri { set; get; }
 
-        [DbColumn("DestinationUserUri")] 
+        [DbColumn("DestinationUserUri")]
         public string DestinationUserUri { get; set; }
 
         [AllowNull]
-        [DbColumn("FromMediationServer")] 
+        [DbColumn("FromMediationServer")]
         public string FromMediationServer { set; get; }
 
         [AllowNull]
-        [DbColumn("ToMediationServer")] 
+        [DbColumn("ToMediationServer")]
         public string ToMediationServer { set; get; }
 
         [AllowNull]
-        [DbColumn("FromGateway")] 
+        [DbColumn("FromGateway")]
         public string FromGateway { set; get; }
 
         [AllowNull]
-        [DbColumn("ToGateway")] 
+        [DbColumn("ToGateway")]
         public string ToGateway { set; get; }
 
         [AllowNull]
-        [DbColumn("SourceUserEdgeServer")] 
+        [DbColumn("SourceUserEdgeServer")]
         public string SourceUserEdgeServer { set; get; }
 
         [AllowNull]
-        [DbColumn("DestinationUserEdgeServer")] 
+        [DbColumn("DestinationUserEdgeServer")]
         public string DestinationUserEdgeServer { set; get; }
 
-        [DbColumn("ServerFQDN")] 
+        [DbColumn("ServerFQDN")]
         public string ServerFQDN { set; get; }
 
-        [DbColumn("PoolFQDN")] 
+        [DbColumn("PoolFQDN")]
         public string PoolFQDN { set; get; }
 
         [AllowNull]
-        [DbColumn("OnBehalf")] 
+        [DbColumn("OnBehalf")]
         public string OnBehalf { set; get; }
 
         [AllowNull]
-        [DbColumn("ReferredBy")] 
+        [DbColumn("ReferredBy")]
         public string ReferredBy { set; get; }
 
         [AllowNull]
-        [DbColumn("CalleeURI")] 
+        [DbColumn("CalleeURI")]
         public string CalleeURI { get; set; }
-        
+
         [AllowNull]
-        [DbColumn("Marker_CallFrom")] 
+        [DbColumn("Marker_CallFrom")]
         public long Marker_CallFrom { set; get; }
 
         [AllowNull]
-        [DbColumn("Marker_CallTo")] 
+        [DbColumn("Marker_CallTo")]
         public long Marker_CallTo { set; get; }
 
         [AllowNull]
-        [DbColumn("Marker_CallTypeID")] 
+        [DbColumn("Marker_CallTypeID")]
         public long Marker_CallTypeID { set; get; }
 
         [DbColumn("PhoneCallsTableName")]
@@ -164,21 +155,14 @@ namespace LyncBillingBase.DataModels
         public string PhoneCallsTableName { get; set; }
 
         public string PhoneBookName { set; get; }
-
         public string PhoneCallsTable { set; get; }
 
-        //This is used to tell where to find and update this PhoneCalls
-        
-
-        private decimal _Marker_CallCost;
-
-        [DbColumn("Marker_CallCost")] 
+        [DbColumn("Marker_CallCost")]
         public decimal Marker_CallCost
         {
-            set { this._Marker_CallCost = value; }
-            get { return decimal.Round(this._Marker_CallCost, 2); }
+            set { _Marker_CallCost = value; }
+            get { return decimal.Round(_Marker_CallCost, 2); }
         }
-
     }
 
     //The phonecalls version of the IEqualityComparer, used with LINQ's Distinct function
@@ -199,5 +183,4 @@ namespace LyncBillingBase.DataModels
     //        return hashcode.GetHashCode();
     //    }
     //}
-
 }

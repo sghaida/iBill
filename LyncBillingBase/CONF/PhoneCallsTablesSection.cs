@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LyncBillingBase.Conf
 {
@@ -38,7 +34,7 @@ namespace LyncBillingBase.Conf
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((PhoneCallsTableElement)element).Name;
+            return ((PhoneCallsTableElement) element).Name;
         }
     }
 
@@ -53,14 +49,14 @@ namespace LyncBillingBase.Conf
         [ConfigurationProperty("PhoneCallsTables")]
         public PhoneCallsTablesCollection PhoneCallsTables
         {
-            get { return (PhoneCallsTablesCollection)this["PhoneCallsTables"]; }
+            get { return (PhoneCallsTablesCollection) this["PhoneCallsTables"]; }
         }
 
         public List<string> PhoneCallsTablesList
         {
             get
             {
-                List<string> tablesList = new List<string>();
+                var tablesList = new List<string>();
 
                 foreach (PhoneCallsTableElement el in PhoneCallsTables)
                 {
