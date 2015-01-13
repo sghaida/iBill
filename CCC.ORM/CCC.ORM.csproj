@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6FCD2469-2B10-419B-BD55-C42B486B6869}</ProjectGuid>
+    <ProjectGuid>{5FB432B3-D581-4A6C-8718-D9038FED0630}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CCC.ORM</RootNamespace>
