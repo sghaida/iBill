@@ -44,7 +44,7 @@ namespace CCC.ORM.DataAccess
         /// <summary>
         ///     A true or false flag to indicate whether this is an ID field in it's table or not.
         /// </summary>
-        public bool IsIDField { get; set; }
+        public bool IsIdField { get; set; }
 
         /// <summary>
         ///     A true or false flag to indicate whether this value can be null on update or insert
@@ -54,7 +54,7 @@ namespace CCC.ORM.DataAccess
         /// <summary>
         ///     A true or false flag to indicate whether this ID Field can be inserted and/or updated in it's table.
         /// </summary>
-        public bool AllowIDInsert { get; set; }
+        public bool AllowIdInsert { get; set; }
 
         /// <summary>
         ///     A true or false flag to indicate whether this is a foreign key in it's table or not.
@@ -119,7 +119,7 @@ namespace CCC.ORM.DataAccess
         ///     This sets the relation type between the two data models.
         ///     It can be any value defined in the GLOBALS.DataRelation.Type
         /// </summary>
-        public GLOBALS.DataRelation.Type RelationType { get; set; }
+        public Globals.DataRelation.Type RelationType { get; set; }
 
         private static T Cast<T>(object o)
         {

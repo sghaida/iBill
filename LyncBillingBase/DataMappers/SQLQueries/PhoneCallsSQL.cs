@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace LyncBillingBase.DataMappers.SQLQueries
 {
-    public class PhoneCallsSQL
+    public class PhoneCallsSql
     {
         public string ChargableCallsPerUser(List<string> tables, string sipAccount)
         {

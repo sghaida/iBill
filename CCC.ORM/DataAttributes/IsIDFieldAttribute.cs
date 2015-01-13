@@ -6,9 +6,9 @@ namespace CCC.ORM.DataAttributes
     ///     This attribute tells the Repository that it's associated property resembles a Database Table ID Column.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class IsIDFieldAttribute : Attribute
+    public class IsIdFieldAttribute : Attribute
     {
-        public IsIDFieldAttribute(bool status = true)
+        public IsIdFieldAttribute(bool status = true)
         {
             Status = status;
         }

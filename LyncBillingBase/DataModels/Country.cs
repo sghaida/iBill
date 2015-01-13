@@ -4,25 +4,25 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NEW_Countries", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "NEW_Countries", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class Country : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("ID")]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [DbColumn("Name")]
         public string Name { get; set; }
 
         [DbColumn("ISO2Code")]
-        public string ISO2Code { get; set; }
+        public string Iso2Code { get; set; }
 
         [DbColumn("ISO3Code")]
-        public string ISO3Code { get; set; }
+        public string Iso3Code { get; set; }
 
         [DbColumn("CurrencyID")]
-        public int CurrencyID { get; set; }
+        public int CurrencyId { get; set; }
 
         //
         // Relations

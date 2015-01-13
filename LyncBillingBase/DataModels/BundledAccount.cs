@@ -4,13 +4,13 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "BundledAccounts", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "BundledAccounts", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class BundledAccount : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("ID")]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [DbColumn("PrimarySipAccount")]
         public string PrimarySipAccount { get; set; }

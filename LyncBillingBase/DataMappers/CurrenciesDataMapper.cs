@@ -9,7 +9,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class CurrenciesDataMapper : DataAccess<Currency>
     {
-        private static List<Currency> _Currencies = new List<Currency>();
+        private static List<Currency> _currencies = new List<Currency>();
 
         public CurrenciesDataMapper()
         {
@@ -18,18 +18,18 @@ namespace LyncBillingBase.DataMappers
 
         private void LoadCurrencies()
         {
-            if (_Currencies == null || _Currencies.Count == 0)
+            if (_currencies == null || _currencies.Count == 0)
             {
-                _Currencies = base.GetAll().ToList();
+                _currencies = base.GetAll().ToList();
             }
         }
 
-        public Currency GetByISO3Code(string ISO3Code)
+        public Currency GetByIso3Code(string iso3Code)
         {
             Currency currency = null;
 
             var condition = new Dictionary<string, object>();
-            condition.Add("ISO3Code", ISO3Code);
+            condition.Add("ISO3Code", iso3Code);
 
             try
             {
@@ -49,37 +49,37 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<Currency> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            return _Currencies;
+            return _currencies;
         }
 
         public override int Insert(Currency dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var isContained = _Currencies.Contains(dataObject);
+            var isContained = _currencies.Contains(dataObject);
             var itExists =
-                _Currencies.Exists(item => item.Name == dataObject.Name || item.ISO3Code == dataObject.ISO3Code);
+                _currencies.Exists(item => item.Name == dataObject.Name || item.Iso3Code == dataObject.Iso3Code);
 
             if (isContained || itExists)
             {
                 return -1;
             }
-            dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
-            _Currencies.Add(dataObject);
+            dataObject.Id = base.Insert(dataObject, dataSourceName, dataSourceType);
+            _currencies.Add(dataObject);
 
-            return dataObject.ID;
+            return dataObject.Id;
         }
 
         public override bool Update(Currency dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var currency = _Currencies.Find(item => item.ID == dataObject.ID);
+            var currency = _currencies.Find(item => item.Id == dataObject.Id);
 
             if (currency != null)
             {
-                _Currencies.Remove(currency);
-                _Currencies.Add(dataObject);
+                _currencies.Remove(currency);
+                _currencies.Add(dataObject);
 
                 return base.Update(dataObject, dataSourceName, dataSourceType);
             }
@@ -87,13 +87,13 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Delete(Currency dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var currency = _Currencies.Find(item => item.ID == dataObject.ID);
+            var currency = _currencies.Find(item => item.Id == dataObject.Id);
 
             if (currency != null)
             {
-                _Currencies.Remove(currency);
+                _currencies.Remove(currency);
 
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }

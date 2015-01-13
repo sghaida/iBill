@@ -11,20 +11,20 @@ using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
 {
-    public class RatesForNGNDataMapper : DataAccess<RateForNGN>
+    public class RatesForNgnDataMapper : DataAccess<RateForNgn>
     {
         /***
          * These data mappers are used to complete the relations data.
          */
         private readonly GatewaysRatesDataMapper _gatewaysRatesDataMapper = new GatewaysRatesDataMapper();
 
-        private readonly NumberingPlansForNGNDataMapper _ngnNumberingPlanDataMapper =
-            new NumberingPlansForNGNDataMapper();
+        private readonly NumberingPlansForNgnDataMapper _ngnNumberingPlanDataMapper =
+            new NumberingPlansForNgnDataMapper();
 
         /***
          * The SQL Queries Repository
          */
-        private RatesSQL RATES_SQL_QUERIES = new RatesSQL();
+        private RatesSql _ratesSqlQueries = new RatesSql();
 
         /// <summary>
         ///     Given a list of Rates Objects, fill their Numbering Plan objects with the Numbering Plan's Data Relations.
@@ -32,7 +32,7 @@ namespace LyncBillingBase.DataMappers
         ///     We have to fill the data relations inside the local Numbering Plan objects ourselves.
         /// </summary>
         /// <param name="numberingPlan">A list of Numbering Plan objects</param>
-        private void FillNumberingPlanData(ref IEnumerable<RateForNGN> rates)
+        private void FillNumberingPlanData(ref IEnumerable<RateForNgn> rates)
         {
             try
             {
@@ -44,16 +44,16 @@ namespace LyncBillingBase.DataMappers
 
                 rates =
                     (from rate in rates
-                        where (rate.NumberingPlanForNGN != null && rate.NumberingPlanForNGN.ID > 0)
-                        join numPlan in allNumberingPlan on rate.NumberingPlanForNGN.ID equals numPlan.ID
-                        select new RateForNGN
+                        where (rate.NumberingPlanForNgn != null && rate.NumberingPlanForNgn.Id > 0)
+                        join numPlan in allNumberingPlan on rate.NumberingPlanForNgn.Id equals numPlan.Id
+                        select new RateForNgn
                         {
-                            ID = rate.ID,
-                            DialingCodeID = rate.DialingCodeID,
+                            Id = rate.Id,
+                            DialingCodeId = rate.DialingCodeId,
                             Rate = rate.Rate,
                             //relations
-                            NumberingPlanForNGN = numPlan
-                        }).AsEnumerable<RateForNGN>();
+                            NumberingPlanForNgn = numPlan
+                        }).AsEnumerable<RateForNgn>();
             }
             catch (Exception ex)
             {
@@ -64,15 +64,15 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Gateway's ID, return it's currently active Rates table name
         /// </summary>
-        /// <param name="GatewayID">Gateway.ID</param>
+        /// <param name="gatewayId">Gateway.ID</param>
         /// <returns>Rates table name</returns>
-        private string GetTableNameByGatewayID(int GatewayID)
+        private string GetTableNameByGatewayId(int gatewayId)
         {
             var tableName = string.Empty;
 
             try
             {
-                var gatewayRatesInfo = _gatewaysRatesDataMapper.GetByGatewayID(GatewayID);
+                var gatewayRatesInfo = _gatewaysRatesDataMapper.GetByGatewayId(gatewayId);
 
                 if (gatewayRatesInfo != null && gatewayRatesInfo.Count > 0)
                 {
@@ -94,15 +94,15 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="GatewayID"></param>
+        /// <param name="gatewayId"></param>
         /// <returns></returns>
-        public List<RateForNGN> GetByGatewayID(int GatewayID)
+        public List<RateForNgn> GetByGatewayId(int gatewayId)
         {
-            var gatewayNGNRates = new List<RateForNGN>();
+            var gatewayNgnRates = new List<RateForNgn>();
 
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
+                var tableName = GetTableNameByGatewayId(gatewayId);
 
                 if (string.IsNullOrEmpty(tableName))
                 {
@@ -110,7 +110,7 @@ namespace LyncBillingBase.DataMappers
                 }
 
                 //var SQL = RATES_SQL_QUERIES.GetNGNRates(tableName);
-                return gatewayNGNRates.GetWithRelations(tableName, item => item.NumberingPlanForNGN).ToList();
+                return gatewayNgnRates.GetWithRelations(tableName, item => item.NumberingPlanForNgn).ToList();
             }
             catch (Exception ex)
             {
@@ -122,9 +122,9 @@ namespace LyncBillingBase.DataMappers
         ///     Returns All Gateways Rates Info Key value Per and the key is the Gateway ID
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, List<RateForNGN>> GetGatewaysNGNRatesByID()
+        public Dictionary<int, List<RateForNgn>> GetGatewaysNgnRatesById()
         {
-            var ngnlRates = new Dictionary<int, List<RateForNGN>>();
+            var ngnlRates = new Dictionary<int, List<RateForNgn>>();
 
             var gatewayRatesInfo = _gatewaysRatesDataMapper.GetAll().ToList();
 
@@ -132,7 +132,7 @@ namespace LyncBillingBase.DataMappers
             {
                 lock (ngnlRates)
                 {
-                    ngnlRates.Add(item.Gateway.ID, GetByGatewayID(item.Gateway.ID));
+                    ngnlRates.Add(item.Gateway.Id, GetByGatewayId(item.Gateway.Id));
                 }
             });
 
@@ -143,9 +143,9 @@ namespace LyncBillingBase.DataMappers
         ///     Returns All Gateways NGN Rates Info Key value Per and the key is the Gateway name
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, List<RateForNGN>> GetGatewaysNGNRatesByName()
+        public Dictionary<string, List<RateForNgn>> GetGatewaysNgnRatesByName()
         {
-            var ngnlRates = new Dictionary<string, List<RateForNGN>>();
+            var ngnlRates = new Dictionary<string, List<RateForNgn>>();
 
             var gatewayRatesInfo = _gatewaysRatesDataMapper.GetAll().ToList();
 
@@ -153,7 +153,7 @@ namespace LyncBillingBase.DataMappers
             {
                 lock (ngnlRates)
                 {
-                    ngnlRates.Add(item.Gateway.Name, GetByGatewayID(item.Gateway.ID));
+                    ngnlRates.Add(item.Gateway.Name, GetByGatewayId(item.Gateway.Id));
                 }
             });
 
@@ -164,15 +164,15 @@ namespace LyncBillingBase.DataMappers
         ///     Insert RateForNGN object into the Gateway's NGN Rates table.
         /// </summary>
         /// <param name="ngnRateObject">The Rate object to insert.</param>
-        /// <param name="GatewayID">The Gateway's ID to insert the Rate object into it's NGN Rates table.</param>
+        /// <param name="gatewayId">The Gateway's ID to insert the Rate object into it's NGN Rates table.</param>
         /// <returns>Database Row ID</returns>
-        public int Insert(RateForNGN ngnRateObject, int GatewayID)
+        public int Insert(RateForNgn ngnRateObject, int gatewayId)
         {
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
+                var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Insert(ngnRateObject, tableName, GLOBALS.DataSource.Type.DBTable);
+                return base.Insert(ngnRateObject, tableName, Globals.DataSource.Type.DBTable);
             }
             catch (Exception ex)
             {
@@ -184,15 +184,15 @@ namespace LyncBillingBase.DataMappers
         ///     Update a RateForNGN object in a Gateway's NGN Rates table.
         /// </summary>
         /// <param name="ngnRateObject">The NGN Rate object to insert.</param>
-        /// <param name="GatewayID">The Gateway's ID to update the Rate object from it's NGN Rates table.</param>
+        /// <param name="gatewayId">The Gateway's ID to update the Rate object from it's NGN Rates table.</param>
         /// <returns>Update boolean</returns>
-        public bool Update(RateForNGN ngnRateObject, int GatewayID)
+        public bool Update(RateForNgn ngnRateObject, int gatewayId)
         {
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
+                var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Update(ngnRateObject, tableName, GLOBALS.DataSource.Type.DBTable);
+                return base.Update(ngnRateObject, tableName, Globals.DataSource.Type.DBTable);
             }
             catch (Exception ex)
             {
@@ -204,15 +204,15 @@ namespace LyncBillingBase.DataMappers
         ///     Delete a RateForNGN object from a Gateway's NGN Rates table.
         /// </summary>
         /// <param name="ngnRateObject">The NGN Rate object to insert.</param>
-        /// <param name="GatewayID">The Gateway's ID to delete the Rate object from it's NGN Rates table.</param>
+        /// <param name="gatewayId">The Gateway's ID to delete the Rate object from it's NGN Rates table.</param>
         /// <returns>Delete boolean</returns>
-        public bool Delete(RateForNGN ngnRateObject, int GatewayID)
+        public bool Delete(RateForNgn ngnRateObject, int gatewayId)
         {
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
+                var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Delete(ngnRateObject, tableName, GLOBALS.DataSource.Type.DBTable);
+                return base.Delete(ngnRateObject, tableName, Globals.DataSource.Type.DBTable);
             }
             catch (Exception ex)
             {
@@ -224,49 +224,49 @@ namespace LyncBillingBase.DataMappers
          * Disable the default parent functions
          */
 
-        public override int Insert(RateForNGN dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override int Insert(RateForNgn dataObject, string dataSourceName = null,
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
-        public override bool Update(RateForNGN dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override bool Update(RateForNgn dataObject, string dataSourceName = null,
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
-        public override bool Delete(RateForNGN dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override bool Delete(RateForNgn dataObject, string dataSourceName = null,
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
-        public override RateForNGN GetById(long id, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override RateForNgn GetById(long id, string dataSourceName = null,
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<RateForNGN> Get(Dictionary<string, object> whereConditions, int limit = 25,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override IEnumerable<RateForNgn> Get(Dictionary<string, object> whereConditions, int limit = 25,
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<RateForNGN> Get(Expression<Func<RateForNGN, bool>> predicate,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override IEnumerable<RateForNgn> Get(Expression<Func<RateForNgn, bool>> predicate,
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<RateForNGN> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override IEnumerable<RateForNgn> GetAll(string dataSourceName = null,
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<RateForNGN> GetAll(string sql)
+        public override IEnumerable<RateForNgn> GetAll(string sqlQuery)
         {
             throw new NotImplementedException();
         }

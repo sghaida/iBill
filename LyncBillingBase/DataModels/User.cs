@@ -5,14 +5,14 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "ActiveDirectoryUsers", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "ActiveDirectoryUsers", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class User : DataModel
     {
-        [IsIDField]
-        [AllowIDInsert]
+        [IsIdField]
+        [AllowIdInsert]
         [DbColumn("AD_UserID")]
-        public int EmployeeID { get; set; }
+        public int EmployeeId { get; set; }
 
         [DbColumn("AD_DisplayName")]
         public string DisplayName { get; set; }
@@ -34,7 +34,7 @@ namespace LyncBillingBase.DataModels
 
         [AllowNull]
         [DbColumn("UpdatedByAD")]
-        public Byte UpdatedByAD { get; set; }
+        public Byte UpdatedByAd { get; set; }
 
         [DbColumn("NotifyUser")]
         public string NotifyUser { get; set; }
@@ -50,11 +50,11 @@ namespace LyncBillingBase.DataModels
         //
         // Relations
         [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "Name", ThisKey = "SiteName",
-            RelationType = GLOBALS.DataRelation.Type.UNION)]
+            RelationType = Globals.DataRelation.Type.UNION )]
         public Site Site { get; set; }
 
         [DataRelation(WithDataModel = typeof (Department), OnDataModelKey = "Name", ThisKey = "DepartmentName",
-            RelationType = GLOBALS.DataRelation.Type.UNION)]
+            RelationType = Globals.DataRelation.Type.UNION )]
         public Department Department { get; set; }
     }
 }

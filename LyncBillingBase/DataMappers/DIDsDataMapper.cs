@@ -6,72 +6,72 @@ using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
 {
-    public class DIDsDataMapper : DataAccess<DID>
+    public class DiDsDataMapper : DataAccess<Did>
     {
-        private static List<DID> _DIDs = new List<DID>();
+        private static List<Did> _diDs = new List<Did>();
 
-        public DIDsDataMapper()
+        public DiDsDataMapper()
         {
-            LoadDIDs();
+            LoadDiDs();
         }
 
-        private void LoadDIDs()
+        private void LoadDiDs()
         {
-            if (_DIDs == null || _DIDs.Count == 0)
+            if (_diDs == null || _diDs.Count == 0)
             {
-                _DIDs = base.GetAll().ToList();
+                _diDs = base.GetAll().ToList();
             }
         }
 
-        public override IEnumerable<DID> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override IEnumerable<Did> GetAll(string dataSourceName = null,
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            return _DIDs;
+            return _diDs;
         }
 
-        public override int Insert(DID dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override int Insert(Did dataObject, string dataSourceName = null,
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var isContained = _DIDs.Contains(dataObject);
+            var isContained = _diDs.Contains(dataObject);
             var itExists =
-                _DIDs.Exists(
+                _diDs.Exists(
                     item =>
                         item.Regex == dataObject.Regex ||
-                        (item.Regex == dataObject.Regex && item.SiteID == dataObject.SiteID));
+                        (item.Regex == dataObject.Regex && item.SiteId == dataObject.SiteId));
 
             if (isContained || itExists)
             {
                 return -1;
             }
-            dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
-            _DIDs.Add(dataObject);
+            dataObject.Id = base.Insert(dataObject, dataSourceName, dataSourceType);
+            _diDs.Add(dataObject);
 
-            return dataObject.ID;
+            return dataObject.Id;
         }
 
-        public override bool Update(DID dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override bool Update(Did dataObject, string dataSourceName = null,
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var did = _DIDs.Find(item => item.ID == dataObject.ID);
+            var did = _diDs.Find(item => item.Id == dataObject.Id);
 
             if (did != null)
             {
-                _DIDs.Remove(did);
-                _DIDs.Add(dataObject);
+                _diDs.Remove(did);
+                _diDs.Add(dataObject);
 
                 return base.Update(dataObject, dataSourceName, dataSourceType);
             }
             return false;
         }
 
-        public override bool Delete(DID dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override bool Delete(Did dataObject, string dataSourceName = null,
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var did = _DIDs.Find(item => item.ID == dataObject.ID);
+            var did = _diDs.Find(item => item.Id == dataObject.Id);
 
             if (did != null)
             {
-                _DIDs.Remove(did);
+                _diDs.Remove(did);
 
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }

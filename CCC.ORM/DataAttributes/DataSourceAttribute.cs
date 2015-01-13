@@ -19,7 +19,7 @@ namespace CCC.ORM.DataAttributes
         ///     * DBTable: A database table. In this case, the Name option specifies the table name.
         ///     * WS: A webservice endpoint. In this case, the Name option speficies the address.
         /// </summary>
-        public GLOBALS.DataSource.Type Type { get; set; }
+        public Globals.DataSource.Type Type { get; set; }
 
         /// <summary>
         ///     This specifies how the data is read and fetched. This option can be one of the following:
@@ -27,6 +27,6 @@ namespace CCC.ORM.DataAttributes
         ///     * Distributed: Data is read from multiple sources, this data source acts as a lookup of the other sources, such as:
         ///     a lookup table, a lookup webservice endpoint...etc
         /// </summary>
-        public GLOBALS.DataSource.AccessMethod AccessMethod { get; set; }
+        public Globals.DataSource.AccessMethod AccessMethod { get; set; }
     }
 }

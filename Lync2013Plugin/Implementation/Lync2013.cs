@@ -13,18 +13,18 @@ namespace Lync2013Plugin.Implementation
 {
     public class Lync2013 : ICallProcessor
     {
-        private static readonly DBLib DBRoutines = new DBLib();
-        private static OleDbConnection SourceDBConnector;
-        private static OleDbConnection DestinationDBConnector;
-        private ENUMS enums = new ENUMS();
-        private string PhoneCallsTableName = string.Empty;
+        private static readonly DbLib DbRoutines = new DbLib();
+        private static OleDbConnection _sourceDbConnector;
+        private static OleDbConnection _destinationDbConnector;
+        private Enums _enums = new Enums();
+        private string _phoneCallsTableName = string.Empty;
 
         public Lync2013()
         {
             try
             {
-                SourceDBConnector = new OleDbConnection(ConstructConnectionString());
-                DestinationDBConnector = new OleDbConnection(DBLib.ConnectionString);
+                _sourceDbConnector = new OleDbConnection(ConstructConnectionString());
+                _destinationDbConnector = new OleDbConnection(DbLib.ConnectionString);
             }
             catch (Exception e)
             {
@@ -51,7 +51,7 @@ namespace Lync2013Plugin.Implementation
         {
             var phoneCallsFunc = new PhoneCallsImpl();
 
-            DataTable ToBeInsertedDataTable;
+            DataTable toBeInsertedDataTable;
             OleDbDataReader dataReader = null;
 
             var exceptions = new ConcurrentQueue<Exception>();
@@ -61,11 +61,11 @@ namespace Lync2013Plugin.Implementation
             var lastImportedPhoneCallDate = DateTime.MinValue;
 
             //OPEN CONNECTIONS
-            SourceDBConnector.Open();
-            DestinationDBConnector.Open();
+            _sourceDbConnector.Open();
+            _destinationDbConnector.Open();
 
-            dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName, false),
-                DestinationDBConnector);
+            dataReader = DbRoutines.Executereader(SqLs.GetLastImportedPhonecallDate(_phoneCallsTableName, false),
+                _destinationDbConnector);
 
             if (dataReader.Read() && !dataReader.IsDBNull(0))
             {
@@ -77,8 +77,8 @@ namespace Lync2013Plugin.Implementation
             else
             {
                 //Table is empty in this case we need to read from the source that we will import the data from
-                dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate("DialogsView", true),
-                    SourceDBConnector);
+                dataReader = DbRoutines.Executereader(SqLs.GetLastImportedPhonecallDate("DialogsView", true),
+                    _sourceDbConnector);
 
                 if (dataReader.Read() && !dataReader.IsDBNull(0))
                 {
@@ -91,17 +91,17 @@ namespace Lync2013Plugin.Implementation
             while (lastImportedPhoneCallDate <= DateTime.Now)
             {
                 //Construct CREATE_IMPORT_PHONE_CALLS_QUERY
-                var SQL = SQLs.CreateImportCallsQueryLync2013(lastImportedPhoneCallDate);
+                var sql = SqLs.CreateImportCallsQueryLync2013(lastImportedPhoneCallDate);
 
                 if (lastImportedPhoneCallDate > DateTime.MinValue)
-                    Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + " since " +
+                    Console.WriteLine("Importing PhoneCalls from " + _phoneCallsTableName + " since " +
                                       lastImportedPhoneCallDate);
                 else
-                    Console.WriteLine("Importing PhoneCalls from " + PhoneCallsTableName + " since the begining");
+                    Console.WriteLine("Importing PhoneCalls from " + _phoneCallsTableName + " since the begining");
 
                 //Read DB and map it to List of PhoneCalls
                 var phoneCalls =
-                    DB.ReadSqlData(DBRoutines.EXECUTEREADER(SQL, SourceDBConnector), DB.PhoneCallsSelector).ToList();
+                    Db.ReadSqlData(DbRoutines.Executereader(sql, _sourceDbConnector), Db.PhoneCallsSelector).ToList();
 
                 if (phoneCalls.Count() > 0)
                 {
@@ -118,10 +118,10 @@ namespace Lync2013Plugin.Implementation
                     });
 
                     // Bulk insert
-                    ToBeInsertedDataTable = phoneCalls.ConvertToDataTable();
-                    ToBeInsertedDataTable.BulkInsert(PhoneCallsTableName, DestinationDBConnector.ConnectionString);
+                    toBeInsertedDataTable = phoneCalls.ConvertToDataTable();
+                    toBeInsertedDataTable.BulkInsert(_phoneCallsTableName, _destinationDbConnector.ConnectionString);
 
-                    ToBeInsertedDataTable.Dispose();
+                    toBeInsertedDataTable.Dispose();
 
                     Console.WriteLine("   [+] Imported: " + phoneCalls.Count + " phone calls.");
                 }
@@ -133,15 +133,15 @@ namespace Lync2013Plugin.Implementation
             }
 
             //Close All Connection and DataReaders
-            SourceDBConnector.Close();
-            DestinationDBConnector.Close();
+            _sourceDbConnector.Close();
+            _destinationDbConnector.Close();
 
             if (dataReader.IsClosed == false)
             {
                 dataReader.Close();
             }
 
-            Console.WriteLine("Finish importing Calls from " + PhoneCallsTableName);
+            Console.WriteLine("Finish importing Calls from " + _phoneCallsTableName);
         }
 
         public void PluginInfo()
@@ -157,8 +157,8 @@ namespace Lync2013Plugin.Implementation
             var msDataMapper = new MonitoringServersDataMapper();
 
             var info =
-                Repo.monitoringServerInfo.Where(item => item.Key == GetType().Name).Select(item => item.Value).First();
-            PhoneCallsTableName = info.PhoneCallsTable;
+                Repo.MonitoringServerInfo.Where(item => item.Key == GetType().Name).Select(item => item.Value).First();
+            _phoneCallsTableName = info.PhoneCallsTable;
 
             return msDataMapper.CreateConnectionString(info);
         }

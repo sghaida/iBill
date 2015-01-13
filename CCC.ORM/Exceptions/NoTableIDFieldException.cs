@@ -2,13 +2,13 @@
 
 namespace CCC.ORM.Exceptions
 {
-    public class NoTableIDFieldException : Exception
+    public class NoTableIdFieldException : Exception
     {
-        public NoTableIDFieldException()
+        public NoTableIdFieldException()
         {
         }
 
-        public NoTableIDFieldException(string className)
+        public NoTableIdFieldException(string className)
         {
             Source = className;
         }

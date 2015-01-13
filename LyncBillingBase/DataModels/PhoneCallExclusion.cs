@@ -4,13 +4,13 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "ExceptionsList", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "ExceptionsList", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class PhoneCallExclusion : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("ID")]
-        public long ID { set; get; }
+        public long Id { set; get; }
 
         [DbColumn("Entity")]
         public string ExclusionSubject { set; get; }
@@ -19,7 +19,7 @@ namespace LyncBillingBase.DataModels
         public string ExclusionType { set; get; }
 
         [DbColumn("SiteID")]
-        public int SiteID { set; get; }
+        public int SiteId { set; get; }
 
         [DbColumn("ZeroCost")]
         public string ZeroCost { set; get; }
@@ -38,7 +38,7 @@ namespace LyncBillingBase.DataModels
         public Site Site { get; set; }
 
         [DataRelation(WithDataModel = typeof (User), OnDataModelKey = "SipAccount", ThisKey = "ExclusionSubject",
-            RelationType = GLOBALS.DataRelation.Type.UNION)]
+            RelationType = Globals.DataRelation.Type.UNION)]
         public User User { get; set; }
     }
 }

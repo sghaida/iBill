@@ -4,19 +4,19 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NGN_NumberingPlan", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
-    public class NumberingPlanForNGN : DataModel
+    [DataSource(Name = "NGN_NumberingPlan", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
+    public class NumberingPlanForNgn : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("ID")]
-        public long ID { get; set; }
+        public long Id { get; set; }
 
         [DbColumn("DialingCode")]
         public string DialingCode { get; set; }
 
         [DbColumn("CountryCodeISO3")]
-        public string ISO3CountryCode { get; set; }
+        public string Iso3CountryCode { get; set; }
 
         [AllowNull]
         [DbColumn("Provider")]
@@ -28,7 +28,7 @@ namespace LyncBillingBase.DataModels
 
         [AllowNull]
         [DbColumn("TypeOfServiceID")]
-        public int TypeOfServiceID { get; set; }
+        public int TypeOfServiceId { get; set; }
 
         //
         // Relations

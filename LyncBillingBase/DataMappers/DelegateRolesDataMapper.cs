@@ -12,12 +12,12 @@ namespace LyncBillingBase.DataMappers
         ///     Given a User's SipAccount, return all the authorized Users, Sites-Departments and Sites that this user is a
         ///     delegate on.
         /// </summary>
-        /// <param name="DelegeeSipAccount">The Delegee SipAccount</param>
+        /// <param name="delegeeSipAccount">The Delegee SipAccount</param>
         /// <returns>List of DelegateRole</returns>
-        public List<DelegateRole> GetByDelegeeSipAccount(string DelegeeSipAccount)
+        public List<DelegateRole> GetByDelegeeSipAccount(string delegeeSipAccount)
         {
             var conditions = new Dictionary<string, object>();
-            conditions.Add("DelegeeSipAccount", DelegeeSipAccount);
+            conditions.Add("DelegeeSipAccount", delegeeSipAccount);
 
             try
             {
@@ -34,13 +34,13 @@ namespace LyncBillingBase.DataMappers
         ///     this kind of delegation...
         ///     Managed Users, Managed Sites, Managed Sites-Departments
         /// </summary>
-        /// <param name="DelegeeSipAccount">The Delegee SipAccount</param>
-        /// <param name="DelegationType">The Delegation TypeID</param>
-        public List<DelegateRole> GetByDelegeeSipAccount(string DelegeeSipAccount, int DelegationType)
+        /// <param name="delegeeSipAccount">The Delegee SipAccount</param>
+        /// <param name="delegationType">The Delegation TypeID</param>
+        public List<DelegateRole> GetByDelegeeSipAccount(string delegeeSipAccount, int delegationType)
         {
             var conditions = new Dictionary<string, object>();
-            conditions.Add("DelegeeSipAccount", DelegeeSipAccount);
-            conditions.Add("DelegationType", DelegationType);
+            conditions.Add("DelegeeSipAccount", delegeeSipAccount);
+            conditions.Add("DelegationType", delegationType);
 
             try
             {

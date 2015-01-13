@@ -4,23 +4,23 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Roles_System", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "Roles_System", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class SystemRole : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("ID")]
-        public int ID { set; get; }
+        public int Id { set; get; }
 
         [DbColumn("SipAccount")]
         public string SipAccount { get; set; }
 
         [DbColumn("RoleID")]
-        public int RoleID { get; set; }
+        public int RoleId { get; set; }
 
         [IsForeignKey]
         [DbColumn("SiteID")]
-        public int SiteID { get; set; }
+        public int SiteId { get; set; }
 
         [AllowNull]
         [DbColumn("Description")]

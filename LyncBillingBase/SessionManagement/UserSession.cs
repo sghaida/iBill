@@ -7,16 +7,16 @@ namespace LyncBillingBase.SessionManagement
 {
     public class UserSession
     {
-        private static readonly List<UserSession> usersSessions = new List<UserSession>();
+        private static readonly List<UserSession> UsersSessions = new List<UserSession>();
         //The delegates roles data mapper - used for data access
-        private DelegateRolesDataMapper DelegateRoleAccessor = new DelegateRolesDataMapper();
-        private List<DelegateRole> userDelegees = new List<DelegateRole>();
+        private DelegateRolesDataMapper _delegateRoleAccessor = new DelegateRolesDataMapper();
+        private List<DelegateRole> _userDelegees = new List<DelegateRole>();
 
         public UserSession()
         {
             NormalUserInfo = new User();
             TelephoneNumber = string.Empty;
-            IPAddress = string.Empty;
+            IpAddress = string.Empty;
             UserAgent = string.Empty;
 
             BundledAccountsList = new List<string>();
@@ -52,7 +52,7 @@ namespace LyncBillingBase.SessionManagement
         //Normal user data
         public User NormalUserInfo { get; set; }
         public string TelephoneNumber { set; get; }
-        public string IPAddress { set; get; }
+        public string IpAddress { set; get; }
         public string UserAgent { set; get; }
         //Bundled Accounts List
         public List<string> BundledAccountsList { get; set; }
@@ -82,13 +82,13 @@ namespace LyncBillingBase.SessionManagement
         public bool IsDepartmentDelegate { set; get; }
         public bool IsSiteDelegate { set; get; }
 
-        private void InitializeSystemRoles(List<SystemRole> SystemRoles = null)
+        private void InitializeSystemRoles(List<SystemRole> systemRoles = null)
         {
-            if (SystemRoles != null && SystemRoles.Count > 0)
+            if (systemRoles != null && systemRoles.Count > 0)
             {
-                this.SystemRoles = SystemRoles;
+                this.SystemRoles = systemRoles;
 
-                foreach (var role in SystemRoles)
+                foreach (var role in systemRoles)
                 {
                     //if (Role.IsDeveloper(role.RoleID)) IsDeveloper = true;
                     //else if (Role.IsSystemAdmin(role.RoleID)) IsSystemAdmin = true;
@@ -155,17 +155,17 @@ namespace LyncBillingBase.SessionManagement
 
         public void AddUserSession(UserSession userSession)
         {
-            if (!usersSessions.Contains(userSession))
+            if (!UsersSessions.Contains(userSession))
             {
-                usersSessions.Add(userSession);
+                UsersSessions.Add(userSession);
             }
         }
 
         public void RemoveUserSession(UserSession userSession)
         {
-            if (!usersSessions.Contains(userSession))
+            if (!UsersSessions.Contains(userSession))
             {
-                usersSessions.Remove(userSession);
+                UsersSessions.Remove(userSession);
             }
         }
 
@@ -208,10 +208,10 @@ namespace LyncBillingBase.SessionManagement
         //Get the user sipaccount.
         public string GetEffectiveSipAccount()
         {
-            var DelegeesRoleNames = new List<string>();
+            var delegeesRoleNames = new List<string>();
 
             //if the user is a user-delegee return the delegate sipaccount.
-            if (DelegeesRoleNames.Contains(ActiveRoleName) && DelegeeAccount != null)
+            if (delegeesRoleNames.Contains(ActiveRoleName) && DelegeeAccount != null)
             {
                 return (DelegeeAccount.DelegeeUserAccount.SipAccount);
             }
@@ -222,10 +222,10 @@ namespace LyncBillingBase.SessionManagement
         //Get the user displayname.
         public string GetEffectiveDisplayName()
         {
-            var DelegeesRoleNames = new List<string>();
+            var delegeesRoleNames = new List<string>();
 
             //if the user is a user-delegee return the delegate sipaccount.
-            if (DelegeesRoleNames.Contains(ActiveRoleName) && DelegeeAccount != null)
+            if (delegeesRoleNames.Contains(ActiveRoleName) && DelegeeAccount != null)
             {
                 return (DelegeeAccount.DelegeeUserAccount.DisplayName);
             }

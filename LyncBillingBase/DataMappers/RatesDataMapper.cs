@@ -16,16 +16,16 @@ namespace LyncBillingBase.DataMappers
          * These data mappers are used to complete the relations data.
          */
         private readonly GatewaysRatesDataMapper _gatewaysRatesDataMapper = new GatewaysRatesDataMapper();
-        private readonly DataAccess<Rates_International> _interRatesDataMapper = new DataAccess<Rates_International>();
+        private readonly DataAccess<RatesInternational> _interRatesDataMapper = new DataAccess<RatesInternational>();
         /***
          * These data mappers are responsible for converting the in the Rates tables to different meaningful data models.
          */
-        private readonly DataAccess<Rates_National> _nationalRatesDataMapper = new DataAccess<Rates_National>();
+        private readonly DataAccess<RatesNational> _nationalRatesDataMapper = new DataAccess<RatesNational>();
         private readonly NumberingPlansDataMapper _numberingPlanDataMapper = new NumberingPlansDataMapper();
         /***
          * The SQL Queries Repository
          */
-        private readonly RatesSQL RATES_SQL_QUERIES = new RatesSQL();
+        private readonly RatesSql _ratesSqlQueries = new RatesSql();
 
         /// <summary>
         ///     Given a list of Rates Objects, fill their Numbering Plan objects with the Numbering Plan's Data Relations.
@@ -50,7 +50,7 @@ namespace LyncBillingBase.DataMappers
                             numPlan.DialingPrefix
                         select new Rate
                         {
-                            RateID = rate.RateID,
+                            RateId = rate.RateId,
                             DialingCode = rate.DialingCode,
                             Price = rate.Price,
                             //relations
@@ -66,15 +66,15 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Gateway's ID, return it's currently active Rates table name
         /// </summary>
-        /// <param name="GatewayID">Gateway.ID</param>
+        /// <param name="gatewayId">Gateway.ID</param>
         /// <returns>Rates table name</returns>
-        private string GetTableNameByGatewayID(int GatewayID)
+        private string GetTableNameByGatewayId(int gatewayId)
         {
             var tableName = string.Empty;
 
             try
             {
-                var gatewayRatesInfo = _gatewaysRatesDataMapper.GetByGatewayID(GatewayID);
+                var gatewayRatesInfo = _gatewaysRatesDataMapper.GetByGatewayId(gatewayId);
 
                 if (gatewayRatesInfo != null && gatewayRatesInfo.Count > 0)
                 {
@@ -96,15 +96,15 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="GatewayID"></param>
+        /// <param name="gatewayId"></param>
         /// <returns></returns>
-        public List<Rate> GetByGatewayID(int GatewayID)
+        public List<Rate> GetByGatewayId(int gatewayId)
         {
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
+                var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.GetAll(tableName, GLOBALS.DataSource.Type.DBTable).ToList();
+                return base.GetAll(tableName, Globals.DataSource.Type.DBTable).ToList();
             }
             catch (Exception ex)
             {
@@ -114,19 +114,19 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="GatewayID"></param>
+        /// <param name="gatewayId"></param>
         /// <returns></returns>
-        public List<Rate> GetByDialingCode(int GatewayID, long DialingCode)
+        public List<Rate> GetByDialingCode(int gatewayId, long dialingCode)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("country_code_dialing_prefix", DialingCode);
+            condition.Add("country_code_dialing_prefix", dialingCode);
 
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
+                var tableName = GetTableNameByGatewayId(gatewayId);
 
                 return
-                    base.Get(condition, dataSourceName: tableName, dataSourceType: GLOBALS.DataSource.Type.DBTable)
+                    base.Get(condition, dataSourceName: tableName, dataSourceType: Globals.DataSource.Type.DBTable)
                         .ToList();
             }
             catch (Exception ex)
@@ -137,17 +137,17 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="GatewayID"></param>
-        /// <param name="ISO3CountryCode"></param>
+        /// <param name="gatewayId"></param>
+        /// <param name="iso3CountryCode"></param>
         /// <returns></returns>
-        public List<Rates_National> GetNationalRatesForCountryByGatewayID(int GatewayID, string ISO3CountryCode)
+        public List<RatesNational> GetNationalRatesForCountryByGatewayId(int gatewayId, string iso3CountryCode)
         {
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
-                var SQL = RATES_SQL_QUERIES.GetNationalRatesForCountry(tableName, ISO3CountryCode);
+                var tableName = GetTableNameByGatewayId(gatewayId);
+                var sql = _ratesSqlQueries.GetNationalRatesForCountry(tableName, iso3CountryCode);
 
-                return _nationalRatesDataMapper.GetAll(SQL).ToList();
+                return _nationalRatesDataMapper.GetAll(sql).ToList();
             }
             catch (Exception ex)
             {
@@ -157,15 +157,15 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="GatewayID"></param>
+        /// <param name="gatewayId"></param>
         /// <param name="ISO3CountryCode"></param>
         /// <returns></returns>
-        public List<Rates_International> GetInternationalRatesByGatewayID(int GatewayID)
+        public List<RatesInternational> GetInternationalRatesByGatewayId(int gatewayId)
         {
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
-                var SQL = RATES_SQL_QUERIES.GetInternationalRates(tableName);
+                var tableName = GetTableNameByGatewayId(gatewayId);
+                var sql = _ratesSqlQueries.GetInternationalRates(tableName);
 
                 //Check if there is a rates table to get the rates from
                 if (string.IsNullOrEmpty(tableName))
@@ -173,7 +173,7 @@ namespace LyncBillingBase.DataMappers
                     return null;
                 }
 
-                return _interRatesDataMapper.GetAll(SQL).ToList();
+                return _interRatesDataMapper.GetAll(sql).ToList();
             }
             catch (Exception ex)
             {
@@ -185,16 +185,16 @@ namespace LyncBillingBase.DataMappers
         ///     Returns all Gateways International Rates Info Key value Per and the key is the Gateway ID
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, List<Rates_International>> GetGatewaysRatesByID()
+        public Dictionary<int, List<RatesInternational>> GetGatewaysRatesById()
         {
             var gatewayRateInfo = _gatewaysRatesDataMapper.GetAll().ToList();
-            var internationalRates = new Dictionary<int, List<Rates_International>>();
+            var internationalRates = new Dictionary<int, List<RatesInternational>>();
 
             Parallel.ForEach(gatewayRateInfo, item =>
             {
                 lock (internationalRates)
                 {
-                    internationalRates.Add(item.Gateway.ID, GetInternationalRatesByGatewayID(item.Gateway.ID));
+                    internationalRates.Add(item.Gateway.Id, GetInternationalRatesByGatewayId(item.Gateway.Id));
                 }
             });
 
@@ -205,16 +205,16 @@ namespace LyncBillingBase.DataMappers
         ///     Returns All Gateways International Rates Info Key value Per and the key is the Gateway name
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, List<Rates_International>> GetGatewaysRatesByName()
+        public Dictionary<string, List<RatesInternational>> GetGatewaysRatesByName()
         {
             var gatewayRateInfo = _gatewaysRatesDataMapper.GetAll().ToList();
-            var internationalRates = new Dictionary<string, List<Rates_International>>();
+            var internationalRates = new Dictionary<string, List<RatesInternational>>();
 
             Parallel.ForEach(gatewayRateInfo, item =>
             {
                 lock (internationalRates)
                 {
-                    internationalRates.Add(item.Gateway.Name, GetInternationalRatesByGatewayID(item.Gateway.ID));
+                    internationalRates.Add(item.Gateway.Name, GetInternationalRatesByGatewayId(item.Gateway.Id));
                 }
             });
 
@@ -225,15 +225,15 @@ namespace LyncBillingBase.DataMappers
         ///     Insert Rate object into the Gateway's rates table.
         /// </summary>
         /// <param name="rateObject">The Rate object to insert.</param>
-        /// <param name="GatewayID">The Gateway's ID to insert the Rate object into it's Rates table.</param>
+        /// <param name="gatewayId">The Gateway's ID to insert the Rate object into it's Rates table.</param>
         /// <returns>Database Row ID</returns>
-        public int Insert(Rate rateObject, int GatewayID)
+        public int Insert(Rate rateObject, int gatewayId)
         {
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
+                var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Insert(rateObject, tableName, GLOBALS.DataSource.Type.DBTable);
+                return base.Insert(rateObject, tableName, Globals.DataSource.Type.DBTable);
             }
             catch (Exception ex)
             {
@@ -245,15 +245,15 @@ namespace LyncBillingBase.DataMappers
         ///     Update a Rate object in a Gateway's rates table.
         /// </summary>
         /// <param name="rateObject">The Rate object to insert.</param>
-        /// <param name="GatewayID">The Gateway's ID to update the Rate object from it's Rates table.</param>
+        /// <param name="gatewayId">The Gateway's ID to update the Rate object from it's Rates table.</param>
         /// <returns>Update boolean</returns>
-        public bool Update(Rate rateObject, int GatewayID)
+        public bool Update(Rate rateObject, int gatewayId)
         {
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
+                var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Update(rateObject, tableName, GLOBALS.DataSource.Type.DBTable);
+                return base.Update(rateObject, tableName, Globals.DataSource.Type.DBTable);
             }
             catch (Exception ex)
             {
@@ -265,15 +265,15 @@ namespace LyncBillingBase.DataMappers
         ///     Delete a Rate object from a Gateway's rates table.
         /// </summary>
         /// <param name="rateObject">The Rate object to insert.</param>
-        /// <param name="GatewayID">The Gateway's ID to delete the Rate object from it's Rates table.</param>
+        /// <param name="gatewayId">The Gateway's ID to delete the Rate object from it's Rates table.</param>
         /// <returns>Delete boolean</returns>
-        public bool Delete(Rate rateObject, int GatewayID)
+        public bool Delete(Rate rateObject, int gatewayId)
         {
             try
             {
-                var tableName = GetTableNameByGatewayID(GatewayID);
+                var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Delete(rateObject, tableName, GLOBALS.DataSource.Type.DBTable);
+                return base.Delete(rateObject, tableName, Globals.DataSource.Type.DBTable);
             }
             catch (Exception ex)
             {
@@ -286,48 +286,48 @@ namespace LyncBillingBase.DataMappers
          */
 
         public override int Insert(Rate dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
         public override bool Update(Rate dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
         public override bool Delete(Rate dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
         public override Rate GetById(long id, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
         public override IEnumerable<Rate> Get(Dictionary<string, object> whereConditions, int limit = 25,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
         public override IEnumerable<Rate> Get(Expression<Func<Rate, bool>> predicate, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
         public override IEnumerable<Rate> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<Rate> GetAll(string sql)
+        public override IEnumerable<Rate> GetAll(string sqlQuery)
         {
             throw new NotImplementedException();
         }

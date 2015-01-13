@@ -12,8 +12,8 @@ namespace Lync2013Plugin
 {
     public class Helpers
     {
-        private static readonly ENUMS enums = new ENUMS();
-        private readonly ADLib adRoutines = new ADLib();
+        private static readonly Enums Enums = new Enums();
+        private readonly AdLib _adRoutines = new AdLib();
 
         private static void ParallelWhile(Func<bool> condition, Action<ParallelLoopState> body)
         {
@@ -71,91 +71,91 @@ namespace Lync2013Plugin
         {
             var phoneCallDict = new Dictionary<string, object>();
 
-            phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.SessionIdTime), phoneCall.SessionIdTime);
+            phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.SessionIdTime), phoneCall.SessionIdTime);
 
-            phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.SessionIdSeq), phoneCall.SessionIdSeq);
+            phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.SessionIdSeq), phoneCall.SessionIdSeq);
 
             if (DateTime.MinValue != phoneCall.ResponseTime)
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.ResponseTime), phoneCall.ResponseTime);
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.ResponseTime), phoneCall.ResponseTime);
 
             if (DateTime.MinValue != phoneCall.SessionEndTime)
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.SessionEndTime), phoneCall.SessionEndTime);
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.SessionEndTime), phoneCall.SessionEndTime);
 
             if (!string.IsNullOrEmpty(phoneCall.SourceUserUri))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.SourceUserUri), phoneCall.SourceUserUri);
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.SourceUserUri), phoneCall.SourceUserUri);
 
             if (!string.IsNullOrEmpty(phoneCall.SourceNumberUri))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.SourceNumberUri), phoneCall.SourceNumberUri);
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.SourceNumberUri), phoneCall.SourceNumberUri);
 
             if (!string.IsNullOrEmpty(phoneCall.DestinationNumberUri))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.DestinationNumberUri),
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.DestinationNumberUri),
                     phoneCall.DestinationNumberUri);
 
             if (!string.IsNullOrEmpty(phoneCall.DestinationUserUri))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.DestinationUserUri),
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.DestinationUserUri),
                     phoneCall.DestinationUserUri);
 
             if (!string.IsNullOrEmpty(phoneCall.FromMediationServer))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.FromMediationServer),
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.FromMediationServer),
                     phoneCall.FromMediationServer);
 
             if (!string.IsNullOrEmpty(phoneCall.ToMediationServer))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.ToMediationServer), phoneCall.ToMediationServer);
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.ToMediationServer), phoneCall.ToMediationServer);
 
             if (!string.IsNullOrEmpty(phoneCall.FromGateway))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.FromGateway), phoneCall.FromGateway);
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.FromGateway), phoneCall.FromGateway);
 
             if (!string.IsNullOrEmpty(phoneCall.ToGateway))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.ToGateway), phoneCall.ToGateway);
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.ToGateway), phoneCall.ToGateway);
 
             if (!string.IsNullOrEmpty(phoneCall.SourceUserEdgeServer))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.SourceUserEdgeServer),
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.SourceUserEdgeServer),
                     phoneCall.SourceUserEdgeServer);
 
             if (!string.IsNullOrEmpty(phoneCall.DestinationUserEdgeServer))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.DestinationUserEdgeServer),
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.DestinationUserEdgeServer),
                     phoneCall.DestinationUserEdgeServer);
 
-            if (!string.IsNullOrEmpty(phoneCall.ServerFQDN))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.ServerFQDN), phoneCall.ServerFQDN);
+            if (!string.IsNullOrEmpty(phoneCall.ServerFqdn))
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.ServerFqdn), phoneCall.ServerFqdn);
 
-            if (!string.IsNullOrEmpty(phoneCall.PoolFQDN))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.PoolFQDN), phoneCall.PoolFQDN);
+            if (!string.IsNullOrEmpty(phoneCall.PoolFqdn))
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.PoolFqdn), phoneCall.PoolFqdn);
 
             if (!string.IsNullOrEmpty(phoneCall.OnBehalf))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.OnBehalf), phoneCall.OnBehalf);
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.OnBehalf), phoneCall.OnBehalf);
 
             if (!string.IsNullOrEmpty(phoneCall.ReferredBy))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.ReferredBy), phoneCall.ReferredBy);
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.ReferredBy), phoneCall.ReferredBy);
 
-            if (!string.IsNullOrEmpty(phoneCall.CalleeURI))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.CalleeURI), phoneCall.CalleeURI);
+            if (!string.IsNullOrEmpty(phoneCall.CalleeUri))
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.CalleeUri), phoneCall.CalleeUri);
 
             if (!string.IsNullOrEmpty(phoneCall.ChargingParty))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.ChargingParty), phoneCall.ChargingParty);
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.ChargingParty), phoneCall.ChargingParty);
 
-            if (!string.IsNullOrEmpty(phoneCall.Marker_CallToCountry))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.Marker_CallToCountry),
-                    phoneCall.Marker_CallToCountry);
+            if (!string.IsNullOrEmpty(phoneCall.MarkerCallToCountry))
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.MarkerCallToCountry),
+                    phoneCall.MarkerCallToCountry);
 
-            if (!string.IsNullOrEmpty(phoneCall.Marker_CallType))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.Marker_CallType), phoneCall.Marker_CallType);
+            if (!string.IsNullOrEmpty(phoneCall.MarkerCallType))
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.MarkerCallType), phoneCall.MarkerCallType);
 
-            if (!string.IsNullOrEmpty(phoneCall.UI_CallType))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.UI_CallType), phoneCall.UI_CallType);
+            if (!string.IsNullOrEmpty(phoneCall.UiCallType))
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.UiCallType), phoneCall.UiCallType);
 
 
-            if (!string.IsNullOrEmpty(phoneCall.UI_UpdatedByUser))
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.UI_UpdatedByUser), phoneCall.UI_UpdatedByUser);
+            if (!string.IsNullOrEmpty(phoneCall.UiUpdatedByUser))
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.UiUpdatedByUser), phoneCall.UiUpdatedByUser);
 
-            if (DateTime.MinValue != phoneCall.UI_MarkedOn)
-                phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.UI_MarkedOn), phoneCall.UI_MarkedOn);
+            if (DateTime.MinValue != phoneCall.UiMarkedOn)
+                phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.UiMarkedOn), phoneCall.UiMarkedOn);
 
-            phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.Marker_CallTypeID), phoneCall.Marker_CallTypeID);
-            phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.Marker_CallCost), phoneCall.Marker_CallCost);
-            phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.Marker_CallFrom), phoneCall.Marker_CallFrom);
-            phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.Marker_CallTo), phoneCall.Marker_CallTo);
-            phoneCallDict.Add(enums.GetDescription(ENUMS.PhoneCalls.Duration), phoneCall.Duration);
+            phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.MarkerCallTypeId), phoneCall.MarkerCallTypeId);
+            phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.MarkerCallCost), phoneCall.MarkerCallCost);
+            phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.MarkerCallFrom), phoneCall.MarkerCallFrom);
+            phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.MarkerCallTo), phoneCall.MarkerCallTo);
+            phoneCallDict.Add(Enums.GetDescription(Enums.PhoneCalls.Duration), phoneCall.Duration);
 
             return phoneCallDict;
         }
@@ -173,118 +173,118 @@ namespace Lync2013Plugin
             //Start filling the PhoneCall object
 
             phoneCall.SessionIdTime =
-                dataReader.GetDateTime(dataReader.GetOrdinal(enums.GetDescription(ENUMS.PhoneCalls.SessionIdTime)));
+                dataReader.GetDateTime(dataReader.GetOrdinal(Enums.GetDescription(Enums.PhoneCalls.SessionIdTime)));
 
             //phoneCall.SessionIdTime = Convert.ToDateTime(dataReader[enums.GetDescription(ENUMS.PhoneCalls.SessionIdTime)].ToString());
             phoneCall.SessionIdSeq =
-                dataReader.GetInt32(dataReader.GetOrdinal(enums.GetDescription(ENUMS.PhoneCalls.SessionIdSeq)));
+                dataReader.GetInt32(dataReader.GetOrdinal(Enums.GetDescription(Enums.PhoneCalls.SessionIdSeq)));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.ResponseTime);
+            column = Enums.GetDescription(Enums.PhoneCalls.ResponseTime);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.ResponseTime = dataReader.GetDateTime(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.SessionEndTime);
+            column = Enums.GetDescription(Enums.PhoneCalls.SessionEndTime);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.SessionEndTime = dataReader.GetDateTime(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.SourceUserUri);
+            column = Enums.GetDescription(Enums.PhoneCalls.SourceUserUri);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.SourceUserUri = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.SourceNumberUri);
+            column = Enums.GetDescription(Enums.PhoneCalls.SourceNumberUri);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.SourceNumberUri = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.DestinationUserUri);
+            column = Enums.GetDescription(Enums.PhoneCalls.DestinationUserUri);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.DestinationUserUri = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.DestinationNumberUri);
+            column = Enums.GetDescription(Enums.PhoneCalls.DestinationNumberUri);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.DestinationNumberUri = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.FromMediationServer);
+            column = Enums.GetDescription(Enums.PhoneCalls.FromMediationServer);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.FromMediationServer = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.ToMediationServer);
+            column = Enums.GetDescription(Enums.PhoneCalls.ToMediationServer);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.ToMediationServer = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.FromGateway);
+            column = Enums.GetDescription(Enums.PhoneCalls.FromGateway);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.FromGateway = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.ToGateway);
+            column = Enums.GetDescription(Enums.PhoneCalls.ToGateway);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.ToGateway = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.SourceUserEdgeServer);
+            column = Enums.GetDescription(Enums.PhoneCalls.SourceUserEdgeServer);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.SourceUserEdgeServer = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.DestinationUserEdgeServer);
+            column = Enums.GetDescription(Enums.PhoneCalls.DestinationUserEdgeServer);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.DestinationUserEdgeServer = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.ServerFQDN);
+            column = Enums.GetDescription(Enums.PhoneCalls.ServerFqdn);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
-                phoneCall.ServerFQDN = dataReader.GetString(dataReader.GetOrdinal(column));
+                phoneCall.ServerFqdn = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.PoolFQDN);
+            column = Enums.GetDescription(Enums.PhoneCalls.PoolFqdn);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
-                phoneCall.PoolFQDN = dataReader.GetString(dataReader.GetOrdinal(column));
+                phoneCall.PoolFqdn = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.OnBehalf);
+            column = Enums.GetDescription(Enums.PhoneCalls.OnBehalf);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.OnBehalf = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.ReferredBy);
+            column = Enums.GetDescription(Enums.PhoneCalls.ReferredBy);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.ReferredBy = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.CalleeURI);
+            column = Enums.GetDescription(Enums.PhoneCalls.CalleeUri);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
-                phoneCall.CalleeURI = dataReader.GetString(dataReader.GetOrdinal(column));
+                phoneCall.CalleeUri = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.ChargingParty);
+            column = Enums.GetDescription(Enums.PhoneCalls.ChargingParty);
             if (ValidateColumnName(ref dataReader, ref column) &&
                 (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
                 phoneCall.ChargingParty = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.Duration);
+            column = Enums.GetDescription(Enums.PhoneCalls.Duration);
             if (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty)
                 phoneCall.Duration = dataReader.GetDecimal(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallFrom);
+            column = Enums.GetDescription(Enums.PhoneCalls.MarkerCallFrom);
             if (ValidateColumnName(ref dataReader, ref column) &&
                 (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
-                phoneCall.Marker_CallFrom = dataReader.GetInt64(dataReader.GetOrdinal(column));
+                phoneCall.MarkerCallFrom = dataReader.GetInt64(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallTo);
+            column = Enums.GetDescription(Enums.PhoneCalls.MarkerCallTo);
             if (ValidateColumnName(ref dataReader, ref column) &&
                 (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
-                phoneCall.Marker_CallTo = dataReader.GetInt64(dataReader.GetOrdinal(column));
+                phoneCall.MarkerCallTo = dataReader.GetInt64(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallToCountry);
+            column = Enums.GetDescription(Enums.PhoneCalls.MarkerCallToCountry);
             if (ValidateColumnName(ref dataReader, ref column) &&
                 (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
-                phoneCall.Marker_CallToCountry = dataReader.GetString(dataReader.GetOrdinal(column));
+                phoneCall.MarkerCallToCountry = dataReader.GetString(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallTypeID);
+            column = Enums.GetDescription(Enums.PhoneCalls.MarkerCallTypeId);
             if (ValidateColumnName(ref dataReader, ref column) &&
                 (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
-                phoneCall.Marker_CallTypeID = dataReader.GetInt32(dataReader.GetOrdinal(column));
+                phoneCall.MarkerCallTypeId = dataReader.GetInt32(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallCost);
+            column = Enums.GetDescription(Enums.PhoneCalls.MarkerCallCost);
             if (ValidateColumnName(ref dataReader, ref column) &&
                 (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
-                phoneCall.Marker_CallCost = dataReader.GetInt32(dataReader.GetOrdinal(column));
+                phoneCall.MarkerCallCost = dataReader.GetInt32(dataReader.GetOrdinal(column));
 
-            column = enums.GetDescription(ENUMS.PhoneCalls.Marker_CallType);
+            column = Enums.GetDescription(Enums.PhoneCalls.MarkerCallType);
             if (ValidateColumnName(ref dataReader, ref column) &&
                 (dataReader[column] != DBNull.Value || dataReader[column].ToString() != string.Empty))
-                phoneCall.Marker_CallType = dataReader.GetString(dataReader.GetOrdinal(column));
+                phoneCall.MarkerCallType = dataReader.GetString(dataReader.GetOrdinal(column));
 
 
             //Return teh filled object
@@ -334,13 +334,13 @@ namespace Lync2013Plugin
 
             while (numberToParse > 0)
             {
-                var number = Repo.numberingPlan.Find(item => item.DialingPrefix == numberToParse);
+                var number = Repo.NumberingPlan.Find(item => item.DialingPrefix == numberToParse);
 
                 if (number != null)
                 {
                     typeOfService = number.TypeOfService;
                     dialingPrefix = number.DialingPrefix;
-                    return number.ISO3CountryCode;
+                    return number.Iso3CountryCode;
                 }
                 numberToParse = numberToParse/10;
             }
@@ -348,14 +348,14 @@ namespace Lync2013Plugin
             return "N/A";
         }
 
-        public bool MatchDID(string phoneNumber, out string site, string sipAccount = null)
+        public bool MatchDid(string phoneNumber, out string site, string sipAccount = null)
         {
             var tmpPhoneNumber = string.Empty;
 
 
             if (string.IsNullOrEmpty(phoneNumber) && !string.IsNullOrEmpty(sipAccount))
             {
-                var userInfo = Repo.users.Find(item => item.SipAccount.ToLower() == sipAccount.ToLower());
+                var userInfo = Repo.Users.Find(item => item.SipAccount.ToLower() == sipAccount.ToLower());
 
                 tmpPhoneNumber = userInfo != null ? FixNumberType(userInfo.TelephoneNumber) : @"N/A";
             }
@@ -369,13 +369,13 @@ namespace Lync2013Plugin
                 tmpPhoneNumber = phoneNumber;
             }
 
-            foreach (var didEntry in Repo.dids)
+            foreach (var didEntry in Repo.Dids)
             {
                 var did = didEntry.Regex;
 
                 if (Regex.IsMatch(tmpPhoneNumber.Trim('+'), @"^" + did))
                 {
-                    var siteEntry = Repo.sites.FirstOrDefault(item => item.ID == didEntry.SiteID);
+                    var siteEntry = Repo.Sites.FirstOrDefault(item => item.Id == didEntry.SiteId);
 
                     if (siteEntry != null)
                     {
@@ -404,7 +404,7 @@ namespace Lync2013Plugin
 
             if (phoneNumber == @"N/A" && !string.IsNullOrEmpty(sipAccount))
             {
-                var userInfo = Repo.users.Find(item => item.SipAccount.ToLower() == sipAccount.ToLower());
+                var userInfo = Repo.Users.Find(item => item.SipAccount.ToLower() == sipAccount.ToLower());
                 tmpPhoneNumber = userInfo != null ? FixNumberType(userInfo.TelephoneNumber) : @"N/A";
             }
             else
@@ -419,7 +419,7 @@ namespace Lync2013Plugin
             return dialingPrefix;
         }
 
-        public bool GetNGNDialingInfo(string phoneNumber, string sourceCountry, out long dialingPrefix,
+        public bool GetNgnDialingInfo(string phoneNumber, string sourceCountry, out long dialingPrefix,
             out string countryCode, out string callType)
         {
             dialingPrefix = 0;
@@ -429,18 +429,18 @@ namespace Lync2013Plugin
 
             if (!string.IsNullOrEmpty(phoneNumber) && !string.IsNullOrEmpty(sourceCountry))
             {
-                var numberNGN = Repo.numberingPlanNGN.Find(
+                var numberNgn = Repo.NumberingPlanNgn.Find(
                     item =>
-                        item.ISO3CountryCode == Convert.ToString(ReturnEmptyIfNull(sourceCountry)) &&
+                        item.Iso3CountryCode == Convert.ToString(ReturnEmptyIfNull(sourceCountry)) &&
                         Regex.IsMatch(phoneNumber, item.DialingCode)
                     );
 
                 //Try to figure NGN call type
-                if (numberNGN != null)
+                if (numberNgn != null)
                 {
-                    callType = numberNGN.TypeOfService.Name;
-                    countryCode = numberNGN.ISO3CountryCode;
-                    long.TryParse(numberNGN.DialingCode.Trim('^').Trim('+'), out dialingPrefix);
+                    callType = numberNgn.TypeOfService.Name;
+                    countryCode = numberNgn.Iso3CountryCode;
+                    long.TryParse(numberNgn.DialingCode.Trim('^').Trim('+'), out dialingPrefix);
 
                     return true;
                 }
@@ -453,19 +453,19 @@ namespace Lync2013Plugin
         {
             var destinationNumberLeadingChars = new List<char> {'+', '0'};
 
-            if (phoneCall.CalleeURI == phoneCall.DestinationNumberUri || phoneCall.CalleeURI == null)
+            if (phoneCall.CalleeUri == phoneCall.DestinationNumberUri || phoneCall.CalleeUri == null)
             {
                 return phoneCall;
             }
 
-            if (Regex.IsMatch(phoneCall.CalleeURI, @"\d{1,}@\w{1,}.*") ||
-                Regex.IsMatch(phoneCall.CalleeURI, @"\d{1,};\w{1,}.*"))
+            if (Regex.IsMatch(phoneCall.CalleeUri, @"\d{1,}@\w{1,}.*") ||
+                Regex.IsMatch(phoneCall.CalleeUri, @"\d{1,};\w{1,}.*"))
             {
                 //Try to fetch the calleeUri phone number
                 //Two cases for matching two versions of the calleeUri
-                var calleeUriCase1 = ReplaceStringWithPattern(phoneCall.CalleeURI, @"@\w{1,}.*",
+                var calleeUriCase1 = ReplaceStringWithPattern(phoneCall.CalleeUri, @"@\w{1,}.*",
                     charactersToBeTrimmed: destinationNumberLeadingChars);
-                var calleeUriCase2 = ReplaceStringWithPattern(phoneCall.CalleeURI, @";\w{1,}.*",
+                var calleeUriCase2 = ReplaceStringWithPattern(phoneCall.CalleeUri, @";\w{1,}.*",
                     charactersToBeTrimmed: destinationNumberLeadingChars);
 
                 if (calleeUriCase1 == phoneCall.DestinationNumberUri.Trim('+') ||
@@ -474,13 +474,13 @@ namespace Lync2013Plugin
                     return phoneCall;
                 }
 
-                if (IsValidEmail(phoneCall.CalleeURI))
+                if (IsValidEmail(phoneCall.CalleeUri))
                 {
-                    phoneCall.ChargingParty = phoneCall.CalleeURI;
+                    phoneCall.ChargingParty = phoneCall.CalleeUri;
                     return phoneCall;
                 }
 
-                var newChargingParty = NormalizePhoneNumber(phoneCall.CalleeURI);
+                var newChargingParty = NormalizePhoneNumber(phoneCall.CalleeUri);
 
                 if (IsValidEmail(newChargingParty))
                     phoneCall.ChargingParty = newChargingParty;
@@ -519,7 +519,7 @@ namespace Lync2013Plugin
             return Regex.IsMatch(emailAddress, pattern);
         }
 
-        public bool IsIMEmail(string emailAddress)
+        public bool IsImEmail(string emailAddress)
         {
             if (emailAddress.EndsWith("hotmail.com") ||
                 emailAddress.EndsWith("yahoo.com") ||
@@ -547,7 +547,7 @@ namespace Lync2013Plugin
             return value;
         }
 
-        public object ReturnNullIfDBNull(object value)
+        public object ReturnNullIfDbNull(object value)
         {
             if (value == DBNull.Value)
                 return '\0';
@@ -578,7 +578,7 @@ namespace Lync2013Plugin
             {
                 number = Regex.Replace(phoneNumber, @"@\w{1,}.*", "");
 
-                var userInfo = adRoutines.getUsersAttributesFromPhone(number);
+                var userInfo = _adRoutines.GetUsersAttributesFromPhone(number);
 
                 number = (userInfo != null && userInfo.SipAccount != null)
                     ? userInfo.SipAccount.Replace("sip:", "")

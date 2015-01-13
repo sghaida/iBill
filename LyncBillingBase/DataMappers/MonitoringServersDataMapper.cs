@@ -10,7 +10,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class MonitoringServersDataMapper : DataAccess<MonitoringServerInfo>
     {
-        private static List<MonitoringServerInfo> _MonitoringServers = new List<MonitoringServerInfo>();
+        private static List<MonitoringServerInfo> _monitoringServers = new List<MonitoringServerInfo>();
 
         public MonitoringServersDataMapper()
         {
@@ -19,19 +19,19 @@ namespace LyncBillingBase.DataMappers
 
         private void LoadMonitoringServersInfo()
         {
-            if (_MonitoringServers == null || _MonitoringServers.Count == 0)
+            if (_monitoringServers == null || _monitoringServers.Count == 0)
             {
-                _MonitoringServers = base.GetAll().ToList();
+                _monitoringServers = base.GetAll().ToList();
             }
         }
 
         public string CreateConnectionString(MonitoringServerInfo monInfo)
         {
-            string ConnectionString = null;
+            string connectionString = null;
 
             if (monInfo.InstanceName != null)
             {
-                ConnectionString =
+                connectionString =
                     String.Format(
                         "Provider=SQLOLEDB.1;Data Source={0}\\{1};Persist Security Info=True;User ID={2};Password='{3}';Initial Catalog={4}",
                         monInfo.InstanceHostName,
@@ -42,7 +42,7 @@ namespace LyncBillingBase.DataMappers
             }
             else
             {
-                ConnectionString =
+                connectionString =
                     String.Format(
                         "Provider=SQLOLEDB.1;Data Source={0};Persist Security Info=True;User ID={1};Password='{2}';Initial Catalog={3}",
                         monInfo.InstanceHostName,
@@ -51,7 +51,7 @@ namespace LyncBillingBase.DataMappers
                         monInfo.DatabaseName);
             }
 
-            return ConnectionString;
+            return connectionString;
         }
 
         /// <summary>
@@ -65,12 +65,12 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                if (_MonitoringServers.Count > 0)
+                if (_monitoringServers.Count > 0)
                 {
                     monitoringServersInfoMap = new Dictionary<string, MonitoringServerInfo>();
 
                     Parallel.ForEach(
-                        _MonitoringServers,
+                        _monitoringServers,
                         server =>
                         {
                             lock (monitoringServersInfoMap)
@@ -100,16 +100,16 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<MonitoringServerInfo> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            return _MonitoringServers;
+            return _monitoringServers;
         }
 
         public override int Insert(MonitoringServerInfo dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var isContained = _MonitoringServers.Contains(dataObject);
-            var itExists = _MonitoringServers.Exists(
+            var isContained = _monitoringServers.Contains(dataObject);
+            var itExists = _monitoringServers.Exists(
                 item =>
                     item.InstanceHostName == dataObject.InstanceHostName &&
                     item.InstanceName == dataObject.InstanceName &&
@@ -122,21 +122,21 @@ namespace LyncBillingBase.DataMappers
             {
                 return -1;
             }
-            dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
-            _MonitoringServers.Add(dataObject);
+            dataObject.Id = base.Insert(dataObject, dataSourceName, dataSourceType);
+            _monitoringServers.Add(dataObject);
 
-            return dataObject.ID;
+            return dataObject.Id;
         }
 
         public override bool Update(MonitoringServerInfo dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var server = _MonitoringServers.Find(item => item.ID == dataObject.ID);
+            var server = _monitoringServers.Find(item => item.Id == dataObject.Id);
 
             if (server != null)
             {
-                _MonitoringServers.Remove(server);
-                _MonitoringServers.Add(dataObject);
+                _monitoringServers.Remove(server);
+                _monitoringServers.Add(dataObject);
 
                 return base.Update(dataObject, dataSourceName, dataSourceType);
             }
@@ -144,13 +144,13 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Delete(MonitoringServerInfo dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var server = _MonitoringServers.Find(item => item.ID == dataObject.ID);
+            var server = _monitoringServers.Find(item => item.Id == dataObject.Id);
 
             if (server != null)
             {
-                _MonitoringServers.Remove(server);
+                _monitoringServers.Remove(server);
 
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }

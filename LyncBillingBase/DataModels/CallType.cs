@@ -4,16 +4,16 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NEW_CallTypes", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "NEW_CallTypes", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class CallType : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("ID")]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [DbColumn("TypeID")]
-        public int TypeID { get; set; }
+        public int TypeId { get; set; }
 
         [DbColumn("Name")]
         public string Name { get; set; }

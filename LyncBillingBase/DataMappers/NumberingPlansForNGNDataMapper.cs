@@ -9,7 +9,7 @@ using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
 {
-    public class NumberingPlansForNGNDataMapper : DataAccess<NumberingPlanForNGN>
+    public class NumberingPlansForNgnDataMapper : DataAccess<NumberingPlanForNgn>
     {
         /**
          * This instance of the Countries DataMapper is used for data reading only.
@@ -22,7 +22,7 @@ namespace LyncBillingBase.DataMappers
         ///     We have to fill the data relations inside the local Countries objects ourselves.
         /// </summary>
         /// <param name="ngnNumberingPlan">A list of Numbering Plan objects</param>
-        private void FillCountriesAndCurrenciesData(ref IEnumerable<NumberingPlanForNGN> ngnNumberingPlan)
+        private void FillCountriesAndCurrenciesData(ref IEnumerable<NumberingPlanForNgn> ngnNumberingPlan)
         {
             try
             {
@@ -34,20 +34,20 @@ namespace LyncBillingBase.DataMappers
 
                 ngnNumberingPlan =
                     (from dialingRecord in ngnNumberingPlan
-                        where (dialingRecord.Country != null && dialingRecord.Country.ID > 0)
-                        join countryObject in allCountries on dialingRecord.Country.ID equals countryObject.ID
-                        select new NumberingPlanForNGN
+                        where (dialingRecord.Country != null && dialingRecord.Country.Id > 0)
+                        join countryObject in allCountries on dialingRecord.Country.Id equals countryObject.Id
+                        select new NumberingPlanForNgn
                         {
-                            ID = dialingRecord.ID,
+                            Id = dialingRecord.Id,
                             DialingCode = dialingRecord.DialingCode,
-                            ISO3CountryCode = dialingRecord.ISO3CountryCode,
+                            Iso3CountryCode = dialingRecord.Iso3CountryCode,
                             Provider = dialingRecord.Provider,
-                            TypeOfServiceID = dialingRecord.TypeOfServiceID,
+                            TypeOfServiceId = dialingRecord.TypeOfServiceId,
                             Description = dialingRecord.Description,
                             //RELATIONS
                             TypeOfService = dialingRecord.TypeOfService,
                             Country = countryObject
-                        }).AsEnumerable<NumberingPlanForNGN>();
+                        }).AsEnumerable<NumberingPlanForNgn>();
             }
             catch (Exception ex)
             {
@@ -60,10 +60,10 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="DialingPrefix">NumberingPlanForNGN.DialingPrefix (string)</param>
         /// <returns>A list of NumberingPlanForNGN objects</returns>
-        public List<NumberingPlanForNGN> GetByPrefix(string DialingCode)
+        public List<NumberingPlanForNgn> GetByPrefix(string dialingCode)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("DialingCode", DialingCode);
+            condition.Add("DialingCode", dialingCode);
 
             try
             {
@@ -80,10 +80,10 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="DialingPrefix">Country.ISO3Code (string)</param>
         /// <returns>A list of NumberingPlanForNGN objects</returns>
-        public List<NumberingPlanForNGN> GetByISO3CountryCode(string ISO3Code)
+        public List<NumberingPlanForNgn> GetByIso3CountryCode(string iso3Code)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("CountryCodeISO3", ISO3Code);
+            condition.Add("CountryCodeISO3", iso3Code);
 
             try
             {
@@ -100,11 +100,11 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="DialingPrefix">Telephone Number (string)</param>
         /// <returns>A Country's ISO3Code (string)</returns>
-        public string GetISO3CountryCodeByNumber(string TelephoneNumber)
+        public string GetIso3CountryCodeByNumber(string telephoneNumber)
         {
             long numberToParse = 0;
-            string ISO3CountryCode = null;
-            List<NumberingPlanForNGN> ngnCountriesCodes = null;
+            string iso3CountryCode = null;
+            List<NumberingPlanForNgn> ngnCountriesCodes = null;
 
             var condition = new Dictionary<string, object>();
             condition.Add("Type_Of_Service", "countrycode");
@@ -115,33 +115,33 @@ namespace LyncBillingBase.DataMappers
 
                 if (ngnCountriesCodes != null && ngnCountriesCodes.Count > 0)
                 {
-                    if (string.IsNullOrEmpty(TelephoneNumber))
+                    if (string.IsNullOrEmpty(telephoneNumber))
                     {
                         return null;
                     }
-                    if (TelephoneNumber.Contains(";"))
+                    if (telephoneNumber.Contains(";"))
                     {
-                        var parts = TelephoneNumber.Split(';').ToList();
+                        var parts = telephoneNumber.Split(';').ToList();
 
                         if (";" != parts.First())
                         {
-                            TelephoneNumber = parts.First();
+                            telephoneNumber = parts.First();
                         }
                         else
                         {
-                            TelephoneNumber = parts[2];
+                            telephoneNumber = parts[2];
                         }
                     }
 
 
                     //Begin by trimming the "+" symbol
-                    TelephoneNumber = TelephoneNumber.Trim('+');
+                    telephoneNumber = telephoneNumber.Trim('+');
 
 
                     //Try to parse the number and match it with the numbering plan
-                    if (TelephoneNumber.Length >= 9)
+                    if (telephoneNumber.Length >= 9)
                     {
-                        long.TryParse(TelephoneNumber, out numberToParse);
+                        long.TryParse(telephoneNumber, out numberToParse);
 
                         while (numberToParse > 0)
                         {
@@ -151,7 +151,7 @@ namespace LyncBillingBase.DataMappers
                             if (number != null)
                             {
                                 // RETURN
-                                ISO3CountryCode = number.ISO3CountryCode;
+                                iso3CountryCode = number.Iso3CountryCode;
                                 break;
                             }
                             numberToParse = numberToParse/10;
@@ -159,7 +159,7 @@ namespace LyncBillingBase.DataMappers
                     } //end-inner-if
                 } //end-outer-if
 
-                return ISO3CountryCode;
+                return iso3CountryCode;
             }
             catch (Exception ex)
             {
@@ -167,10 +167,10 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override NumberingPlanForNGN GetById(long id, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override NumberingPlanForNgn GetById(long id, string dataSourceName = null,
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
-            NumberingPlanForNGN dialingRecord = null;
+            NumberingPlanForNgn dialingRecord = null;
 
             try
             {
@@ -179,7 +179,7 @@ namespace LyncBillingBase.DataMappers
                 if (null != dialingRecord)
                 {
                     var temporaryList =
-                        new List<NumberingPlanForNGN> {dialingRecord} as IEnumerable<NumberingPlanForNGN>;
+                        new List<NumberingPlanForNgn> {dialingRecord} as IEnumerable<NumberingPlanForNgn>;
                     FillCountriesAndCurrenciesData(ref temporaryList);
                     dialingRecord = temporaryList.First();
                 }
@@ -192,10 +192,10 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<NumberingPlanForNGN> Get(Dictionary<string, object> whereConditions, int limit = 25,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override IEnumerable<NumberingPlanForNgn> Get(Dictionary<string, object> whereConditions, int limit = 25,
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
-            IEnumerable<NumberingPlanForNGN> ngnNumberingPlan = null;
+            IEnumerable<NumberingPlanForNgn> ngnNumberingPlan = null;
 
             try
             {
@@ -214,10 +214,10 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<NumberingPlanForNGN> Get(Expression<Func<NumberingPlanForNGN, bool>> predicate,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override IEnumerable<NumberingPlanForNgn> Get(Expression<Func<NumberingPlanForNgn, bool>> predicate,
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
-            IEnumerable<NumberingPlanForNGN> ngnNumberingPlan = null;
+            IEnumerable<NumberingPlanForNgn> ngnNumberingPlan = null;
 
             try
             {
@@ -236,10 +236,10 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<NumberingPlanForNGN> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override IEnumerable<NumberingPlanForNgn> GetAll(string dataSourceName = null,
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
-            IEnumerable<NumberingPlanForNGN> ngnNumberingPlan = new List<NumberingPlanForNGN>();
+            IEnumerable<NumberingPlanForNgn> ngnNumberingPlan = new List<NumberingPlanForNgn>();
 
             try
             {
@@ -259,13 +259,13 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<NumberingPlanForNGN> GetAll(string sql)
+        public override IEnumerable<NumberingPlanForNgn> GetAll(string sqlQuery)
         {
-            IEnumerable<NumberingPlanForNGN> ngnNumberingPlan = null;
+            IEnumerable<NumberingPlanForNgn> ngnNumberingPlan = null;
 
             try
             {
-                ngnNumberingPlan = base.GetAll(sql);
+                ngnNumberingPlan = base.GetAll(sqlQuery);
 
                 if (null != ngnNumberingPlan && ngnNumberingPlan.Count() > 0)
                 {

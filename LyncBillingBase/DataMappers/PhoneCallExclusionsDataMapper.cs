@@ -49,21 +49,21 @@ namespace LyncBillingBase.DataMappers
         /// <returns>string</returns>
         private string LookUpExclusionType(string exclusionType, bool reverseLookup = false)
         {
-            var DEFAULT = GLOBALS.PhoneCallExclusion.Type.Default;
-            var SOURCE = GLOBALS.PhoneCallExclusion.Type.Source;
-            var DESTINATION = GLOBALS.PhoneCallExclusion.Type.Destination;
+            var DEFAULT = Globals.PhoneCallExclusion.Type.Default;
+            var source = Globals.PhoneCallExclusion.Type.Source;
+            var destination = Globals.PhoneCallExclusion.Type.Destination;
 
             if (false == reverseLookup)
             {
                 if (false == string.IsNullOrEmpty(exclusionType))
                 {
-                    if (exclusionType == SOURCE.Value())
+                    if (exclusionType == source.Value())
                     {
-                        return SOURCE.Description();
+                        return source.Description();
                     }
-                    if (exclusionType == DESTINATION.Value())
+                    if (exclusionType == destination.Value())
                     {
-                        return DESTINATION.Description();
+                        return destination.Description();
                     }
                 }
 
@@ -71,17 +71,17 @@ namespace LyncBillingBase.DataMappers
             }
             if (false == string.IsNullOrEmpty(exclusionType))
             {
-                if (exclusionType == SOURCE.Description())
+                if (exclusionType == source.Description())
                 {
-                    return SOURCE.Value();
+                    return source.Value();
                 }
-                if (exclusionType == DESTINATION.Description())
+                if (exclusionType == destination.Description())
                 {
-                    return DESTINATION.Value();
+                    return destination.Value();
                 }
             }
 
-            return SOURCE.Value();
+            return source.Value();
         }
 
         /// <summary>
@@ -93,21 +93,21 @@ namespace LyncBillingBase.DataMappers
         /// <returns>string</returns>
         private string LookUpZeroCost(string zeroCost, bool reverseLookup = false)
         {
-            var DEFAULT = GLOBALS.PhoneCallExclusion.ZeroCost.Default;
-            var YES = GLOBALS.PhoneCallExclusion.ZeroCost.Yes;
-            var NO = GLOBALS.PhoneCallExclusion.ZeroCost.No;
+            var DEFAULT = Globals.PhoneCallExclusion.ZeroCost.Default;
+            var yes = Globals.PhoneCallExclusion.ZeroCost.Yes;
+            var no = Globals.PhoneCallExclusion.ZeroCost.No;
 
             if (false == reverseLookup)
             {
                 if (false == string.IsNullOrEmpty(zeroCost))
                 {
-                    if (zeroCost == YES.Value())
+                    if (zeroCost == yes.Value())
                     {
-                        return YES.Description();
+                        return yes.Description();
                     }
-                    if (zeroCost == NO.Value())
+                    if (zeroCost == no.Value())
                     {
-                        return NO.Description();
+                        return no.Description();
                     }
                 }
 
@@ -115,17 +115,17 @@ namespace LyncBillingBase.DataMappers
             }
             if (false == string.IsNullOrEmpty(zeroCost))
             {
-                if (zeroCost == YES.Description())
+                if (zeroCost == yes.Description())
                 {
-                    return YES.Value();
+                    return yes.Value();
                 }
-                if (zeroCost == NO.Description())
+                if (zeroCost == no.Description())
                 {
-                    return NO.Value();
+                    return no.Value();
                 }
             }
 
-            return NO.Value();
+            return no.Value();
         }
 
         /// <summary>
@@ -137,21 +137,21 @@ namespace LyncBillingBase.DataMappers
         /// <returns>string</returns>
         private string LookUpAutoMark(string autoMarkType, bool reverseLookup = false)
         {
-            var DEFAULT = GLOBALS.PhoneCallExclusion.AutoMark.Default;
-            var BUSINESS = GLOBALS.PhoneCallExclusion.AutoMark.Business;
-            var PERSONAL = GLOBALS.PhoneCallExclusion.AutoMark.Personal;
+            var DEFAULT = Globals.PhoneCallExclusion.AutoMark.Default;
+            var business = Globals.PhoneCallExclusion.AutoMark.Business;
+            var personal = Globals.PhoneCallExclusion.AutoMark.Personal;
 
             if (false == reverseLookup)
             {
                 if (false == string.IsNullOrEmpty(autoMarkType))
                 {
-                    if (autoMarkType == BUSINESS.Value())
+                    if (autoMarkType == business.Value())
                     {
-                        return BUSINESS.Description();
+                        return business.Description();
                     }
-                    if (autoMarkType == PERSONAL.Value())
+                    if (autoMarkType == personal.Value())
                     {
-                        return PERSONAL.Description();
+                        return personal.Description();
                     }
                 }
 
@@ -159,13 +159,13 @@ namespace LyncBillingBase.DataMappers
             }
             if (false == string.IsNullOrEmpty(autoMarkType))
             {
-                if (autoMarkType == BUSINESS.Description())
+                if (autoMarkType == business.Description())
                 {
-                    return BUSINESS.Value();
+                    return business.Value();
                 }
-                if (autoMarkType == PERSONAL.Description())
+                if (autoMarkType == personal.Description())
                 {
-                    return PERSONAL.Value();
+                    return personal.Value();
                 }
             }
 
@@ -197,12 +197,12 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Site's ID, return all it's exclusions.
         /// </summary>
-        /// <param name="SiteID">Site.ID (int)</param>
+        /// <param name="siteId">Site.ID (int)</param>
         /// <returns>List of PhoneCallExclusion objects</returns>
-        public List<PhoneCallExclusion> GetBySiteID(int SiteID)
+        public List<PhoneCallExclusion> GetBySiteId(int siteId)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("SiteID", SiteID);
+            condition.Add("SiteID", siteId);
 
             try
             {
@@ -217,12 +217,12 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Site's ID, return all it's exclusions that are defined of the type "SOURCE".
         /// </summary>
-        /// <param name="SiteID">Site.ID (int)</param>
+        /// <param name="siteId">Site.ID (int)</param>
         /// <returns>List of PhoneCallExclusion objects</returns>
-        public List<PhoneCallExclusion> GetSourcesBySiteID(int SiteID)
+        public List<PhoneCallExclusion> GetSourcesBySiteId(int siteId)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("SiteID", SiteID);
+            condition.Add("SiteID", siteId);
             condition.Add("EntityType", "S");
 
             try
@@ -238,12 +238,12 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Site's ID, return all it's exclusions that are defined of the type "DESTINATON".
         /// </summary>
-        /// <param name="SiteID">Site.ID (int)</param>
+        /// <param name="siteId">Site.ID (int)</param>
         /// <returns>List of PhoneCallExclusion objects</returns>
-        public List<PhoneCallExclusion> GetDestinationsBySiteID(int SiteID)
+        public List<PhoneCallExclusion> GetDestinationsBySiteId(int siteId)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("SiteID", SiteID);
+            condition.Add("SiteID", siteId);
             condition.Add("EntityType", "D");
 
             try
@@ -257,7 +257,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override int Insert(PhoneCallExclusion newExclusionObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             // NULL value check
             if (null == newExclusionObject)
@@ -282,7 +282,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Update(PhoneCallExclusion existingExclusionObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             // NULL value check
             if (null == existingExclusionObject)
@@ -308,7 +308,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override PhoneCallExclusion GetById(long id, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             PhoneCallExclusion exclusion = null;
 
@@ -332,7 +332,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<PhoneCallExclusion> Get(Expression<Func<PhoneCallExclusion, bool>> predicate,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             List<PhoneCallExclusion> exclusions = null;
 
@@ -354,7 +354,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<PhoneCallExclusion> Get(Dictionary<string, object> whereConditions, int limit = 25,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             List<PhoneCallExclusion> exclusions = null;
 
@@ -376,7 +376,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<PhoneCallExclusion> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             List<PhoneCallExclusion> exclusions = null;
 
@@ -397,13 +397,13 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<PhoneCallExclusion> GetAll(string sql)
+        public override IEnumerable<PhoneCallExclusion> GetAll(string sqlQuery)
         {
             List<PhoneCallExclusion> exclusions = null;
 
             try
             {
-                exclusions = base.GetAll(sql).ToList();
+                exclusions = base.GetAll(sqlQuery).ToList();
 
                 if (exclusions != null && exclusions.Count > 0)
                 {

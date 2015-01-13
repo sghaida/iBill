@@ -6,24 +6,24 @@ using System.DirectoryServices.ActiveDirectory;
 
 namespace CCC.UTILS.Libs
 {
-    public class ADLib
+    public class AdLib
     {
-        private static readonly string ADSearchFilter = ConfigurationManager.AppSettings["ADSearchFilter"];
+        private static readonly string AdSearchFilter = ConfigurationManager.AppSettings["ADSearchFilter"];
         //INIT RESOURCE SEARCHER
-        private readonly DirectorySearcher resourceSearcher = new DirectorySearcher(forestResource);
+        private readonly DirectorySearcher _resourceSearcher = new DirectorySearcher(ForestResource);
         //INIT LOCAL SEARCHER
-        private DirectorySearcher localSearcher = new DirectorySearcher(forestlocal);
+        private DirectorySearcher _localSearcher = new DirectorySearcher(Forestlocal);
 
         /// <summary>
         ///     Get Lync Server Pools FQDN
         /// </summary>
         /// <param name="userInfo"></param>
         /// <returns></returns>
-        public ADUserInfo setLyncPool(ADUserInfo userInfo)
+        public AdUserInfo SetLyncPool(AdUserInfo userInfo)
         {
-            var poolFilter = string.Format(@"(distinguishedName={0})", userInfo.PrimaryHomeServerDN);
-            resourceSearcher.Filter = poolFilter;
-            var resourceForestPoolResult = resourceSearcher.FindOne();
+            var poolFilter = string.Format(@"(distinguishedName={0})", userInfo.PrimaryHomeServerDn);
+            _resourceSearcher.Filter = poolFilter;
+            var resourceForestPoolResult = _resourceSearcher.FindOne();
 
             if ((string) resourceForestPoolResult.Properties["dnshostname"][0] != null)
                 userInfo.PoolName = (string) resourceForestPoolResult.Properties["dnshostname"][0];
@@ -34,14 +34,14 @@ namespace CCC.UTILS.Libs
         /// <summary>
         ///     Authenticate user
         /// </summary>
-        /// <param name="EmailAddress">Email Address </param>
+        /// <param name="emailAddress">Email Address </param>
         /// <param name="password">Domain Controller Password</param>
         /// <returns></returns>
-        public bool AuthenticateUser(string EmailAddress, string password, out string msg)
+        public bool AuthenticateUser(string emailAddress, string password, out string msg)
         {
             msg = string.Empty;
 
-            if (password == null || password == string.Empty || EmailAddress == null || EmailAddress == string.Empty)
+            if (password == null || password == string.Empty || emailAddress == null || emailAddress == string.Empty)
             {
                 msg = "Email and/or password can't be empty!";
                 return false;
@@ -49,16 +49,16 @@ namespace CCC.UTILS.Libs
 
             try
             {
-                var userInfo = GetUserAttributes(EmailAddress);
+                var userInfo = GetUserAttributes(emailAddress);
 
                 if (userInfo == null)
                 {
                     msg = "Error: Couldn't fetch user information!";
                     return false;
                 }
-                var directoryEntry = new DirectoryEntry(LocalGCUri, userInfo.Upn, password);
+                var directoryEntry = new DirectoryEntry(LocalGcUri, userInfo.Upn, password);
                 directoryEntry.AuthenticationType = AuthenticationTypes.None;
-                var localFilter = string.Format(ADSearchFilter, EmailAddress);
+                var localFilter = string.Format(AdSearchFilter, emailAddress);
 
 
                 var localSearcher = new DirectorySearcher(directoryEntry);
@@ -121,17 +121,17 @@ namespace CCC.UTILS.Libs
         /// </summary>
         /// <param name="mailAddress"></param>
         /// <returns></returns>
-        public ADUserInfo GetUserAttributes(string mailAddress)
+        public AdUserInfo GetUserAttributes(string mailAddress)
         {
-            var userInfo = new ADUserInfo();
+            var userInfo = new AdUserInfo();
 
-            var resourceFilter = string.Format(ADSearchFilter, mailAddress);
+            var resourceFilter = string.Format(AdSearchFilter, mailAddress);
 
-            resourceSearcher.Filter = resourceFilter;
+            _resourceSearcher.Filter = resourceFilter;
 
             try
             {
-                var resourceForestResult = resourceSearcher.FindOne();
+                var resourceForestResult = _resourceSearcher.FindOne();
 
                 if (resourceForestResult != null)
                 {
@@ -157,13 +157,13 @@ namespace CCC.UTILS.Libs
                         userInfo.EmailAddress = (string) resourceForestResult.Properties["mail"][0];
 
                     if (resourceForestResult.Properties.Contains("employeeid"))
-                        userInfo.EmployeeID = (string) resourceForestResult.Properties["employeeid"][0];
+                        userInfo.EmployeeId = (string) resourceForestResult.Properties["employeeid"][0];
 
                     if (resourceForestResult.Properties.Contains("telephonenumber"))
                         userInfo.BusinessPhone = (string) resourceForestResult.Properties["telephonenumber"][0];
 
                     if (resourceForestResult.Properties.Contains("physicalDeliveryOfficeName"))
-                        userInfo.physicalDeliveryOfficeName =
+                        userInfo.PhysicalDeliveryOfficeName =
                             (string) resourceForestResult.Properties["physicalDeliveryOfficeName"][0];
 
                     if (resourceForestResult.Properties.Contains("msrtcsip-primaryuseraddress"))
@@ -173,7 +173,7 @@ namespace CCC.UTILS.Libs
                         userInfo.Telephone = (string) resourceForestResult.Properties["msrtcsip-line"][0];
 
                     if (resourceForestResult.Properties.Contains("msrtcsip-primaryhomeserver"))
-                        userInfo.PrimaryHomeServerDN =
+                        userInfo.PrimaryHomeServerDn =
                             ((string) resourceForestResult.Properties["msrtcsip-primaryhomeserver"][0]).Replace(
                                 "CN=Lc Services,CN=Microsoft,", "");
 
@@ -194,22 +194,22 @@ namespace CCC.UTILS.Libs
             }
         }
 
-        public List<ADUserInfo> GetSipAccounts(string fullName)
+        public List<AdUserInfo> GetSipAccounts(string fullName)
         {
             var resourceFilter = string.Format("(&(objectClass=user)(objectCategory=person)(cn={0}))", fullName);
 
-            resourceSearcher.Filter = resourceFilter;
+            _resourceSearcher.Filter = resourceFilter;
 
-            var listOfUsers = new List<ADUserInfo>();
-            ADUserInfo userInfo;
+            var listOfUsers = new List<AdUserInfo>();
+            AdUserInfo userInfo;
 
             try
             {
-                var resourceForestResult = resourceSearcher.FindAll();
+                var resourceForestResult = _resourceSearcher.FindAll();
 
                 foreach (SearchResult result in resourceForestResult)
                 {
-                    userInfo = new ADUserInfo();
+                    userInfo = new AdUserInfo();
 
                     if (result.Properties.Contains("mail"))
                         userInfo.EmailAddress = (string) result.Properties["mail"][0];
@@ -218,7 +218,7 @@ namespace CCC.UTILS.Libs
                         userInfo.DisplayName = (string) result.Properties["cn"][0];
 
                     if (result.Properties.Contains("employeeid"))
-                        userInfo.EmployeeID = (string) result.Properties["employeeid"][0];
+                        userInfo.EmployeeId = (string) result.Properties["employeeid"][0];
 
                     listOfUsers.Add(userInfo);
                 }
@@ -236,18 +236,18 @@ namespace CCC.UTILS.Libs
         /// </summary>
         /// <param name="phoneNumber">Business Phone Number</param>
         /// <returns>ADUserInfo Object</returns>
-        public ADUserInfo getUsersAttributesFromPhone(string phoneNumber)
+        public AdUserInfo GetUsersAttributesFromPhone(string phoneNumber)
         {
-            var userInfo = new ADUserInfo();
+            var userInfo = new AdUserInfo();
 
             var searchFilter = "(&(objectClass=user)(objectCategory=person)(msrtcsip-line=Tel:{0}))";
             var resourceFilter = string.Format(searchFilter, phoneNumber);
 
-            resourceSearcher.Filter = resourceFilter;
+            _resourceSearcher.Filter = resourceFilter;
 
             try
             {
-                var resourceForestResult = resourceSearcher.FindOne();
+                var resourceForestResult = _resourceSearcher.FindOne();
 
                 if (resourceForestResult != null)
                 {
@@ -277,9 +277,9 @@ namespace CCC.UTILS.Libs
 
             try
             {
-                var rootDSE = new DirectoryEntry(string.Format("LDAP://{0}/RootDSE", dnsDomainName));
+                var rootDse = new DirectoryEntry(string.Format("LDAP://{0}/RootDSE", dnsDomainName));
 
-                var configurationNamingContext = rootDSE.Properties["configurationNamingContext"][0].ToString();
+                var configurationNamingContext = rootDse.Properties["configurationNamingContext"][0].ToString();
 
                 var searchRoot = new DirectoryEntry("LDAP://cn=Partitions," + configurationNamingContext);
 
@@ -312,13 +312,13 @@ namespace CCC.UTILS.Libs
         /// <returns>Domain FQDN</returns>
         public string GetFqdnFromNetBiosName(string netBiosName)
         {
-            var FQDN = string.Empty;
+            var fqdn = string.Empty;
 
             try
             {
-                var rootDSE = new DirectoryEntry(string.Format("LDAP://{0}/RootDSE", netBiosName));
+                var rootDse = new DirectoryEntry(string.Format("LDAP://{0}/RootDSE", netBiosName));
 
-                var configurationNamingContext = rootDSE.Properties["configurationNamingContext"][0].ToString();
+                var configurationNamingContext = rootDse.Properties["configurationNamingContext"][0].ToString();
 
                 var searchRoot = new DirectoryEntry("LDAP://cn=Partitions," + configurationNamingContext);
 
@@ -329,9 +329,9 @@ namespace CCC.UTILS.Libs
 
                 var result = searcher.FindOne();
                 if (result != null)
-                    FQDN = result.Properties["dnsroot"][0].ToString();
+                    fqdn = result.Properties["dnsroot"][0].ToString();
 
-                return FQDN;
+                return fqdn;
             }
             catch (Exception ex)
             {
@@ -344,20 +344,20 @@ namespace CCC.UTILS.Libs
         {
             var users = new List<string>();
 
-            resourceSearcher.SizeLimit = 10000;
-            resourceSearcher.PageSize = 250;
+            _resourceSearcher.SizeLimit = 10000;
+            _resourceSearcher.PageSize = 250;
 
             var localFilter =
                 string.Format(
                     @"(&(objectClass=user)(objectCategory=person)(!(objectClass=contact))(msRTCSIP-PrimaryUserAddress=*))");
 
-            resourceSearcher.Filter = localFilter;
+            _resourceSearcher.Filter = localFilter;
 
             SearchResultCollection resourceForestResult;
 
             try
             {
-                resourceForestResult = resourceSearcher.FindAll();
+                resourceForestResult = _resourceSearcher.FindAll();
 
                 if (resourceForestResult != null)
                 {
@@ -376,22 +376,22 @@ namespace CCC.UTILS.Libs
         }
 
         //WEB.CONF AD RELATED FIELDS
-        private static readonly string LocalGCUri = ConfigurationManager.AppSettings["LocalDomainURI"];
-        private static readonly string LocalGCUsername = ConfigurationManager.AppSettings["LocalDomainUser"];
-        private static readonly string LocalGCPassword = ConfigurationManager.AppSettings["LocalDomainPassword"];
-        private static readonly string ResourceGCUri = ConfigurationManager.AppSettings["ResourceDomainURI"];
-        private static readonly string ResourceGCUsername = ConfigurationManager.AppSettings["ResourceDomainUser"];
-        private static readonly string ResourceGCPassword = ConfigurationManager.AppSettings["ResourceDomainPassword"];
+        private static readonly string LocalGcUri = ConfigurationManager.AppSettings["LocalDomainURI"];
+        private static readonly string LocalGcUsername = ConfigurationManager.AppSettings["LocalDomainUser"];
+        private static readonly string LocalGcPassword = ConfigurationManager.AppSettings["LocalDomainPassword"];
+        private static readonly string ResourceGcUri = ConfigurationManager.AppSettings["ResourceDomainURI"];
+        private static readonly string ResourceGcUsername = ConfigurationManager.AppSettings["ResourceDomainUser"];
+        private static readonly string ResourceGcPassword = ConfigurationManager.AppSettings["ResourceDomainPassword"];
         //INIT LOCAL GC
-        private static readonly DirectoryEntry forestResource = new DirectoryEntry(ResourceGCUri, ResourceGCUsername,
-            ResourceGCPassword);
+        private static readonly DirectoryEntry ForestResource = new DirectoryEntry(ResourceGcUri, ResourceGcUsername,
+            ResourceGcPassword);
 
         //INIT RESOURCE GC
-        private static readonly DirectoryEntry forestlocal = new DirectoryEntry(LocalGCUri, LocalGCUsername,
-            LocalGCPassword);
+        private static readonly DirectoryEntry Forestlocal = new DirectoryEntry(LocalGcUri, LocalGcUsername,
+            LocalGcPassword);
     }
 
-    public class ADUserInfo
+    public class AdUserInfo
     {
         public string Title { set; get; }
         public string DisplayName { set; get; }
@@ -400,14 +400,14 @@ namespace CCC.UTILS.Libs
         public string SamAccountName { set; get; }
         public string Upn { set; get; }
         public string EmailAddress { set; get; }
-        public string EmployeeID { set; get; }
+        public string EmployeeId { set; get; }
         public string Department { set; get; }
         public string BusinessPhone { get; set; }
         public string department { set; get; }
         public string Telephone { get; set; }
         public string SipAccount { set; get; }
-        public string PrimaryHomeServerDN { get; set; }
+        public string PrimaryHomeServerDn { get; set; }
         public string PoolName { set; get; }
-        public string physicalDeliveryOfficeName { set; get; }
+        public string PhysicalDeliveryOfficeName { set; get; }
     }
 }

@@ -11,16 +11,16 @@ namespace LyncBillingBase.DataMappers
     {
         /// <summary>
         /// </summary>
-        /// <param name="UserSipAccount"></param>
+        /// <param name="userSipAccount"></param>
         /// <returns></returns>
-        public List<PhoneBookContact> GetBySipAccount(string UserSipAccount)
+        public List<PhoneBookContact> GetBySipAccount(string userSipAccount)
         {
             List<PhoneBookContact> userPhoneBookContacts = null;
 
             var linqDistinctComparer = new PhoneBookContactComparer();
 
             var condition = new Dictionary<string, object>();
-            condition.Add("SipAccount", UserSipAccount);
+            condition.Add("SipAccount", userSipAccount);
 
             try
             {
@@ -41,16 +41,16 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="UserSipAccount"></param>
+        /// <param name="userSipAccount"></param>
         /// <returns></returns>
-        public Dictionary<string, PhoneBookContact> GetAddressBook(string UserSipAccount)
+        public Dictionary<string, PhoneBookContact> GetAddressBook(string userSipAccount)
         {
             List<PhoneBookContact> userPhoneBookContacts = null;
             Dictionary<string, PhoneBookContact> userAddressBook = null;
 
             try
             {
-                userPhoneBookContacts = GetBySipAccount(UserSipAccount);
+                userPhoneBookContacts = GetBySipAccount(userSipAccount);
 
                 if (userPhoneBookContacts != null && userPhoneBookContacts.Count > 0)
                 {

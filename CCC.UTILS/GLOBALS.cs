@@ -2,7 +2,7 @@
 
 namespace CCC.UTILS
 {
-    public static class GLOBALS
+    public static class Globals
     {
         public enum SpecialDateTime
         {
@@ -26,9 +26,9 @@ namespace CCC.UTILS
         {
             public enum Type
             {
-                [Description("The intersection of two data models. Equivalent to an SQL INNER JOIN.")] [DefaultValue("INTERSECTION")] INTERSECTION = 0,
+                [Description("The intersection of two data models. Equivalent to an SQL INNER JOIN.")] [DefaultValue("INTERSECTION")] Intersection = 0,
 
-                [Description("The union of two data models. Equivalent to an SQL OUTER JOIN.")] [DefaultValue("UNION")] UNION = 1
+                [Description("The union of two data models. Equivalent to an SQL OUTER JOIN.")] [DefaultValue("UNION")] Union = 1
             }
         }
     }

@@ -5,11 +5,11 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "MonitoringServersInfo", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
+    [DataSource(Name = "MonitoringServersInfo", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.DistributedSource)]
     public class CallsSummaryForUser : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("Date")]
         public DateTime Date { get; set; }
 

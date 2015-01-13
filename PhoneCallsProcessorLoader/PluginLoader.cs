@@ -7,7 +7,7 @@ using PhoneCallsProcessorLoader.ConfigurationSections;
 
 namespace PhoneCallsProcessorLoader
 {
-    public class PluginLoader<T>
+    public class PluginLoader
     {
         public static List<ICallProcessor> LoadPlugins()
         {

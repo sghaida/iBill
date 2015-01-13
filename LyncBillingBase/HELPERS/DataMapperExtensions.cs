@@ -8,7 +8,7 @@ namespace LyncBillingBase.Helpers
 {
     public static class DataMapperExtensions
     {
-        private static readonly SitesDepartmentsDataMapper _sitesDepartmentsDataMapper =
+        private static readonly SitesDepartmentsDataMapper SitesDepartmentsDataMapper =
             SitesDepartmentsDataMapper.Instance;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace LyncBillingBase.Helpers
             {
                 // 
                 // Get the site-department object
-                var siteDepartment = _sitesDepartmentsDataMapper.GetById(delegateRole.ManagedSiteDepartmentID);
+                var siteDepartment = SitesDepartmentsDataMapper.GetById(delegateRole.ManagedSiteDepartmentId);
 
                 //
                 // Fill the site department object
@@ -58,30 +58,30 @@ namespace LyncBillingBase.Helpers
             {
                 //
                 // Get all sites departments
-                var allSitesDepartments = _sitesDepartmentsDataMapper.GetAll();
+                var allSitesDepartments = SitesDepartmentsDataMapper.GetAll();
 
                 // Enable parallelization on the enumerable collections
                 allSitesDepartments = allSitesDepartments.AsParallel();
                 delegateRoles = delegateRoles.AsParallel();
 
                 //Fitler, join, and project
-                sitesDelegates = delegateRoles.Where(item => item.ManagedSiteID > 0).ToList();
-                sitesDepartmentsDelegates = delegateRoles.Where(item => item.ManagedSiteDepartmentID > 0).ToList();
+                sitesDelegates = delegateRoles.Where(item => item.ManagedSiteId > 0).ToList();
+                sitesDepartmentsDelegates = delegateRoles.Where(item => item.ManagedSiteDepartmentId > 0).ToList();
                 userDelegates =
                     delegateRoles.Where(item => false == string.IsNullOrEmpty(item.ManagedUserSipAccount)).ToList();
 
                 sitesDepartmentsDelegates =
                     (from role in sitesDepartmentsDelegates
-                        join siteDepartment in allSitesDepartments on role.ManagedSiteDepartmentID equals
-                            siteDepartment.ID
+                        join siteDepartment in allSitesDepartments on role.ManagedSiteDepartmentId equals
+                            siteDepartment.Id
                         select new DelegateRole
                         {
-                            ID = role.ID,
+                            Id = role.Id,
                             DelegeeSipAccount = role.DelegeeSipAccount,
                             DelegationType = role.DelegationType,
                             ManagedUserSipAccount = role.ManagedUserSipAccount,
-                            ManagedSiteID = role.ManagedSiteID,
-                            ManagedSiteDepartmentID = siteDepartment.ID,
+                            ManagedSiteId = role.ManagedSiteId,
+                            ManagedSiteDepartmentId = siteDepartment.Id,
                             Description = role.Description,
                             //RELATIONS
                             ManagedUser = role.ManagedUser,
@@ -111,7 +111,7 @@ namespace LyncBillingBase.Helpers
             {
                 // 
                 // Get the site-department object
-                var siteDepartment = _sitesDepartmentsDataMapper.GetById(departmentHeadRole.SiteDepartmentID);
+                var siteDepartment = SitesDepartmentsDataMapper.GetById(departmentHeadRole.SiteDepartmentId);
 
                 //
                 // Fill the site department object
@@ -144,7 +144,7 @@ namespace LyncBillingBase.Helpers
             {
                 //
                 // Get all sites departments
-                var allSitesDepartments = _sitesDepartmentsDataMapper.GetAll();
+                var allSitesDepartments = SitesDepartmentsDataMapper.GetAll();
 
                 // Enable parallelization of the enumerable collections
                 allSitesDepartments = allSitesDepartments.AsParallel();
@@ -153,13 +153,13 @@ namespace LyncBillingBase.Helpers
                 //Fitler, join, and project
                 departmentHeadsRoles =
                     (from role in departmentHeadsRoles
-                        where (role.SiteDepartmentID > 0)
-                        join siteDepartment in allSitesDepartments on role.SiteDepartmentID equals siteDepartment.ID
+                        where (role.SiteDepartmentId > 0)
+                        join siteDepartment in allSitesDepartments on role.SiteDepartmentId equals siteDepartment.Id
                         select new DepartmentHeadRole
                         {
-                            ID = role.ID,
+                            Id = role.Id,
                             SipAccount = role.SipAccount,
-                            SiteDepartmentID = role.SiteDepartmentID,
+                            SiteDepartmentId = role.SiteDepartmentId,
                             //RELATIONS
                             User = role.User,
                             SiteDepartment = siteDepartment

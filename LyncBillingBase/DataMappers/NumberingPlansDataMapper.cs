@@ -34,13 +34,13 @@ namespace LyncBillingBase.DataMappers
 
                 numberingPlan =
                     (from dialingRecord in numberingPlan
-                        where (dialingRecord.Country != null && dialingRecord.Country.ID > 0)
-                        join countryObject in allCountries on dialingRecord.Country.ID equals countryObject.ID
+                        where (dialingRecord.Country != null && dialingRecord.Country.Id > 0)
+                        join countryObject in allCountries on dialingRecord.Country.Id equals countryObject.Id
                         select new NumberingPlan
                         {
                             DialingPrefix = dialingRecord.DialingPrefix,
-                            ISO2CountryCode = dialingRecord.ISO2CountryCode,
-                            ISO3CountryCode = dialingRecord.ISO3CountryCode,
+                            Iso2CountryCode = dialingRecord.Iso2CountryCode,
+                            Iso3CountryCode = dialingRecord.Iso3CountryCode,
                             CountryName = dialingRecord.CountryName,
                             City = dialingRecord.City,
                             Provider = dialingRecord.Provider,
@@ -58,12 +58,12 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Dialing Prefix, return all the Numbering Plan records associated with it.
         /// </summary>
-        /// <param name="DialingPrefix">NumberingPlan.DialingPrefix (Int64)</param>
+        /// <param name="dialingPrefix">NumberingPlan.DialingPrefix (Int64)</param>
         /// <returns>A list of NumberingPlan objects</returns>
-        public List<NumberingPlan> GetByPrefix(Int64 DialingPrefix)
+        public List<NumberingPlan> GetByPrefix(Int64 dialingPrefix)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("DialingPrefix", DialingPrefix);
+            condition.Add("DialingPrefix", dialingPrefix);
 
             try
             {
@@ -80,10 +80,10 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="DialingPrefix">Country.ISO2Code (string)</param>
         /// <returns>A list of NumberingPlan objects</returns>
-        public List<NumberingPlan> GetByISO2CountryCode(string ISO2Code)
+        public List<NumberingPlan> GetByIso2CountryCode(string iso2Code)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("Two_Digits_country_code", ISO2Code);
+            condition.Add("Two_Digits_country_code", iso2Code);
 
             try
             {
@@ -100,10 +100,10 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="DialingPrefix">Country.ISO3Code (string)</param>
         /// <returns>A list of NumberingPlan objects</returns>
-        public List<NumberingPlan> GetByISO3CountryCode(string ISO3Code)
+        public List<NumberingPlan> GetByIso3CountryCode(string iso3Code)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("Three_Digits_Country_Code", ISO3Code);
+            condition.Add("Three_Digits_Country_Code", iso3Code);
 
             try
             {
@@ -120,10 +120,10 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="DialingPrefix">Telephone Number (string)</param>
         /// <returns>A Country's ISO3Code (string)</returns>
-        public string GetISO3CountryCodeByNumber(string TelephoneNumber)
+        public string GetIso3CountryCodeByNumber(string telephoneNumber)
         {
             long numberToParse = 0;
-            string ISO3CountryCode = null;
+            string iso3CountryCode = null;
             List<NumberingPlan> countriesCodes = null;
 
             var condition = new Dictionary<string, object>();
@@ -135,33 +135,33 @@ namespace LyncBillingBase.DataMappers
 
                 if (countriesCodes != null && countriesCodes.Count > 0)
                 {
-                    if (string.IsNullOrEmpty(TelephoneNumber))
+                    if (string.IsNullOrEmpty(telephoneNumber))
                     {
                         return null;
                     }
-                    if (TelephoneNumber.Contains(";"))
+                    if (telephoneNumber.Contains(";"))
                     {
-                        var parts = TelephoneNumber.Split(';').ToList();
+                        var parts = telephoneNumber.Split(';').ToList();
 
                         if (";" != parts.First())
                         {
-                            TelephoneNumber = parts.First();
+                            telephoneNumber = parts.First();
                         }
                         else
                         {
-                            TelephoneNumber = parts[2];
+                            telephoneNumber = parts[2];
                         }
                     }
 
 
                     //Begin by trimming the "+" symbol
-                    TelephoneNumber = TelephoneNumber.Trim('+');
+                    telephoneNumber = telephoneNumber.Trim('+');
 
 
                     //Try to parse the number and match it with the numbering plan
-                    if (TelephoneNumber.Length >= 9)
+                    if (telephoneNumber.Length >= 9)
                     {
-                        long.TryParse(TelephoneNumber, out numberToParse);
+                        long.TryParse(telephoneNumber, out numberToParse);
 
                         while (numberToParse > 0)
                         {
@@ -170,7 +170,7 @@ namespace LyncBillingBase.DataMappers
                             if (number != null)
                             {
                                 // RETURN
-                                ISO3CountryCode = number.ISO3CountryCode;
+                                iso3CountryCode = number.Iso3CountryCode;
                                 break;
                             }
                             numberToParse = numberToParse/10;
@@ -178,7 +178,7 @@ namespace LyncBillingBase.DataMappers
                     } //end-inner-if
                 } //end-outer-if
 
-                return ISO3CountryCode;
+                return iso3CountryCode;
             }
             catch (Exception ex)
             {
@@ -187,7 +187,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override NumberingPlan GetById(long id, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             NumberingPlan dialingRecord = null;
 
@@ -211,7 +211,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<NumberingPlan> Get(Dictionary<string, object> whereConditions, int limit = 25,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             IEnumerable<NumberingPlan> numberingPlan = null;
 
@@ -233,7 +233,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<NumberingPlan> Get(Expression<Func<NumberingPlan, bool>> predicate,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             IEnumerable<NumberingPlan> numberingPlan = null;
 
@@ -255,7 +255,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<NumberingPlan> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             IEnumerable<NumberingPlan> numberingPlan = new List<NumberingPlan>();
 
@@ -276,13 +276,13 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<NumberingPlan> GetAll(string sql)
+        public override IEnumerable<NumberingPlan> GetAll(string sqlQuery)
         {
             IEnumerable<NumberingPlan> numberingPlan = null;
 
             try
             {
-                numberingPlan = base.GetAll(sql);
+                numberingPlan = base.GetAll(sqlQuery);
 
                 if (null != numberingPlan && numberingPlan.Count() > 0)
                 {

@@ -61,7 +61,7 @@ namespace PhoneCallsProcessorLoader.ConfigurationSections
         {
             get
             {
-                var CallProcessorPluginsList = new List<CallProcessorPluginData>();
+                var callProcessorPluginsList = new List<CallProcessorPluginData>();
 
                 foreach (CallProcessorPluginsElement el in CallProcessorPlugins)
                 {
@@ -72,10 +72,10 @@ namespace PhoneCallsProcessorLoader.ConfigurationSections
                     pluginData.Version = el.Version;
                     pluginData.Enabled = el.Enabled;
 
-                    CallProcessorPluginsList.Add(pluginData);
+                    callProcessorPluginsList.Add(pluginData);
                 }
 
-                return CallProcessorPluginsList;
+                return callProcessorPluginsList;
             }
         }
     }

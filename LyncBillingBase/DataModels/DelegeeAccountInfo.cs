@@ -5,7 +5,7 @@ namespace LyncBillingBase.DataModels
 {
     public class DelegeeAccountInfo : DataModel
     {
-        public int DelegeeTypeID { get; set; }
+        public int DelegeeTypeId { get; set; }
         //Sites Delegate Role related
         public Site DelegeeSiteAccount { get; set; }
         //Departent Delegate Role related

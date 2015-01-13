@@ -15,8 +15,8 @@ namespace CCC.UTILS.Libs
         {
             return new SpecialDateTime
             {
-                YearAsText = GLOBALS.SpecialDateTime.OneYearAgoFromToday.Description(),
-                YearAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.OneYearAgoFromToday.Value())
+                YearAsText = Globals.SpecialDateTime.OneYearAgoFromToday.Description(),
+                YearAsNumber = Convert.ToInt32(Globals.SpecialDateTime.OneYearAgoFromToday.Value())
             };
         }
 
@@ -24,8 +24,8 @@ namespace CCC.UTILS.Libs
         {
             return new SpecialDateTime
             {
-                YearAsText = GLOBALS.SpecialDateTime.TwoYearsAgoFromToday.Description(),
-                YearAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.TwoYearsAgoFromToday.Value())
+                YearAsText = Globals.SpecialDateTime.TwoYearsAgoFromToday.Description(),
+                YearAsNumber = Convert.ToInt32(Globals.SpecialDateTime.TwoYearsAgoFromToday.Value())
             };
         }
 
@@ -36,32 +36,32 @@ namespace CCC.UTILS.Libs
                 //First Quarter
                 new SpecialDateTime
                 {
-                    QuarterAsText = GLOBALS.SpecialDateTime.FirstQuarter.Description(),
-                    QuarterAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.FirstQuarter.Value())
+                    QuarterAsText = Globals.SpecialDateTime.FirstQuarter.Description(),
+                    QuarterAsNumber = Convert.ToInt32(Globals.SpecialDateTime.FirstQuarter.Value())
                 },
                 //Second Quarter
                 new SpecialDateTime
                 {
-                    QuarterAsText = GLOBALS.SpecialDateTime.SecondQuarter.Description(),
-                    QuarterAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.SecondQuarter.Value())
+                    QuarterAsText = Globals.SpecialDateTime.SecondQuarter.Description(),
+                    QuarterAsNumber = Convert.ToInt32(Globals.SpecialDateTime.SecondQuarter.Value())
                 },
                 //Third Quarter
                 new SpecialDateTime
                 {
-                    QuarterAsText = GLOBALS.SpecialDateTime.ThirdQuarter.Description(),
-                    QuarterAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.ThirdQuarter.Value())
+                    QuarterAsText = Globals.SpecialDateTime.ThirdQuarter.Description(),
+                    QuarterAsNumber = Convert.ToInt32(Globals.SpecialDateTime.ThirdQuarter.Value())
                 },
                 //Fourth Quarter
                 new SpecialDateTime
                 {
-                    QuarterAsText = GLOBALS.SpecialDateTime.FourthQuarter.Description(),
-                    QuarterAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.FourthQuarter.Value())
+                    QuarterAsText = Globals.SpecialDateTime.FourthQuarter.Description(),
+                    QuarterAsNumber = Convert.ToInt32(Globals.SpecialDateTime.FourthQuarter.Value())
                 },
                 //All Quarters
                 new SpecialDateTime
                 {
-                    QuarterAsText = GLOBALS.SpecialDateTime.AllQuarters.Description(),
-                    QuarterAsNumber = Convert.ToInt32(GLOBALS.SpecialDateTime.AllQuarters.Value())
+                    QuarterAsText = Globals.SpecialDateTime.AllQuarters.Description(),
+                    QuarterAsNumber = Convert.ToInt32(Globals.SpecialDateTime.AllQuarters.Value())
                 }
             };
 
@@ -75,27 +75,27 @@ namespace CCC.UTILS.Libs
             var finalDateRangeTitle = string.Empty;
 
             SpecialDateTime Quarter;
-            var AllQuarters = GetQuartersOfTheYear();
+            var allQuarters = GetQuartersOfTheYear();
 
-            var OneYearAgoFromToday = Get_OneYearAgoFromToday();
-            var TwoYearsAgoFromToday = Get_TwoYearsAgoFromToday();
+            var oneYearAgoFromToday = Get_OneYearAgoFromToday();
+            var twoYearsAgoFromToday = Get_TwoYearsAgoFromToday();
 
 
             //Begin
             //First, handle the year
-            if (filterYear == OneYearAgoFromToday.YearAsNumber)
+            if (filterYear == oneYearAgoFromToday.YearAsNumber)
             {
                 startingDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
                 endingDate = DateTime.Now;
 
-                finalDateRangeTitle = OneYearAgoFromToday.YearAsText;
+                finalDateRangeTitle = oneYearAgoFromToday.YearAsText;
             }
-            else if (filterYear == TwoYearsAgoFromToday.YearAsNumber)
+            else if (filterYear == twoYearsAgoFromToday.YearAsNumber)
             {
                 startingDate = new DateTime(DateTime.Now.Year - 2, DateTime.Now.Month, 1);
                 endingDate = DateTime.Now;
 
-                finalDateRangeTitle = TwoYearsAgoFromToday.YearAsText;
+                finalDateRangeTitle = twoYearsAgoFromToday.YearAsText;
             }
             else
             {
@@ -133,8 +133,8 @@ namespace CCC.UTILS.Libs
                         break;
                 }
 
-                Quarter = AllQuarters.Find(quarter => quarter.QuarterAsNumber == filterQuater) ??
-                          AllQuarters.Find(quarter => quarter.QuarterAsNumber == 5);
+                Quarter = allQuarters.Find(quarter => quarter.QuarterAsNumber == filterQuater) ??
+                          allQuarters.Find(quarter => quarter.QuarterAsNumber == 5);
 
                 startingDate = new DateTime(Convert.ToInt32(filterYear), quarterStartingMonth, 1);
                 endingDate = new DateTime(Convert.ToInt32(filterYear), quarterEndingMonth, 1);

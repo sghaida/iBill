@@ -8,7 +8,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class MailTemplatesDataMapper : DataAccess<MailTemplate>
     {
-        private static List<MailTemplate> _MailTemplates = new List<MailTemplate>();
+        private static List<MailTemplate> _mailTemplates = new List<MailTemplate>();
 
         public MailTemplatesDataMapper()
         {
@@ -17,45 +17,45 @@ namespace LyncBillingBase.DataMappers
 
         private void LoadMailTemplates()
         {
-            if (_MailTemplates == null || _MailTemplates.Count == 0)
+            if (_mailTemplates == null || _mailTemplates.Count == 0)
             {
-                _MailTemplates = base.GetAll().ToList();
+                _mailTemplates = base.GetAll().ToList();
             }
         }
 
         public override IEnumerable<MailTemplate> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            return _MailTemplates;
+            return _mailTemplates;
         }
 
         public override int Insert(MailTemplate dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var isContained = _MailTemplates.Contains(dataObject);
+            var isContained = _mailTemplates.Contains(dataObject);
             var itExists =
-                _MailTemplates.Exists(
+                _mailTemplates.Exists(
                     item => item.Subject == dataObject.Subject && item.TemplateBody == dataObject.TemplateBody);
 
             if (isContained || itExists)
             {
                 return -1;
             }
-            dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
-            _MailTemplates.Add(dataObject);
+            dataObject.Id = base.Insert(dataObject, dataSourceName, dataSourceType);
+            _mailTemplates.Add(dataObject);
 
-            return dataObject.ID;
+            return dataObject.Id;
         }
 
         public override bool Update(MailTemplate dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var template = _MailTemplates.Find(item => item.ID == dataObject.ID);
+            var template = _mailTemplates.Find(item => item.Id == dataObject.Id);
 
             if (template != null)
             {
-                _MailTemplates.Remove(template);
-                _MailTemplates.Add(dataObject);
+                _mailTemplates.Remove(template);
+                _mailTemplates.Add(dataObject);
 
                 return base.Update(dataObject, dataSourceName, dataSourceType);
             }
@@ -63,13 +63,13 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Delete(MailTemplate dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var template = _MailTemplates.Find(item => item.ID == dataObject.ID);
+            var template = _mailTemplates.Find(item => item.Id == dataObject.Id);
 
             if (template != null)
             {
-                _MailTemplates.Remove(template);
+                _mailTemplates.Remove(template);
 
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }

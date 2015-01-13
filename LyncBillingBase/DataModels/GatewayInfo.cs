@@ -4,20 +4,20 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "GatewaysDetails", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "GatewaysDetails", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class GatewayInfo : DataModel
     {
-        [IsIDField]
-        [AllowIDInsert]
+        [IsIdField]
+        [AllowIdInsert]
         [DbColumn("GatewayID")]
-        public int GatewayID { set; get; }
+        public int GatewayId { set; get; }
 
         [DbColumn("SiteID")]
-        public int SiteID { set; get; }
+        public int SiteId { set; get; }
 
         [DbColumn("PoolID")]
-        public int PoolID { set; get; }
+        public int PoolId { set; get; }
 
         [AllowNull]
         [DbColumn("Description")]
@@ -29,7 +29,7 @@ namespace LyncBillingBase.DataModels
         public Gateway Gateway { get; set; }
 
         [DataRelation(WithDataModel = typeof (GatewayRate), OnDataModelKey = "GatewayID", ThisKey = "GatewayID",
-            RelationType = GLOBALS.DataRelation.Type.UNION)]
+            RelationType = Globals.DataRelation.Type.UNION)]
         public GatewayRate GatewayRatesInfo { get; set; }
 
         [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "ID", ThisKey = "SiteID")]

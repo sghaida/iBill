@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Lync2013Plugin
 {
-    public class ENUMS
+    public class Enums
     {
         public enum CallMarkerStatus
         {
@@ -36,30 +36,30 @@ namespace Lync2013Plugin
             [Description("ToGateway")] ToGateway,
             [Description("SourceUserEdgeServer")] SourceUserEdgeServer,
             [Description("DestinationUserEdgeServer")] DestinationUserEdgeServer,
-            [Description("ServerFQDN")] ServerFQDN,
-            [Description("PoolFQDN")] PoolFQDN,
+            [Description("ServerFQDN")] ServerFqdn,
+            [Description("PoolFQDN")] PoolFqdn,
             [Description("OnBehalf")] OnBehalf,
             [Description("ReferredBy")] ReferredBy,
             [Description("ChargingParty")] ChargingParty,
             [Description("Duration")] Duration,
-            [Description("Marker_CallFrom")] Marker_CallFrom,
-            [Description("Marker_CallTo")] Marker_CallTo,
-            [Description("Marker_CallToCountry")] Marker_CallToCountry,
-            [Description("Marker_CallType")] Marker_CallType,
-            [Description("Marker_CallTypeID")] Marker_CallTypeID,
-            [Description("Marker_CallCost")] Marker_CallCost,
-            [Description("UI_MarkedOn")] UI_MarkedOn,
-            [Description("UI_UpdatedByUser")] UI_UpdatedByUser,
-            [Description("UI_AssignedByUser")] UI_AssignedByUser,
-            [Description("UI_AssignedToUser")] UI_AssignedToUser,
-            [Description("UI_AssignedOn,")] UI_AssignedOn,
-            [Description("UI_CallType")] UI_CallType,
-            [Description("AC_DisputeStatus")] AC_DisputeStatus,
-            [Description("AC_DisputeResolvedOn")] AC_DisputeResolvedOn,
-            [Description("AC_IsInvoiced")] AC_IsInvoiced,
-            [Description("ac_InvoiceDate")] AC_InvoiceDate,
+            [Description("Marker_CallFrom")] MarkerCallFrom,
+            [Description("Marker_CallTo")] MarkerCallTo,
+            [Description("Marker_CallToCountry")] MarkerCallToCountry,
+            [Description("Marker_CallType")] MarkerCallType,
+            [Description("Marker_CallTypeID")] MarkerCallTypeId,
+            [Description("Marker_CallCost")] MarkerCallCost,
+            [Description("UI_MarkedOn")] UiMarkedOn,
+            [Description("UI_UpdatedByUser")] UiUpdatedByUser,
+            [Description("UI_AssignedByUser")] UiAssignedByUser,
+            [Description("UI_AssignedToUser")] UiAssignedToUser,
+            [Description("UI_AssignedOn,")] UiAssignedOn,
+            [Description("UI_CallType")] UiCallType,
+            [Description("AC_DisputeStatus")] AcDisputeStatus,
+            [Description("AC_DisputeResolvedOn")] AcDisputeResolvedOn,
+            [Description("AC_IsInvoiced")] AcIsInvoiced,
+            [Description("ac_InvoiceDate")] AcInvoiceDate,
             [Description("Exclude")] Exclude,
-            [Description("CalleeURI")] CalleeURI
+            [Description("CalleeURI")] CalleeUri
         }
 
         public string GetDescription(Enum value)

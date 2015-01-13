@@ -38,7 +38,7 @@ namespace CCC.ORM.DataAttributes
         ///     * UNION: The union of two data models. Equivalent to an SQL OUTER JOIN.
         ///     * INTERSECTION: The intersection of two data models. Equivalent to an SQL INNER JOIN.
         /// </summary>
-        public GLOBALS.DataRelation.Type RelationType { get; set; }
+        public Globals.DataRelation.Type RelationType { get; set; }
 
         public string Name
         {

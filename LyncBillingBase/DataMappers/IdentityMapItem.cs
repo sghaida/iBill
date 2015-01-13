@@ -8,6 +8,6 @@ namespace LyncBillingBase.DataMappers
         public T DataObject { get; set; }
         public DateTime AddedOn { get; set; }
         public bool Updated { get; set; }
-        public bool DBSynced { get; set; }
+        public bool DbSynced { get; set; }
     }
 }

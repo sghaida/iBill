@@ -20,9 +20,9 @@ namespace CCC.UTILS.Libs
 
             //Replace Json Date String                                         
             var pattern = @"\\/Date\((\d+)\+\d+\)\\/";
-            MatchEvaluator Evaluator = JsonDateToDateString;
+            MatchEvaluator evaluator = JsonDateToDateString;
             var regex = new Regex(pattern);
-            jsonString = regex.Replace(jsonString, Evaluator);
+            jsonString = regex.Replace(jsonString, evaluator);
 
             return jsonString;
         }
@@ -31,9 +31,9 @@ namespace CCC.UTILS.Libs
         {
             //Convert "yyyy-MM-dd HH:mm:ss" String as "\/Date(1319266795390+0800)\/"
             var pattern = @"\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}";
-            MatchEvaluator Evaluator = DateStringToJsonDate;
+            MatchEvaluator evaluator = DateStringToJsonDate;
             var regex = new Regex(pattern);
-            jsonString = regex.Replace(jsonString, Evaluator);
+            jsonString = regex.Replace(jsonString, evaluator);
 
             var serializer = new DataContractJsonSerializer(typeof (T));
             var ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace LyncBillingBase.Conf
 {
-    public class PDFReportColumnDescriptionElement : ConfigurationElement
+    public class PdfReportColumnDescriptionElement : ConfigurationElement
     {
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]
         public string Name
@@ -19,20 +19,20 @@ namespace LyncBillingBase.Conf
         }
     }
 
-    public class PDFReportColumnsDescriptionsCollection : ConfigurationElementCollection
+    public class PdfReportColumnsDescriptionsCollection : ConfigurationElementCollection
     {
         protected override ConfigurationElement CreateNewElement()
         {
-            return new PDFReportColumnDescriptionElement();
+            return new PdfReportColumnDescriptionElement();
         }
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((PDFReportColumnDescriptionElement) element).Name;
+            return ((PdfReportColumnDescriptionElement) element).Name;
         }
     }
 
-    public class PDFReportColumnsDescriptionsSection : ConfigurationSection
+    public class PdfReportColumnsDescriptionsSection : ConfigurationSection
     {
         public static string ConfigurationSectionName
         {
@@ -40,18 +40,18 @@ namespace LyncBillingBase.Conf
         }
 
         [ConfigurationProperty("PDFReportColumnsDescriptions")]
-        public PDFReportColumnsDescriptionsCollection PDFReportColumnsDescriptions
+        public PdfReportColumnsDescriptionsCollection PdfReportColumnsDescriptions
         {
-            get { return (PDFReportColumnsDescriptionsCollection) this["PDFReportColumnsDescriptions"]; }
+            get { return (PdfReportColumnsDescriptionsCollection) this["PDFReportColumnsDescriptions"]; }
         }
 
-        public Dictionary<string, string> PDFReportColumnsDescriptionsMap
+        public Dictionary<string, string> PdfReportColumnsDescriptionsMap
         {
             get
             {
                 var columnsDescription = new Dictionary<string, string>();
 
-                foreach (PDFReportColumnDescriptionElement element in PDFReportColumnsDescriptions)
+                foreach (PdfReportColumnDescriptionElement element in PdfReportColumnsDescriptions)
                 {
                     columnsDescription.Add(element.Name, element.Description);
                 }
@@ -62,8 +62,8 @@ namespace LyncBillingBase.Conf
 
         public string GetDescription(string columnName)
         {
-            if (PDFReportColumnsDescriptionsMap.Keys.Contains(columnName))
-                return PDFReportColumnsDescriptionsMap[columnName];
+            if (PdfReportColumnsDescriptionsMap.Keys.Contains(columnName))
+                return PdfReportColumnsDescriptionsMap[columnName];
             return columnName;
         }
     }

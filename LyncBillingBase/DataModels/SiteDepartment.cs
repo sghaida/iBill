@@ -4,21 +4,21 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Sites_Departments", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "Sites_Departments", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class SiteDepartment : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("ID")]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [IsForeignKey]
         [DbColumn("SiteID")]
-        public int SiteID { get; set; }
+        public int SiteId { get; set; }
 
         [IsForeignKey]
         [DbColumn("DepartmentID")]
-        public int DepartmentID { get; set; }
+        public int DepartmentId { get; set; }
 
         [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
         public Site Site { get; set; }

@@ -4,26 +4,26 @@ using System.Linq;
 
 namespace LyncBillingBase.DataMappers.SQLQueries
 {
-    public class CallsSummariesSQL
+    public class CallsSummariesSql
     {
         /// <summary>
         /// </summary>
-        /// <param name="UserSipAccount"></param>
-        /// <param name="StartingDate"></param>
-        /// <param name="EndingDate"></param>
-        /// <param name="DBTables"></param>
+        /// <param name="userSipAccount"></param>
+        /// <param name="startingDate"></param>
+        /// <param name="endingDate"></param>
+        /// <param name="dbTables"></param>
         /// <returns></returns>
-        public string GetCallsSummariesForUser(string UserSipAccount, string StartingDate, string EndingDate,
-            List<string> DBTables)
+        public string GetCallsSummariesForUser(string userSipAccount, string startingDate, string endingDate,
+            List<string> dbTables)
         {
-            var SQL_QUERY = string.Empty;
-            var SELECT_PART = string.Empty;
-            var FROM_PART = string.Empty;
-            var GROUP_BY_ORDER_BY_PART = string.Empty;
+            var sqlQuery = string.Empty;
+            var selectPart = string.Empty;
+            var fromPart = string.Empty;
+            var groupByOrderByPart = string.Empty;
 
-            if (DBTables != null && DBTables.Count > 0)
+            if (dbTables != null && dbTables.Count > 0)
             {
-                SELECT_PART = String.Format(
+                selectPart = String.Format(
                     "SELECT TOP 100 PERCENT " +
                     "YEAR(ResponseTime) AS [Year], " +
                     "MONTH(ResponseTime) AS [Month], " +
@@ -42,12 +42,12 @@ namespace LyncBillingBase.DataMappers.SQLQueries
 
                 //
                 // Start the FROM_PART
-                FROM_PART = String.Format("FROM  (");
+                fromPart = String.Format("FROM  (");
 
                 var index = 0;
-                foreach (var tableName in DBTables)
+                foreach (var tableName in dbTables)
                 {
-                    FROM_PART += String.Format(
+                    fromPart += String.Format(
                         "SELECT * FROM [{0}] " +
                         "WHERE " +
                         "[ChargingParty]='{1}' AND " +
@@ -57,53 +57,53 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                         "[ToGateway] IS NOT NULL AND " +
                         "([AC_DisputeStatus]='Rejected' OR [AC_DisputeStatus] IS NULL ) "
                         , tableName
-                        , UserSipAccount
-                        , StartingDate
-                        , EndingDate
+                        , userSipAccount
+                        , startingDate
+                        , endingDate
                         );
 
-                    if (index < (DBTables.Count() - 1))
+                    if (index < (dbTables.Count() - 1))
                     {
-                        FROM_PART += " UNION ALL ";
+                        fromPart += " UNION ALL ";
                         index++;
                     }
                 }
 
                 // 
                 // Close the FROM PART
-                FROM_PART += String.Format(") AS [UserCallsSummary] ");
+                fromPart += String.Format(") AS [UserCallsSummary] ");
 
-                GROUP_BY_ORDER_BY_PART = String.Format(
+                groupByOrderByPart = String.Format(
                     "GROUP BY " +
                     "YEAR(ResponseTime), " +
                     "MONTH(ResponseTime), " +
                     "[ChargingParty] " +
                     "ORDER BY [ChargingParty] ASC ");
 
-                SQL_QUERY = String.Format("{0} {1} {2}", SELECT_PART, FROM_PART, GROUP_BY_ORDER_BY_PART);
+                sqlQuery = String.Format("{0} {1} {2}", selectPart, fromPart, groupByOrderByPart);
             }
 
-            return SQL_QUERY;
+            return sqlQuery;
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="SiteName"></param>
-        /// <param name="StartingDate"></param>
-        /// <param name="EndingDate"></param>
-        /// <param name="DBTables"></param>
+        /// <param name="siteName"></param>
+        /// <param name="startingDate"></param>
+        /// <param name="endingDate"></param>
+        /// <param name="dbTables"></param>
         /// <returns></returns>
-        public string GetCallsSummariesForUsersInSite(string SiteName, string StartingDate, string EndingDate,
-            List<string> DBTables)
+        public string GetCallsSummariesForUsersInSite(string siteName, string startingDate, string endingDate,
+            List<string> dbTables)
         {
-            var SQL_QUERY = string.Empty;
-            var SELECT_PART = string.Empty;
-            var FROM_PART = string.Empty;
-            var GROUP_BY_ORDER_BY_PART = string.Empty;
+            var sqlQuery = string.Empty;
+            var selectPart = string.Empty;
+            var fromPart = string.Empty;
+            var groupByOrderByPart = string.Empty;
 
-            if (DBTables != null && DBTables.Count > 0)
+            if (dbTables != null && dbTables.Count > 0)
             {
-                SELECT_PART = String.Format(
+                selectPart = String.Format(
                     "SELECT TOP 100 PERCENT " +
                     "YEAR(ResponseTime) AS [Year], " +
                     "MONTH(ResponseTime) AS [Month], " +
@@ -122,13 +122,13 @@ namespace LyncBillingBase.DataMappers.SQLQueries
 
                 //
                 // Start the FROM_PART
-                FROM_PART = String.Format("FROM  (");
+                fromPart = String.Format("FROM  (");
 
                 var index = 0;
-                foreach (var tableName in DBTables)
+                foreach (var tableName in dbTables)
                 {
                     // Concatenate the FROM_PART with the below
-                    FROM_PART = String.Format(
+                    fromPart = String.Format(
                         "{0} " +
                         "SELECT * FROM [{1}] " +
                         "WHERE " +
@@ -146,26 +146,26 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                         "WHERE " +
                         "[SiteName]='{4}' " +
                         ")  "
-                        , FROM_PART
+                        , fromPart
                         , tableName
-                        , StartingDate
-                        , EndingDate
-                        , SiteName
+                        , startingDate
+                        , endingDate
+                        , siteName
                         );
 
-                    if (index < (DBTables.Count() - 1))
+                    if (index < (dbTables.Count() - 1))
                     {
                         // Add the UNION ALL phrase between each inner-select
-                        FROM_PART = String.Format("{0} UNION ALL ", FROM_PART);
+                        fromPart = String.Format("{0} UNION ALL ", fromPart);
                         index++;
                     }
                 }
 
                 // 
                 // Close the FROM PART
-                FROM_PART = String.Format("{0} ) AS [UserCallsSummary] ", FROM_PART);
+                fromPart = String.Format("{0} ) AS [UserCallsSummary] ", fromPart);
 
-                GROUP_BY_ORDER_BY_PART = String.Format(
+                groupByOrderByPart = String.Format(
                     "GROUP BY " +
                     "YEAR(ResponseTime), " +
                     "MONTH(ResponseTime), " +
@@ -173,10 +173,10 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                     "[AC_IsInvoiced] " +
                     "ORDER BY [ChargingParty] ASC");
 
-                SQL_QUERY = String.Format("{0} {1} {2}", SELECT_PART, FROM_PART, GROUP_BY_ORDER_BY_PART);
+                sqlQuery = String.Format("{0} {1} {2}", selectPart, fromPart, groupByOrderByPart);
             }
 
-            return SQL_QUERY;
+            return sqlQuery;
         }
     }
 }
