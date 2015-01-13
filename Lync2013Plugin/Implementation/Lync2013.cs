@@ -8,8 +8,13 @@ using System.Data.OleDb;
 using System.Data.SqlTypes;
 using System.Collections.Concurrent;
 
+<<<<<<< HEAD
 using ORM.Helpers;
 using ORM.DataAccess;
+=======
+using CCC.ORM.Helpers;
+using CCC.ORM.DataAccess;
+>>>>>>> 4d2825ed2d6c07fa47ef8a534e938e39e0b8f09c
 using LyncBillingBase;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;
@@ -49,7 +54,7 @@ namespace Lync2013Plugin.Implementation
             try
             {
                 SourceDBConnector = new OleDbConnection(ConstructConnectionString());
-                DestinationDBConnector = new OleDbConnection(DBLib.ConnectionString_Lync);
+                DestinationDBConnector = new OleDbConnection(DBLib.ConnectionString);
             }
             catch (Exception e) { throw e.InnerException; }
         }
@@ -72,7 +77,7 @@ namespace Lync2013Plugin.Implementation
             SourceDBConnector.Open();
             DestinationDBConnector.Open();
 
-            dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName,isRemote:false), DestinationDBConnector);
+            dataReader = DBRoutines.EXECUTEREADER(SQLs.GetLastImportedPhonecallDate(PhoneCallsTableName, isRemote:false), DestinationDBConnector);
 
             if (dataReader.Read() && !dataReader.IsDBNull(0))
             {
@@ -124,7 +129,7 @@ namespace Lync2013Plugin.Implementation
 
                     // Bulk insert
                     ToBeInsertedDataTable = phoneCalls.ConvertToDataTable<PhoneCall>();
-                    ToBeInsertedDataTable.BulkInsert(PhoneCallsTableName);
+                    ToBeInsertedDataTable.BulkInsert(PhoneCallsTableName, DestinationDBConnector.ConnectionString);
 
                     ToBeInsertedDataTable.Dispose();
     
