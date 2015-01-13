@@ -64,13 +64,6 @@
       <Project>{4d303f14-08ed-4f92-b7e1-377569a8d7eb}</Project>
       <Name>LyncBillingBase</Name>
     </ProjectReference>
-<<<<<<< HEAD
-    <ProjectReference Include="..\ORM\ORM.csproj">
-      <Project>{6fcd2469-2b10-419b-bd55-c42b486b6869}</Project>
-      <Name>ORM</Name>
-    </ProjectReference>
-=======
->>>>>>> 4d2825ed2d6c07fa47ef8a534e938e39e0b8f09c
     <ProjectReference Include="..\PhoneCallsProcessor\PhoneCallsProcessor.csproj">
       <Project>{ecbeb87a-859d-4aec-8529-7ac23581cb65}</Project>
       <Name>PhoneCallsProcessor</Name>

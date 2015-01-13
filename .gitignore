@@ -66,3 +66,9 @@ PhoneCallsProcessor/bin/Debug/PhoneCallsProcessor.pdb
 PhoneCallsProcessor/obj/Debug/PhoneCallsProcessor.dll
 PhoneCallsProcessor/obj/Debug/PhoneCallsProcessor.pdb
 PhoneCallsProcessorLoader/obj/Debug/PhoneCallsProcessorLoader.csproj.FileListAbsolute.txt
+PhoneCallsProcessorLoader/bin/Debug/PhoneCallsProcessorLoader.exe.config
+PhoneCallsProcessorLoader/bin/Debug/PhoneCallsProcessorLoader.vshost.exe.config
+PhoneCallsProcessorLoader/bin/Debug/PhoneCallsProcessorLoader.vshost.exe.manifest
+CCC.ORM/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+CCC.UTILS/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+LyncBillingTesting/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
