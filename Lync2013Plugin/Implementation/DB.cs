@@ -9,13 +9,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-<<<<<<< HEAD
-using ORM;
-using ORM.DataAccess;
-using ORM.DataAttributes;
-=======
-using CCC.ORM.DataAttributes;
->>>>>>> 4d2825ed2d6c07fa47ef8a534e938e39e0b8f09c
+//using CCC.ORM.DataAttributes;
+
 using LyncBillingBase.DataModels;
 
 namespace Lync2013Plugin.Implementation
@@ -38,40 +33,40 @@ namespace Lync2013Plugin.Implementation
         }
 
 
-        public static void BulkInsert(this List<PhoneCall> source, string tableName, string databaseConnectionString)
-        {
-            List<PropertyInfo> masterPropertyInfoFields = new List<PropertyInfo>();
+        //public static void BulkInsert(this List<PhoneCall> source, string tableName, string databaseConnectionString)
+        //{
+        //    List<PropertyInfo> masterPropertyInfoFields = new List<PropertyInfo>();
            
-            //SQL Bulk Copy only works with sql connection so we need to remove the provider from the connection string
-            //using (var bcp = new SqlBulkCopy(DBLib.ConnectionString_Lync.Replace(@"Provider=SQLOLEDB.1;",""))) 
-            using (var bcp = new SqlBulkCopy(NormalizeConnectionString(databaseConnectionString)))
-            {
-                var AllProperties =  source.GetType().GetGenericArguments().Single().GetProperties(flags).
-                    Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null).
-                    Cast<PropertyInfo>().Select(item => item.GetCustomAttribute<DbColumnAttribute>().Name).ToArray();
+        //    //SQL Bulk Copy only works with sql connection so we need to remove the provider from the connection string
+        //    //using (var bcp = new SqlBulkCopy(DBLib.ConnectionString_Lync.Replace(@"Provider=SQLOLEDB.1;",""))) 
+        //    using (var bcp = new SqlBulkCopy(NormalizeConnectionString(databaseConnectionString)))
+        //    {
+        //        var AllProperties =  source.GetType().GetGenericArguments().Single().GetProperties(flags).
+        //            Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null).
+        //            Cast<PropertyInfo>().Select(item => item.GetCustomAttribute<DbColumnAttribute>().Name).ToArray();
 
-                masterPropertyInfoFields = source.GetType().GetGenericArguments().Single().GetProperties(flags)
-               .Where(property => 
-                    property.GetCustomAttribute<DbColumnAttribute>() != null &&  
-                    property.Name != "PhoneCallsTableName" && 
-                    property.Name != "PhoneBookName" && 
-                    property.Name != "PhoneCallsTable") 
-               .Cast<PropertyInfo>()
-               .ToList();
+        //        masterPropertyInfoFields = source.GetType().GetGenericArguments().Single().GetProperties(flags)
+        //       .Where(property => 
+        //            property.GetCustomAttribute<DbColumnAttribute>() != null &&  
+        //            property.Name != "PhoneCallsTableName" && 
+        //            property.Name != "PhoneBookName" && 
+        //            property.Name != "PhoneCallsTable") 
+        //       .Cast<PropertyInfo>()
+        //       .ToList();
 
-                using (var reader = ObjectReader.Create<PhoneCall>(source, AllProperties))
-                {
-                    bcp.DestinationTableName = tableName;
+        //        using (var reader = ObjectReader.Create<PhoneCall>(source, AllProperties))
+        //        {
+        //            bcp.DestinationTableName = tableName;
                     
-                    foreach (var item in masterPropertyInfoFields)
-                    {   
-                        bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(item.Name, item.GetCustomAttribute<DbColumnAttribute>().Name));
-                    }
+        //            foreach (var item in masterPropertyInfoFields)
+        //            {   
+        //                bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(item.Name, item.GetCustomAttribute<DbColumnAttribute>().Name));
+        //            }
                     
-                    bcp.WriteToServer(reader);
-                }
-            }
-        }
+        //            bcp.WriteToServer(reader);
+        //        }
+        //    }
+        //}
 
         
         public static void BulkInsert(this DataTable dt, string tableName, string databaseConnectionString) 

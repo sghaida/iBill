@@ -145,7 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCC.ORM\CCC.ORM.csproj">
-      <Project>{6fcd2469-2b10-419b-bd55-c42b486b6869}</Project>
+      <Project>{5fb432b3-d581-4a6c-8718-d9038fed0630}</Project>
       <Name>CCC.ORM</Name>
     </ProjectReference>
     <ProjectReference Include="..\CCC.UTILS\CCC.UTILS.csproj">
