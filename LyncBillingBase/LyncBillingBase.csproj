@@ -117,7 +117,6 @@
     <Compile Include="DataModels\Rates_National.cs" />
     <Compile Include="DataModels\Site.cs" />
     <Compile Include="DataModels\SiteDepartment.cs" />
-    <Compile Include="DataModels\StoreLoader.cs" />
     <Compile Include="DataModels\User.cs" />
     <Compile Include="SessionManagement\UserSession.cs" />
     <Compile Include="Libs\PDFLib.cs" />
@@ -145,9 +144,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ProjectReference Include="..\ORM\ORM.csproj">
       <Project>{6fcd2469-2b10-419b-bd55-c42b486b6869}</Project>
       <Name>ORM</Name>
+=======
+    <ProjectReference Include="..\CCC.ORM\CCC.ORM.csproj">
+      <Project>{6fcd2469-2b10-419b-bd55-c42b486b6869}</Project>
+      <Name>CCC.ORM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CCC.UTILS\CCC.UTILS.csproj">
+      <Project>{9f02e36f-a8a3-4c7d-8772-51838757fb6d}</Project>
+      <Name>CCC.UTILS</Name>
+>>>>>>> 4d2825ed2d6c07fa47ef8a534e938e39e0b8f09c
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

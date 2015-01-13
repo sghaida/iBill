@@ -1,10 +1,11 @@
-﻿using LyncBillingBase.DataModels;
-using LyncBillingBase.Repository;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using LyncBillingBase.DataModels;
+using LyncBillingBase.Repository;
 
 namespace Lync2013Plugin.Implementation
 {
@@ -41,14 +42,14 @@ namespace Lync2013Plugin.Implementation
 
         public static List<Rates_National> GetNationalRates(Gateway gateway, string CountryCodeISO3)
         {
-            List<Rates_National> tempNationalRates = repo.Rates.GetNationalRatesForCountryByGatewayID(gateway.ID,CountryCodeISO3).ToList();
+            List<Rates_National> tempNationalRates = repo.Rates.GetNationalRatesForCountryByGatewayID(gateway.ID, CountryCodeISO3).ToList();
 
             //Check of the nationalRates container is instantiated
             if (Repo.nationalRates == null)
                 Repo.nationalRates = new Dictionary<string, Dictionary<string, List<Rates_National>>>();
 
             //Temporary Containers
-          
+
             Dictionary<string, List<Rates_National>> tempCountryRates = new Dictionary<string, List<Rates_National>>();
 
             var gatewayRatesObj = Repo.gatewayRates.Find(item => item.GatewayID == gateway.ID);
@@ -65,7 +66,7 @@ namespace Lync2013Plugin.Implementation
                 else
                 {
                     if (gatewayRatesObj != null && !string.IsNullOrEmpty(gatewayRatesObj.RatesTableName))
-                    {  
+                    {
                         tempCountryRates.Add(CountryCodeISO3, tempNationalRates);
                         Repo.nationalRates[gateway.Name] = tempCountryRates;
                     }
@@ -74,15 +75,15 @@ namespace Lync2013Plugin.Implementation
             else
             {
                 if (gatewayRatesObj != null && !string.IsNullOrEmpty(gatewayRatesObj.RatesTableName))
-                {  
+                {
                     tempCountryRates.Add(CountryCodeISO3, tempNationalRates);
                     Repo.nationalRates.Add(gateway.Name, tempCountryRates);
                 }
             }
 
-            
             return tempNationalRates;
         }
         
     }
+
 }

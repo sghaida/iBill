@@ -1,9 +1,4 @@
-﻿using Lync2013Plugin.Implementation;
-using LyncBillingBase.DataMappers;
-using LyncBillingBase.DataModels;
-using LyncBillingBase.Libs;
-using LyncBillingBase.Repository;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
@@ -11,7 +6,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-
+using CCC.UTILS.Libs;
+using LyncBillingBase.DataMappers;
+using LyncBillingBase.DataModels;
+using LyncBillingBase.Repository;
+using Lync2013Plugin.Implementation;
 
 namespace Lync2013Plugin
 {

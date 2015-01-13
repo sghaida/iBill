@@ -9,28 +9,42 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+<<<<<<< HEAD
 using ORM;
 using ORM.DataAccess;
 using ORM.DataAttributes;
+=======
+using CCC.ORM.DataAttributes;
+>>>>>>> 4d2825ed2d6c07fa47ef8a534e938e39e0b8f09c
 using LyncBillingBase.DataModels;
 
 namespace Lync2013Plugin.Implementation
 {
-   
     public static class DB
     {
-        private static DBLib DBRoutines = new DBLib();
-
         //Define what attributes to be read from the class
         private const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
 
+        private static string NormalizeConnectionString(string connectionString)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                return null;
+            }
+            else
+            {
+                return connectionString.Replace(@"Provider=SQLOLEDB.1;", "");
+            }
+        }
 
-        public static void BulkInsert(this List<PhoneCall> source, string tableName) 
+
+        public static void BulkInsert(this List<PhoneCall> source, string tableName, string databaseConnectionString)
         {
             List<PropertyInfo> masterPropertyInfoFields = new List<PropertyInfo>();
            
             //SQL Bulk Copy only works with sql connection so we need to remove the provider from the connection string
-            using (var bcp = new SqlBulkCopy(DBLib.ConnectionString_Lync.Replace(@"Provider=SQLOLEDB.1;",""))) 
+            //using (var bcp = new SqlBulkCopy(DBLib.ConnectionString_Lync.Replace(@"Provider=SQLOLEDB.1;",""))) 
+            using (var bcp = new SqlBulkCopy(NormalizeConnectionString(databaseConnectionString)))
             {
                 var AllProperties =  source.GetType().GetGenericArguments().Single().GetProperties(flags).
                     Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null).
@@ -60,13 +74,12 @@ namespace Lync2013Plugin.Implementation
         }
 
         
-        public static void BulkInsert(this DataTable dt, string tableName) 
+        public static void BulkInsert(this DataTable dt, string tableName, string databaseConnectionString) 
         {
             try
             {
-              
-                using (SqlBulkCopy bcp = new SqlBulkCopy(DBLib.ConnectionString_Lync.Replace(@"Provider=SQLOLEDB.1;", "")
-                    , SqlBulkCopyOptions.TableLock | SqlBulkCopyOptions.KeepNulls | SqlBulkCopyOptions.KeepIdentity)) 
+                using (SqlBulkCopy bcp = new SqlBulkCopy(NormalizeConnectionString(databaseConnectionString),
+                    SqlBulkCopyOptions.TableLock | SqlBulkCopyOptions.KeepNulls | SqlBulkCopyOptions.KeepIdentity)) 
                 {
                     foreach (DataColumn dc in dt.Columns)
                     {
@@ -94,6 +107,16 @@ namespace Lync2013Plugin.Implementation
             }
 
             reader.CloseDataReader();
+        }
+
+
+        public static void CloseDataReader(this OleDbDataReader dataReader)
+        {
+            if (dataReader.IsClosed == false)
+            {
+                dataReader.Close();
+                dataReader.Dispose();
+            }
         }
 
 
@@ -132,16 +155,6 @@ namespace Lync2013Plugin.Implementation
             CalleeURI = (record["CalleeURI"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("CalleeURI"))
         };
 
-        public static void CloseDataReader(this OleDbDataReader dataReader)
-        {
-            if (dataReader.IsClosed == false)
-            {
-                dataReader.Close();
-                dataReader.Dispose();
-            }
-        }
     }
-
-    
 
 }

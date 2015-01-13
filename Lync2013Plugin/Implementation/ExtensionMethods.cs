@@ -19,5 +19,7 @@ namespace Lync2013Plugin.Implementation
 
             return false;
         }
+
     }
+
 }
