@@ -1,17 +1,11 @@
-﻿using FastMember;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-//using CCC.ORM.DataAttributes;
-
 using LyncBillingBase.DataModels;
+//using CCC.ORM.DataAttributes;
 
 namespace Lync2013Plugin.Implementation
 {
@@ -20,23 +14,90 @@ namespace Lync2013Plugin.Implementation
         //Define what attributes to be read from the class
         private const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
 
+        public static Func<IDataRecord, PhoneCall> PhoneCallsSelector = record => new PhoneCall
+        {
+            PhoneCallsTableName = "PhoneCalls2013",
+            SessionIdTime = record.GetDateTime(record.GetOrdinal("SessionIdTime")),
+            SessionIdSeq = record.GetInt32(record.GetOrdinal("SessionIdSeq")),
+            ResponseTime =
+                (record["ResponseTime"] == DBNull.Value)
+                    ? DateTime.MinValue
+                    : record.GetDateTime(record.GetOrdinal("ResponseTime")),
+            SessionEndTime =
+                (record["SessionEndTime"] == DBNull.Value)
+                    ? DateTime.MinValue
+                    : record.GetDateTime(record.GetOrdinal("SessionEndTime")),
+            Duration =
+                (record["Duration"] == DBNull.Value)
+                    ? Convert.ToDecimal(0)
+                    : record.GetDecimal(record.GetOrdinal("Duration")),
+            SourceUserUri =
+                (record["SourceUserUri"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("SourceUserUri")),
+            DestinationUserUri =
+                (record["DestinationUserUri"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("DestinationUserUri")),
+            SourceNumberUri =
+                (record["SourceNumberUri"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("SourceNumberUri")),
+            DestinationNumberUri =
+                (record["DestinationNumberUri"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("DestinationNumberUri")),
+            FromMediationServer =
+                (record["FromMediationServer"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("FromMediationServer")),
+            ToMediationServer =
+                (record["ToMediationServer"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("ToMediationServer")),
+            FromGateway =
+                (record["FromGateway"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("FromGateway")),
+            ToGateway =
+                (record["ToGateway"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("ToGateway")),
+            SourceUserEdgeServer =
+                (record["SourceUserEdgeServer"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("SourceUserEdgeServer")),
+            DestinationUserEdgeServer =
+                (record["DestinationUserEdgeServer"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("DestinationUserEdgeServer")),
+            ServerFQDN =
+                (record["ServerFQDN"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("ServerFQDN")),
+            PoolFQDN =
+                (record["PoolFQDN"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("PoolFQDN")),
+            ReferredBy =
+                (record["ReferredBy"] == DBNull.Value)
+                    ? string.Empty
+                    : record.GetString(record.GetOrdinal("ReferredBy")),
+            OnBehalf =
+                (record["OnBehalf"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("OnBehalf")),
+            CalleeURI =
+                (record["CalleeURI"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("CalleeURI"))
+        };
+
         private static string NormalizeConnectionString(string connectionString)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
                 return null;
             }
-            else
-            {
-                return connectionString.Replace(@"Provider=SQLOLEDB.1;", "");
-            }
+            return connectionString.Replace(@"Provider=SQLOLEDB.1;", "");
         }
-
 
         //public static void BulkInsert(this List<PhoneCall> source, string tableName, string databaseConnectionString)
         //{
         //    List<PropertyInfo> masterPropertyInfoFields = new List<PropertyInfo>();
-           
+
         //    //SQL Bulk Copy only works with sql connection so we need to remove the provider from the connection string
         //    //using (var bcp = new SqlBulkCopy(DBLib.ConnectionString_Lync.Replace(@"Provider=SQLOLEDB.1;",""))) 
         //    using (var bcp = new SqlBulkCopy(NormalizeConnectionString(databaseConnectionString)))
@@ -57,24 +118,24 @@ namespace Lync2013Plugin.Implementation
         //        using (var reader = ObjectReader.Create<PhoneCall>(source, AllProperties))
         //        {
         //            bcp.DestinationTableName = tableName;
-                    
+
         //            foreach (var item in masterPropertyInfoFields)
         //            {   
         //                bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(item.Name, item.GetCustomAttribute<DbColumnAttribute>().Name));
         //            }
-                    
+
         //            bcp.WriteToServer(reader);
         //        }
         //    }
         //}
 
-        
-        public static void BulkInsert(this DataTable dt, string tableName, string databaseConnectionString) 
+
+        public static void BulkInsert(this DataTable dt, string tableName, string databaseConnectionString)
         {
             try
             {
-                using (SqlBulkCopy bcp = new SqlBulkCopy(NormalizeConnectionString(databaseConnectionString),
-                    SqlBulkCopyOptions.TableLock | SqlBulkCopyOptions.KeepNulls | SqlBulkCopyOptions.KeepIdentity)) 
+                using (var bcp = new SqlBulkCopy(NormalizeConnectionString(databaseConnectionString),
+                    SqlBulkCopyOptions.TableLock | SqlBulkCopyOptions.KeepNulls | SqlBulkCopyOptions.KeepIdentity))
                 {
                     foreach (DataColumn dc in dt.Columns)
                     {
@@ -87,23 +148,21 @@ namespace Lync2013Plugin.Implementation
                     bcp.WriteToServer(dt.Select());
                 }
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 throw e.InnerException;
             }
         }
 
-        
         public static IEnumerable<T> ReadSqlData<T>(OleDbDataReader reader, Func<IDataRecord, T> selector)
         {
-            while(reader.Read()) 
+            while (reader.Read())
             {
                 yield return selector(reader);
             }
 
             reader.CloseDataReader();
         }
-
 
         public static void CloseDataReader(this OleDbDataReader dataReader)
         {
@@ -113,43 +172,5 @@ namespace Lync2013Plugin.Implementation
                 dataReader.Dispose();
             }
         }
-
-
-        public static Func<IDataRecord, PhoneCall> PhoneCallsSelector = (record) => new PhoneCall
-        {
-            PhoneCallsTableName = "PhoneCalls2013",
-
-            SessionIdTime = record.GetDateTime(record.GetOrdinal("SessionIdTime")),
-            SessionIdSeq = record.GetInt32(record.GetOrdinal("SessionIdSeq")),
-
-
-            ResponseTime = (record["ResponseTime"] == DBNull.Value) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("ResponseTime")),
-            SessionEndTime = (record["SessionEndTime"] == DBNull.Value) ? DateTime.MinValue : record.GetDateTime(record.GetOrdinal("SessionEndTime")),
-
-            Duration = (record["Duration"] == DBNull.Value) ? Convert.ToDecimal(0) : record.GetDecimal(record.GetOrdinal("Duration")),
-
-            SourceUserUri = (record["SourceUserUri"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("SourceUserUri")),
-            DestinationUserUri = (record["DestinationUserUri"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("DestinationUserUri")),
-
-            SourceNumberUri = (record["SourceNumberUri"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("SourceNumberUri")),
-            DestinationNumberUri = (record["DestinationNumberUri"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("DestinationNumberUri")),
-
-            FromMediationServer = (record["FromMediationServer"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("FromMediationServer")),
-            ToMediationServer = (record["ToMediationServer"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("ToMediationServer")),
-
-            FromGateway = (record["FromGateway"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("FromGateway")),
-            ToGateway = (record["ToGateway"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("ToGateway")),
-
-            SourceUserEdgeServer = (record["SourceUserEdgeServer"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("SourceUserEdgeServer")),
-            DestinationUserEdgeServer = (record["DestinationUserEdgeServer"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("DestinationUserEdgeServer")),
-
-            ServerFQDN = (record["ServerFQDN"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("ServerFQDN")),
-            PoolFQDN = (record["PoolFQDN"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("PoolFQDN")),
-            ReferredBy = (record["ReferredBy"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("ReferredBy")),
-            OnBehalf = (record["OnBehalf"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("OnBehalf")),
-            CalleeURI = (record["CalleeURI"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("CalleeURI"))
-        };
-
     }
-
 }

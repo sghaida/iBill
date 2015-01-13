@@ -1,22 +1,11 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
-using CCC.ORM;
+﻿using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "ExceptionsList", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "ExceptionsList", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
     public class PhoneCallExclusion : DataModel
     {
         [IsIDField]
@@ -43,13 +32,13 @@ namespace LyncBillingBase.DataModels
         [DbColumn("Description")]
         public string Description { set; get; }
 
-
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
+        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
         public Site Site { get; set; }
 
-        [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "ExclusionSubject", RelationType = GLOBALS.DataRelation.Type.UNION)]
+        [DataRelation(WithDataModel = typeof (User), OnDataModelKey = "SipAccount", ThisKey = "ExclusionSubject",
+            RelationType = GLOBALS.DataRelation.Type.UNION)]
         public User User { get; set; }
     }
 }

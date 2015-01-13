@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PhoneCallsProcessorLoader.ConfigurationSections
 {
@@ -43,7 +40,7 @@ namespace PhoneCallsProcessorLoader.ConfigurationSections
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((CallProcessorPluginsElement)element).Name;
+            return ((CallProcessorPluginsElement) element).Name;
         }
     }
 
@@ -57,20 +54,19 @@ namespace PhoneCallsProcessorLoader.ConfigurationSections
         [ConfigurationProperty("CallProcessorPlugins")]
         public CallProcessorPluginsCollection CallProcessorPlugins
         {
-            get { return (CallProcessorPluginsCollection)this["CallProcessorPlugins"]; }
+            get { return (CallProcessorPluginsCollection) this["CallProcessorPlugins"]; }
         }
-
 
         public List<CallProcessorPluginData> CallProcessorPluginsList
         {
             get
             {
-                List<CallProcessorPluginData> CallProcessorPluginsList = new List<CallProcessorPluginData>();
+                var CallProcessorPluginsList = new List<CallProcessorPluginData>();
 
                 foreach (CallProcessorPluginsElement el in CallProcessorPlugins)
                 {
-                    CallProcessorPluginData pluginData = new CallProcessorPluginData();
-                    
+                    var pluginData = new CallProcessorPluginData();
+
                     pluginData.Name = el.Name;
                     pluginData.Path = el.Path;
                     pluginData.Version = el.Version;
@@ -82,6 +78,5 @@ namespace PhoneCallsProcessorLoader.ConfigurationSections
                 return CallProcessorPluginsList;
             }
         }
-
     }
 }

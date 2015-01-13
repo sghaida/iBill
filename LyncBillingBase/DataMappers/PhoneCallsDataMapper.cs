@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
-
-
-
-
-
 using CCC.ORM;
 using CCC.ORM.DataAccess;
-
+using LyncBillingBase.DataMappers.SQLQueries;
 using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
@@ -21,31 +13,31 @@ namespace LyncBillingBase.DataMappers
         /***
          * Get the phone calls tables list from the MonitoringServersInfo table
          */
-        private DataAccess<MonitoringServerInfo> _monitoringServersInfoDataMapper = new DataAccess<MonitoringServerInfo>();
 
-        /**
-         * The SQL Queries Generator
-         */
-        private SQLQueries.PhoneCallsSQL PHONECALLS_SQL_QUERIES = new SQLQueries.PhoneCallsSQL();
+        private readonly DataAccess<MonitoringServerInfo> _monitoringServersInfoDataMapper =
+            new DataAccess<MonitoringServerInfo>();
 
         /***
          * The list of phone calls tables
          */
-        private List<string> DBTables = new List<string>();
+        private readonly List<string> DBTables = new List<string>();
+        /**
+         * The SQL Queries Generator
+         */
+        private readonly PhoneCallsSQL PHONECALLS_SQL_QUERIES = new PhoneCallsSQL();
 
-
-        public PhoneCallsDataMapper() : base()
+        public PhoneCallsDataMapper()
         {
-            DBTables = _monitoringServersInfoDataMapper.GetAll().Select<MonitoringServerInfo, string>(item => item.PhoneCallsTable).ToList<string>();
+            DBTables = _monitoringServersInfoDataMapper.GetAll().Select(item => item.PhoneCallsTable).ToList();
         }
 
-
-        public override int Insert(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override int Insert(PhoneCall phoneCallObject, string dataSourceName = null,
+            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
-            string finalDataSourceName = string.Empty;
+            var finalDataSourceName = string.Empty;
 
             // NULL object check
-            if(null == phoneCallObject)
+            if (null == phoneCallObject)
             {
                 throw new Exception("PhoneCalls#Insert: Cannot insert NULL phone call objects.");
             }
@@ -71,10 +63,10 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-
-        public override bool Update(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override bool Update(PhoneCall phoneCallObject, string dataSourceName = null,
+            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
-            string finalDataSourceName = string.Empty;
+            var finalDataSourceName = string.Empty;
 
             // NULL object check
             if (phoneCallObject == null)
@@ -93,87 +85,85 @@ namespace LyncBillingBase.DataMappers
             }
             else
             {
-                throw new Exception("PhoneCalls#Update: Both the DataSource name and the phoneCallObject.PhoneCallsTableName are NULL.");
+                throw new Exception(
+                    "PhoneCalls#Update: Both the DataSource name and the phoneCallObject.PhoneCallsTableName are NULL.");
             }
 
             // Perform data update 
             try
-            { 
+            {
                 return base.Update(phoneCallObject, finalDataSourceName, dataSource);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex.InnerException;
             }
         }
 
-
-        public override bool Delete(PhoneCall phoneCallObject, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override bool Delete(PhoneCall phoneCallObject, string dataSourceName = null,
+            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
-            string finalDataSourceName = string.Empty;
+            var finalDataSourceName = string.Empty;
 
             // NULL object check
-            if(null == phoneCallObject)
+            if (null == phoneCallObject)
             {
                 throw new Exception("PhoneCalls#Delete: Cannot delete NULL phone call objects.");
             }
 
             // Decide on the value of the DataSource name
-            if(false == string.IsNullOrEmpty(dataSourceName))
+            if (false == string.IsNullOrEmpty(dataSourceName))
             {
                 finalDataSourceName = dataSourceName;
             }
-            else if(false == string.IsNullOrEmpty(phoneCallObject.PhoneCallsTableName))
+            else if (false == string.IsNullOrEmpty(phoneCallObject.PhoneCallsTableName))
             {
                 finalDataSourceName = phoneCallObject.PhoneCallsTableName;
             }
             else
             {
-                throw new Exception("PhoneCalls#Delete: Both the DataSource name and the phoneCallObject.PhoneCallsTableName are NULL.");
+                throw new Exception(
+                    "PhoneCalls#Delete: Both the DataSource name and the phoneCallObject.PhoneCallsTableName are NULL.");
             }
 
             // Perform data delete
             try
-            { 
+            {
                 return base.Delete(phoneCallObject, dataSourceName, dataSource);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex.InnerException;
             }
         }
 
-
-        public IEnumerable<PhoneCall> GetChargableCallsPerUser(string sipAccount) 
+        public IEnumerable<PhoneCall> GetChargableCallsPerUser(string sipAccount)
         {
-            string sqlStatemnet = PHONECALLS_SQL_QUERIES.ChargableCallsPerUser(DBTables, sipAccount);
+            var sqlStatemnet = PHONECALLS_SQL_QUERIES.ChargableCallsPerUser(DBTables, sipAccount);
 
             return base.GetAll(sqlStatemnet);
         }
 
-
-        public IEnumerable<PhoneCall> GetChargeableCallsForSite(string siteName) 
+        public IEnumerable<PhoneCall> GetChargeableCallsForSite(string siteName)
         {
-            string sqlStatemnet = PHONECALLS_SQL_QUERIES.ChargeableCallsForSite(DBTables, siteName);
+            var sqlStatemnet = PHONECALLS_SQL_QUERIES.ChargeableCallsForSite(DBTables, siteName);
 
             return base.GetAll(sqlStatemnet);
         }
 
-
-        public override PhoneCall GetById(long id, string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+        public override PhoneCall GetById(long id, string dataSourceName = null,
+            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
-
-        public override IEnumerable<PhoneCall> GetAll(string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+        public override IEnumerable<PhoneCall> GetAll(string dataSourceName = null,
+            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
         {
             //string sqlStatement = sqlAccessor.GetAllPhoneCalls(dbTables);
             //return base.GetAll(SQL_QUERY: sqlStatement);
 
             throw new NotImplementedException();
         }
-
     }
-
 }

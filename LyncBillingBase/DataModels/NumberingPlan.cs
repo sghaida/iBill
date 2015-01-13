@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
 using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NumberingPlan", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "NumberingPlan", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
     public class NumberingPlan : DataModel
     {
         [IsIDField]
@@ -45,17 +35,9 @@ namespace LyncBillingBase.DataModels
         [DbColumn("Type_Of_Service")]
         public string TypeOfService { get; set; }
 
-
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(Country), OnDataModelKey = "ISO3Code", ThisKey = "ISO3CountryCode")]
+        [DataRelation(WithDataModel = typeof (Country), OnDataModelKey = "ISO3Code", ThisKey = "ISO3CountryCode")]
         public Country Country { get; set; }
-
-        //[DataRelation(Name="CountryID_Country.ID", WithDataModel = typeof(Country), OnDataModelKey = "ID", ThisKey = "CountryID")]
-        //public Country Country { get; set; }
-
-        //[DataRelation(Name = "TypeOfServiceID_CallType.ID", WithDataModel = typeof(CallType), OnDataModelKey = "ID", ThisKey = "TypeOfServiceID")]
-        //public CallType TypeOfService { get; set; }
-
     }
 }

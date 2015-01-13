@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LyncBillingBase.Reports
+﻿namespace LyncBillingBase.Reports
 {
     public class UserCallsSummary : DetailedReport
     {
@@ -13,7 +7,6 @@ namespace LyncBillingBase.Reports
         public string SipAccount { get; set; }
         public string SiteName { get; set; }
         public string AC_IsInvoiced { get; set; }
-
         public long Duration { get; set; }
     }
 }

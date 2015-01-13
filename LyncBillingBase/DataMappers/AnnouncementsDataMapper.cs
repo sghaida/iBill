@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
-
-using CCC.ORM.Helpers;
 using CCC.ORM.DataAccess;
-
+using CCC.ORM.Helpers;
 using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
@@ -15,18 +10,19 @@ namespace LyncBillingBase.DataMappers
     public class AnnouncementsDataMapper : DataAccess<Announcement>
     {
         /// <summary>
-        /// Given a Role ID, return all the announcements that are associated with it
+        ///     Given a Role ID, return all the announcements that are associated with it
         /// </summary>
         /// <param name="RoleID">System Role ID or Delegation Type ID.</param>
         /// <returns>List of announcements objects/</returns>
         public List<Announcement> GetByRoleID(int RoleID)
         {
-            Dictionary<string, object> conditions = new Dictionary<string, object>();
+            var conditions = new Dictionary<string, object>();
             conditions.Add("ForRole", RoleID);
 
             try
             {
-                return Get(whereConditions: conditions, limit: 0).GetWithRelations(item=>item.Role).GetWithRelations(item=>item.Site).ToList<Announcement>();
+                return
+                    Get(conditions, 0).GetWithRelations(item => item.Role).GetWithRelations(item => item.Site).ToList();
             }
             catch (Exception ex)
             {
@@ -34,20 +30,19 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-
         /// <summary>
-        /// Given a Site ID, return all the announcements that are associated with it
+        ///     Given a Site ID, return all the announcements that are associated with it
         /// </summary>
         /// <param name="RoleID">Site ID</param>
         /// <returns>List of announcements objects.</returns>
         public List<Announcement> GetBySiteID(int SiteID)
         {
-            Dictionary<string, object> conditions = new Dictionary<string, object>();
+            var conditions = new Dictionary<string, object>();
             conditions.Add("ForSite", SiteID);
 
             try
             {
-                return Get(whereConditions: conditions, limit: 0).ToList<Announcement>();
+                return Get(conditions, 0).ToList();
             }
             catch (Exception ex)
             {

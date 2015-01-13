@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
-using CCC.ORM;
+﻿using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "BundledAccounts", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "BundledAccounts", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
     public class BundledAccount : DataModel
     {
         [IsIDField]
@@ -29,11 +18,9 @@ namespace LyncBillingBase.DataModels
         [DbColumn("AssociatedSipAccount")]
         public string AssociatedSipAccount { get; set; }
 
-
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(User), OnDataModelKey = "SipAccount", ThisKey = "PrimarySipAccount")]
+        [DataRelation(WithDataModel = typeof (User), OnDataModelKey = "SipAccount", ThisKey = "PrimarySipAccount")]
         public User PrimaryUserAccount { get; set; }
     }
-
 }

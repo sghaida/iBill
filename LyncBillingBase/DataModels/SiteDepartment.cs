@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
-using CCC.ORM;
+﻿using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Sites_Departments", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "Sites_Departments", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
     public class SiteDepartment : DataModel
     {
         [IsIDField]
@@ -31,10 +20,10 @@ namespace LyncBillingBase.DataModels
         [DbColumn("DepartmentID")]
         public int DepartmentID { get; set; }
 
-        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
+        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
         public Site Site { get; set; }
 
-        [DataRelation(WithDataModel = typeof(Department), OnDataModelKey = "ID", ThisKey = "DepartmentID")]
+        [DataRelation(WithDataModel = typeof (Department), OnDataModelKey = "ID", ThisKey = "DepartmentID")]
         public Department Department { get; set; }
     }
 }

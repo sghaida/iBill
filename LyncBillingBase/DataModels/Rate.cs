@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
-
-
-using CCC.ORM;
+﻿using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
 
-
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "GatewaysRates", Type = GLOBALS.DataSource.Type.DBTable, AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
+    [DataSource(Name = "GatewaysRates", Type = GLOBALS.DataSource.Type.DBTable,
+        AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
     public class Rate : DataModel
     {
         [IsIDField]
@@ -28,12 +17,11 @@ namespace LyncBillingBase.DataModels
 
         [DbColumn("rate")]
         public decimal Price { get; set; }
-                
 
         //
         // Relations
-        [DataRelation(WithDataModel = typeof(NumberingPlan), OnDataModelKey = "DialingPrefix", ThisKey = "DialingCode")]
+        [DataRelation(WithDataModel = typeof (NumberingPlan), OnDataModelKey = "DialingPrefix", ThisKey = "DialingCode")
+        ]
         public NumberingPlan NumberingPlan { get; set; }
     }
-
 }

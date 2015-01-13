@@ -2,40 +2,47 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LyncBillingBase.Conf
 {
     public class PDFReportPropertiesElement : ConfigurationElement
     {
         [ConfigurationProperty("reportName", IsKey = true, IsRequired = true)]
-        private string reportName { get { return this["reportName"].ToString(); } }
+        private string reportName
+        {
+            get { return this["reportName"].ToString(); }
+        }
 
         [ConfigurationProperty("columnsNames", IsRequired = true)]
-        private string columnsNames { get { return this["columnsNames"].ToString(); } }
+        private string columnsNames
+        {
+            get { return this["columnsNames"].ToString(); }
+        }
 
         [ConfigurationProperty("columnsWidths", IsRequired = true)]
-        private string columnsWidths { get { return this["columnsWidths"].ToString(); } }
+        private string columnsWidths
+        {
+            get { return this["columnsWidths"].ToString(); }
+        }
 
         public string ReportName()
         {
-            return reportName.ToString();
+            return reportName;
         }
 
         public List<string> ColumnsNames()
         {
-            return columnsNames.Split(',').ToList<string>();
+            return columnsNames.Split(',').ToList();
         }
 
         public int[] ColumnsWidths()
         {
-            int[] parsedWidths = { };
-            List<string> originalWidthsValues = columnsWidths.Split(',').ToList<string>();
+            int[] parsedWidths = {};
+            var originalWidthsValues = columnsWidths.Split(',').ToList();
 
             parsedWidths = (from width in originalWidthsValues
-                            select Convert.ToInt32(width)
-                            ).ToArray<int>();
+                select Convert.ToInt32(width)
+                ).ToArray<int>();
 
             return parsedWidths;
         }
@@ -51,7 +58,7 @@ namespace LyncBillingBase.Conf
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((PDFReportPropertiesElement)element).ReportName();
+            return ((PDFReportPropertiesElement) element).ReportName();
         }
     }
 
@@ -59,19 +66,22 @@ namespace LyncBillingBase.Conf
     public class PDFReportsPropertiesSection : ConfigurationSection
     {
         //The section name
-        public static string ConfigurationSectionName { get { return "PDFReportsPropertiesSection"; } }
+        public static string ConfigurationSectionName
+        {
+            get { return "PDFReportsPropertiesSection"; }
+        }
 
         [ConfigurationProperty("PDFReportsProperties")]
         public PDFReportsPropertiesCollection PDFReportsProperties
         {
-            get { return (PDFReportsPropertiesCollection)this["PDFReportsProperties"]; }
+            get { return (PDFReportsPropertiesCollection) this["PDFReportsProperties"]; }
         }
 
         public List<PDFReportPropertiesElement> PDFReportsPropertiesList
         {
             get
             {
-                List<PDFReportPropertiesElement> reportsProperties = new List<PDFReportPropertiesElement>();
+                var reportsProperties = new List<PDFReportPropertiesElement>();
 
                 foreach (PDFReportPropertiesElement element in PDFReportsProperties)
                 {
@@ -87,7 +97,7 @@ namespace LyncBillingBase.Conf
             get
             {
                 Dictionary<string, object> report;
-                Dictionary<string, Dictionary<string, object>> reportsProperties = new Dictionary<string, Dictionary<string, object>>();
+                var reportsProperties = new Dictionary<string, Dictionary<string, object>>();
 
                 foreach (PDFReportPropertiesElement element in PDFReportsProperties)
                 {
@@ -105,7 +115,7 @@ namespace LyncBillingBase.Conf
         public PDFReportPropertiesElement GetReportProperties(string reportName)
         {
             //Return the report if found, otherwise null
-            return PDFReportsPropertiesList.SingleOrDefault<PDFReportPropertiesElement>(report => report.ReportName() == reportName);
+            return PDFReportsPropertiesList.SingleOrDefault(report => report.ReportName() == reportName);
         }
     }
 }

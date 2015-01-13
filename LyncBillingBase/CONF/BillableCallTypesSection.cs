@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LyncBillingBase.Conf
 {
-
     public class BillableTypeElement : ConfigurationElement
     {
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]
@@ -32,7 +28,7 @@ namespace LyncBillingBase.Conf
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((BillableTypeElement)element).Name;
+            return ((BillableTypeElement) element).Name;
         }
     }
 
@@ -46,14 +42,14 @@ namespace LyncBillingBase.Conf
         [ConfigurationProperty("BillableTypes")]
         public BillableTypeCollection BillableTypes
         {
-            get { return (BillableTypeCollection)this["BillableTypes"]; }
+            get { return (BillableTypeCollection) this["BillableTypes"]; }
         }
 
         public List<int> BillableTypesList
         {
             get
             {
-                List<int> billableTypesList = new List<int>();
+                var billableTypesList = new List<int>();
 
                 foreach (BillableTypeElement el in BillableTypes)
                 {
@@ -68,7 +64,7 @@ namespace LyncBillingBase.Conf
         {
             get
             {
-                List<int> fixedlinesIdsList = new List<int>();
+                var fixedlinesIdsList = new List<int>();
 
                 foreach (BillableTypeElement el in BillableTypes)
                 {
@@ -86,7 +82,7 @@ namespace LyncBillingBase.Conf
         {
             get
             {
-                List<int> ngnlinesIdsList = new List<int>();
+                var ngnlinesIdsList = new List<int>();
 
                 foreach (BillableTypeElement el in BillableTypes)
                 {
@@ -104,7 +100,7 @@ namespace LyncBillingBase.Conf
         {
             get
             {
-                List<int> mobilelinesIdsList = new List<int>();
+                var mobilelinesIdsList = new List<int>();
 
                 foreach (BillableTypeElement el in BillableTypes)
                 {
@@ -123,7 +119,7 @@ namespace LyncBillingBase.Conf
         {
             get
             {
-                List<int> billableTypesList = new List<int>();
+                var billableTypesList = new List<int>();
 
                 foreach (BillableTypeElement el in BillableTypes)
                 {
@@ -133,6 +129,5 @@ namespace LyncBillingBase.Conf
                 return billableTypesList.ToArray();
             }
         }
-
     }
 }

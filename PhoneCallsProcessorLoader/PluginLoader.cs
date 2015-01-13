@@ -1,76 +1,70 @@
-﻿using PhoneCallsProcessorLoader.ConfigurationSections;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using PhoneCallsProcessor.Interfaces;
+using PhoneCallsProcessorLoader.ConfigurationSections;
 
 namespace PhoneCallsProcessorLoader
 {
     public class PluginLoader<T>
     {
-        public static List<ICallProcessor> LoadPlugins() 
+        public static List<ICallProcessor> LoadPlugins()
         {
             //Read Plugins Configurations
-            CallProcessorPluginsSection cppSection = (CallProcessorPluginsSection)ConfigurationManager.GetSection(CallProcessorPluginsSection.ConfigurationSectionName);
-            List<CallProcessorPluginData> pluginsData = cppSection.CallProcessorPluginsList;
+            var cppSection =
+                (CallProcessorPluginsSection)
+                    ConfigurationManager.GetSection(CallProcessorPluginsSection.ConfigurationSectionName);
+            var pluginsData = cppSection.CallProcessorPluginsList;
 
-            List<Assembly> assemblies = new List<Assembly>();
+            var assemblies = new List<Assembly>();
 
             //Put assemblies in a list
-            foreach (CallProcessorPluginData pluginInfo in pluginsData) 
+            foreach (var pluginInfo in pluginsData)
             {
-                if (pluginInfo.Enabled == true) 
+                if (pluginInfo.Enabled)
                 {
-                    AssemblyName an = AssemblyName.GetAssemblyName(pluginInfo.Path);
-                    Assembly assembly = Assembly.Load(an);
-                    assemblies.Add(assembly); 
+                    var an = AssemblyName.GetAssemblyName(pluginInfo.Path);
+                    var assembly = Assembly.Load(an);
+                    assemblies.Add(assembly);
                 }
             }
 
-            Type pluginType = typeof(ICallProcessor);
+            var pluginType = typeof (ICallProcessor);
 
-            List<Type> pluginTypes = new List<Type>();
+            var pluginTypes = new List<Type>();
 
-            foreach (Assembly asm in assemblies) 
+            foreach (var asm in assemblies)
             {
-                if (asm != null) 
+                if (asm != null)
                 {
-                    Type[] types = asm.GetTypes();
+                    var types = asm.GetTypes();
 
-                    foreach (Type type in types) 
+                    foreach (var type in types)
                     {
                         if (type.IsInterface || type.IsAbstract)
                         {
-                            continue;
                         }
-                        else 
-                        {   
-
+                        else
+                        {
                             if (type.GetInterface(pluginType.Name) != null)
                             {
                                 pluginTypes.Add(type);
-                            } 
+                            }
                         }
                     }
                 }
             }
 
-            List<ICallProcessor> plugins = new List<ICallProcessor>(pluginTypes.Count);
+            var plugins = new List<ICallProcessor>(pluginTypes.Count);
 
-            foreach (Type type in pluginTypes)
+            foreach (var type in pluginTypes)
             {
-                ICallProcessor plugin = (ICallProcessor)Activator.CreateInstance(type);
+                var plugin = (ICallProcessor) Activator.CreateInstance(type);
                 plugins.Add(plugin);
             }
 
-            return plugins; 
-
+            return plugins;
         }
-        
     }
 }

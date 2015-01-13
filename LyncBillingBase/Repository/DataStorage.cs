@@ -1,78 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-
-using LyncBillingBase.DataMappers;
-
+﻿using LyncBillingBase.DataMappers;
 
 namespace LyncBillingBase.Repository
 {
     public sealed class DataStorage
     {
         /***
+         * Singleton implementation with an attempted thread-safety using double-check locking
+         * @source: http://csharpindepth.com/articles/general/singleton.aspx
+         */
+        // internal datastorage singleton container
+        private static DataStorage _instance;
+        // lock for thread-safety laziness
+        private static readonly object _mutex = new object();
+        /***
          * DataStorage Repositories
          */
         // System Wide
         public AnnouncementsDataMapper Announcements = new AnnouncementsDataMapper();
         public BundledAccountsDataMapper BundledAccounts = new BundledAccountsDataMapper();
-        public MailTemplatesDataMapper MailTemplates = new MailTemplatesDataMapper();
-        
+        // Backend, Call Marking
+        public CallMarkerStatusDataMapper CallMarkers = new CallMarkerStatusDataMapper();
+        public CallTypesDataMapper CallTypes = new CallTypesDataMapper();
         // Countries, Sites, Departments, and Currencies
         public CountriesDataMapper Countries = new CountriesDataMapper();
-        public SitesDataMapper Sites = new SitesDataMapper();
-        public PoolsDataMapper Pools = new PoolsDataMapper();
+        public CurrenciesDataMapper Currencies = new CurrenciesDataMapper();
+        public DelegateRolesDataMapper DelegateRoles = new DelegateRolesDataMapper();
+        public DepartmentHeadRolesDataMapper DepartmentHeads = new DepartmentHeadRolesDataMapper();
+        public DepartmentsDataMapper Departments = new DepartmentsDataMapper();
+        public DIDsDataMapper DIDs = new DIDsDataMapper();
         public GatewaysDataMapper Gateways = new GatewaysDataMapper();
         public GatewaysInfoDataMapper GatewaysInfo = new GatewaysInfoDataMapper();
         public GatewaysRatesDataMapper GatewaysRates = new GatewaysRatesDataMapper();
-        public DepartmentsDataMapper Departments = new DepartmentsDataMapper();
-        public SitesDepartmentsDataMapper SitesDepartments = SitesDepartmentsDataMapper.Instance;
-        public CurrenciesDataMapper Currencies = new CurrenciesDataMapper();
-
-        // Roles
-        public RolesDataMapper Roles = new RolesDataMapper();
-        public SystemRolesDataMapper SystemRoles = new SystemRolesDataMapper();
-        public DelegateRolesDataMapper DelegateRoles = new DelegateRolesDataMapper();
-        public DepartmentHeadRolesDataMapper DepartmentHeads = new DepartmentHeadRolesDataMapper();
-
-        // PhoneCalls
-        public PhoneCallsDataMapper PhoneCalls = new PhoneCallsDataMapper();
-
+        public MailTemplatesDataMapper MailTemplates = new MailTemplatesDataMapper();
+        public MonitoringServersDataMapper MonitoringServers = new MonitoringServersDataMapper();
         // NumberingPlan, DIDs, CallTypes and Rates
         public NumberingPlansDataMapper NumberingPlans = new NumberingPlansDataMapper();
         public NumberingPlansForNGNDataMapper NumberingPlansForNGN = new NumberingPlansForNGNDataMapper();
-        public DIDsDataMapper DIDs = new DIDsDataMapper();
-        public CallTypesDataMapper CallTypes = new CallTypesDataMapper();
-        public RatesDataMapper Rates = new RatesDataMapper();
-        public RatesForNGNDataMapper RatesForNGN = new RatesForNGNDataMapper();
-
         // User
         public PhoneBookContactsDataMapper PhoneBooks = new PhoneBookContactsDataMapper();
-        public UsersDataMapper Users = new UsersDataMapper();
+        // PhoneCalls
+        public PhoneCallsDataMapper PhoneCalls = new PhoneCallsDataMapper();
         public PhoneCallExclusionsDataMapper PhoneCallsExclusions = new PhoneCallExclusionsDataMapper();
-
-        // Backend, Call Marking
-        public CallMarkerStatusDataMapper CallMarkers = new CallMarkerStatusDataMapper();
-        public MonitoringServersDataMapper MonitoringServers = new MonitoringServersDataMapper();
-
+        public PoolsDataMapper Pools = new PoolsDataMapper();
+        public RatesDataMapper Rates = new RatesDataMapper();
+        public RatesForNGNDataMapper RatesForNGN = new RatesForNGNDataMapper();
+        // Roles
+        public RolesDataMapper Roles = new RolesDataMapper();
+        public SitesDataMapper Sites = new SitesDataMapper();
+        public SitesDepartmentsDataMapper SitesDepartments = SitesDepartmentsDataMapper.Instance;
+        public SystemRolesDataMapper SystemRoles = new SystemRolesDataMapper();
+        public UsersDataMapper Users = new UsersDataMapper();
         // Calls Summaries
         public UsersCallsSummariesDataMapper UsersCallsSummaries = new UsersCallsSummariesDataMapper();
-
-
-        /***
-         * Singleton implementation with an attempted thread-safety using double-check locking
-         * @source: http://csharpindepth.com/articles/general/singleton.aspx
-         */
-        // internal datastorage singleton container
-        private static DataStorage _instance = null;
-
-        // lock for thread-safety laziness
-        private static readonly object _mutex = new object();
-
         // empty constuctor
-        private DataStorage() { }
+        private DataStorage()
+        {
+        }
 
         //The only public method, used to obtain an instance of DataStorage
         public static DataStorage Instance
@@ -81,7 +64,7 @@ namespace LyncBillingBase.Repository
             {
                 if (_instance == null)
                 {
-                    lock(_mutex)
+                    lock (_mutex)
                     {
                         if (_instance == null)
                         {

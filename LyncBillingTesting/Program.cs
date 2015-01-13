@@ -1,32 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq.Expressions;
-
 using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.Helpers;
-
-
-using LyncBillingBase;
-using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;
-using LyncBillingBase.Helpers;
+using LyncBillingBase.DataModels;
 using LyncBillingBase.Repository;
-
-using Lync2013Plugin.Implementation;
 
 namespace LyncBillingTesting
 {
-    class Program
+    internal class Program
     {
-        public  static string tolower(string text)
+        public static string tolower(string text)
         {
             return text.ToLower();
         }
-
 
         public static void Main(string[] args)
         {
@@ -40,36 +29,32 @@ namespace LyncBillingTesting
             var allDepartmentHeads = DepartmentHeadsDM.GetAll().ToList();
         }
 
-
         public static void InsertUpdateDeleteTests()
         {
-            DataStorage _STORAGE = DataStorage.Instance;
+            var _STORAGE = DataStorage.Instance;
 
-            bool status = false;
-
+            var status = false;
 
 
             /***
              * TESTING NUMBERING PLAN
              */
-            NumberingPlansDataMapper numberingPlan = new NumberingPlansDataMapper();
+            var numberingPlan = new NumberingPlansDataMapper();
 
-            string athens = "athens";
-            string kaz = "kaz";
+            var athens = "athens";
+            var kaz = "kaz";
 
-            NumberingPlan plan = new NumberingPlan();
+            var plan = new NumberingPlan();
             plan.City = athens;
             plan.ISO3CountryCode = kaz;
 
-            CustomExpressionVisitor ev = new CustomExpressionVisitor();
+            var ev = new CustomExpressionVisitor();
 
-            Expression<Func<NumberingPlan, bool>> exp1 = (item) => item.City.ToLower() == athens;
-            Expression<Func<NumberingPlan, bool>> exp2 = ((item) => item.ISO3CountryCode.ToLower() == kaz);
+            Expression<Func<NumberingPlan, bool>> exp1 = item => item.City.ToLower() == athens;
+            Expression<Func<NumberingPlan, bool>> exp2 = (item => item.ISO3CountryCode.ToLower() == kaz);
 
             var data1 = numberingPlan.Get(exp1).ToList();
             var data2 = numberingPlan.Get(exp2).ToList();
-
-
 
 
             /***
@@ -78,14 +63,14 @@ namespace LyncBillingTesting
             var allSitesDepartments = _STORAGE.SitesDepartments.GetAll();
 
 
-            Site newSite = new Site()
+            var newSite = new Site
             {
                 CountryCode = "GRC",
                 Description = "Sample Description",
                 Name = "TEST-SITE"
             };
 
-            Department newDepartment = new Department()
+            var newDepartment = new Department
             {
                 Name = "TEST-DEPARTMENT",
                 Description = "Sample Description"
@@ -94,7 +79,7 @@ namespace LyncBillingTesting
             newSite.ID = _STORAGE.Sites.Insert(newSite);
             newDepartment.ID = _STORAGE.Departments.Insert(newDepartment);
 
-            SiteDepartment newSiteDepartment = new SiteDepartment()
+            var newSiteDepartment = new SiteDepartment
             {
                 SiteID = newSite.ID,
                 DepartmentID = newDepartment.ID
@@ -119,13 +104,12 @@ namespace LyncBillingTesting
             status = _STORAGE.Sites.Delete(newSite);
 
 
-
             /***
              * TESTING USERS DATA MAPPER
              */
             var allUsers = _STORAGE.Users.GetAll();
 
-            User newUser = new User()
+            var newUser = new User
             {
                 EmployeeID = 99887766,
                 SipAccount = "unknown@ccc.gr",
@@ -150,13 +134,12 @@ namespace LyncBillingTesting
             status = _STORAGE.Users.Delete(newUser);
 
 
-
             /***
              * TESTING SYSTEM ROLES
              */
             var DEVELOPER_ROLE = _STORAGE.Roles.GetByRoleID(10);
 
-            SystemRole systemRole = new SystemRole()
+            var systemRole = new SystemRole
             {
                 Description = "TESTING SYSTEM ROLE",
                 RoleID = DEVELOPER_ROLE.RoleID,
@@ -177,7 +160,6 @@ namespace LyncBillingTesting
             status = _STORAGE.SystemRoles.Delete(systemRole);
 
 
-
             /***
              * TESTING SITES DEPARTMENTS DATA MAPPER
              */
@@ -185,7 +167,7 @@ namespace LyncBillingTesting
             var raso_site = _STORAGE.Sites.GetById(31);
             var isd_department = _STORAGE.Departments.GetByName("ISD");
 
-            SiteDepartment siteDepartment = new SiteDepartment()
+            var siteDepartment = new SiteDepartment
             {
                 SiteID = moa_site.ID,
                 DepartmentID = isd_department.ID
@@ -204,11 +186,10 @@ namespace LyncBillingTesting
             status = _STORAGE.SitesDepartments.Delete(siteDepartment);
 
 
-
             /***
              * TESTING SITES DATA MAPPER
              */
-            Site site = new Site()
+            var site = new Site
             {
                 CountryCode = "GRC",
                 Description = "SAMPLE GREECE SITE",
@@ -225,11 +206,10 @@ namespace LyncBillingTesting
             status = _STORAGE.Sites.Delete(site);
 
 
-
             /***
              * TESTING ROLES DATA MAPPER
              */
-            Role role123 = new Role()
+            var role123 = new Role
             {
                 RoleDescription = "SAMPLE ROLE",
                 RoleID = 123123,
@@ -244,11 +224,10 @@ namespace LyncBillingTesting
             status = _STORAGE.Roles.Delete(role123);
 
 
-
             /***
              * TESTING NGN RATES DATA MAPPER
              */
-            RateForNGN NGNRate = new RateForNGN()
+            var NGNRate = new RateForNGN
             {
                 DialingCodeID = 1,
                 Rate = Convert.ToDecimal(15.45)
@@ -264,11 +243,10 @@ namespace LyncBillingTesting
             status = _STORAGE.RatesForNGN.Delete(NGNRate, 10);
 
 
-
             /***
              * TESTING POOLS DATA MAPPER
              */
-            Pool newPool = new Pool()
+            var newPool = new Pool
             {
                 FQDN = "TESTING POOL FQDN"
             };
@@ -281,11 +259,10 @@ namespace LyncBillingTesting
             status = _STORAGE.Pools.Delete(newPool);
 
 
-
             /***
              * TESTING PHONE CALLS EXCLUSIONS
              */
-            PhoneCallExclusion exclusion = new PhoneCallExclusion()
+            var exclusion = new PhoneCallExclusion
             {
                 ExclusionSubject = "aalhour@ccc.gr",
                 Description = "SAMPLE EXCLUSION TEST",
@@ -306,11 +283,10 @@ namespace LyncBillingTesting
             status = _STORAGE.PhoneCallsExclusions.Delete(exclusion);
 
 
-
             /***
              * TESTING PHONE BOOK CONTACTS DATA MAPPER
              */
-            PhoneBookContact contact = new PhoneBookContact()
+            var contact = new PhoneBookContact
             {
                 DestinationCountry = "JOR",
                 DestinationNumber = "123123123123123123",
@@ -330,11 +306,10 @@ namespace LyncBillingTesting
             status = _STORAGE.PhoneBooks.Delete(contact);
 
 
-
             /***
              * TESTING NUMBERING PLAN FOR NGN
              */
-            NumberingPlanForNGN NGN = new NumberingPlanForNGN()
+            var NGN = new NumberingPlanForNGN
             {
                 Description = "TEST NGN",
                 DialingCode = "8000000000000",
@@ -353,11 +328,10 @@ namespace LyncBillingTesting
             status = _STORAGE.NumberingPlansForNGN.Delete(NGN);
 
 
-
             /***
              * TESTING NUMBER PLAN DATA MAPPER
              */
-            NumberingPlan numPlan = new NumberingPlan()
+            var numPlan = new NumberingPlan
             {
                 City = "Xin Che Bang",
                 CountryName = "ChinaYaNa",
@@ -376,11 +350,10 @@ namespace LyncBillingTesting
             status = _STORAGE.NumberingPlans.Delete(numPlan);
 
 
-
             /***
              * TESTING MONITORING SERVERS INFO DATA MAPPER
              */
-            MonitoringServerInfo monServer = new MonitoringServerInfo()
+            var monServer = new MonitoringServerInfo
             {
                 CreatedAt = DateTime.Now,
                 DatabaseName = "asdasdasd",
@@ -402,11 +375,10 @@ namespace LyncBillingTesting
             status = _STORAGE.MonitoringServers.Delete(monServer);
 
 
-
             /***
              * TESTING MAIL TAMPLEATES DATA MAPPER
              */
-            MailTemplate newTemplate = new MailTemplate()
+            var newTemplate = new MailTemplate
             {
                 TemplateBody = "SAMPLE",
                 Subject = "SAMPLE"
@@ -421,11 +393,10 @@ namespace LyncBillingTesting
             status = _STORAGE.MailTemplates.Delete(newTemplate);
 
 
-
             /***
              * TESTING GATEWAYS RATES DATA MAPPER
              */
-            GatewayRate gatewayRateInfo = new GatewayRate()
+            var gatewayRateInfo = new GatewayRate
             {
                 CurrencyCode = "EUR",
                 StartingDate = DateTime.Now,
@@ -446,18 +417,17 @@ namespace LyncBillingTesting
             status = _STORAGE.GatewaysRates.Delete(gatewayRateInfo);
 
 
-
             /***
              * TESTING GATEWAYS INFO DATA MAPPER
              */
-            Gateway sampleGateway = new Gateway()
+            var sampleGateway = new Gateway
             {
                 Name = "SAMPLE GATEWAY"
             };
 
             sampleGateway.ID = _STORAGE.Gateways.Insert(sampleGateway);
 
-            GatewayInfo newGatewayInfo = new GatewayInfo()
+            var newGatewayInfo = new GatewayInfo
             {
                 Description = "New Info for Gateway",
                 GatewayID = sampleGateway.ID,
@@ -476,11 +446,10 @@ namespace LyncBillingTesting
             status = _STORAGE.Gateways.Delete(sampleGateway);
 
 
-
             /***
              * TESTING GATEWAYS DATA MAPPER
              */
-            Gateway newGateway = new Gateway()
+            var newGateway = new Gateway
             {
                 Name = "Sameer"
             };
@@ -493,11 +462,10 @@ namespace LyncBillingTesting
             status = _STORAGE.Gateways.Delete(newGateway);
 
 
-
             /***
              * TESTING DIDs DATA MAPPER
              */
-            DID newDID = new DID()
+            var newDID = new DID
             {
                 Description = "SAMPLE DID",
                 Regex = "SAMPLE REGEX",
@@ -514,11 +482,10 @@ namespace LyncBillingTesting
             status = _STORAGE.DIDs.Delete(newDID);
 
 
-
             /***
              * TESTING DEPARTMENTS
              */
-            Department department = new Department()
+            var department = new Department
             {
                 Name = "SUMURMUR",
                 Description = "Sumurmur Department"
@@ -538,8 +505,8 @@ namespace LyncBillingTesting
              * TESTING DEPARTMENT HEAD ROLES
              */
             var MOA = _STORAGE.Sites.GetById(29);
-            var MOA_ISD = _STORAGE.SitesDepartments.GetBySiteID(29).ToList<SiteDepartment>().Find(item => item.Department.Name == "ISD");
-            DepartmentHeadRole depHead = new DepartmentHeadRole()
+            var MOA_ISD = _STORAGE.SitesDepartments.GetBySiteID(29).ToList().Find(item => item.Department.Name == "ISD");
+            var depHead = new DepartmentHeadRole
             {
                 SipAccount = "aalhour@ccc.gr",
                 SiteDepartmentID = MOA_ISD.ID
@@ -555,28 +522,27 @@ namespace LyncBillingTesting
             status = _STORAGE.DepartmentHeads.Delete(depHead);
 
 
-
             /***
              * TESTING DELEGATE ROLES DATA MAPPER
              */
             MOA = _STORAGE.Sites.GetById(29);
-            MOA_ISD = _STORAGE.SitesDepartments.GetBySiteID(29).ToList<SiteDepartment>().Find(item => item.Department.Name == "ISD");
+            MOA_ISD = _STORAGE.SitesDepartments.GetBySiteID(29).ToList().Find(item => item.Department.Name == "ISD");
 
-            DelegateRole userDelegate = new DelegateRole()
+            var userDelegate = new DelegateRole
             {
                 DelegationType = 3,
                 DelegeeSipAccount = "aalhour@ccc.gr",
                 ManagedUserSipAccount = "ghassan@ccc.gr"
             };
 
-            DelegateRole departmentDelegate = new DelegateRole()
+            var departmentDelegate = new DelegateRole
             {
                 DelegationType = 2,
                 DelegeeSipAccount = "aalhour@ccc.gr",
                 ManagedSiteDepartmentID = MOA_ISD.ID
             };
 
-            DelegateRole siteDelegate = new DelegateRole()
+            var siteDelegate = new DelegateRole
             {
                 DelegationType = 1,
                 DelegeeSipAccount = "aalhour@ccc.gr",
@@ -604,11 +570,10 @@ namespace LyncBillingTesting
             status = _STORAGE.DelegateRoles.Delete(siteDelegate);
 
 
-
             /***
              * TESTING Currencies DATA MAPPER
              */
-            Currency newCurrency = new Currency()
+            var newCurrency = new Currency
             {
                 ISO3Code = "ZVZ",
                 Name = "ZeeVeeZee"
@@ -619,12 +584,11 @@ namespace LyncBillingTesting
             status = _STORAGE.Currencies.Delete(newCurrency);
 
 
-
             /***
              * TESTING COUNTRIES DATA MAPPER
              */
             var EURO = _STORAGE.Currencies.GetByISO3Code("EUR");
-            Country newCountry = new Country()
+            var newCountry = new Country
             {
                 CurrencyID = EURO.ID,
                 ISO2Code = "ZZ",
@@ -639,11 +603,10 @@ namespace LyncBillingTesting
             status = _STORAGE.Countries.Delete(newCountry);
 
 
-
             /***
              * TESTING CALL TYPES DATA MAPPER
              */
-            CallType newCallType = new CallType()
+            var newCallType = new CallType
             {
                 Description = "Testing call types data mapper.",
                 Name = "TEST-CALL-TYPE",
@@ -651,7 +614,7 @@ namespace LyncBillingTesting
             };
 
             newCallType.ID = _STORAGE.CallTypes.Insert(newCallType);
-            
+
             newCallType.Description = newCallType.Description.ToUpper();
             newCallType.Name = (newCallType.Name + "-02").ToUpper();
 
@@ -659,11 +622,10 @@ namespace LyncBillingTesting
             status = _STORAGE.CallTypes.Delete(newCallType);
 
 
-
             /***
              * TESTING CALL MARKER STATUS DATA MAPPER
              */
-            CallMarkerStatus newMarkerStatus = new CallMarkerStatus()
+            var newMarkerStatus = new CallMarkerStatus
             {
                 PhoneCallsTable = "PhoneCalls2015",
                 Timestamp = DateTime.Now,
@@ -671,25 +633,24 @@ namespace LyncBillingTesting
             };
 
             newMarkerStatus.ID = _STORAGE.CallMarkers.Insert(newMarkerStatus);
-            
+
             newMarkerStatus.Type = GLOBALS.CallMarkerStatus.Type.ApplyingRates.Value();
             newMarkerStatus.Timestamp = DateTime.Now;
-            
+
             status = _STORAGE.CallMarkers.Update(newMarkerStatus);
             status = _STORAGE.CallMarkers.Delete(newMarkerStatus);
-
 
 
             /***
              * TESTING BUNDLED ACCOUNTS
              */
-            BundledAccount bundled1 = new BundledAccount()
+            var bundled1 = new BundledAccount
             {
                 PrimarySipAccount = "aalhour@ccc.gr",
                 AssociatedSipAccount = "sghaida@ccc.gr"
             };
 
-            BundledAccount bundled2 = new BundledAccount()
+            var bundled2 = new BundledAccount
             {
                 PrimarySipAccount = "aalhour@ccc.gr",
                 AssociatedSipAccount = "ghassan@ccc.gr"
@@ -697,22 +658,21 @@ namespace LyncBillingTesting
 
             bundled1.ID = _STORAGE.BundledAccounts.Insert(bundled1);
             bundled2.ID = _STORAGE.BundledAccounts.Insert(bundled2);
-            
+
             var allBundled = _STORAGE.BundledAccounts.GetAll();
             var aalhourBundled = _STORAGE.BundledAccounts.GetAssociatedSipAccounts("aalhour@ccc.gr");
 
             bundled2.AssociatedSipAccount = "nafez@ccc.gr";
-            
+
             status = _STORAGE.BundledAccounts.Update(bundled2);
             status = _STORAGE.BundledAccounts.Delete(bundled1);
             status = _STORAGE.BundledAccounts.Delete(bundled2);
 
 
-
             /***
              * TESTING ANNOUNCEMENTS 
              */
-            Announcement ann = new Announcement
+            var ann = new Announcement
             {
                 ForRole = 10,
                 ForSite = 29,
@@ -723,15 +683,11 @@ namespace LyncBillingTesting
             ann.ID = _STORAGE.Announcements.Insert(ann);
 
             ann = _STORAGE.Announcements.GetById(ann.ID);
-            
+
             ann.AnnouncementBody = "Hello Developer. Things have changed.";
-            
+
             status = _STORAGE.Announcements.Update(ann);
             status = _STORAGE.Announcements.Delete(ann);
-
-         
         }
-
     }
-
 }
