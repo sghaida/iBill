@@ -1074,7 +1074,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <param name="SQL"></param>
         /// <returns></returns>
-        public int INSERT(string SQL)
+        public int Insert( string SQL )
         {
             var conn = DBInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(SQL, conn);
@@ -1105,7 +1105,7 @@ namespace CCC.ORM.DataAccess
         /// <param name="tableName">DB Table Name</param>
         /// <param name="columnsValues">Dictionary Holds Fields and Values to be inserted</param>
         /// <returns>Row ID </returns>
-        public int INSERT(string tableName, Dictionary<string, object> columnsValues)
+        public int Insert( string tableName , Dictionary<string , object> columnsValues )
         {
             var fields = new StringBuilder();
             fields.Append("(");
@@ -1188,7 +1188,7 @@ namespace CCC.ORM.DataAccess
         /// <param name="tableName">DB Table Name</param>
         /// <param name="columnsValues">Dictionary Holds Fields and Values to be inserted</param>
         /// <returns>Row ID </returns>
-        public int INSERT(string tableName, Dictionary<string, object> columnsValues, string idFieldName)
+        public int Insert(string tableName, Dictionary<string, object> columnsValues, string idFieldName)
         {
             var fields = new StringBuilder();
             fields.Append("(");
@@ -1252,7 +1252,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <param name="SQL"></param>
         /// <returns></returns>
-        public bool UPDATE(string SQL)
+        public bool Update( string SQL )
         {
             var conn = DBInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(SQL, conn);
@@ -1283,7 +1283,7 @@ namespace CCC.ORM.DataAccess
         /// <param name="idFieldName">ID Field name </param>
         /// <param name="ID">ID Value</param>
         /// <returns>Row ID</returns>
-        public bool UPDATE(string tableName, Dictionary<string, object> columnsValues, string idFieldName, Int64 ID)
+        public bool Update( string tableName , Dictionary<string , object> columnsValues , string idFieldName , Int64 ID )
         {
             var fieldsValues = new StringBuilder();
 
@@ -1332,7 +1332,7 @@ namespace CCC.ORM.DataAccess
         /// <param name="columnsValues">Dictionary Holds Fields and Values to be inserted</param>
         /// <param name="wherePart">Dictionary Holds Fields and Values to be able to construct Where Statemnet</param>
         /// <returns></returns>
-        public bool UPDATE(string tableName, Dictionary<string, object> columnsValues,
+        public bool Update( string tableName , Dictionary<string , object> columnsValues ,
             Dictionary<string, object> wherePart)
         {
             var fieldsValues = new StringBuilder();
@@ -1422,7 +1422,7 @@ namespace CCC.ORM.DataAccess
         /// <param name="idFieldName">ID Field name </param>
         /// <param name="ID">ID Value</param>
         /// <returns>Row ID</returns>
-        public bool UPDATE(string tableName, Dictionary<string, object> columnsValues, string idFieldName, Int64 ID,
+        public bool Update( string tableName , Dictionary<string , object> columnsValues , string idFieldName , Int64 ID ,
             ref OleDbConnection conn)
         {
             var fieldsValues = new StringBuilder();
@@ -1468,7 +1468,7 @@ namespace CCC.ORM.DataAccess
         /// <param name="columnsValues">Dictionary Holds Fields and Values to be inserted</param>
         /// <param name="wherePart">Dictionary Holds Fields and Values to be able to construct Where Statemnet</param>
         /// <returns></returns>
-        public bool UPDATE(string tableName, Dictionary<string, object> columnsValues,
+        public bool Update( string tableName , Dictionary<string , object> columnsValues ,
             Dictionary<string, object> wherePart, ref OleDbConnection conn)
         {
             var updateQuery = string.Empty;
@@ -1538,7 +1538,7 @@ namespace CCC.ORM.DataAccess
         /// <param name="columnsValues">Dictionary Holds Fields and Values to be inserted</param>
         /// <param name="wherePart">Dictionary Holds Fields and Values to be able to construct Where Statemnet</param>
         /// <returns></returns>
-        public bool UPDATE(string tableName, Dictionary<string, object> columnsValues, ref OleDbConnection conn)
+        public bool Update(string tableName, Dictionary<string, object> columnsValues, ref OleDbConnection conn)
         {
             var fieldsValues = new StringBuilder();
             var whereStatement = new StringBuilder();
@@ -1587,7 +1587,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <param name="SQL"></param>
         /// <returns></returns>
-        public bool DELETE(string SQL)
+        public bool Delete(string SQL)
         {
             var conn = DBInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(SQL, conn);
@@ -1616,7 +1616,7 @@ namespace CCC.ORM.DataAccess
         /// <param name="idFieldName">ID Field Name</param>
         /// <param name="ID">ID Field Value</param>
         /// <returns>True if Row has been deleted. </returns>
-        public bool DELETE(string tableName, string idFieldName, int ID)
+        public bool Delete(string tableName, string idFieldName, int ID)
         {
             var deleteQuery = string.Format("DELETE FROM [{0}] WHERE [{1}]={2}", tableName, idFieldName, ID);
 
@@ -1647,7 +1647,7 @@ namespace CCC.ORM.DataAccess
         /// <param name="idFieldName">ID Field Name</param>
         /// <param name="ID">ID Field Value</param>
         /// <returns>True if Row has been deleted. </returns>
-        public bool DELETE(string tableName, string idFieldName, long ID)
+        public bool Delete(string tableName, string idFieldName, long ID)
         {
             var deleteQuery = string.Format("DELETE FROM [{0}] WHERE [{1}]={2}", tableName, idFieldName, ID);
 
@@ -1677,7 +1677,7 @@ namespace CCC.ORM.DataAccess
         /// <param name="tableName">DB Table Name</param>
         /// <param name="wherePart">Dictionary Holds Fields and Values to be able to construct Where Statemnet</param>
         /// <returns>True if Row has been deleted.</returns>
-        public bool DELETE(string tableName, Dictionary<string, object> wherePart)
+        public bool Delete(string tableName, Dictionary<string, object> wherePart)
         {
             var whereStatement = new StringBuilder();
 
@@ -1756,7 +1756,7 @@ namespace CCC.ORM.DataAccess
             }
         }
 
-        public bool CREATE(string tableName, Dictionary<string, string> columns)
+        public bool Create(string tableName, Dictionary<string, string> columns)
         {
             var createTableQuery = new StringBuilder();
             createTableQuery.Append("CREATE TABLE ");
@@ -1794,7 +1794,7 @@ namespace CCC.ORM.DataAccess
             }
         }
 
-        public OleDbDataReader EXECUTEREADER(string sqlStatment, OleDbConnection connection)
+        public OleDbDataReader Executereader( string sqlStatment , OleDbConnection connection )
         {
             OleDbCommand command;
 

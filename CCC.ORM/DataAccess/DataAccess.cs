@@ -164,7 +164,7 @@ namespace CCC.ORM.DataAccess
 
                 try
                 {
-                    rowID = DBRoutines.INSERT(finalDataSourceName, columnsValues, Schema.IdFieldName);
+                    rowID = DBRoutines.Insert(finalDataSourceName, columnsValues, Schema.IdFieldName);
                 }
                 catch (Exception ex)
                 {
@@ -319,7 +319,7 @@ namespace CCC.ORM.DataAccess
                             "Update Error: Cannot update data object unless there is at least one WHERE CONDITION. Please revise the update procedures on " +
                             dataObject.GetType().Name);
                     }
-                    status = DBRoutines.UPDATE(finalDataSourceName, columnsValues, whereConditions);
+                    status = DBRoutines.Update(finalDataSourceName, columnsValues, whereConditions);
                 }
                 catch (Exception ex)
                 {
@@ -386,7 +386,7 @@ namespace CCC.ORM.DataAccess
 
             whereConditions.Add(IDField.TableField.ColumnName,
                 Convert.ChangeType(dataObjectAttrValue, IDField.TableField.FieldType));
-            return DBRoutines.DELETE(finalDataSourceName, whereConditions);
+            return DBRoutines.Delete(finalDataSourceName, whereConditions);
         }
 
         public virtual T GetById(long id, string dataSourceName = null,
@@ -580,21 +580,21 @@ namespace CCC.ORM.DataAccess
 
         public virtual int Insert(string sql)
         {
-            var id = DBRoutines.INSERT(sql);
+            var id = DBRoutines.Insert(sql);
 
             return id;
         }
 
         public virtual bool Update(string sql)
         {
-            var status = DBRoutines.UPDATE(sql);
+            var status = DBRoutines.Update(sql);
 
             return status;
         }
 
         public virtual bool Delete(string sql)
         {
-            var status = DBRoutines.DELETE(sql);
+            var status = DBRoutines.Delete(sql);
 
             return status;
         }
