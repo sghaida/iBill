@@ -7,9 +7,9 @@ namespace CCC.ORM.DataAttributes
     ///     to be changed and inserted into the corresponding database table.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class AllowIDInsertAttribute : Attribute
+    public class AllowIdInsertAttribute : Attribute
     {
-        public AllowIDInsertAttribute(bool status = true)
+        public AllowIdInsertAttribute(bool status = true)
         {
             Status = status;
         }

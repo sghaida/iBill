@@ -16,8 +16,8 @@ namespace CCC.ORM.DataAccess
         {
             try
             {
-                tryReadDataSourceAttributeValue();
-                tryReadClassDataFields();
+                TryReadDataSourceAttributeValue();
+                TryReadClassDataFields();
             }
             catch (Exception ex)
             {
@@ -26,9 +26,9 @@ namespace CCC.ORM.DataAccess
         }
 
         public string DataSourceName { get; set; }
-        public GLOBALS.DataSource.Type DataSourceType { set; get; }
-        public GLOBALS.DataSource.AccessMethod DataSourceAccessMethod { get; set; }
-        public string IDFieldName { set; get; }
+        public Globals.DataSource.Type DataSourceType { set; get; }
+        public Globals.DataSource.AccessMethod DataSourceAccessMethod { get; set; }
+        public string IdFieldName { set; get; }
         public List<DataField> DataFields { get; set; }
         /***
         * Private functions.
@@ -38,25 +38,25 @@ namespace CCC.ORM.DataAccess
         ///     Tries to read the TableName attribute value if it exists; if it doesn't it throws and exception
         /// </summary>
         /// <returns>TableName attribute value (string), if exists.</returns>
-        private void tryReadDataSourceAttributeValue()
+        private void TryReadDataSourceAttributeValue()
         {
             //Get the table name attribute
             var dataSourceAtt = typeof (T).GetCustomAttributes(typeof (DataSourceAttribute));
 
             // This mean that the Class is unstructured Class and it could be related to table/function or procedure or not.
-            if (dataSourceAtt.Count() > 0)
+            var sourceAtt = dataSourceAtt as IList<Attribute> ?? dataSourceAtt.ToList();
+            if (!sourceAtt.Any()) return;
+            
+            var dsAttr = ((DataSourceAttribute) sourceAtt.First());
+
+            if (dsAttr != null)
             {
-                var dsAttr = ((DataSourceAttribute) dataSourceAtt.First());
+                DataSourceType = dsAttr.Type;
+                DataSourceAccessMethod = dsAttr.AccessMethod;
 
-                if (dsAttr != null)
+                if (false == string.IsNullOrEmpty(dsAttr.Name))
                 {
-                    DataSourceType = dsAttr.Type;
-                    DataSourceAccessMethod = dsAttr.AccessMethod;
-
-                    if (false == string.IsNullOrEmpty(dsAttr.Name))
-                    {
-                        DataSourceName = dsAttr.Name;
-                    }
+                    DataSourceName = dsAttr.Name;
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace CCC.ORM.DataAccess
         ///     otherwise, it assigns the default values.
         ///     Write the results to the inner List of DataFields
         /// </summary>
-        private void tryReadClassDataFields()
+        private void TryReadClassDataFields()
         {
             DataFields = new List<DataField>();
 
@@ -84,42 +84,42 @@ namespace CCC.ORM.DataAccess
             var allClassFields = tableFields.Concat(relationFields).ToList();
 
             //If no exception was thrown, proceed to processing the class fields
-            foreach (var field in allClassFields)
+            foreach (var propertyInfo in allClassFields)
             {
                 var newDataField = new DataField();
 
-                newDataField.Name = field.Name;
+                newDataField.Name = propertyInfo.Name;
 
-                if (field.GetCustomAttribute<DbColumnAttribute>() != null)
+                if (propertyInfo.GetCustomAttribute<DbColumnAttribute>() != null)
                 {
-                    var dbColumnAttr = field.GetCustomAttribute<DbColumnAttribute>();
-                    var isIDFieldAttr = field.GetCustomAttribute<IsIDFieldAttribute>();
-                    var allowNullAttr = field.GetCustomAttribute<AllowNullAttribute>();
-                    var allowIDInsertAttr = field.GetCustomAttribute<AllowIDInsertAttribute>();
-                    var isKeyAttr = field.GetCustomAttribute<IsForeignKeyAttribute>();
-                    var excludeAttr = field.GetCustomAttribute<ExcludeAttribute>();
+                    var dbColumnAttr = propertyInfo.GetCustomAttribute<DbColumnAttribute>();
+                    var isIdFieldAttr = propertyInfo.GetCustomAttribute<IsIdFieldAttribute>();
+                    var allowNullAttr = propertyInfo.GetCustomAttribute<AllowNullAttribute>();
+                    var allowIdInsertAttr = propertyInfo.GetCustomAttribute<AllowIdInsertAttribute>();
+                    var isKeyAttr = propertyInfo.GetCustomAttribute<IsForeignKeyAttribute>();
+                    var excludeAttr = propertyInfo.GetCustomAttribute<ExcludeAttribute>();
 
                     newDataField.TableField = new DbTableField
                     {
                         ColumnName = dbColumnAttr.Name,
-                        IsIDField = isIDFieldAttr != null ? isIDFieldAttr.Status : false,
-                        AllowNull = allowNullAttr != null ? allowNullAttr.Status : false,
-                        AllowIDInsert = allowIDInsertAttr != null ? allowIDInsertAttr.Status : false,
-                        IsKey = isKeyAttr != null ? isKeyAttr.Status : false,
-                        ExcludeOnSelect = excludeAttr != null ? excludeAttr.OnSelect : false,
-                        ExcludeOnInsert = excludeAttr != null ? excludeAttr.OnInsert : false,
-                        ExcludeOnUpdate = excludeAttr != null ? excludeAttr.OnUpdate : false,
-                        FieldType = field.PropertyType
+                        IsIdField = isIdFieldAttr != null && isIdFieldAttr.Status,
+                        AllowNull = allowNullAttr != null && allowNullAttr.Status,
+                        AllowIdInsert = allowIdInsertAttr != null && allowIdInsertAttr.Status,
+                        IsKey = isKeyAttr != null && isKeyAttr.Status,
+                        ExcludeOnSelect = excludeAttr != null && excludeAttr.OnSelect,
+                        ExcludeOnInsert = excludeAttr != null && excludeAttr.OnInsert,
+                        ExcludeOnUpdate = excludeAttr != null && excludeAttr.OnUpdate,
+                        FieldType = propertyInfo.PropertyType
                     };
                 }
 
-                if (field.GetCustomAttribute<DataRelationAttribute>() != null)
+                if (propertyInfo.GetCustomAttribute<DataRelationAttribute>() != null)
                 {
-                    var dataRelationAttribute = field.GetCustomAttribute<DataRelationAttribute>();
+                    var dataRelationAttribute = propertyInfo.GetCustomAttribute<DataRelationAttribute>();
 
                     newDataField.Relation = new DbRelation
                     {
-                        DataField = field.Name,
+                        DataField = propertyInfo.Name,
                         RelationName = dataRelationAttribute.Name,
                         WithDataModel = dataRelationAttribute.WithDataModel,
                         OnDataModelKey = dataRelationAttribute.OnDataModelKey,
@@ -132,14 +132,13 @@ namespace CCC.ORM.DataAccess
             }
 
             //Set the IDFieldName variable to the DbColumn name of the ID.
-            if (DataFields.Count > 0)
-            {
-                var field = DataFields.Find(item => item.TableField != null && item.TableField.IsIDField);
+            if (DataFields.Count <= 0) return;
 
-                if (field != null)
-                {
-                    IDFieldName = field.TableField.ColumnName;
-                }
+            var field = DataFields.Find(item => item.TableField != null && item.TableField.IsIdField);
+
+            if (field != null)
+            {
+                IdFieldName = field.TableField.ColumnName;
             }
         }
 
@@ -153,19 +152,19 @@ namespace CCC.ORM.DataAccess
             return DataSourceName;
         }
 
-        public GLOBALS.DataSource.Type GetDataSourceType()
+        public Globals.DataSource.Type GetDataSourceType()
         {
             return DataSourceType;
         }
 
-        public GLOBALS.DataSource.AccessMethod GetDataSourceAccessMethod()
+        public Globals.DataSource.AccessMethod GetDataSourceAccessMethod()
         {
             return DataSourceAccessMethod;
         }
 
-        public string GetIDFieldName()
+        public string GetIdFieldName()
         {
-            return IDFieldName;
+            return IdFieldName;
         }
 
         public List<DataField> GetDataFields()

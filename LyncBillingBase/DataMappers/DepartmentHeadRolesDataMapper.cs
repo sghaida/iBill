@@ -14,13 +14,13 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a User's SipAccount, return whether this User has the role of a Department Head.
         /// </summary>
-        /// <param name="UserSipAccount">User.SipAccount (string).</param>
+        /// <param name="userSipAccount">User.SipAccount (string).</param>
         /// <returns>boolean.</returns>
-        public bool IsDepartmentHead(string UserSipAccount)
+        public bool IsDepartmentHead(string userSipAccount)
         {
             List<DepartmentHeadRole> roles = null;
             var condition = new Dictionary<string, object>();
-            condition.Add("SipAccount", UserSipAccount);
+            condition.Add("SipAccount", userSipAccount);
 
             try
             {
@@ -41,12 +41,12 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Site-Deparment's ID, return all the associated Department-Head User Roles.
         /// </summary>
-        /// <param name="SiteDepartmentID">SiteDepartment.ID (int).</param>
+        /// <param name="siteDepartmentId">SiteDepartment.ID (int).</param>
         /// <returns>List of DepartmentHeadRole objects.</returns>
-        public List<DepartmentHeadRole> GetBySiteDepartmentID(int SiteDepartmentID)
+        public List<DepartmentHeadRole> GetBySiteDepartmentId(int siteDepartmentId)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("SiteDepartmentID", SiteDepartmentID);
+            condition.Add("SiteDepartmentID", siteDepartmentId);
 
             try
             {
@@ -59,7 +59,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override DepartmentHeadRole GetById(long id, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             DepartmentHeadRole role = null;
 
@@ -83,7 +83,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<DepartmentHeadRole> Get(Dictionary<string, object> whereConditions, int limit = 25,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             IEnumerable<DepartmentHeadRole> roles = null;
 
@@ -105,7 +105,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<DepartmentHeadRole> Get(Expression<Func<DepartmentHeadRole, bool>> predicate,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             IEnumerable<DepartmentHeadRole> roles = null;
 
@@ -127,7 +127,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<DepartmentHeadRole> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSource = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             IEnumerable<DepartmentHeadRole> roles = null;
 
@@ -148,13 +148,13 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<DepartmentHeadRole> GetAll(string sql)
+        public override IEnumerable<DepartmentHeadRole> GetAll(string sqlQuery)
         {
             IEnumerable<DepartmentHeadRole> roles = null;
 
             try
             {
-                roles = base.GetAll(sql);
+                roles = base.GetAll(sqlQuery);
 
                 if (roles != null && roles.Count() > 0)
                 {

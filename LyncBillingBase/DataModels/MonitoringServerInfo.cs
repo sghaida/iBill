@@ -5,13 +5,13 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "MonitoringServersInfo", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "MonitoringServersInfo", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class MonitoringServerInfo : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("id")]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [DbColumn("instanceHostName")]
         public string InstanceHostName { get; set; }

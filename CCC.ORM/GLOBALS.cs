@@ -2,7 +2,7 @@
 
 namespace CCC.ORM
 {
-    public static class GLOBALS
+    public static class Globals
     {
         public enum ActualRates
         {

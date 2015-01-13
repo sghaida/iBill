@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LyncBillingBase.Conf
 {
-    public class PDFReportPropertiesElement : ConfigurationElement
+    public class PdfReportPropertiesElement : ConfigurationElement
     {
         [ConfigurationProperty("reportName", IsKey = true, IsRequired = true)]
         private string reportName
@@ -49,21 +49,21 @@ namespace LyncBillingBase.Conf
     }
 
 
-    public class PDFReportsPropertiesCollection : ConfigurationElementCollection
+    public class PdfReportsPropertiesCollection : ConfigurationElementCollection
     {
         protected override ConfigurationElement CreateNewElement()
         {
-            return new PDFReportPropertiesElement();
+            return new PdfReportPropertiesElement();
         }
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((PDFReportPropertiesElement) element).ReportName();
+            return ((PdfReportPropertiesElement) element).ReportName();
         }
     }
 
 
-    public class PDFReportsPropertiesSection : ConfigurationSection
+    public class PdfReportsPropertiesSection : ConfigurationSection
     {
         //The section name
         public static string ConfigurationSectionName
@@ -72,18 +72,18 @@ namespace LyncBillingBase.Conf
         }
 
         [ConfigurationProperty("PDFReportsProperties")]
-        public PDFReportsPropertiesCollection PDFReportsProperties
+        public PdfReportsPropertiesCollection PdfReportsProperties
         {
-            get { return (PDFReportsPropertiesCollection) this["PDFReportsProperties"]; }
+            get { return (PdfReportsPropertiesCollection) this["PDFReportsProperties"]; }
         }
 
-        public List<PDFReportPropertiesElement> PDFReportsPropertiesList
+        public List<PdfReportPropertiesElement> PdfReportsPropertiesList
         {
             get
             {
-                var reportsProperties = new List<PDFReportPropertiesElement>();
+                var reportsProperties = new List<PdfReportPropertiesElement>();
 
-                foreach (PDFReportPropertiesElement element in PDFReportsProperties)
+                foreach (PdfReportPropertiesElement element in PdfReportsProperties)
                 {
                     reportsProperties.Add(element);
                 }
@@ -92,14 +92,14 @@ namespace LyncBillingBase.Conf
             }
         }
 
-        public Dictionary<string, Dictionary<string, object>> PDFReportsPropertiesMap
+        public Dictionary<string, Dictionary<string, object>> PdfReportsPropertiesMap
         {
             get
             {
                 Dictionary<string, object> report;
                 var reportsProperties = new Dictionary<string, Dictionary<string, object>>();
 
-                foreach (PDFReportPropertiesElement element in PDFReportsProperties)
+                foreach (PdfReportPropertiesElement element in PdfReportsProperties)
                 {
                     report = new Dictionary<string, object>();
                     report.Add("columnsNames", element.ColumnsNames());
@@ -112,10 +112,10 @@ namespace LyncBillingBase.Conf
             }
         }
 
-        public PDFReportPropertiesElement GetReportProperties(string reportName)
+        public PdfReportPropertiesElement GetReportProperties(string reportName)
         {
             //Return the report if found, otherwise null
-            return PDFReportsPropertiesList.SingleOrDefault(report => report.ReportName() == reportName);
+            return PdfReportsPropertiesList.SingleOrDefault(report => report.ReportName() == reportName);
         }
     }
 }

@@ -4,13 +4,13 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "DIDs", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
-    public class DID : DataModel
+    [DataSource(Name = "DIDs", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
+    public class Did : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("ID")]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [DbColumn("Regex")]
         public string Regex { get; set; }
@@ -21,7 +21,7 @@ namespace LyncBillingBase.DataModels
 
         [AllowNull]
         [DbColumn("SiteID")]
-        public int SiteID { get; set; }
+        public int SiteId { get; set; }
 
         //
         // Relations

@@ -4,16 +4,16 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "GatewaysRates", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
-    public class Rates_International : DataModel
+    [DataSource(Name = "GatewaysRates", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.DistributedSource)]
+    public class RatesInternational : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("ISO3CountryCode")]
-        public string ISO3CountryCode { get; set; }
+        public string Iso3CountryCode { get; set; }
 
         [DbColumn("ISO2CountryCode")]
-        public string ISO2CountryCode { get; set; }
+        public string Iso2CountryCode { get; set; }
 
         [DbColumn("CountryName")]
         public string CountryName { get; set; }

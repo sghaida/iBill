@@ -11,9 +11,9 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Site's ID, return all the Users that belong to that Site.
         /// </summary>
-        /// <param name="SiteID">Site.ID (int)</param>
+        /// <param name="siteId">Site.ID (int)</param>
         /// <returns>List of User objects. Users that belong to that Site.</returns>
-        public List<User> GetBySiteID(int SiteID)
+        public List<User> GetBySiteId(int siteId)
         {
             throw new NotImplementedException();
         }
@@ -42,17 +42,17 @@ namespace LyncBillingBase.DataMappers
         ///     Given a search term (string), return all the Users whose SipAccount and/or DisplayName match that term or part of
         ///     it.
         /// </summary>
-        /// <param name="SearchTerm">SearchTerm (string)</param>
+        /// <param name="searchTerm">SearchTerm (string)</param>
         /// <returns>List of User objects. Users that matched the search term.</returns>
-        public List<User> GetBySearchTerm(string SearchTerm)
+        public List<User> GetBySearchTerm(string searchTerm)
         {
             var users = new List<User>();
 
             var sipAccountCondition = new Dictionary<string, object>();
-            sipAccountCondition.Add("SipAccount", String.Format("like '%{0}%'", SearchTerm));
+            sipAccountCondition.Add("SipAccount", String.Format("like '%{0}%'", searchTerm));
 
             var displayNameCondition = new Dictionary<string, object>();
-            displayNameCondition.Add("AD_DisplayName", String.Format("like '%{0}%'", SearchTerm));
+            displayNameCondition.Add("AD_DisplayName", String.Format("like '%{0}%'", searchTerm));
 
             try
             {
@@ -76,14 +76,14 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Get the User with the given SipAccount.
         /// </summary>
-        /// <param name="UserSipAccount">User.SipAccount (string)</param>
+        /// <param name="userSipAccount">User.SipAccount (string)</param>
         /// <returns>A User object.</returns>
-        public User GetBySipAccount(string UserSipAccount)
+        public User GetBySipAccount(string userSipAccount)
         {
             User user = null;
 
             var condition = new Dictionary<string, object>();
-            condition.Add("SipAccount", UserSipAccount);
+            condition.Add("SipAccount", userSipAccount);
 
             try
             {
@@ -103,14 +103,14 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Get the User with the given UserID.
         /// </summary>
-        /// <param name="UserID">User.ID (int)</param>
+        /// <param name="userId">User.ID (int)</param>
         /// <returns>A User object.</returns>
-        public User GetByUserID(int UserID)
+        public User GetByUserId(int userId)
         {
             User user = null;
 
             var condition = new Dictionary<string, object>();
-            condition.Add("AD_UserID", UserID);
+            condition.Add("AD_UserID", userId);
 
             try
             {

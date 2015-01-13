@@ -10,7 +10,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class GatewaysInfoDataMapper : DataAccess<GatewayInfo>
     {
-        private static List<GatewayInfo> _GatewaysInfo = new List<GatewayInfo>();
+        private static List<GatewayInfo> _gatewaysInfo = new List<GatewayInfo>();
 
         public GatewaysInfoDataMapper()
         {
@@ -19,9 +19,9 @@ namespace LyncBillingBase.DataMappers
 
         private void LoadGatewaysInfo()
         {
-            if (_GatewaysInfo == null || _GatewaysInfo.Count == 0)
+            if (_gatewaysInfo == null || _gatewaysInfo.Count == 0)
             {
-                _GatewaysInfo = _GatewaysInfo.GetWithRelations(
+                _gatewaysInfo = _gatewaysInfo.GetWithRelations(
                     item => item.Gateway,
                     item => item.GatewayRatesInfo,
                     item => item.Site,
@@ -32,13 +32,13 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="GatewayID"></param>
+        /// <param name="gatewayId"></param>
         /// <returns></returns>
-        public List<GatewayInfo> GetByGatewayID(int GatewayID)
+        public List<GatewayInfo> GetByGatewayId(int gatewayId)
         {
             try
             {
-                return _GatewaysInfo.Where(item => item.GatewayID == GatewayID).ToList();
+                return _gatewaysInfo.Where(item => item.GatewayId == gatewayId).ToList();
             }
             catch (Exception ex)
             {
@@ -49,16 +49,16 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Site's ID, return the list of Gateways mapped to it.
         /// </summary>
-        /// <param name="SiteID">Site.ID (int)</param>
+        /// <param name="siteId">Site.ID (int)</param>
         /// <returns>List of Gateway objects.</returns>
-        public List<Gateway> GetGatewaysBySiteID(int SiteID)
+        public List<Gateway> GetGatewaysBySiteId(int siteId)
         {
             List<Gateway> gateways = null;
             List<GatewayInfo> gatewaysInfo = null;
 
             try
             {
-                gatewaysInfo = _GatewaysInfo.Where(item => item.SiteID == SiteID).ToList();
+                gatewaysInfo = _gatewaysInfo.Where(item => item.SiteId == siteId).ToList();
 
                 if (gatewaysInfo != null && gatewaysInfo.Count > 0)
                 {
@@ -76,16 +76,16 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Gateway's ID, return the list of Sites it is associated with.
         /// </summary>
-        /// <param name="GatewayID">Gateway.ID (int), GatewayInfo.GatewayID (int)</param>
+        /// <param name="gatewayId">Gateway.ID (int), GatewayInfo.GatewayID (int)</param>
         /// <returns></returns>
-        public List<Site> GetSitesByGatewayID(int GatewayID)
+        public List<Site> GetSitesByGatewayId(int gatewayId)
         {
             List<Site> sites = null;
             List<GatewayInfo> gatewaysInfo = null;
 
             try
             {
-                gatewaysInfo = _GatewaysInfo.Where(item => item.GatewayID == GatewayID).ToList();
+                gatewaysInfo = _gatewaysInfo.Where(item => item.GatewayId == gatewayId).ToList();
 
                 if (gatewaysInfo != null && gatewaysInfo.Count > 0)
                 {
@@ -101,25 +101,25 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<GatewayInfo> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            return _GatewaysInfo;
+            return _gatewaysInfo;
         }
 
         public override int Insert(GatewayInfo dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var isContained = _GatewaysInfo.Contains(dataObject);
+            var isContained = _gatewaysInfo.Contains(dataObject);
             var itExists =
-                _GatewaysInfo.Exists(item => item.GatewayID == dataObject.GatewayID && item.SiteID == dataObject.SiteID);
+                _gatewaysInfo.Exists(item => item.GatewayId == dataObject.GatewayId && item.SiteId == dataObject.SiteId);
 
             if (isContained || itExists)
             {
                 return -1;
             }
-            var rowID = base.Insert(dataObject, dataSourceName, dataSourceType);
+            var rowId = base.Insert(dataObject, dataSourceName, dataSourceType);
 
-            if (rowID > 0)
+            if (rowId > 0)
             {
                 dataObject = dataObject.GetWithRelations(
                     item => item.Gateway,
@@ -128,16 +128,16 @@ namespace LyncBillingBase.DataMappers
                     item => item.Pool);
             }
 
-            _GatewaysInfo.Add(dataObject);
+            _gatewaysInfo.Add(dataObject);
 
-            return rowID;
+            return rowId;
         }
 
         public override bool Update(GatewayInfo dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var gatewayInfo =
-                _GatewaysInfo.Find(item => item.GatewayID == dataObject.GatewayID && item.SiteID == dataObject.SiteID);
+                _gatewaysInfo.Find(item => item.GatewayId == dataObject.GatewayId && item.SiteId == dataObject.SiteId);
 
             if (gatewayInfo != null)
             {
@@ -145,7 +145,7 @@ namespace LyncBillingBase.DataMappers
 
                 if (status)
                 {
-                    _GatewaysInfo.Remove(gatewayInfo);
+                    _gatewaysInfo.Remove(gatewayInfo);
 
                     dataObject = dataObject.GetWithRelations(
                         item => item.Gateway,
@@ -153,7 +153,7 @@ namespace LyncBillingBase.DataMappers
                         item => item.Site,
                         item => item.Pool);
 
-                    _GatewaysInfo.Add(dataObject);
+                    _gatewaysInfo.Add(dataObject);
                 }
 
                 return status;
@@ -162,17 +162,17 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Delete(GatewayInfo dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var gatewayInfo =
-                _GatewaysInfo.Find(
+                _gatewaysInfo.Find(
                     item =>
-                        item.GatewayID == dataObject.GatewayID && item.SiteID == dataObject.SiteID &&
-                        item.PoolID == dataObject.PoolID);
+                        item.GatewayId == dataObject.GatewayId && item.SiteId == dataObject.SiteId &&
+                        item.PoolId == dataObject.PoolId);
 
             if (gatewayInfo != null)
             {
-                _GatewaysInfo.Remove(gatewayInfo);
+                _gatewaysInfo.Remove(gatewayInfo);
 
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }

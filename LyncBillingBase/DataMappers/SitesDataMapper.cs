@@ -8,7 +8,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class SitesDataMapper : DataAccess<Site>
     {
-        private static List<Site> _Sites = new List<Site>();
+        private static List<Site> _sites = new List<Site>();
 
         public SitesDataMapper()
         {
@@ -17,44 +17,44 @@ namespace LyncBillingBase.DataMappers
 
         public void LoadSites()
         {
-            if (_Sites == null || _Sites.Count == 0)
+            if (_sites == null || _sites.Count == 0)
             {
-                _Sites = base.GetAll().ToList();
+                _sites = base.GetAll().ToList();
             }
         }
 
         public override IEnumerable<Site> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            return _Sites;
+            return _sites;
         }
 
         public override int Insert(Site dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var isContained = _Sites.Contains(dataObject);
+            var isContained = _sites.Contains(dataObject);
             var itExists =
-                _Sites.Exists(item => item.Name == dataObject.Name && item.CountryCode == dataObject.CountryCode);
+                _sites.Exists(item => item.Name == dataObject.Name && item.CountryCode == dataObject.CountryCode);
 
             if (isContained || itExists)
             {
                 return -1;
             }
-            dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
-            _Sites.Add(dataObject);
+            dataObject.Id = base.Insert(dataObject, dataSourceName, dataSourceType);
+            _sites.Add(dataObject);
 
-            return dataObject.ID;
+            return dataObject.Id;
         }
 
         public override bool Update(Site dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var site = _Sites.Find(item => item.ID == dataObject.ID);
+            var site = _sites.Find(item => item.Id == dataObject.Id);
 
             if (site != null)
             {
-                _Sites.Remove(site);
-                _Sites.Add(dataObject);
+                _sites.Remove(site);
+                _sites.Add(dataObject);
 
                 return base.Update(dataObject, dataSourceName, dataSourceType);
             }
@@ -62,13 +62,13 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Delete(Site dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var site = _Sites.Find(item => item.ID == dataObject.ID);
+            var site = _sites.Find(item => item.Id == dataObject.Id);
 
             if (site != null)
             {
-                _Sites.Remove(site);
+                _sites.Remove(site);
 
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }

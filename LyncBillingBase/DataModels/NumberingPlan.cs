@@ -5,12 +5,12 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NumberingPlan", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "NumberingPlan", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class NumberingPlan : DataModel
     {
-        [IsIDField]
-        [AllowIDInsert]
+        [IsIdField]
+        [AllowIdInsert]
         [DbColumn("Dialing_prefix")]
         public Int64 DialingPrefix { get; set; }
 
@@ -18,10 +18,10 @@ namespace LyncBillingBase.DataModels
         public string CountryName { get; set; }
 
         [DbColumn("Two_Digits_country_code")]
-        public string ISO2CountryCode { get; set; }
+        public string Iso2CountryCode { get; set; }
 
         [DbColumn("Three_Digits_Country_Code")]
-        public string ISO3CountryCode { get; set; }
+        public string Iso3CountryCode { get; set; }
 
         [AllowNull]
         [DbColumn("City")]

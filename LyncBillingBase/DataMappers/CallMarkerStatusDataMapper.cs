@@ -9,7 +9,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class CallMarkerStatusDataMapper : DataAccess<CallMarkerStatus>
     {
-        private static List<CallMarkerStatus> _CallMarkerStatus;
+        private static List<CallMarkerStatus> _callMarkerStatus;
 
         public CallMarkerStatusDataMapper()
         {
@@ -19,12 +19,12 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a PhoneCalls Table Name, return all the CallMarkerStatus objects associated with it.
         /// </summary>
-        /// <param name="PhoneCallsTable">CallMarkerStatus.PhoneCallsTable (string)</param>
+        /// <param name="phoneCallsTable">CallMarkerStatus.PhoneCallsTable (string)</param>
         /// <returns>List of CallMarkerStatus objects</returns>
-        public List<CallMarkerStatus> GetByPhoneCallsTable(string PhoneCallsTable)
+        public List<CallMarkerStatus> GetByPhoneCallsTable(string phoneCallsTable)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("phoneCallsTable", PhoneCallsTable);
+            condition.Add("phoneCallsTable", phoneCallsTable);
 
             try
             {
@@ -39,17 +39,17 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a PhoneCalls Table Name and a Call Marker Type, return the CallMarkerStatus object associated with them.
         /// </summary>
-        /// <param name="PhoneCallsTable">CallMarkerStatus.PhoneCallsTable (string)</param>
-        /// <param name="Type">CallMarkerStatus.Type (string)</param>
+        /// <param name="phoneCallsTable">CallMarkerStatus.PhoneCallsTable (string)</param>
+        /// <param name="type">CallMarkerStatus.Type (string)</param>
         /// <returns>List of CallMarkerStatus objects</returns>
-        public CallMarkerStatus GetByPhoneCallsTableAndType(string PhoneCallsTable, string Type)
+        public CallMarkerStatus GetByPhoneCallsTableAndType(string phoneCallsTable, string type)
         {
             CallMarkerStatus markerStatus = null;
 
             try
             {
                 var results =
-                    _CallMarkerStatus.Where(item => item.PhoneCallsTable == PhoneCallsTable && item.Type == Type);
+                    _callMarkerStatus.Where(item => item.PhoneCallsTable == phoneCallsTable && item.Type == type);
 
                 if (results != null && results.Count() > 0)
                 {
@@ -81,35 +81,35 @@ namespace LyncBillingBase.DataMappers
             }
             else
             {
-                markerStatus.ID = existingMarkerStatus.ID;
+                markerStatus.Id = existingMarkerStatus.Id;
                 Update(markerStatus);
             }
         }
 
         public override IEnumerable<CallMarkerStatus> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            return _CallMarkerStatus;
+            return _callMarkerStatus;
         }
 
         public override bool Update(CallMarkerStatus dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var markerstatus = _CallMarkerStatus.FirstOrDefault(item => item.ID == dataObject.ID);
+            var markerstatus = _callMarkerStatus.FirstOrDefault(item => item.Id == dataObject.Id);
 
             if (markerstatus != null)
             {
-                _CallMarkerStatus.Remove(markerstatus);
-                _CallMarkerStatus.Add(dataObject);
+                _callMarkerStatus.Remove(markerstatus);
+                _callMarkerStatus.Add(dataObject);
                 return base.Update(dataObject, dataSourceName, dataSourceType);
             }
             return false;
         }
 
         public override int Insert(CallMarkerStatus dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var markerstatus = _CallMarkerStatus.FirstOrDefault(
+            var markerstatus = _callMarkerStatus.FirstOrDefault(
                 item =>
                     item.PhoneCallsTable == dataObject.PhoneCallsTable ||
                     item.Type == dataObject.Type ||
@@ -118,21 +118,21 @@ namespace LyncBillingBase.DataMappers
 
             if (markerstatus == null)
             {
-                var rowID = base.Insert(dataObject, dataSourceName, dataSourceType);
-                dataObject.ID = rowID;
+                var rowId = base.Insert(dataObject, dataSourceName, dataSourceType);
+                dataObject.Id = rowId;
 
-                _CallMarkerStatus.Add(dataObject);
+                _callMarkerStatus.Add(dataObject);
 
-                return rowID;
+                return rowId;
             }
             return -1;
         }
 
         public void SetData()
         {
-            if (_CallMarkerStatus == null || _CallMarkerStatus.Count() == 0)
+            if (_callMarkerStatus == null || _callMarkerStatus.Count() == 0)
             {
-                _CallMarkerStatus = base.GetAll().ToList();
+                _callMarkerStatus = base.GetAll().ToList();
             }
         }
     }

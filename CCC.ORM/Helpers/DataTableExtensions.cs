@@ -25,7 +25,7 @@ namespace CCC.ORM.Helpers
         } //end-ConvertToDateString-function
 
         [Obsolete]
-        public static List<T> ConvertToList_OLD<T>(this DataTable DataTable) where T : class, new()
+        public static List<T> ConvertToList_OLD<T>(this DataTable dataTable) where T : class, new()
         {
             var dataList = new List<T>();
 
@@ -47,7 +47,7 @@ namespace CCC.ORM.Helpers
                 .ToList();
 
             //Read Datatable column names and types
-            var dtlFieldNames = DataTable.Columns.Cast<DataColumn>()
+            var dtlFieldNames = dataTable.Columns.Cast<DataColumn>()
                 .Select(item => new
                 {
                     Name = item.ColumnName,
@@ -69,7 +69,7 @@ namespace CCC.ORM.Helpers
             //Fill The data
             //foreach (var datarow in DataTable.AsEnumerable().ToList())   
             //{
-            Parallel.ForEach(DataTable.AsEnumerable().ToList(),
+            Parallel.ForEach(dataTable.AsEnumerable().ToList(),
                 datarow =>
                 {
                     var masterObj = new T();
@@ -129,7 +129,7 @@ namespace CCC.ORM.Helpers
         }
 
         [Obsolete]
-        public static List<T> ConvertToList_OLD<T>(this DataTable DataTable, params Expression<Func<T, object>>[] path)
+        public static List<T> ConvertToList_OLD<T>(this DataTable dataTable, params Expression<Func<T, object>>[] path)
             where T : class, new()
         {
             var dataList = new List<T>();
@@ -161,7 +161,7 @@ namespace CCC.ORM.Helpers
                 .ToList();
 
             //Read Datatable column names and types
-            var dtlFieldNames = DataTable.Columns.Cast<DataColumn>()
+            var dtlFieldNames = dataTable.Columns.Cast<DataColumn>()
                 .Select(item => new
                 {
                     Name = item.ColumnName,
@@ -236,7 +236,7 @@ namespace CCC.ORM.Helpers
             //Fill The data
             //foreach (var datarow in DataTable.AsEnumerable().ToList())   
             //{
-            Parallel.ForEach(DataTable.AsEnumerable().ToList(),
+            Parallel.ForEach(dataTable.AsEnumerable().ToList(),
                 datarow =>
                 {
                     var masterObj = new T();
@@ -373,7 +373,7 @@ namespace CCC.ORM.Helpers
             return dataList;
         }
 
-        public static List<T> ConvertToList<T>(this DataTable DataTable) where T : class, new()
+        public static List<T> ConvertToList<T>(this DataTable dataTable) where T : class, new()
         {
             var dataList = new List<T>();
 
@@ -400,7 +400,7 @@ namespace CCC.ORM.Helpers
                 setters.Add(columnName, Invoker.CreateSetter<T>(propertyInfo));
             }
 
-            Parallel.ForEach(DataTable.AsEnumerable().ToList(),
+            Parallel.ForEach(dataTable.AsEnumerable().ToList(),
                 datarow =>
                 {
                     var masterObj = new T();
@@ -433,7 +433,7 @@ namespace CCC.ORM.Helpers
         /// <typeparam name="T">Class name</typeparam>
         /// <param name="dataTable">data table to convert</param>
         /// <returns>List<T></returns>
-        public static List<T> ConvertToList<T>(this DataTable DataTable, params Expression<Func<T, object>>[] path)
+        public static List<T> ConvertToList<T>(this DataTable dataTable, params Expression<Func<T, object>>[] path)
             where T : class, new()
         {
             var dataList = new List<T>();
@@ -445,8 +445,8 @@ namespace CCC.ORM.Helpers
 
             //
             // List of T object data fields (DbColumnAttribute Values), and types.
-            var SETTERS_MasterObject = new Dictionary<string, Action<T, object>>();
-            var SETTERS_ChildObjects = new Dictionary<string, Dictionary<string, Action<dynamic, object>>>();
+            var settersMasterObject = new Dictionary<string, Action<T, object>>();
+            var settersChildObjects = new Dictionary<string, Dictionary<string, Action<dynamic, object>>>();
 
             //
             // Define what attributes to be read from the class
@@ -472,11 +472,11 @@ namespace CCC.ORM.Helpers
             {
                 var propertyInfo = typeof (T).GetProperty(field.Name);
                 var columnName = field.GetCustomAttribute<DbColumnAttribute>().Name;
-                SETTERS_MasterObject.Add(columnName, Invoker.CreateSetter<T>(propertyInfo));
+                settersMasterObject.Add(columnName, Invoker.CreateSetter<T>(propertyInfo));
             }
 
             // Read Datatable column names and types
-            var dtlFieldNames = DataTable.Columns.Cast<DataColumn>()
+            var dtlFieldNames = dataTable.Columns.Cast<DataColumn>()
                 .Select(item => new
                 {
                     Name = item.ColumnName,
@@ -487,7 +487,7 @@ namespace CCC.ORM.Helpers
             // Fill The data
             //foreach (var datarow in DataTable.AsEnumerable().ToList())
             //{
-            Parallel.ForEach(DataTable.AsEnumerable().ToList(), datarow =>
+            Parallel.ForEach(dataTable.AsEnumerable().ToList(), datarow =>
             {
                 // Create and instance of the master object type
                 var masterObj = new T();
@@ -588,7 +588,7 @@ namespace CCC.ORM.Helpers
 
                 //
                 // Fill master Object with its related properties values
-                foreach (var setter in SETTERS_MasterObject)
+                foreach (var setter in settersMasterObject)
                 {
                     setter.Value(masterObj, datarow[setter.Key]);
                 }

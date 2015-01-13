@@ -5,23 +5,23 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "GatewaysRates", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
-    public class RateForNGN : DataModel
+    [DataSource(Name = "GatewaysRates", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.DistributedSource)]
+    public class RateForNgn : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("RateID")]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [DbColumn("DialingCodeID")]
-        public Int64 DialingCodeID { get; set; }
+        public Int64 DialingCodeId { get; set; }
 
         [DbColumn("Rate")]
         public decimal Rate { get; set; }
 
         //
         // Relations
-        [DataRelation(WithDataModel = typeof (NumberingPlanForNGN), OnDataModelKey = "ID", ThisKey = "DialingCodeID")]
-        public NumberingPlanForNGN NumberingPlanForNGN { get; set; }
+        [DataRelation(WithDataModel = typeof (NumberingPlanForNgn), OnDataModelKey = "ID", ThisKey = "DialingCodeID")]
+        public NumberingPlanForNgn NumberingPlanForNgn { get; set; }
     }
 }

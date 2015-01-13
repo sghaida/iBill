@@ -10,7 +10,7 @@ namespace CCC.ORM.DataAccess
 {
     public class DataAccess<T> : IDataAccess<T> where T : DataModel, new()
     {
-        private static readonly DBLib DBRoutines = new DBLib();
+        private static readonly DbLib DBRoutines = new DbLib();
 
         private static readonly List<Type> NumericTypes = new List<Type>
         {
@@ -42,13 +42,13 @@ namespace CCC.ORM.DataAccess
                 {
                     throw new NoDataSourceNameException(typeof (T).Name);
                 }
-                if (Schema.DataFields.Where(item => item.TableField != null).ToList().Count() == 0)
+                if (!Schema.DataFields.Where(item => item.TableField != null).ToList().Any())
                 {
                     throw new NoTableFieldsException(typeof (T).Name);
                 }
-                if (string.IsNullOrEmpty(Schema.IDFieldName))
+                if (string.IsNullOrEmpty(Schema.IdFieldName))
                 {
-                    throw new NoTableIDFieldException(typeof (T).Name);
+                    throw new NoTableFieldsException( typeof( T ).Name );
                 }
             }
             catch (Exception ex)
@@ -58,7 +58,7 @@ namespace CCC.ORM.DataAccess
         }
 
         public virtual int Insert(T dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var rowID = 0;
             var finalDataSourceName = string.Empty;
@@ -94,7 +94,7 @@ namespace CCC.ORM.DataAccess
                 foreach (var field in objectSchemaFields)
                 {
                     // Don't insert the ID Field in the Data Source, unless it's marked as AllowIDInsert
-                    var skipIDInsert = (field.TableField.IsIDField && field.TableField.AllowIDInsert == false);
+                    var skipIDInsert = (field.TableField.IsIdField && field.TableField.AllowIdInsert == false);
                     var skipExcludedColumn = field.TableField.ExcludeOnInsert;
 
                     if (skipIDInsert || skipExcludedColumn)
@@ -164,7 +164,7 @@ namespace CCC.ORM.DataAccess
 
                 try
                 {
-                    rowID = DBRoutines.INSERT(finalDataSourceName, columnsValues, Schema.IDFieldName);
+                    rowID = DBRoutines.INSERT(finalDataSourceName, columnsValues, Schema.IdFieldName);
                 }
                 catch (Exception ex)
                 {
@@ -176,7 +176,7 @@ namespace CCC.ORM.DataAccess
         }
 
         public virtual bool Update(T dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var status = false;
             var finalDataSourceName = string.Empty;
@@ -217,7 +217,7 @@ namespace CCC.ORM.DataAccess
                     //
                     // Don't update the ID Field in the Data Source, unless it's marked as AllowIDInsert
                     // Add the data object ID into the WHERE CONDITIONS
-                    if (field.TableField.IsIDField)
+                    if (field.TableField.IsIdField)
                     {
                         var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
 
@@ -243,7 +243,7 @@ namespace CCC.ORM.DataAccess
 
                         //
                         // DON'T CONTINUE EXECUTION IF THE ID FIELD IS NOT ALLOWED TO BE CHANGED
-                        if (false == field.TableField.AllowIDInsert)
+                        if (false == field.TableField.AllowIdInsert)
                         {
                             continue;
                         }
@@ -331,7 +331,7 @@ namespace CCC.ORM.DataAccess
         }
 
         public virtual bool Delete(T dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var finalDataSourceName = string.Empty;
             var whereConditions = new Dictionary<string, object>();
@@ -359,7 +359,7 @@ namespace CCC.ORM.DataAccess
 
             //
             // Decide the IDField value
-            IDField = Schema.DataFields.Find(field => field.TableField != null && field.TableField.IsIDField);
+            IDField = Schema.DataFields.Find(field => field.TableField != null && field.TableField.IsIdField);
 
             if (null == IDField)
             {
@@ -390,7 +390,7 @@ namespace CCC.ORM.DataAccess
         }
 
         public virtual T GetById(long id, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var dt = new DataTable();
             var finalDataSourceName = string.Empty;
@@ -421,10 +421,10 @@ namespace CCC.ORM.DataAccess
 
             //Construct the record ID condition
             condition = new Dictionary<string, object>();
-            condition.Add(Schema.IDFieldName, id);
+            condition.Add(Schema.IdFieldName, id);
 
             //Proceed with getting the data
-            if (Schema.DataSourceType == GLOBALS.DataSource.Type.DBTable)
+            if (Schema.DataSourceType == Globals.DataSource.Type.DBTable)
             {
                 //switch (IncludeDataRelations)
                 //{
@@ -451,7 +451,7 @@ namespace CCC.ORM.DataAccess
         }
 
         public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var dt = new DataTable();
 
@@ -492,7 +492,7 @@ namespace CCC.ORM.DataAccess
         }
 
         public virtual IEnumerable<T> Get(Dictionary<string, object> whereConditions, int limit = 25,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var dt = new DataTable();
             var finalDataSourceName = string.Empty;
@@ -522,7 +522,7 @@ namespace CCC.ORM.DataAccess
 
 
             //Proceed with getting the data
-            if (Schema.DataSourceType == GLOBALS.DataSource.Type.DBTable)
+            if (Schema.DataSourceType == Globals.DataSource.Type.DBTable)
             {
                 //switch (IncludeDataRelations)
                 //{
@@ -544,7 +544,7 @@ namespace CCC.ORM.DataAccess
         }
 
         public virtual IEnumerable<T> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var dt = new DataTable();
             var finalDataSourceName = string.Empty;
@@ -563,7 +563,7 @@ namespace CCC.ORM.DataAccess
             finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? Schema.DataSourceName : dataSourceName);
 
             //Proceed with getting the data
-            if (Schema.DataSourceType == GLOBALS.DataSource.Type.DBTable)
+            if (Schema.DataSourceType == Globals.DataSource.Type.DBTable)
             {
                 dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
             }

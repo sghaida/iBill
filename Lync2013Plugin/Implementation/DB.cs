@@ -9,10 +9,10 @@ using LyncBillingBase.DataModels;
 
 namespace Lync2013Plugin.Implementation
 {
-    public static class DB
+    public static class Db
     {
         //Define what attributes to be read from the class
-        private const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+        private const BindingFlags Flags = BindingFlags.Public | BindingFlags.Instance;
 
         public static Func<IDataRecord, PhoneCall> PhoneCallsSelector = record => new PhoneCall
         {
@@ -69,11 +69,11 @@ namespace Lync2013Plugin.Implementation
                 (record["DestinationUserEdgeServer"] == DBNull.Value)
                     ? string.Empty
                     : record.GetString(record.GetOrdinal("DestinationUserEdgeServer")),
-            ServerFQDN =
+            ServerFqdn =
                 (record["ServerFQDN"] == DBNull.Value)
                     ? string.Empty
                     : record.GetString(record.GetOrdinal("ServerFQDN")),
-            PoolFQDN =
+            PoolFqdn =
                 (record["PoolFQDN"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("PoolFQDN")),
             ReferredBy =
                 (record["ReferredBy"] == DBNull.Value)
@@ -81,7 +81,7 @@ namespace Lync2013Plugin.Implementation
                     : record.GetString(record.GetOrdinal("ReferredBy")),
             OnBehalf =
                 (record["OnBehalf"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("OnBehalf")),
-            CalleeURI =
+            CalleeUri =
                 (record["CalleeURI"] == DBNull.Value) ? string.Empty : record.GetString(record.GetOrdinal("CalleeURI"))
         };
 

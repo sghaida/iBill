@@ -8,29 +8,29 @@ namespace CCC.ORM.Helpers
 {
     public class RandomObjectsGenerator<T> where T : class, new()
     {
-        private static readonly Random rand = new Random();
-        private static readonly List<long> randomLongNumbersList = new List<long>();
-        private static readonly List<Int32> randomIntNumbersList = new List<Int32>();
-        private static readonly List<DateTime> randomDateTimeList = new List<DateTime>();
-        private readonly int MaxIntRandBound = Int32.MaxValue;
-        private readonly long maxLongRandBound = long.MaxValue;
-        private readonly int minIntRandBound = 1;
+        private static readonly Random Rand = new Random();
+        private static readonly List<long> RandomLongNumbersList = new List<long>();
+        private static readonly List<Int32> RandomIntNumbersList = new List<Int32>();
+        private static readonly List<DateTime> RandomDateTimeList = new List<DateTime>();
+        private readonly int _maxIntRandBound = Int32.MaxValue;
+        private readonly long _maxLongRandBound = long.MaxValue;
+        private readonly int _minIntRandBound = 1;
         // Randomization bounds 
-        private readonly int minLongRandBound = 1;
+        private readonly int _minLongRandBound = 1;
 
         private int GetIntNumber()
         {
             var buf = new byte[8];
 
-            rand.NextBytes(buf);
+            Rand.NextBytes(buf);
 
             var intRand = BitConverter.ToInt32(buf, 0);
 
-            var value = Math.Abs(intRand%(minIntRandBound - MaxIntRandBound)) + minIntRandBound;
+            var value = Math.Abs(intRand%(_minIntRandBound - _maxIntRandBound)) + _minIntRandBound;
 
-            if (!randomIntNumbersList.Contains(value))
+            if (!RandomIntNumbersList.Contains(value))
             {
-                randomIntNumbersList.Add(value);
+                RandomIntNumbersList.Add(value);
             }
             else
             {
@@ -43,14 +43,14 @@ namespace CCC.ORM.Helpers
         private long GetLongNumber()
         {
             var buf = new byte[8];
-            rand.NextBytes(buf);
+            Rand.NextBytes(buf);
             var longRand = BitConverter.ToInt64(buf, 0);
 
-            var value = Math.Abs(longRand%(minLongRandBound - maxLongRandBound)) + minLongRandBound;
+            var value = Math.Abs(longRand%(_minLongRandBound - _maxLongRandBound)) + _minLongRandBound;
 
-            if (!randomLongNumbersList.Contains(value))
+            if (!RandomLongNumbersList.Contains(value))
             {
-                randomLongNumbersList.Add(value);
+                RandomLongNumbersList.Add(value);
             }
             else
             {
@@ -62,8 +62,8 @@ namespace CCC.ORM.Helpers
 
         private decimal GetDecimal()
         {
-            var scale = (byte) rand.Next(29);
-            var sign = rand.Next(2) == 1;
+            var scale = (byte) Rand.Next(29);
+            var sign = Rand.Next(2) == 1;
             return new decimal
                 (
                 GetIntNumber(),
@@ -76,7 +76,7 @@ namespace CCC.ORM.Helpers
 
         private bool GetBool()
         {
-            var value = rand.Next(256);
+            var value = Rand.Next(256);
             return value >= 128;
         }
 
@@ -92,15 +92,15 @@ namespace CCC.ORM.Helpers
             var range = (DateTime.Today - startingDate).Days;
 
             var value = startingDate
-                .AddDays(rand.Next(range))
-                .AddHours(rand.Next(0, 24))
-                .AddMinutes(rand.Next(0, 60))
-                .AddSeconds(rand.Next(0, 60))
-                .AddMilliseconds(rand.Next(0, 999));
+                .AddDays(Rand.Next(range))
+                .AddHours(Rand.Next(0, 24))
+                .AddMinutes(Rand.Next(0, 60))
+                .AddSeconds(Rand.Next(0, 60))
+                .AddMilliseconds(Rand.Next(0, 999));
 
-            if (!randomDateTimeList.Contains(value))
+            if (!RandomDateTimeList.Contains(value))
             {
-                randomDateTimeList.Add(value);
+                RandomDateTimeList.Add(value);
             }
             else
             {
@@ -114,9 +114,9 @@ namespace CCC.ORM.Helpers
         {
             var b = new Byte[10];
 
-            rand.NextBytes(b);
+            Rand.NextBytes(b);
 
-            return b[rand.Next(0, 9)];
+            return b[Rand.Next(0, 9)];
         }
 
         public static T GenerateRandomObject()

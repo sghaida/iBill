@@ -1,5 +1,4 @@
 ﻿using System;
-using PhoneCallsProcessor.Interfaces;
 
 namespace PhoneCallsProcessorLoader
 {
@@ -7,7 +6,7 @@ namespace PhoneCallsProcessorLoader
     {
         private static void Main(string[] args)
         {
-            var plugins = PluginLoader<ICallProcessor>.LoadPlugins();
+            var plugins = PluginLoader.LoadPlugins();
 
             plugins[0].ProcessPhoneCalls();
 

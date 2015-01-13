@@ -9,17 +9,17 @@ namespace CCC.ORM.Helpers
 {
     public static class DataAccessExtensionscs
     {
-        private static readonly DBLib DBRoutines = new DBLib();
+        private static readonly DbLib DbRoutines = new DbLib();
 
         public static T GetWithRelations<T>(this T source, params Expression<Func<T, object>>[] path)
             where T : DataModel, new()
         {
-            var Schema = new DataSourceSchema<T>();
+            var schema = new DataSourceSchema<T>();
 
             // Table Relations Map
             // To be sent to the DB Lib for SQL Query generation
-            var TableRelationsMap = new List<SqlJoinRelation>();
-            var DbRelationsList = new List<DbRelation>();
+            var tableRelationsMap = new List<SqlJoinRelation>();
+            var dbRelationsList = new List<DbRelation>();
 
             //
             // Database related
@@ -41,7 +41,7 @@ namespace CCC.ORM.Helpers
 
             //
             // Get the Relations Fields from the Schema 
-            DbRelationsList = Schema.DataFields
+            dbRelationsList = schema.DataFields
                 .Where(field =>
                     field.Relation != null &&
                     expressionLookup.Values.Contains(field.Relation.WithDataModel.Name) &&
@@ -52,10 +52,10 @@ namespace CCC.ORM.Helpers
 
             //
             // Start processing the list of table relations
-            if (DbRelationsList != null && DbRelationsList.Count() > 0)
+            if (dbRelationsList != null && dbRelationsList.Count() > 0)
             {
                 //Foreach relation in the relations list, process it and construct the big TablesRelationsMap
-                foreach (var relation in DbRelationsList)
+                foreach (var relation in dbRelationsList)
                 {
                     //Create a temporary map for this target table relation
                     var joinedTableInfo = new SqlJoinRelation();
@@ -83,21 +83,21 @@ namespace CCC.ORM.Helpers
 
                     //Get the field that describes our key on which we are in relation with the target model
                     var thisKey =
-                        Schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
+                        schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
 
                     if (thisKey != null && joinedModelKey != null)
                     {
                         //Initialize the temporary map and add it to the original relations map
                         joinedTableInfo.RelationName = relation.RelationName;
                         joinedTableInfo.RelationType = relation.RelationType;
-                        joinedTableInfo.MasterTableName = Schema.DataSourceName;
+                        joinedTableInfo.MasterTableName = schema.DataSourceName;
                         joinedTableInfo.MasterTableKey = thisKey.TableField.ColumnName;
                         joinedTableInfo.JoinedTableName = joinedModelSchema.GetDataSourceName();
                         joinedTableInfo.JoinedTableKey = joinedModelKey.TableField.ColumnName;
                         joinedTableInfo.JoinedTableColumns = joinedModelTableColumns;
 
                         //Add the relation keys to the TableRelationsMap
-                        TableRelationsMap.Add(joinedTableInfo);
+                        tableRelationsMap.Add(joinedTableInfo);
                     }
                 } //end-foreach
             } //end-outer-if
@@ -106,19 +106,19 @@ namespace CCC.ORM.Helpers
             //
             // Get the ID Field to find the relations for.
             // If the ID Field was not found, return an empty instance of the object.
-            var IDField = Schema.DataFields.Find(field => field.TableField != null && field.TableField.IsIDField);
+            var idField = schema.DataFields.Find(field => field.TableField != null && field.TableField.IsIdField);
 
-            if (IDField != null)
+            if (idField != null)
             {
-                var dataObjectAttr = source.GetType().GetProperty(IDField.Name);
+                var dataObjectAttr = source.GetType().GetProperty(idField.Name);
 
                 var dataObjectAttrValue = dataObjectAttr.GetValue(source, null);
 
                 // Put the ID Field in the WHERE CONDITIONS
                 if (dataObjectAttrValue != null)
                 {
-                    whereConditions.Add(IDField.TableField.ColumnName,
-                        Convert.ChangeType(dataObjectAttrValue, IDField.TableField.FieldType));
+                    whereConditions.Add(idField.TableField.ColumnName,
+                        Convert.ChangeType(dataObjectAttrValue, idField.TableField.FieldType));
                 }
                 else
                 {
@@ -132,7 +132,7 @@ namespace CCC.ORM.Helpers
 
             //
             // Get our table columns from the schema
-            thisModelTableColumns = Schema.DataFields
+            thisModelTableColumns = schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select(
                     field => field.TableField.ColumnName)
@@ -140,8 +140,8 @@ namespace CCC.ORM.Helpers
 
             //
             // Query the data-srouce
-            dt = DBRoutines.SELECT_WITH_JOIN(Schema.DataSourceName, thisModelTableColumns, whereConditions,
-                TableRelationsMap, 1);
+            dt = DbRoutines.SELECT_WITH_JOIN(schema.DataSourceName, thisModelTableColumns, whereConditions,
+                tableRelationsMap, 1);
 
             // Return data
             var data = dt.ConvertToList(path);
@@ -158,19 +158,19 @@ namespace CCC.ORM.Helpers
         /// </summary>
         /// <typeparam name="T">Type</typeparam>
         /// <param name="source">IEnumerable data which to be evaluated and filled by the extension method</param>
-        /// <param name="DataSourceName">The DataSource that you wish to select from incase of Distributed Datasources</param>
+        /// <param name="dataSourceName">The DataSource that you wish to select from incase of Distributed Datasources</param>
         /// <param name="path">the path of the relation such as item=>item.x</param>
         /// <returns>IEnumerable with populated relation </returns>
-        public static IEnumerable<T> GetWithRelations<T>(this IEnumerable<T> source, string DataSourceName,
+        public static IEnumerable<T> GetWithRelations<T>(this IEnumerable<T> source, string dataSourceName,
             params Expression<Func<T, object>>[] path) where T : DataModel, new()
         {
-            var Schema = new DataSourceSchema<T>();
+            var schema = new DataSourceSchema<T>();
 
             //Table Relations Map
             //To be sent to the DB Lib for SQL Query generation
-            var TableRelationsMap = new List<SqlJoinRelation>();
+            var tableRelationsMap = new List<SqlJoinRelation>();
 
-            var DbRelationsList = new List<DbRelation>();
+            var dbRelationsList = new List<DbRelation>();
 
             //This will hold the information about the sub joins object types          
             var expressionLookup = new Dictionary<string, string>();
@@ -180,7 +180,7 @@ namespace CCC.ORM.Helpers
                 expressionLookup.Add((t.Body as MemberExpression).Member.Name, t.Body.Type.Name);
             }
 
-            DbRelationsList = Schema.DataFields
+            dbRelationsList = schema.DataFields
                 .Where(field =>
                     field.Relation != null &&
                     expressionLookup.Values.Contains(field.Relation.WithDataModel.Name) &&
@@ -190,10 +190,10 @@ namespace CCC.ORM.Helpers
 
 
             //Start processing the list of table relations
-            if (DbRelationsList != null && DbRelationsList.Count() > 0)
+            if (dbRelationsList != null && dbRelationsList.Count() > 0)
             {
                 //Foreach relation in the relations list, process it and construct the big TablesRelationsMap
-                foreach (var relation in DbRelationsList)
+                foreach (var relation in dbRelationsList)
                 {
                     //Create a temporary map for this target table relation
                     var joinedTableInfo = new SqlJoinRelation();
@@ -221,20 +221,20 @@ namespace CCC.ORM.Helpers
 
                     //Get the field that describes our key on which we are in relation with the target model
                     var thisKey =
-                        Schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
+                        schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
 
                     if (thisKey != null && joinedModelKey != null)
                     {
                         //Initialize the temporary map and add it to the original relations map
                         joinedTableInfo.RelationName = relation.RelationName;
                         joinedTableInfo.RelationType = relation.RelationType;
-                        if (DataSourceName == null)
+                        if (dataSourceName == null)
                         {
-                            joinedTableInfo.MasterTableName = Schema.DataSourceName;
+                            joinedTableInfo.MasterTableName = schema.DataSourceName;
                         }
                         else
                         {
-                            joinedTableInfo.MasterTableName = DataSourceName;
+                            joinedTableInfo.MasterTableName = dataSourceName;
                         }
                         joinedTableInfo.MasterTableKey = thisKey.TableField.ColumnName;
                         joinedTableInfo.JoinedTableName = joinedModelSchema.GetDataSourceName();
@@ -242,7 +242,7 @@ namespace CCC.ORM.Helpers
                         joinedTableInfo.JoinedTableColumns = joinedModelTableColumns;
 
                         //Add the relation keys to the TableRelationsMap
-                        TableRelationsMap.Add(joinedTableInfo);
+                        tableRelationsMap.Add(joinedTableInfo);
                     }
                 } //end-foreach
             } //end-outer-if
@@ -250,26 +250,26 @@ namespace CCC.ORM.Helpers
             var dt = new DataTable();
             var finalDataSourceName = string.Empty;
 
-            if (DataSourceName == null)
+            if (dataSourceName == null)
             {
-                finalDataSourceName = Schema.DataSourceName;
+                finalDataSourceName = schema.DataSourceName;
             }
             else
             {
-                finalDataSourceName = DataSourceName;
+                finalDataSourceName = dataSourceName;
             }
 
 
             List<string> thisModelTableColumns;
 
             //Get our table columns from the schema
-            thisModelTableColumns = Schema.DataFields
+            thisModelTableColumns = schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select(
                     field => field.TableField.ColumnName)
                 .ToList();
 
-            dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, null, TableRelationsMap, 0);
+            dt = DbRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, null, tableRelationsMap, 0);
 
             return dt.ConvertToList(path);
         }
@@ -284,13 +284,13 @@ namespace CCC.ORM.Helpers
         public static IEnumerable<T> GetWithRelations<T>(this IEnumerable<T> source,
             params Expression<Func<T, object>>[] path) where T : DataModel, new()
         {
-            var Schema = new DataSourceSchema<T>();
+            var schema = new DataSourceSchema<T>();
 
             //Table Relations Map
             //To be sent to the DB Lib for SQL Query generation
-            var TableRelationsMap = new List<SqlJoinRelation>();
+            var tableRelationsMap = new List<SqlJoinRelation>();
 
-            var DbRelationsList = new List<DbRelation>();
+            var dbRelationsList = new List<DbRelation>();
 
             //This will hold the information about the sub joins object types          
             var expressionLookup = new Dictionary<string, string>();
@@ -300,7 +300,7 @@ namespace CCC.ORM.Helpers
                 expressionLookup.Add((t.Body as MemberExpression).Member.Name, t.Body.Type.Name);
             }
 
-            DbRelationsList = Schema.DataFields
+            dbRelationsList = schema.DataFields
                 .Where(field =>
                     field.Relation != null &&
                     expressionLookup.Values.Contains(field.Relation.WithDataModel.Name) &&
@@ -310,10 +310,10 @@ namespace CCC.ORM.Helpers
 
 
             //Start processing the list of table relations
-            if (DbRelationsList != null && DbRelationsList.Count() > 0)
+            if (dbRelationsList != null && dbRelationsList.Count() > 0)
             {
                 //Foreach relation in the relations list, process it and construct the big TablesRelationsMap
-                foreach (var relation in DbRelationsList)
+                foreach (var relation in dbRelationsList)
                 {
                     //Create a temporary map for this target table relation
                     var joinedTableInfo = new SqlJoinRelation();
@@ -341,21 +341,21 @@ namespace CCC.ORM.Helpers
 
                     //Get the field that describes our key on which we are in relation with the target model
                     var thisKey =
-                        Schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
+                        schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
 
                     if (thisKey != null && joinedModelKey != null)
                     {
                         //Initialize the temporary map and add it to the original relations map
                         joinedTableInfo.RelationName = relation.RelationName;
                         joinedTableInfo.RelationType = relation.RelationType;
-                        joinedTableInfo.MasterTableName = Schema.DataSourceName;
+                        joinedTableInfo.MasterTableName = schema.DataSourceName;
                         joinedTableInfo.MasterTableKey = thisKey.TableField.ColumnName;
                         joinedTableInfo.JoinedTableName = joinedModelSchema.GetDataSourceName();
                         joinedTableInfo.JoinedTableKey = joinedModelKey.TableField.ColumnName;
                         joinedTableInfo.JoinedTableColumns = joinedModelTableColumns;
 
                         //Add the relation keys to the TableRelationsMap
-                        TableRelationsMap.Add(joinedTableInfo);
+                        tableRelationsMap.Add(joinedTableInfo);
                     }
                 } //end-foreach
             } //end-outer-if
@@ -365,27 +365,27 @@ namespace CCC.ORM.Helpers
             List<string> thisModelTableColumns;
 
             //Get our table columns from the schema
-            thisModelTableColumns = Schema.DataFields
+            thisModelTableColumns = schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select(
                     field => field.TableField.ColumnName)
                 .ToList();
 
-            dt = DBRoutines.SELECT_WITH_JOIN(Schema.DataSourceName, thisModelTableColumns, null, TableRelationsMap, 0);
+            dt = DbRoutines.SELECT_WITH_JOIN(schema.DataSourceName, thisModelTableColumns, null, tableRelationsMap, 0);
 
             return dt.ConvertToList(path);
         }
 
         [Obsolete("This Function is deprecated. kindly use GetWithRelations instead")]
-        public static IEnumerable<T> IncludeRelation<T>(this IEnumerable<T> source, string DataSourceName,
+        public static IEnumerable<T> IncludeRelation<T>(this IEnumerable<T> source, string dataSourceName,
             params Expression<Func<T, object>>[] path) where T : DataModel, new()
         {
-            var Schema = new DataSourceSchema<T>();
+            var schema = new DataSourceSchema<T>();
             //Table Relations Map
             //To be sent to the DB Lib for SQL Query generation
-            var TableRelationsMap = new List<SqlJoinRelation>();
+            var tableRelationsMap = new List<SqlJoinRelation>();
 
-            var DbRelationsList = new List<DbRelation>();
+            var dbRelationsList = new List<DbRelation>();
 
             //This will hold the information about the sub joins object types          
             var expressionLookup = new Dictionary<string, string>();
@@ -394,7 +394,7 @@ namespace CCC.ORM.Helpers
                 expressionLookup.Add((t.Body as MemberExpression).Member.Name, t.Body.Type.Name);
             }
 
-            DbRelationsList = Schema.DataFields.Where(field => field.Relation != null &&
+            dbRelationsList = schema.DataFields.Where(field => field.Relation != null &&
                                                                expressionLookup.Values.Contains(
                                                                    field.Relation.WithDataModel.Name) &&
                                                                expressionLookup.Keys.Contains(field.Name)
@@ -404,10 +404,10 @@ namespace CCC.ORM.Helpers
 
 
             //Start processing the list of table relations
-            if (DbRelationsList != null && DbRelationsList.Count() > 0)
+            if (dbRelationsList != null && dbRelationsList.Count() > 0)
             {
                 //Foreach relation in the relations list, process it and construct the big TablesRelationsMap
-                foreach (var relation in DbRelationsList)
+                foreach (var relation in dbRelationsList)
                 {
                     //Create a temporary map for this target table relation
                     var joinedTableInfo = new SqlJoinRelation();
@@ -435,7 +435,7 @@ namespace CCC.ORM.Helpers
 
                     //Get the field that describes our key on which we are in relation with the target model
                     var thisKey =
-                        Schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
+                        schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
 
                     if (thisKey != null && joinedModelKey != null)
                     {
@@ -444,14 +444,14 @@ namespace CCC.ORM.Helpers
                         joinedTableInfo.RelationType = relation.RelationType;
 
 
-                        joinedTableInfo.MasterTableName = DataSourceName;
+                        joinedTableInfo.MasterTableName = dataSourceName;
                         joinedTableInfo.MasterTableKey = thisKey.TableField.ColumnName;
                         joinedTableInfo.JoinedTableName = joinedModelSchema.GetDataSourceName();
                         joinedTableInfo.JoinedTableKey = joinedModelKey.TableField.ColumnName;
                         joinedTableInfo.JoinedTableColumns = joinedModelTableColumns;
 
                         //Add the relation keys to the TableRelationsMap
-                        TableRelationsMap.Add(joinedTableInfo);
+                        tableRelationsMap.Add(joinedTableInfo);
                     }
                 } //end-foreach
             } //end-outer-if
@@ -461,13 +461,13 @@ namespace CCC.ORM.Helpers
             List<string> thisModelTableColumns;
 
             //Get our table columns from the schema
-            thisModelTableColumns = Schema.DataFields
+            thisModelTableColumns = schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select(
                     field => field.TableField.ColumnName)
                 .ToList();
 
-            dt = DBRoutines.SELECT_WITH_JOIN(DataSourceName, thisModelTableColumns, null, TableRelationsMap, 0);
+            dt = DbRoutines.SELECT_WITH_JOIN(dataSourceName, thisModelTableColumns, null, tableRelationsMap, 0);
 
             return dt.ConvertToList(path);
         }

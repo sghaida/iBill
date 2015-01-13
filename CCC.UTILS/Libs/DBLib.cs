@@ -7,14 +7,14 @@ using System.Text;
 
 namespace CCC.UTILS.Libs
 {
-    public class DBLib
+    public class DbLib
     {
         //Load DLL Configs
-        public static LoadConfigs config = new LoadConfigs();
+        public static LoadConfigs Config = new LoadConfigs();
 
-        public DBLib()
+        public DbLib()
         {
-            var connectionStringsSection = config.DllConfig.ConnectionStrings;
+            var connectionStringsSection = Config.DllConfig.ConnectionStrings;
 
             if (connectionStringsSection != null && connectionStringsSection.ConnectionStrings.Count > 0)
             {
@@ -26,14 +26,14 @@ namespace CCC.UTILS.Libs
             }
         }
 
-        public DBLib(string connectionString)
+        public DbLib(string connectionString)
         {
             ConnectionString = connectionString;
         }
 
         public static string ConnectionString { get; set; }
 
-        private OleDbConnection DBInitializeConnection(string connectionString)
+        private OleDbConnection DbInitializeConnection(string connectionString)
         {
             return new OleDbConnection(connectionString);
         }
@@ -51,7 +51,7 @@ namespace CCC.UTILS.Libs
         /// <returns></returns>
         private static List<string> ConstructUniqueTableColumnsNames(string tableName, List<string> columns)
         {
-            var SEPARATOR = ".";
+            var separator = ".";
             var formattedColumnsNames = new List<string>();
 
             if (!string.IsNullOrEmpty(tableName) && columns != null && columns.Count() > 0)
@@ -59,7 +59,7 @@ namespace CCC.UTILS.Libs
                 formattedColumnsNames = columns
                     .Select(
                         column =>
-                            String.Format("[{0}].[{1}] as '{2}{3}{4}'", tableName, column, tableName, SEPARATOR, column)
+                            String.Format("[{0}].[{1}] as '{2}{3}{4}'", tableName, column, tableName, separator, column)
                     ).ToList();
             }
 
@@ -67,7 +67,7 @@ namespace CCC.UTILS.Libs
         }
 
         //SELECT with SQL query
-        public DataTable SELECTFROMSQL(string sqlQuery, string customConnectionString = null)
+        public DataTable Selectfromsql(string sqlQuery, string customConnectionString = null)
         {
             var dt = new DataTable();
             OleDbDataReader dr;
@@ -75,9 +75,9 @@ namespace CCC.UTILS.Libs
 
             //Initialize connections
             if (!string.IsNullOrEmpty(customConnectionString))
-                conn = DBInitializeConnection(customConnectionString);
+                conn = DbInitializeConnection(customConnectionString);
             else
-                conn = DBInitializeConnection(ConnectionString);
+                conn = DbInitializeConnection(ConnectionString);
 
             //Execute SQL Query
             var comm = new OleDbCommand(sqlQuery, conn);
@@ -109,20 +109,20 @@ namespace CCC.UTILS.Libs
             var dt = new DataTable();
 
             OleDbDataReader dr;
-            var FinalSelectQuery = string.Empty;
-            var TRUTH_OPERATOR = "AND";
+            var finalSelectQuery = string.Empty;
+            var truthOperator = "AND";
 
-            var SelectColumns = new StringBuilder("");
-            var WhereStatement = new StringBuilder("");
-            var JoinStatement = new StringBuilder("");
-            var GroupByFields = new StringBuilder("");
-            var OrderBy = new StringBuilder("");
+            var selectColumns = new StringBuilder("");
+            var whereStatement = new StringBuilder("");
+            var joinStatement = new StringBuilder("");
+            var groupByFields = new StringBuilder("");
+            var orderBy = new StringBuilder("");
 
 
             //Handle Order By
             if (tableName.Contains("Phonecalls"))
             {
-                OrderBy.Append("ORDER BY [SessionIdTime] DESC");
+                orderBy.Append("ORDER BY [SessionIdTime] DESC");
             }
 
 
@@ -136,7 +136,7 @@ namespace CCC.UTILS.Libs
                     var keysStatement = string.Empty;
 
                     //Decide the join type
-                    if (GLOBALS.DataRelation.Type.INTERSECTION == relation.RelationType)
+                    if (Globals.DataRelation.Type.Intersection == relation.RelationType)
                     {
                         joinType = "INNER JOIN";
                     }
@@ -153,10 +153,10 @@ namespace CCC.UTILS.Libs
 
                     foreach (var column in relation.JoinedTableColumns)
                     {
-                        SelectColumns.Append(string.Format("{0}.{1} AS '{0}.{1}',", relation.RelationName, column));
+                        selectColumns.Append(string.Format("{0}.{1} AS '{0}.{1}',", relation.RelationName, column));
                     }
 
-                    JoinStatement.Append(String.Format("{0} {1} {2} ", joinType, relation.JoinedTableName, keysStatement));
+                    joinStatement.Append(String.Format("{0} {1} {2} ", joinType, relation.JoinedTableName, keysStatement));
                 } //end-foreach
             } //end-outer-if
 
@@ -179,22 +179,22 @@ namespace CCC.UTILS.Libs
                     //selectedfields.Append(fieldName + ",");
                     if (!string.IsNullOrEmpty(field))
                     {
-                        SelectColumns.Append(field + ",");
+                        selectColumns.Append(field + ",");
                     }
                 }
 
-                SelectColumns.Remove(SelectColumns.Length - 1, 1);
+                selectColumns.Remove(selectColumns.Length - 1, 1);
             }
             else
             {
-                SelectColumns.Append("*");
+                selectColumns.Append("*");
             }
 
 
             //Handle the whereClause collection
             if (whereConditions != null && whereConditions.Count != 0)
             {
-                WhereStatement.Append("WHERE ");
+                whereStatement.Append("WHERE ");
 
                 foreach (var pair in whereConditions)
                 {
@@ -209,57 +209,57 @@ namespace CCC.UTILS.Libs
 
                     if (pair.Value == null)
                     {
-                        WhereStatement.Append(String.Format("{0} IS NULL {1} ", key, TRUTH_OPERATOR));
+                        whereStatement.Append(String.Format("{0} IS NULL {1} ", key, truthOperator));
                     }
 
                     else if (pair.Value.ToString() == "!null")
                     {
-                        WhereStatement.Append(String.Format("{0} IS NOT NULL {1} ", key, TRUTH_OPERATOR));
+                        whereStatement.Append(String.Format("{0} IS NOT NULL {1} ", key, truthOperator));
                     }
 
                     else if (pair.Value.ToString() == "!=0")
                     {
-                        WhereStatement.Append(String.Format("{0} <> 0 {1} ", key, TRUTH_OPERATOR));
+                        whereStatement.Append(String.Format("{0} <> 0 {1} ", key, truthOperator));
                     }
 
                     else if (pair.Value is string && pair.Value.ToString().ToLower().Contains("like"))
                     {
                         //key like value: key = "columnX", value = "like '%ABC%'"
-                        WhereStatement.Append(String.Format("{0} {1} {2} ", key, pair.Value, TRUTH_OPERATOR));
+                        whereStatement.Append(String.Format("{0} {1} {2} ", key, pair.Value, truthOperator));
                     }
 
                     else if (pair.Value is string && (pair.Value.ToString()).Contains("BETWEEN"))
                     {
                         //key like value: key = "columnX", value = "BETWEEN abc AND xyz"
-                        WhereStatement.Append(String.Format("{0} {1} {2} ", key, pair.Value, TRUTH_OPERATOR));
+                        whereStatement.Append(String.Format("{0} {1} {2} ", key, pair.Value, truthOperator));
                     }
 
                     else if (pair.Value is List<int>)
                     {
-                        WhereStatement.Append(key + " in ( ");
+                        whereStatement.Append(key + " in ( ");
 
                         foreach (var item in (List<int>) pair.Value)
                         {
-                            WhereStatement.Append(item + ",");
+                            whereStatement.Append(item + ",");
                         }
                         //Remove last ','
-                        WhereStatement.Remove(WhereStatement.Length - 1, 1);
+                        whereStatement.Remove(whereStatement.Length - 1, 1);
 
-                        WhereStatement.Append(" ) " + TRUTH_OPERATOR + " ");
+                        whereStatement.Append(" ) " + truthOperator + " ");
                     }
 
                     else if (pair.Value is List<string>)
                     {
-                        WhereStatement.Append(key + " in ( ");
+                        whereStatement.Append(key + " in ( ");
 
                         foreach (var item in (List<string>) pair.Value)
                         {
-                            WhereStatement.Append(item + ",");
+                            whereStatement.Append(item + ",");
                         }
                         //Remove last ','
-                        WhereStatement.Remove(WhereStatement.Length - 1, 1);
+                        whereStatement.Remove(whereStatement.Length - 1, 1);
 
-                        WhereStatement.Append(" ) " + TRUTH_OPERATOR + " ");
+                        whereStatement.Append(" ) " + truthOperator + " ");
                     }
 
                     else
@@ -267,45 +267,45 @@ namespace CCC.UTILS.Libs
                         var valueType = pair.Value.GetType();
                         if (valueType == typeof (int) || valueType == typeof (Double))
                         {
-                            WhereStatement.Append(String.Format("{0}={1} {2} ", key, pair.Value, TRUTH_OPERATOR));
+                            whereStatement.Append(String.Format("{0}={1} {2} ", key, pair.Value, truthOperator));
                         }
                         else
                         {
-                            WhereStatement.Append(String.Format("{0}='{1}' {2} ", key, pair.Value, TRUTH_OPERATOR));
+                            whereStatement.Append(String.Format("{0}='{1}' {2} ", key, pair.Value, truthOperator));
                         }
                     }
                 }
 
                 //Trim the whereStatement
-                WhereStatement.Remove(WhereStatement.Length - 5, 5);
+                whereStatement.Remove(whereStatement.Length - 5, 5);
             }
 
 
             //Start constructing the FINAL SELECT QUERY
             //Start by formatting the select columns and limits
             if (limits == 0)
-                FinalSelectQuery = string.Format("SELECT {0}", SelectColumns);
+                finalSelectQuery = string.Format("SELECT {0}", selectColumns);
             else
-                FinalSelectQuery = string.Format("SELECT TOP({0}) {1}", limits, SelectColumns);
+                finalSelectQuery = string.Format("SELECT TOP({0}) {1}", limits, selectColumns);
 
             //Add the JOINED tables part
-            if (JoinStatement.ToString().Length > 0)
-                FinalSelectQuery = String.Format("{0} FROM [{1}] {2}", FinalSelectQuery, tableName, JoinStatement);
+            if (joinStatement.ToString().Length > 0)
+                finalSelectQuery = String.Format("{0} FROM [{1}] {2}", finalSelectQuery, tableName, joinStatement);
             else
-                FinalSelectQuery = String.Format("{0} FROM [{1}]", FinalSelectQuery, tableName);
+                finalSelectQuery = String.Format("{0} FROM [{1}]", finalSelectQuery, tableName);
 
             //Add the where conditions to the FINAL SELECT QUERY
-            if (WhereStatement.ToString().Length > 0)
-                FinalSelectQuery = String.Format("{0} {1}", FinalSelectQuery, WhereStatement);
+            if (whereStatement.ToString().Length > 0)
+                finalSelectQuery = String.Format("{0} {1}", finalSelectQuery, whereStatement);
 
             //Add the order by part
-            if (OrderBy.ToString().Length > 0)
-                FinalSelectQuery = String.Format("{0} {1}", FinalSelectQuery, OrderBy);
+            if (orderBy.ToString().Length > 0)
+                finalSelectQuery = String.Format("{0} {1}", finalSelectQuery, orderBy);
 
 
             //Initialize the connection and command
-            var conn = DBInitializeConnection(ConnectionString);
-            var comm = new OleDbCommand(FinalSelectQuery, conn);
+            var conn = DbInitializeConnection(ConnectionString);
+            var comm = new OleDbCommand(finalSelectQuery, conn);
 
             try
             {
@@ -335,9 +335,9 @@ namespace CCC.UTILS.Libs
 
             //Initialize connections
             if (!string.IsNullOrEmpty(customConnectionString))
-                conn = DBInitializeConnection(customConnectionString);
+                conn = DbInitializeConnection(customConnectionString);
             else
-                conn = DBInitializeConnection(ConnectionString);
+                conn = DbInitializeConnection(ConnectionString);
 
             var sqlQuery = string.Format("SELECT * FROM {0} WHERE {1}", tableName, wherePart);
 
@@ -392,7 +392,7 @@ namespace CCC.UTILS.Libs
             else
                 selectQuery = string.Format("SELECT * FROM  [{0}] WHERE [{1}]='{2}'", tableName, whereField, whereValue);
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(selectQuery, conn);
 
             try
@@ -424,7 +424,7 @@ namespace CCC.UTILS.Libs
 
             selectQuery = string.Format("SELECT * FROM  [{0}]", tableName);
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(selectQuery, conn);
 
             try
@@ -542,7 +542,7 @@ namespace CCC.UTILS.Libs
                         orderBy);
             }
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(selectQuery, conn);
 
             try
@@ -580,18 +580,18 @@ namespace CCC.UTILS.Libs
         ///     1. 0 if all Rows
         ///     2. Value for number of rows
         /// </param>
-        /// <param name="setWhereStatementOperatorToOR">
+        /// <param name="setWhereStatementOperatorToOr">
         ///     The default operator in the where statement is "AND", if you set this one
         ///     to true, the operator will be turned to "OR" in the where statement
         /// </param>
         /// <returns>DataTable Object</returns>
         public DataTable SELECT(string tableName, List<string> fieldsList, Dictionary<string, object> whereClause,
-            int limits, bool setWhereStatementOperatorToOR = false)
+            int limits, bool setWhereStatementOperatorToOr = false)
         {
             var dt = new DataTable();
             OleDbDataReader dr;
             var selectQuery = string.Empty;
-            var OPERATOR = setWhereStatementOperatorToOR ? " OR " : " AND ";
+            var OPERATOR = setWhereStatementOperatorToOr ? " OR " : " AND ";
 
             var selectedfields = new StringBuilder();
             var whereStatement = new StringBuilder();
@@ -714,7 +714,7 @@ namespace CCC.UTILS.Libs
                 }
 
                 //Trim the whereStatement
-                if (setWhereStatementOperatorToOR)
+                if (setWhereStatementOperatorToOr)
                     whereStatement.Remove(whereStatement.Length - 4, 4);
                 else
                     whereStatement.Remove(whereStatement.Length - 5, 5);
@@ -738,7 +738,7 @@ namespace CCC.UTILS.Libs
                         orderBy);
             }
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(selectQuery, conn);
 
             try
@@ -769,7 +769,7 @@ namespace CCC.UTILS.Libs
             OleDbDataReader dr;
             var selectQuery = string.Empty;
 
-            var Parameters = new StringBuilder();
+            var parameters = new StringBuilder();
             var whereStatement = new StringBuilder();
 
             if (functionParams != null && functionParams.Count != 0)
@@ -779,11 +779,11 @@ namespace CCC.UTILS.Libs
                     var valueType = obj.GetType();
 
                     if (valueType == typeof (string) || valueType == typeof (DateTime))
-                        Parameters.Append("'" + obj + "',");
+                        parameters.Append("'" + obj + "',");
                     else
-                        Parameters.Append(obj + ",");
+                        parameters.Append(obj + ",");
                 }
-                Parameters.Remove(Parameters.Length - 1, 1);
+                parameters.Remove(parameters.Length - 1, 1);
             }
 
             if (whereClause != null && whereClause.Count != 0)
@@ -802,12 +802,12 @@ namespace CCC.UTILS.Libs
             }
 
             if (whereClause != null && whereClause.Count != 0)
-                selectQuery = string.Format("SELECT * FROM [{0}] ({1}) WHERE {2}", tableName, Parameters, whereStatement);
+                selectQuery = string.Format("SELECT * FROM [{0}] ({1}) WHERE {2}", tableName, parameters, whereStatement);
             else
-                selectQuery = string.Format("SELECT * FROM [{0}] ({1})", tableName, Parameters);
+                selectQuery = string.Format("SELECT * FROM [{0}] ({1})", tableName, parameters);
 
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(selectQuery, conn);
 
             try
@@ -837,12 +837,12 @@ namespace CCC.UTILS.Libs
             var dt = new DataTable();
 
             OleDbDataReader dr;
-            var FinalSelectQuery = string.Empty;
+            var finalSelectQuery = string.Empty;
 
-            var Parameters = new StringBuilder();
-            var WhereStatement = new StringBuilder();
-            var SelectColumns = new StringBuilder();
-            var GroupByFields = new StringBuilder();
+            var parameters = new StringBuilder();
+            var whereStatement = new StringBuilder();
+            var selectColumns = new StringBuilder();
+            var groupByFields = new StringBuilder();
 
             if (functionParams != null && functionParams.Count != 0)
             {
@@ -851,11 +851,11 @@ namespace CCC.UTILS.Libs
                     var valueType = obj.GetType();
 
                     if (valueType == typeof (string) || valueType == typeof (DateTime))
-                        Parameters.Append("'" + obj + "',");
+                        parameters.Append("'" + obj + "',");
                     else
-                        Parameters.Append(obj + ",");
+                        parameters.Append(obj + ",");
                 }
-                Parameters.Remove(Parameters.Length - 1, 1);
+                parameters.Remove(parameters.Length - 1, 1);
             }
 
             if (selectColumnsList != null && selectColumnsList.Count != 0)
@@ -866,12 +866,12 @@ namespace CCC.UTILS.Libs
                     {
                         if (field.Contains("COUNT") || field.Contains("SUM") || field.Contains("YEAR") ||
                             field.Contains("MONTH") || field.Contains("DISTINCT"))
-                            SelectColumns.Append(field + ",");
+                            selectColumns.Append(field + ",");
                         else
-                            SelectColumns.Append("[" + field + "],");
+                            selectColumns.Append("[" + field + "],");
                     }
                 }
-                SelectColumns.Remove(SelectColumns.Length - 1, 1);
+                selectColumns.Remove(selectColumns.Length - 1, 1);
             }
 
             if (groupByColumnsList != null && groupByColumnsList.Count != 0)
@@ -880,10 +880,10 @@ namespace CCC.UTILS.Libs
                 {
                     if (!string.IsNullOrEmpty(field))
                     {
-                        GroupByFields.Append("[" + field + "],");
+                        groupByFields.Append("[" + field + "],");
                     }
                 }
-                GroupByFields.Remove(GroupByFields.Length - 1, 1);
+                groupByFields.Remove(groupByFields.Length - 1, 1);
             }
 
             if (whereClause != null && whereClause.Count != 0)
@@ -892,52 +892,52 @@ namespace CCC.UTILS.Libs
                 {
                     if (pair.Value == null)
                     {
-                        WhereStatement.Append("[" + pair.Key + "] IS NULL" + " AND ");
+                        whereStatement.Append("[" + pair.Key + "] IS NULL" + " AND ");
                     }
 
                     else if (pair.Value.ToString() == "!null")
                     {
-                        WhereStatement.Append("[" + pair.Key + "] IS NOT NULL" + " AND ");
+                        whereStatement.Append("[" + pair.Key + "] IS NOT NULL" + " AND ");
                     }
 
                     else if (pair.Value.ToString() == "!=0")
                     {
-                        WhereStatement.Append("[" + pair.Key + "] <> 0" + " AND ");
+                        whereStatement.Append("[" + pair.Key + "] <> 0" + " AND ");
                     }
 
                     else if (pair.Value is string && (pair.Value.ToString()).Contains("BETWEEN"))
                     {
-                        WhereStatement.Append("[" + pair.Key + "]  " + pair.Value);
+                        whereStatement.Append("[" + pair.Key + "]  " + pair.Value);
 
-                        WhereStatement.Append(" AND ");
+                        whereStatement.Append(" AND ");
                     }
 
                     else if (pair.Value is List<int>)
                     {
-                        WhereStatement.Append("[" + pair.Key + "] in ( ");
+                        whereStatement.Append("[" + pair.Key + "] in ( ");
 
                         foreach (var item in (List<int>) pair.Value)
                         {
-                            WhereStatement.Append(item + ",");
+                            whereStatement.Append(item + ",");
                         }
                         //Remove last ','
-                        WhereStatement.Remove(WhereStatement.Length - 1, 1);
+                        whereStatement.Remove(whereStatement.Length - 1, 1);
 
-                        WhereStatement.Append(" ) AND ");
+                        whereStatement.Append(" ) AND ");
                     }
 
                     else if (pair.Value is List<string>)
                     {
-                        WhereStatement.Append("[" + pair.Key + "] in ( ");
+                        whereStatement.Append("[" + pair.Key + "] in ( ");
 
                         foreach (var item in (List<string>) pair.Value)
                         {
-                            WhereStatement.Append("'" + item + "',");
+                            whereStatement.Append("'" + item + "',");
                         }
                         //Remove last ','
-                        WhereStatement.Remove(WhereStatement.Length - 1, 1);
+                        whereStatement.Remove(whereStatement.Length - 1, 1);
 
-                        WhereStatement.Append(" ) AND ");
+                        whereStatement.Append(" ) AND ");
                     }
 
                     else
@@ -945,37 +945,37 @@ namespace CCC.UTILS.Libs
                         var valueType = pair.Value.GetType();
                         if (valueType == typeof (int) || valueType == typeof (Double))
                         {
-                            WhereStatement.Append("[" + pair.Key + "]=" + pair.Value + " AND ");
+                            whereStatement.Append("[" + pair.Key + "]=" + pair.Value + " AND ");
                         }
                         else
                         {
-                            WhereStatement.Append("[" + pair.Key + "]='" + pair.Value + "' AND ");
+                            whereStatement.Append("[" + pair.Key + "]='" + pair.Value + "' AND ");
                         }
                     }
                 }
-                WhereStatement.Remove(WhereStatement.Length - 5, 5);
+                whereStatement.Remove(whereStatement.Length - 5, 5);
             }
 
             if (selectColumnsList != null && selectColumnsList.Count > 0)
-                FinalSelectQuery = String.Format("SELECT {0} ", SelectColumns);
+                finalSelectQuery = String.Format("SELECT {0} ", selectColumns);
             else
-                FinalSelectQuery = String.Format("SELECT * ");
+                finalSelectQuery = String.Format("SELECT * ");
 
             if (whereClause != null && whereClause.Count > 0)
-                FinalSelectQuery = string.Format("{0} FROM [{1}] ({2}) WHERE {3}", FinalSelectQuery,
-                    databaseFunctionName, Parameters, WhereStatement);
+                finalSelectQuery = string.Format("{0} FROM [{1}] ({2}) WHERE {3}", finalSelectQuery,
+                    databaseFunctionName, parameters, whereStatement);
             else
-                FinalSelectQuery = string.Format("{0} FROM [{1}] ({2})", FinalSelectQuery, databaseFunctionName,
-                    Parameters);
+                finalSelectQuery = string.Format("{0} FROM [{1}] ({2})", finalSelectQuery, databaseFunctionName,
+                    parameters);
 
             if (groupByColumnsList != null && groupByColumnsList.Count > 0)
-                FinalSelectQuery = string.Format("{0} GROUP BY {1} ", FinalSelectQuery, GroupByFields);
+                finalSelectQuery = string.Format("{0} GROUP BY {1} ", finalSelectQuery, groupByFields);
             else
-                FinalSelectQuery = string.Format("{0}", FinalSelectQuery);
+                finalSelectQuery = string.Format("{0}", finalSelectQuery);
 
 
-            var conn = DBInitializeConnection(ConnectionString);
-            var comm = new OleDbCommand(FinalSelectQuery, conn);
+            var conn = DbInitializeConnection(ConnectionString);
+            var comm = new OleDbCommand(finalSelectQuery, conn);
 
             try
             {
@@ -1008,7 +1008,7 @@ namespace CCC.UTILS.Libs
             OleDbConnection conn;
             OleDbCommand comm;
             var numberOfRowsAffected = 0;
-            var FinalSelectQuery = string.Empty;
+            var finalSelectQuery = string.Empty;
             var Parameters = new StringBuilder();
 
 
@@ -1029,10 +1029,10 @@ namespace CCC.UTILS.Libs
             //Construct the EXEC FINAL QUERY
             //SET TRANSACTION ISOLATION LEVEL SNAPSHOT; EXEC ....
             if (Parameters.Length > 0)
-                FinalSelectQuery = String.Format("SET TRANSACTION ISOLATION LEVEL SNAPSHOT; EXEC [dbo].[{0}] {1}",
+                finalSelectQuery = String.Format("SET TRANSACTION ISOLATION LEVEL SNAPSHOT; EXEC [dbo].[{0}] {1}",
                     storeProcedureName, Parameters);
             else
-                FinalSelectQuery = String.Format("SET TRANSACTION ISOLATION LEVEL SNAPSHOT; EXEC [dbo].[{0}]",
+                finalSelectQuery = String.Format("SET TRANSACTION ISOLATION LEVEL SNAPSHOT; EXEC [dbo].[{0}]",
                     storeProcedureName);
 
 
@@ -1044,8 +1044,8 @@ namespace CCC.UTILS.Libs
                 localConnectionString += ";ConnectionTimeout=1800";
             }
 
-            conn = DBInitializeConnection(localConnectionString);
-            comm = new OleDbCommand(FinalSelectQuery, conn);
+            conn = DbInitializeConnection(localConnectionString);
+            comm = new OleDbCommand(finalSelectQuery, conn);
 
             try
             {
@@ -1072,18 +1072,18 @@ namespace CCC.UTILS.Libs
         /// <summary>
         ///     Insert by EXECUTING NATIVE SQL QUERY
         /// </summary>
-        /// <param name="SQL"></param>
+        /// <param name="sql"></param>
         /// <returns></returns>
-        public int INSERT(string SQL)
+        public int INSERT(string sql)
         {
-            var conn = DBInitializeConnection(ConnectionString);
-            var comm = new OleDbCommand(SQL, conn);
+            var conn = DbInitializeConnection(ConnectionString);
+            var comm = new OleDbCommand(sql, conn);
 
-            var recordID = 0;
+            var recordId = 0;
             try
             {
                 conn.Open();
-                recordID = Convert.ToInt32(comm.ExecuteNonQuery());
+                recordId = Convert.ToInt32(comm.ExecuteNonQuery());
             }
             catch (Exception ex)
             {
@@ -1096,7 +1096,7 @@ namespace CCC.UTILS.Libs
                 conn.Dispose();
             }
 
-            return recordID;
+            return recordId;
         }
 
         /// <summary>
@@ -1159,14 +1159,14 @@ namespace CCC.UTILS.Libs
 
             var insertQuery = string.Format("INSERT INTO [{0}] {1} VALUES {2}", tableName, fields, values);
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(insertQuery, conn);
 
-            var recordID = 0;
+            var recordId = 0;
             try
             {
                 conn.Open();
-                recordID = Convert.ToInt32(comm.ExecuteNonQuery());
+                recordId = Convert.ToInt32(comm.ExecuteNonQuery());
             }
             catch (Exception ex)
             {
@@ -1179,7 +1179,7 @@ namespace CCC.UTILS.Libs
                 conn.Dispose();
             }
 
-            return recordID;
+            return recordId;
         }
 
         /// <summary>
@@ -1225,14 +1225,14 @@ namespace CCC.UTILS.Libs
             var insertQuery = string.Format("INSERT INTO [{0}] {1} OUTPUT INSERTED.{2}  VALUES {3}", tableName, fields,
                 idFieldName, values);
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(insertQuery, conn);
 
-            var recordID = 0;
+            var recordId = 0;
             try
             {
                 conn.Open();
-                recordID = Convert.ToInt32(comm.ExecuteScalar());
+                recordId = Convert.ToInt32(comm.ExecuteScalar());
             }
             catch (Exception ex)
             {
@@ -1244,18 +1244,18 @@ namespace CCC.UTILS.Libs
                 conn.Close();
             }
 
-            return recordID;
+            return recordId;
         }
 
         /// <summary>
         ///     Update by EXECUTING NATIVE SQL QUERY
         /// </summary>
-        /// <param name="SQL"></param>
+        /// <param name="sql"></param>
         /// <returns></returns>
-        public bool UPDATE(string SQL)
+        public bool UPDATE(string sql)
         {
-            var conn = DBInitializeConnection(ConnectionString);
-            var comm = new OleDbCommand(SQL, conn);
+            var conn = DbInitializeConnection(ConnectionString);
+            var comm = new OleDbCommand(sql, conn);
             comm.CommandTimeout = 360;
 
             try
@@ -1281,9 +1281,9 @@ namespace CCC.UTILS.Libs
         /// <param name="tableName">DB Table Name</param>
         /// <param name="columnsValues">Dictionary Holds Fields and Values to be inserted</param>
         /// <param name="idFieldName">ID Field name </param>
-        /// <param name="ID">ID Value</param>
+        /// <param name="id">ID Value</param>
         /// <returns>Row ID</returns>
-        public bool UPDATE(string tableName, Dictionary<string, object> columnsValues, string idFieldName, Int64 ID)
+        public bool UPDATE(string tableName, Dictionary<string, object> columnsValues, string idFieldName, Int64 id)
         {
             var fieldsValues = new StringBuilder();
 
@@ -1302,9 +1302,9 @@ namespace CCC.UTILS.Libs
             fieldsValues.Remove(fieldsValues.Length - 1, 1);
 
             var insertQuery = string.Format("UPDATE  [{0}] SET {1} WHERE [{2}]={3}", tableName, fieldsValues,
-                idFieldName, ID);
+                idFieldName, id);
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(insertQuery, conn);
             comm.CommandTimeout = 360;
 
@@ -1393,7 +1393,7 @@ namespace CCC.UTILS.Libs
 
             var updateQuery = string.Format("UPDATE  [{0}] SET {1} WHERE {2}", tableName, fieldsValues, whereStatement);
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(updateQuery, conn);
             comm.CommandTimeout = 360;
 
@@ -1420,9 +1420,9 @@ namespace CCC.UTILS.Libs
         /// <param name="tableName">DB Table Name</param>
         /// <param name="columnsValues">Dictionary Holds Fields and Values to be inserted</param>
         /// <param name="idFieldName">ID Field name </param>
-        /// <param name="ID">ID Value</param>
+        /// <param name="id">ID Value</param>
         /// <returns>Row ID</returns>
-        public bool UPDATE(string tableName, Dictionary<string, object> columnsValues, string idFieldName, Int64 ID,
+        public bool UPDATE(string tableName, Dictionary<string, object> columnsValues, string idFieldName, Int64 id,
             ref OleDbConnection conn)
         {
             var fieldsValues = new StringBuilder();
@@ -1442,7 +1442,7 @@ namespace CCC.UTILS.Libs
             fieldsValues.Remove(fieldsValues.Length - 1, 1);
 
             var insertQuery = string.Format("UPDATE  [{0}] SET {1} WHERE [{2}]={3}", tableName, fieldsValues,
-                idFieldName, ID);
+                idFieldName, id);
 
             var comm = new OleDbCommand(insertQuery, conn);
 
@@ -1585,12 +1585,12 @@ namespace CCC.UTILS.Libs
         /// <summary>
         ///     Delete by EXECUTING NATIVE SQL QUERY
         /// </summary>
-        /// <param name="SQL"></param>
+        /// <param name="sql"></param>
         /// <returns></returns>
-        public bool DELETE(string SQL)
+        public bool DELETE(string sql)
         {
-            var conn = DBInitializeConnection(ConnectionString);
-            var comm = new OleDbCommand(SQL, conn);
+            var conn = DbInitializeConnection(ConnectionString);
+            var comm = new OleDbCommand(sql, conn);
 
             try
             {
@@ -1614,13 +1614,13 @@ namespace CCC.UTILS.Libs
         /// </summary>
         /// <param name="tableName">DB Table Name</param>
         /// <param name="idFieldName">ID Field Name</param>
-        /// <param name="ID">ID Field Value</param>
+        /// <param name="id">ID Field Value</param>
         /// <returns>True if Row has been deleted. </returns>
-        public bool DELETE(string tableName, string idFieldName, int ID)
+        public bool DELETE(string tableName, string idFieldName, int id)
         {
-            var deleteQuery = string.Format("DELETE FROM [{0}] WHERE [{1}]={2}", tableName, idFieldName, ID);
+            var deleteQuery = string.Format("DELETE FROM [{0}] WHERE [{1}]={2}", tableName, idFieldName, id);
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(deleteQuery, conn);
 
             try
@@ -1645,13 +1645,13 @@ namespace CCC.UTILS.Libs
         /// </summary>
         /// <param name="tableName">DB Table Name</param>
         /// <param name="idFieldName">ID Field Name</param>
-        /// <param name="ID">ID Field Value</param>
+        /// <param name="id">ID Field Value</param>
         /// <returns>True if Row has been deleted. </returns>
-        public bool DELETE(string tableName, string idFieldName, long ID)
+        public bool DELETE(string tableName, string idFieldName, long id)
         {
-            var deleteQuery = string.Format("DELETE FROM [{0}] WHERE [{1}]={2}", tableName, idFieldName, ID);
+            var deleteQuery = string.Format("DELETE FROM [{0}] WHERE [{1}]={2}", tableName, idFieldName, id);
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(deleteQuery, conn);
 
             try
@@ -1704,7 +1704,7 @@ namespace CCC.UTILS.Libs
             // Final DELETE SQL Statement
             var deleteQuery = string.Format("DELETE FROM [{0}] WHERE {1}", tableName, whereStatement);
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(deleteQuery, conn);
 
             try
@@ -1736,7 +1736,7 @@ namespace CCC.UTILS.Libs
                 " WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]",
                 tablename);
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(createTableQuery, conn);
 
             try
@@ -1756,7 +1756,7 @@ namespace CCC.UTILS.Libs
             }
         }
 
-        public bool CREATE(string tableName, Dictionary<string, string> columns)
+        public bool Create(string tableName, Dictionary<string, string> columns)
         {
             var createTableQuery = new StringBuilder();
             createTableQuery.Append("CREATE TABLE ");
@@ -1774,7 +1774,7 @@ namespace CCC.UTILS.Libs
             createTableQuery.Length -= 2; //Remove trailing ", "
             createTableQuery.Append(")");
 
-            var conn = DBInitializeConnection(ConnectionString);
+            var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(createTableQuery.ToString(), conn);
 
             try
@@ -1794,7 +1794,7 @@ namespace CCC.UTILS.Libs
             }
         }
 
-        public OleDbDataReader EXECUTEREADER(string sqlStatment, OleDbConnection connection)
+        public OleDbDataReader Executereader(string sqlStatment, OleDbConnection connection)
         {
             OleDbCommand command;
 
@@ -1824,7 +1824,7 @@ namespace CCC.UTILS.Libs
 
     public class SqlJoinRelation
     {
-        public GLOBALS.DataRelation.Type RelationType { get; set; }
+        public Globals.DataRelation.Type RelationType { get; set; }
         public string MasterTableName { get; set; }
         public string MasterTableKey { get; set; }
         public string JoinedTableName { get; set; }

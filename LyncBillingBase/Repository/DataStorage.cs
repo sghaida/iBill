@@ -11,7 +11,7 @@ namespace LyncBillingBase.Repository
         // internal datastorage singleton container
         private static DataStorage _instance;
         // lock for thread-safety laziness
-        private static readonly object _mutex = new object();
+        private static readonly object Mutex = new object();
         /***
          * DataStorage Repositories
          */
@@ -27,7 +27,7 @@ namespace LyncBillingBase.Repository
         public DelegateRolesDataMapper DelegateRoles = new DelegateRolesDataMapper();
         public DepartmentHeadRolesDataMapper DepartmentHeads = new DepartmentHeadRolesDataMapper();
         public DepartmentsDataMapper Departments = new DepartmentsDataMapper();
-        public DIDsDataMapper DIDs = new DIDsDataMapper();
+        public DiDsDataMapper DiDs = new DiDsDataMapper();
         public GatewaysDataMapper Gateways = new GatewaysDataMapper();
         public GatewaysInfoDataMapper GatewaysInfo = new GatewaysInfoDataMapper();
         public GatewaysRatesDataMapper GatewaysRates = new GatewaysRatesDataMapper();
@@ -35,7 +35,7 @@ namespace LyncBillingBase.Repository
         public MonitoringServersDataMapper MonitoringServers = new MonitoringServersDataMapper();
         // NumberingPlan, DIDs, CallTypes and Rates
         public NumberingPlansDataMapper NumberingPlans = new NumberingPlansDataMapper();
-        public NumberingPlansForNGNDataMapper NumberingPlansForNGN = new NumberingPlansForNGNDataMapper();
+        public NumberingPlansForNgnDataMapper NumberingPlansForNgn = new NumberingPlansForNgnDataMapper();
         // User
         public PhoneBookContactsDataMapper PhoneBooks = new PhoneBookContactsDataMapper();
         // PhoneCalls
@@ -43,7 +43,7 @@ namespace LyncBillingBase.Repository
         public PhoneCallExclusionsDataMapper PhoneCallsExclusions = new PhoneCallExclusionsDataMapper();
         public PoolsDataMapper Pools = new PoolsDataMapper();
         public RatesDataMapper Rates = new RatesDataMapper();
-        public RatesForNGNDataMapper RatesForNGN = new RatesForNGNDataMapper();
+        public RatesForNgnDataMapper RatesForNgn = new RatesForNgnDataMapper();
         // Roles
         public RolesDataMapper Roles = new RolesDataMapper();
         public SitesDataMapper Sites = new SitesDataMapper();
@@ -64,7 +64,7 @@ namespace LyncBillingBase.Repository
             {
                 if (_instance == null)
                 {
-                    lock (_mutex)
+                    lock (Mutex)
                     {
                         if (_instance == null)
                         {

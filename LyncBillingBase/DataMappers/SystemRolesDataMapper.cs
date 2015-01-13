@@ -11,12 +11,12 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a User SipAccount, return the list of System Roles.
         /// </summary>
-        /// <param name="SipAccount"></param>
+        /// <param name="sipAccount"></param>
         /// <returns>List of SystemRole objects</returns>
-        public List<SystemRole> GetBySipAccount(string SipAccount)
+        public List<SystemRole> GetBySipAccount(string sipAccount)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("SipAccount", SipAccount);
+            condition.Add("SipAccount", sipAccount);
 
             try
             {
@@ -31,16 +31,16 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a User SipAccount and Role's ID, return whether this user has this role (true or false).
         /// </summary>
-        /// <param name="RoleID">Role.ID (int)</param>
-        /// <param name="SipAccount">User.SipAccount (string)</param>
+        /// <param name="roleId">Role.ID (int)</param>
+        /// <param name="sipAccount">User.SipAccount (string)</param>
         /// <returns>boolean</returns>
-        public bool ValidateRoleForUser(int RoleID, string SipAccount)
+        public bool ValidateRoleForUser(int roleId, string sipAccount)
         {
             List<SystemRole> systemRoles = null;
 
             var condition = new Dictionary<string, object>();
-            condition.Add("SipAccount", SipAccount);
-            condition.Add("RoleID", RoleID);
+            condition.Add("SipAccount", sipAccount);
+            condition.Add("RoleID", roleId);
 
             try
             {
@@ -61,16 +61,16 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a User SipAccount and Role object, return whether this user has this role (true or false).
         /// </summary>
-        /// <param name="UserRole">Role (object)</param>
-        /// <param name="SipAccount">User.SipAccount (string)</param>
+        /// <param name="userRole">Role (object)</param>
+        /// <param name="sipAccount">User.SipAccount (string)</param>
         /// <returns>boolean</returns>
-        public bool ValidateRoleForUser(Role UserRole, string SipAccount)
+        public bool ValidateRoleForUser(Role userRole, string sipAccount)
         {
             List<SystemRole> systemRoles = null;
 
             var condition = new Dictionary<string, object>();
-            condition.Add("SipAccount", SipAccount);
-            condition.Add("RoleID", UserRole.RoleID);
+            condition.Add("SipAccount", sipAccount);
+            condition.Add("RoleID", userRole.RoleId);
 
             try
             {

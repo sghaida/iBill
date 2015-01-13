@@ -5,13 +5,13 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "CallMarkerStatus", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "CallMarkerStatus", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class CallMarkerStatus : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("markerId")]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [DbColumn("phoneCallsTable")]
         public string PhoneCallsTable { get; set; }

@@ -8,7 +8,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class PoolsDataMapper : DataAccess<Pool>
     {
-        private static List<Pool> _Pools = new List<Pool>();
+        private static List<Pool> _pools = new List<Pool>();
 
         public PoolsDataMapper()
         {
@@ -17,43 +17,43 @@ namespace LyncBillingBase.DataMappers
 
         private void LoadPools()
         {
-            if (_Pools == null || _Pools.Count == 0)
+            if (_pools == null || _pools.Count == 0)
             {
-                _Pools = base.GetAll().ToList();
+                _pools = base.GetAll().ToList();
             }
         }
 
         public override IEnumerable<Pool> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            return _Pools;
+            return _pools;
         }
 
         public override int Insert(Pool dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var isContained = _Pools.Contains(dataObject);
-            var itExists = _Pools.Exists(item => item.FQDN == dataObject.FQDN);
+            var isContained = _pools.Contains(dataObject);
+            var itExists = _pools.Exists(item => item.Fqdn == dataObject.Fqdn);
 
             if (isContained || itExists)
             {
                 return -1;
             }
-            dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
-            _Pools.Add(dataObject);
+            dataObject.Id = base.Insert(dataObject, dataSourceName, dataSourceType);
+            _pools.Add(dataObject);
 
-            return dataObject.ID;
+            return dataObject.Id;
         }
 
         public override bool Update(Pool dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var pool = _Pools.Find(item => item.ID == dataObject.ID);
+            var pool = _pools.Find(item => item.Id == dataObject.Id);
 
             if (pool != null)
             {
-                _Pools.Remove(pool);
-                _Pools.Add(dataObject);
+                _pools.Remove(pool);
+                _pools.Add(dataObject);
 
                 return base.Update(dataObject, dataSourceName, dataSourceType);
             }
@@ -61,13 +61,13 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Delete(Pool dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var pool = _Pools.Find(item => item.ID == dataObject.ID);
+            var pool = _pools.Find(item => item.Id == dataObject.Id);
 
             if (pool != null)
             {
-                _Pools.Remove(pool);
+                _pools.Remove(pool);
 
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }

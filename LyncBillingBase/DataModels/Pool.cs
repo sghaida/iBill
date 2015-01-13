@@ -4,15 +4,15 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Pools", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "Pools", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class Pool : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("PoolID")]
-        public int ID { set; get; }
+        public int Id { set; get; }
 
         [DbColumn("PoolFQDN")]
-        public string FQDN { set; get; }
+        public string Fqdn { set; get; }
     }
 }

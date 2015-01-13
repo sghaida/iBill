@@ -2,11 +2,11 @@
 
 namespace LyncBillingBase.DataMappers.SQLQueries
 {
-    public class RatesSQL
+    public class RatesSql
     {
-        public string GetInternationalRates(string RatesTableName)
+        public string GetInternationalRates(string ratesTableName)
         {
-            var SQL = String.Format(
+            var sql = String.Format(
                 "SELECT " +
                 "Country_Name as 'CountryName', " +
                 "Two_Digits_country_code as 'ISO2CountryCode', " +
@@ -27,14 +27,14 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                 "dbo.[{0}] as fixedrate ON numberingplan.Dialing_prefix = fixedrate.country_code_dialing_prefix " +
                 ") SRC " +
                 "GROUP BY Country_Name, Two_Digits_country_code, Three_Digits_Country_Code "
-                , RatesTableName);
+                , ratesTableName);
 
-            return SQL;
+            return sql;
         }
 
-        public string GetNationalRatesForCountry(string RatesTableName, string ISO3CountryCode)
+        public string GetNationalRatesForCountry(string ratesTableName, string iso3CountryCode)
         {
-            var SQL = String.Format(
+            var sql = String.Format(
                 "SELECT " +
                 "r.Rate_ID as 'Rate_ID', " +
                 "np.Dialing_prefix as 'DialingCode', " +
@@ -45,15 +45,15 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                 "FROM dbo.[NumberingPlan] np " +
                 "LEFT OUTER JOIN dbo.[{0}] r on np.Dialing_prefix = r.country_code_dialing_prefix " +
                 "WHERE np.Three_Digits_Country_Code = '{1}' "
-                , RatesTableName
-                , ISO3CountryCode);
+                , ratesTableName
+                , iso3CountryCode);
 
-            return SQL;
+            return sql;
         }
 
-        public string GetNGNRates(string RatesTableName)
+        public string GetNgnRates(string ratesTableName)
         {
-            var SQL = String.Format(
+            var sql = String.Format(
                 "SELECT  " +
                 "RateID,  " +
                 "[{0}].[DialingCodeID] as DialingCodeID,  " +
@@ -68,9 +68,9 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                 "LEFT OUTER JOIN NGN_NumberingPlan on NGN_NumberingPlan.ID = [{0}].[DialingCodeID]  " +
                 "LEFT OUTER JOIN Countries on Countries.CountryCodeISO3 = [NGN_NumberingPlan].[CountryCodeISO3] " +
                 "LEFT OUTER JOIN [CallTypes] on [CallTypes].id = [NGN_NumberingPlan].[TypeOfServiceID] "
-                , RatesTableName);
+                , ratesTableName);
 
-            return SQL;
+            return sql;
         }
     }
 }

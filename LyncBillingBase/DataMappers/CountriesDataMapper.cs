@@ -10,7 +10,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class CountriesDataMapper : DataAccess<Country>
     {
-        private static List<Country> _Countries = new List<Country>();
+        private static List<Country> _countries = new List<Country>();
 
         public CountriesDataMapper()
         {
@@ -19,23 +19,23 @@ namespace LyncBillingBase.DataMappers
 
         private void LoadCountries()
         {
-            if (_Countries == null || _Countries.Count == 0)
+            if (_countries == null || _countries.Count == 0)
             {
-                _Countries = _Countries.GetWithRelations(item => item.Currency).ToList();
+                _countries = _countries.GetWithRelations(item => item.Currency).ToList();
             }
         }
 
         /// <summary>
         ///     Given an ISO2 Country Code, return the Country object.
         /// </summary>
-        /// <param name="ISO2Code">ISO2 Code, such as: GR, US, UK, JO.</param>
+        /// <param name="iso2Code">ISO2 Code, such as: GR, US, UK, JO.</param>
         /// <returns>Country object.</returns>
-        public Country GetByISO2Code(string ISO2Code)
+        public Country GetByIso2Code(string iso2Code)
         {
             Country country = null;
 
             var condition = new Dictionary<string, object>();
-            condition.Add("ISO2Code", ISO2Code);
+            condition.Add("ISO2Code", iso2Code);
 
             try
             {
@@ -57,27 +57,27 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given an ISO3 Country Code, return the Country object.
         /// </summary>
-        /// <param name="ISO3Code">ISO3 Code, such as: GRC, USA, GBR, JOR, ARE.</param>
+        /// <param name="iso3Code">ISO3 Code, such as: GRC, USA, GBR, JOR, ARE.</param>
         /// <returns>Country object.</returns>
-        public Country GetByISO3Code(string ISO3Code)
+        public Country GetByIso3Code(string iso3Code)
         {
-            return _Countries.FirstOrDefault(item => item.ISO3Code == ISO3Code);
+            return _countries.FirstOrDefault(item => item.Iso3Code == iso3Code);
         }
 
         public override IEnumerable<Country> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            return _Countries;
+            return _countries;
         }
 
         public override int Insert(Country dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var isContained = _Countries.Contains(dataObject);
+            var isContained = _countries.Contains(dataObject);
             var itExists =
-                _Countries.Exists(
+                _countries.Exists(
                     item =>
-                        item.ISO3Code == dataObject.ISO3Code || item.ISO2Code == dataObject.ISO2Code ||
+                        item.Iso3Code == dataObject.Iso3Code || item.Iso2Code == dataObject.Iso2Code ||
                         item.Name == dataObject.Name);
 
 
@@ -85,22 +85,22 @@ namespace LyncBillingBase.DataMappers
             {
                 return -1;
             }
-            var rowID = base.Insert(dataObject, dataSourceName, dataSourceType);
+            var rowId = base.Insert(dataObject, dataSourceName, dataSourceType);
 
-            if (rowID > 0)
+            if (rowId > 0)
             {
-                dataObject.ID = rowID;
+                dataObject.Id = rowId;
                 dataObject = dataObject.GetWithRelations(item => item.Currency);
-                _Countries.Add(dataObject);
+                _countries.Add(dataObject);
             }
 
-            return rowID;
+            return rowId;
         }
 
         public override bool Update(Country dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var country = _Countries.Find(item => item.ID == dataObject.ID);
+            var country = _countries.Find(item => item.Id == dataObject.Id);
 
             if (country != null)
             {
@@ -108,10 +108,10 @@ namespace LyncBillingBase.DataMappers
 
                 if (status)
                 {
-                    _Countries.Remove(country);
+                    _countries.Remove(country);
 
                     dataObject = dataObject.GetWithRelations(item => item.Currency);
-                    _Countries.Add(dataObject);
+                    _countries.Add(dataObject);
                 }
 
                 return status;
@@ -120,13 +120,13 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Delete(Country dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var country = _Countries.Find(item => item.ID == dataObject.ID);
+            var country = _countries.Find(item => item.Id == dataObject.Id);
 
             if (country != null)
             {
-                _Countries.Remove(country);
+                _countries.Remove(country);
 
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }

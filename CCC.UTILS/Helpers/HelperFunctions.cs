@@ -11,23 +11,23 @@ namespace CCC.UTILS.Helpers
 {
     public static class HelperFunctions
     {
-        public static bool GetResolvedConnecionIPAddress(string serverNameOrURL, out string resolvedIPAddress)
+        public static bool GetResolvedConnecionIpAddress(string serverNameOrUrl, out string resolvedIpAddress)
         {
             var isResolved = false;
             IPHostEntry hostEntry = null;
-            IPAddress resolvIP = null;
+            IPAddress resolvIp = null;
             try
             {
-                if (!IPAddress.TryParse(serverNameOrURL, out resolvIP))
+                if (!IPAddress.TryParse(serverNameOrUrl, out resolvIp))
                 {
-                    hostEntry = Dns.GetHostEntry(serverNameOrURL);
+                    hostEntry = Dns.GetHostEntry(serverNameOrUrl);
 
                     if (hostEntry != null && hostEntry.AddressList != null
                         && hostEntry.AddressList.Length > 0)
                     {
                         if (hostEntry.AddressList.Length == 1)
                         {
-                            resolvIP = hostEntry.AddressList[0];
+                            resolvIp = hostEntry.AddressList[0];
                             isResolved = true;
                         }
                         else
@@ -36,7 +36,7 @@ namespace CCC.UTILS.Helpers
                             {
                                 if (var.AddressFamily == AddressFamily.InterNetwork)
                                 {
-                                    resolvIP = var;
+                                    resolvIp = var;
                                     isResolved = true;
                                     break;
                                 }
@@ -52,11 +52,11 @@ namespace CCC.UTILS.Helpers
             catch (Exception)
             {
                 isResolved = false;
-                resolvIP = null;
+                resolvIp = null;
             }
             finally
             {
-                resolvedIPAddress = resolvIP.ToString();
+                resolvedIpAddress = resolvIp.ToString();
             }
 
             return isResolved;
@@ -119,7 +119,7 @@ namespace CCC.UTILS.Helpers
             return value;
         }
 
-        public static object ReturnNullIfDBNull(this object value)
+        public static object ReturnNullIfDbNull(this object value)
         {
             if (value == DBNull.Value)
                 return '\0';
@@ -193,25 +193,25 @@ namespace CCC.UTILS.Helpers
             var minutes = Convert.ToInt32(Math.Floor((double) (secondsParam - (hours*3600))/60));
             var seconds = secondsParam - (hours*3600) - (minutes*60);
 
-            var hours_str = hours.ToString();
-            var mins_str = minutes.ToString();
-            var secs_str = seconds.ToString();
+            var hoursStr = hours.ToString();
+            var minsStr = minutes.ToString();
+            var secsStr = seconds.ToString();
 
             if (hours < 10)
             {
-                hours_str = "0" + hours_str;
+                hoursStr = "0" + hoursStr;
             }
 
             if (minutes < 10)
             {
-                mins_str = "0" + mins_str;
+                minsStr = "0" + minsStr;
             }
             if (seconds < 10)
             {
-                secs_str = "0" + secs_str;
+                secsStr = "0" + secsStr;
             }
 
-            return hours_str + ':' + mins_str + ':' + secs_str;
+            return hoursStr + ':' + minsStr + ':' + secsStr;
         }
 
         public static string ConvertSecondsToReadable(this long secondsParam)
@@ -220,25 +220,25 @@ namespace CCC.UTILS.Helpers
             var minutes = Convert.ToInt32(Math.Floor((double) (secondsParam - (hours*3600))/60));
             var seconds = Convert.ToInt32(secondsParam - (hours*3600) - (minutes*60));
 
-            var hours_str = hours.ToString();
-            var mins_str = minutes.ToString();
-            var secs_str = seconds.ToString();
+            var hoursStr = hours.ToString();
+            var minsStr = minutes.ToString();
+            var secsStr = seconds.ToString();
 
             if (hours < 10)
             {
-                hours_str = "0" + hours_str;
+                hoursStr = "0" + hoursStr;
             }
 
             if (minutes < 10)
             {
-                mins_str = "0" + mins_str;
+                minsStr = "0" + minsStr;
             }
             if (seconds < 10)
             {
-                secs_str = "0" + secs_str;
+                secsStr = "0" + secsStr;
             }
 
-            return hours_str + ':' + mins_str + ':' + secs_str;
+            return hoursStr + ':' + minsStr + ':' + secsStr;
         }
 
         /// <summary>

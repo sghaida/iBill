@@ -8,12 +8,12 @@ using CCC.ORM.Libs;
 
 namespace CCC.ORM.DataAccess
 {
-    public class DBLib
+    public class DbLib
     {
         //Load DLL Configs
         public static LoadConfigs config = new LoadConfigs();
 
-        public DBLib()
+        public DbLib()
         {
             var connectionStringsSection = config.DllConfig.ConnectionStrings;
 
@@ -27,7 +27,7 @@ namespace CCC.ORM.DataAccess
             }
         }
 
-        public DBLib(string connectionString)
+        public DbLib(string connectionString)
         {
             ConnectionString = connectionString;
         }
@@ -137,7 +137,7 @@ namespace CCC.ORM.DataAccess
                     var keysStatement = string.Empty;
 
                     //Decide the join type
-                    if (GLOBALS.DataRelation.Type.INTERSECTION == relation.RelationType)
+                    if (Globals.DataRelation.Type.INTERSECTION == relation.RelationType)
                     {
                         joinType = "INNER JOIN";
                     }
@@ -1824,7 +1824,7 @@ namespace CCC.ORM.DataAccess
 
     public class SqlJoinRelation
     {
-        public GLOBALS.DataRelation.Type RelationType { get; set; }
+        public Globals.DataRelation.Type RelationType { get; set; }
         public string MasterTableName { get; set; }
         public string MasterTableKey { get; set; }
         public string JoinedTableName { get; set; }

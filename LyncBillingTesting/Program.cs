@@ -12,7 +12,7 @@ namespace LyncBillingTesting
 {
     internal class Program
     {
-        public static string tolower(string text)
+        public static string Tolower(string text)
         {
             return text.ToLower();
         }
@@ -22,16 +22,16 @@ namespace LyncBillingTesting
             //Lync2013 processor = new Lync2013();
             //processor.ProcessPhoneCalls();
 
-            var DelegatesRolesDM = new DelegateRolesDataMapper();
-            var DepartmentHeadsDM = new DepartmentHeadRolesDataMapper();
+            var delegatesRolesDm = new DelegateRolesDataMapper();
+            var departmentHeadsDm = new DepartmentHeadRolesDataMapper();
 
-            var allDelegates = DelegatesRolesDM.GetAll().ToList();
-            var allDepartmentHeads = DepartmentHeadsDM.GetAll().ToList();
+            var allDelegates = delegatesRolesDm.GetAll().ToList();
+            var allDepartmentHeads = departmentHeadsDm.GetAll().ToList();
         }
 
         public static void InsertUpdateDeleteTests()
         {
-            var _STORAGE = DataStorage.Instance;
+            var storage = DataStorage.Instance;
 
             var status = false;
 
@@ -46,12 +46,12 @@ namespace LyncBillingTesting
 
             var plan = new NumberingPlan();
             plan.City = athens;
-            plan.ISO3CountryCode = kaz;
+            plan.Iso3CountryCode = kaz;
 
             var ev = new CustomExpressionVisitor();
 
             Expression<Func<NumberingPlan, bool>> exp1 = item => item.City.ToLower() == athens;
-            Expression<Func<NumberingPlan, bool>> exp2 = (item => item.ISO3CountryCode.ToLower() == kaz);
+            Expression<Func<NumberingPlan, bool>> exp2 = (item => item.Iso3CountryCode.ToLower() == kaz);
 
             var data1 = numberingPlan.Get(exp1).ToList();
             var data2 = numberingPlan.Get(exp2).ToList();
@@ -60,7 +60,7 @@ namespace LyncBillingTesting
             /***
              * TESTING THE SINGLETON SITES DEPARTMENTS DATA MAPPER
              */
-            var allSitesDepartments = _STORAGE.SitesDepartments.GetAll();
+            var allSitesDepartments = storage.SitesDepartments.GetAll();
 
 
             var newSite = new Site
@@ -76,42 +76,42 @@ namespace LyncBillingTesting
                 Description = "Sample Description"
             };
 
-            newSite.ID = _STORAGE.Sites.Insert(newSite);
-            newDepartment.ID = _STORAGE.Departments.Insert(newDepartment);
+            newSite.Id = storage.Sites.Insert(newSite);
+            newDepartment.Id = storage.Departments.Insert(newDepartment);
 
             var newSiteDepartment = new SiteDepartment
             {
-                SiteID = newSite.ID,
-                DepartmentID = newDepartment.ID
+                SiteId = newSite.Id,
+                DepartmentId = newDepartment.Id
             };
 
-            newSiteDepartment.ID = _STORAGE.SitesDepartments.Insert(newSiteDepartment);
+            newSiteDepartment.Id = storage.SitesDepartments.Insert(newSiteDepartment);
 
-            allSitesDepartments = _STORAGE.SitesDepartments.GetAll();
+            allSitesDepartments = storage.SitesDepartments.GetAll();
 
-            newSiteDepartment.SiteID = 29;
+            newSiteDepartment.SiteId = 29;
 
-            status = _STORAGE.SitesDepartments.Update(newSiteDepartment);
+            status = storage.SitesDepartments.Update(newSiteDepartment);
 
-            newSiteDepartment = _STORAGE.SitesDepartments.GetById(newSiteDepartment.ID);
+            newSiteDepartment = storage.SitesDepartments.GetById(newSiteDepartment.Id);
 
-            allSitesDepartments = _STORAGE.SitesDepartments.GetAll();
+            allSitesDepartments = storage.SitesDepartments.GetAll();
 
-            status = _STORAGE.SitesDepartments.Delete(newSiteDepartment);
+            status = storage.SitesDepartments.Delete(newSiteDepartment);
 
-            status = _STORAGE.Departments.Delete(newDepartment);
+            status = storage.Departments.Delete(newDepartment);
 
-            status = _STORAGE.Sites.Delete(newSite);
+            status = storage.Sites.Delete(newSite);
 
 
             /***
              * TESTING USERS DATA MAPPER
              */
-            var allUsers = _STORAGE.Users.GetAll();
+            var allUsers = storage.Users.GetAll();
 
             var newUser = new User
             {
-                EmployeeID = 99887766,
+                EmployeeId = 99887766,
                 SipAccount = "unknown@ccc.gr",
                 FullName = "UNKNOWN SAMPLE USER",
                 DisplayName = "UNKNOWN USER",
@@ -124,66 +124,66 @@ namespace LyncBillingTesting
                 CreatedAt = DateTime.Now
             };
 
-            _STORAGE.Users.Insert(newUser);
+            storage.Users.Insert(newUser);
 
-            newUser = _STORAGE.Users.GetBySipAccount(newUser.SipAccount);
+            newUser = storage.Users.GetBySipAccount(newUser.SipAccount);
 
             newUser.DisplayName = "UNKNOWN";
 
-            status = _STORAGE.Users.Update(newUser);
-            status = _STORAGE.Users.Delete(newUser);
+            status = storage.Users.Update(newUser);
+            status = storage.Users.Delete(newUser);
 
 
             /***
              * TESTING SYSTEM ROLES
              */
-            var DEVELOPER_ROLE = _STORAGE.Roles.GetByRoleID(10);
+            var developerRole = storage.Roles.GetByRoleId(10);
 
             var systemRole = new SystemRole
             {
                 Description = "TESTING SYSTEM ROLE",
-                RoleID = DEVELOPER_ROLE.RoleID,
+                RoleId = developerRole.RoleId,
                 SipAccount = "nafez@ccc.gr",
-                SiteID = 29
+                SiteId = 29
             };
 
-            systemRole.ID = _STORAGE.SystemRoles.Insert(systemRole);
+            systemRole.Id = storage.SystemRoles.Insert(systemRole);
 
-            systemRole = _STORAGE.SystemRoles.GetById(systemRole.ID);
+            systemRole = storage.SystemRoles.GetById(systemRole.Id);
 
-            systemRole.SiteID = 31;
+            systemRole.SiteId = 31;
 
-            status = _STORAGE.SystemRoles.Update(systemRole);
+            status = storage.SystemRoles.Update(systemRole);
 
-            systemRole = _STORAGE.SystemRoles.GetById(systemRole.ID);
+            systemRole = storage.SystemRoles.GetById(systemRole.Id);
 
-            status = _STORAGE.SystemRoles.Delete(systemRole);
+            status = storage.SystemRoles.Delete(systemRole);
 
 
             /***
              * TESTING SITES DEPARTMENTS DATA MAPPER
              */
-            var moa_site = _STORAGE.Sites.GetById(29);
-            var raso_site = _STORAGE.Sites.GetById(31);
-            var isd_department = _STORAGE.Departments.GetByName("ISD");
+            var moaSite = storage.Sites.GetById(29);
+            var rasoSite = storage.Sites.GetById(31);
+            var isdDepartment = storage.Departments.GetByName("ISD");
 
             var siteDepartment = new SiteDepartment
             {
-                SiteID = moa_site.ID,
-                DepartmentID = isd_department.ID
+                SiteId = moaSite.Id,
+                DepartmentId = isdDepartment.Id
             };
 
-            siteDepartment.ID = _STORAGE.SitesDepartments.Insert(siteDepartment);
+            siteDepartment.Id = storage.SitesDepartments.Insert(siteDepartment);
 
-            siteDepartment = _STORAGE.SitesDepartments.GetById(siteDepartment.ID);
+            siteDepartment = storage.SitesDepartments.GetById(siteDepartment.Id);
 
-            siteDepartment.SiteID = raso_site.ID;
+            siteDepartment.SiteId = rasoSite.Id;
 
-            status = _STORAGE.SitesDepartments.Update(siteDepartment);
+            status = storage.SitesDepartments.Update(siteDepartment);
 
-            siteDepartment = _STORAGE.SitesDepartments.GetById(siteDepartment.ID);
+            siteDepartment = storage.SitesDepartments.GetById(siteDepartment.Id);
 
-            status = _STORAGE.SitesDepartments.Delete(siteDepartment);
+            status = storage.SitesDepartments.Delete(siteDepartment);
 
 
             /***
@@ -196,14 +196,14 @@ namespace LyncBillingTesting
                 Name = "SAMPLE SITE"
             };
 
-            site.ID = _STORAGE.Sites.Insert(site);
+            site.Id = storage.Sites.Insert(site);
 
-            site = _STORAGE.Sites.GetById(site.ID);
+            site = storage.Sites.GetById(site.Id);
 
             site.Name = "sample sample site";
 
-            status = _STORAGE.Sites.Update(site);
-            status = _STORAGE.Sites.Delete(site);
+            status = storage.Sites.Update(site);
+            status = storage.Sites.Delete(site);
 
 
             /***
@@ -212,35 +212,35 @@ namespace LyncBillingTesting
             var role123 = new Role
             {
                 RoleDescription = "SAMPLE ROLE",
-                RoleID = 123123,
+                RoleId = 123123,
                 RoleName = "SAMPLE-01"
             };
 
-            role123.ID = _STORAGE.Roles.Insert(role123);
+            role123.Id = storage.Roles.Insert(role123);
 
             role123.RoleName = "sample-02.01";
 
-            status = _STORAGE.Roles.Update(role123);
-            status = _STORAGE.Roles.Delete(role123);
+            status = storage.Roles.Update(role123);
+            status = storage.Roles.Delete(role123);
 
 
             /***
              * TESTING NGN RATES DATA MAPPER
              */
-            var NGNRate = new RateForNGN
+            var ngnRate = new RateForNgn
             {
-                DialingCodeID = 1,
+                DialingCodeId = 1,
                 Rate = Convert.ToDecimal(15.45)
             };
 
-            NGNRate.ID = 19; //_STORAGE.RatesForNGN.Insert(NGNRate, 10);
+            ngnRate.Id = 19; //_STORAGE.RatesForNGN.Insert(NGNRate, 10);
 
-            NGNRate = _STORAGE.RatesForNGN.GetByGatewayID(10).Find(rate => rate.ID == 19);
+            ngnRate = storage.RatesForNgn.GetByGatewayId(10).Find(rate => rate.Id == 19);
 
-            NGNRate.Rate = Convert.ToDecimal(20.45);
+            ngnRate.Rate = Convert.ToDecimal(20.45);
 
-            status = _STORAGE.RatesForNGN.Update(NGNRate, 10);
-            status = _STORAGE.RatesForNGN.Delete(NGNRate, 10);
+            status = storage.RatesForNgn.Update(ngnRate, 10);
+            status = storage.RatesForNgn.Delete(ngnRate, 10);
 
 
             /***
@@ -248,15 +248,15 @@ namespace LyncBillingTesting
              */
             var newPool = new Pool
             {
-                FQDN = "TESTING POOL FQDN"
+                Fqdn = "TESTING POOL FQDN"
             };
 
-            newPool.ID = _STORAGE.Pools.Insert(newPool);
+            newPool.Id = storage.Pools.Insert(newPool);
 
-            newPool.FQDN = "CHANGED FQDN";
+            newPool.Fqdn = "CHANGED FQDN";
 
-            status = _STORAGE.Pools.Update(newPool);
-            status = _STORAGE.Pools.Delete(newPool);
+            status = storage.Pools.Update(newPool);
+            status = storage.Pools.Delete(newPool);
 
 
             /***
@@ -266,21 +266,21 @@ namespace LyncBillingTesting
             {
                 ExclusionSubject = "aalhour@ccc.gr",
                 Description = "SAMPLE EXCLUSION TEST",
-                ExclusionType = GLOBALS.PhoneCallExclusion.Type.Source.Value(),
-                SiteID = 29,
-                ZeroCost = GLOBALS.PhoneCallExclusion.ZeroCost.No.Value(),
-                AutoMark = GLOBALS.PhoneCallExclusion.AutoMark.Business.Value()
+                ExclusionType = Globals.PhoneCallExclusion.Type.Source.Value(),
+                SiteId = 29,
+                ZeroCost = Globals.PhoneCallExclusion.ZeroCost.No.Value(),
+                AutoMark = Globals.PhoneCallExclusion.AutoMark.Business.Value()
             };
 
-            exclusion.ID = _STORAGE.PhoneCallsExclusions.Insert(exclusion);
+            exclusion.Id = storage.PhoneCallsExclusions.Insert(exclusion);
 
-            exclusion = _STORAGE.PhoneCallsExclusions.GetById(789);
+            exclusion = storage.PhoneCallsExclusions.GetById(789);
 
             exclusion.AutoMark = "";
-            exclusion.ZeroCost = GLOBALS.PhoneCallExclusion.ZeroCost.Yes.Value();
+            exclusion.ZeroCost = Globals.PhoneCallExclusion.ZeroCost.Yes.Value();
 
-            status = _STORAGE.PhoneCallsExclusions.Update(exclusion);
-            status = _STORAGE.PhoneCallsExclusions.Delete(exclusion);
+            status = storage.PhoneCallsExclusions.Update(exclusion);
+            status = storage.PhoneCallsExclusions.Delete(exclusion);
 
 
             /***
@@ -295,37 +295,37 @@ namespace LyncBillingTesting
                 Type = "Personal"
             };
 
-            contact.ID = _STORAGE.PhoneBooks.Insert(contact);
+            contact.Id = storage.PhoneBooks.Insert(contact);
 
-            var allContacts = _STORAGE.PhoneBooks.GetBySipAccount(contact.SipAccount);
+            var allContacts = storage.PhoneBooks.GetBySipAccount(contact.SipAccount);
 
             contact.Name = "SAMPLE PHONE BOOK CONTANCT NAME";
             contact.Type = "Business";
 
-            status = _STORAGE.PhoneBooks.Update(contact);
-            status = _STORAGE.PhoneBooks.Delete(contact);
+            status = storage.PhoneBooks.Update(contact);
+            status = storage.PhoneBooks.Delete(contact);
 
 
             /***
              * TESTING NUMBERING PLAN FOR NGN
              */
-            var NGN = new NumberingPlanForNGN
+            var ngn = new NumberingPlanForNgn
             {
                 Description = "TEST NGN",
                 DialingCode = "8000000000000",
-                ISO3CountryCode = "GRC",
-                TypeOfServiceID = 6,
+                Iso3CountryCode = "GRC",
+                TypeOfServiceId = 6,
                 Provider = "SAMPLE PROVIDER"
             };
 
-            NGN.ID = _STORAGE.NumberingPlansForNGN.Insert(NGN);
+            ngn.Id = storage.NumberingPlansForNgn.Insert(ngn);
 
-            NGN = _STORAGE.NumberingPlansForNGN.GetById(NGN.ID);
+            ngn = storage.NumberingPlansForNgn.GetById(ngn.Id);
 
-            NGN.Description = "TEST NGN - UPDATED.";
+            ngn.Description = "TEST NGN - UPDATED.";
 
-            status = _STORAGE.NumberingPlansForNGN.Update(NGN);
-            status = _STORAGE.NumberingPlansForNGN.Delete(NGN);
+            status = storage.NumberingPlansForNgn.Update(ngn);
+            status = storage.NumberingPlansForNgn.Delete(ngn);
 
 
             /***
@@ -336,18 +336,18 @@ namespace LyncBillingTesting
                 City = "Xin Che Bang",
                 CountryName = "ChinaYaNa",
                 DialingPrefix = 90909,
-                ISO2CountryCode = "CY",
-                ISO3CountryCode = "CYN",
+                Iso2CountryCode = "CY",
+                Iso3CountryCode = "CYN",
                 Provider = string.Empty,
                 TypeOfService = "countrycode"
             };
 
-            _STORAGE.NumberingPlans.Insert(numPlan);
+            storage.NumberingPlans.Insert(numPlan);
 
             numPlan.CountryName = "ChynaYaNa";
 
-            status = _STORAGE.NumberingPlans.Update(numPlan);
-            status = _STORAGE.NumberingPlans.Delete(numPlan);
+            status = storage.NumberingPlans.Update(numPlan);
+            status = storage.NumberingPlans.Delete(numPlan);
 
 
             /***
@@ -366,13 +366,13 @@ namespace LyncBillingTesting
                 Username = "SEMSEM"
             };
 
-            monServer.ID = _STORAGE.MonitoringServers.Insert(monServer);
+            monServer.Id = storage.MonitoringServers.Insert(monServer);
 
             monServer.Username = monServer.Username.ToLower();
             monServer.Password = "123123";
 
-            status = _STORAGE.MonitoringServers.Update(monServer);
-            status = _STORAGE.MonitoringServers.Delete(monServer);
+            status = storage.MonitoringServers.Update(monServer);
+            status = storage.MonitoringServers.Delete(monServer);
 
 
             /***
@@ -384,13 +384,13 @@ namespace LyncBillingTesting
                 Subject = "SAMPLE"
             };
 
-            newTemplate.ID = _STORAGE.MailTemplates.Insert(newTemplate);
+            newTemplate.Id = storage.MailTemplates.Insert(newTemplate);
 
             newTemplate.Subject = "TESTING TEMPLATE";
             newTemplate.TemplateBody = "TESTING TEMPLATE BODY TEXT";
 
-            status = _STORAGE.MailTemplates.Update(newTemplate);
-            status = _STORAGE.MailTemplates.Delete(newTemplate);
+            status = storage.MailTemplates.Update(newTemplate);
+            status = storage.MailTemplates.Delete(newTemplate);
 
 
             /***
@@ -404,17 +404,17 @@ namespace LyncBillingTesting
                 RatesTableName = null,
                 NgnRatesTableName = null,
                 ProviderName = "SAMPLE PROVIDER",
-                GatewayID = 10
+                GatewayId = 10
             };
 
-            gatewayRateInfo.ID = _STORAGE.GatewaysRates.Insert(gatewayRateInfo);
+            gatewayRateInfo.Id = storage.GatewaysRates.Insert(gatewayRateInfo);
 
-            gatewayRateInfo = _STORAGE.GatewaysRates.GetById(gatewayRateInfo.ID);
+            gatewayRateInfo = storage.GatewaysRates.GetById(gatewayRateInfo.Id);
 
             gatewayRateInfo.CurrencyCode = "USD";
 
-            status = _STORAGE.GatewaysRates.Update(gatewayRateInfo);
-            status = _STORAGE.GatewaysRates.Delete(gatewayRateInfo);
+            status = storage.GatewaysRates.Update(gatewayRateInfo);
+            status = storage.GatewaysRates.Delete(gatewayRateInfo);
 
 
             /***
@@ -425,25 +425,25 @@ namespace LyncBillingTesting
                 Name = "SAMPLE GATEWAY"
             };
 
-            sampleGateway.ID = _STORAGE.Gateways.Insert(sampleGateway);
+            sampleGateway.Id = storage.Gateways.Insert(sampleGateway);
 
             var newGatewayInfo = new GatewayInfo
             {
                 Description = "New Info for Gateway",
-                GatewayID = sampleGateway.ID,
-                PoolID = 2,
-                SiteID = 29
+                GatewayId = sampleGateway.Id,
+                PoolId = 2,
+                SiteId = 29
             };
 
-            _STORAGE.GatewaysInfo.Insert(newGatewayInfo);
+            storage.GatewaysInfo.Insert(newGatewayInfo);
 
-            var AllGatewayInfo = _STORAGE.GatewaysInfo.GetByGatewayID(newGatewayInfo.GatewayID).ToList();
+            var allGatewayInfo = storage.GatewaysInfo.GetByGatewayId(newGatewayInfo.GatewayId).ToList();
 
             newGatewayInfo.Description = "Info For Gateway - UPDATED.";
 
-            status = _STORAGE.GatewaysInfo.Update(newGatewayInfo);
-            status = _STORAGE.GatewaysInfo.Delete(newGatewayInfo);
-            status = _STORAGE.Gateways.Delete(sampleGateway);
+            status = storage.GatewaysInfo.Update(newGatewayInfo);
+            status = storage.GatewaysInfo.Delete(newGatewayInfo);
+            status = storage.Gateways.Delete(sampleGateway);
 
 
             /***
@@ -454,32 +454,32 @@ namespace LyncBillingTesting
                 Name = "Sameer"
             };
 
-            newGateway.ID = _STORAGE.Gateways.Insert(newGateway);
+            newGateway.Id = storage.Gateways.Insert(newGateway);
 
             newGateway.Name = "Sameer-02";
 
-            status = _STORAGE.Gateways.Update(newGateway);
-            status = _STORAGE.Gateways.Delete(newGateway);
+            status = storage.Gateways.Update(newGateway);
+            status = storage.Gateways.Delete(newGateway);
 
 
             /***
              * TESTING DIDs DATA MAPPER
              */
-            var newDID = new DID
+            var newDid = new Did
             {
                 Description = "SAMPLE DID",
                 Regex = "SAMPLE REGEX",
-                SiteID = 29
+                SiteId = 29
             };
 
-            newDID.ID = _STORAGE.DIDs.Insert(newDID);
+            newDid.Id = storage.DiDs.Insert(newDid);
 
-            newDID = _STORAGE.DIDs.GetById(newDID.ID);
+            newDid = storage.DiDs.GetById(newDid.Id);
 
-            newDID.Description = "SAMPLE DID - UPDATED DESCRIPTION";
+            newDid.Description = "SAMPLE DID - UPDATED DESCRIPTION";
 
-            status = _STORAGE.DIDs.Update(newDID);
-            status = _STORAGE.DIDs.Delete(newDID);
+            status = storage.DiDs.Update(newDid);
+            status = storage.DiDs.Delete(newDid);
 
 
             /***
@@ -491,42 +491,42 @@ namespace LyncBillingTesting
                 Description = "Sumurmur Department"
             };
 
-            department.ID = _STORAGE.Departments.Insert(department);
+            department.Id = storage.Departments.Insert(department);
 
-            department = _STORAGE.Departments.GetById(department.ID);
+            department = storage.Departments.GetById(department.Id);
 
             department.Description = "Never mind!";
 
-            status = _STORAGE.Departments.Update(department);
-            status = _STORAGE.Departments.Delete(department);
+            status = storage.Departments.Update(department);
+            status = storage.Departments.Delete(department);
 
 
             /***
              * TESTING DEPARTMENT HEAD ROLES
              */
-            var MOA = _STORAGE.Sites.GetById(29);
-            var MOA_ISD = _STORAGE.SitesDepartments.GetBySiteID(29).ToList().Find(item => item.Department.Name == "ISD");
+            var moa = storage.Sites.GetById(29);
+            var moaIsd = storage.SitesDepartments.GetBySiteId(29).ToList().Find(item => item.Department.Name == "ISD");
             var depHead = new DepartmentHeadRole
             {
                 SipAccount = "aalhour@ccc.gr",
-                SiteDepartmentID = MOA_ISD.ID
+                SiteDepartmentId = moaIsd.Id
             };
 
-            depHead.ID = _STORAGE.DepartmentHeads.Insert(depHead);
+            depHead.Id = storage.DepartmentHeads.Insert(depHead);
 
-            depHead = _STORAGE.DepartmentHeads.GetById(depHead.ID);
+            depHead = storage.DepartmentHeads.GetById(depHead.Id);
 
             depHead.SipAccount = "sghaida@ccc.gr";
 
-            status = _STORAGE.DepartmentHeads.Update(depHead);
-            status = _STORAGE.DepartmentHeads.Delete(depHead);
+            status = storage.DepartmentHeads.Update(depHead);
+            status = storage.DepartmentHeads.Delete(depHead);
 
 
             /***
              * TESTING DELEGATE ROLES DATA MAPPER
              */
-            MOA = _STORAGE.Sites.GetById(29);
-            MOA_ISD = _STORAGE.SitesDepartments.GetBySiteID(29).ToList().Find(item => item.Department.Name == "ISD");
+            moa = storage.Sites.GetById(29);
+            moaIsd = storage.SitesDepartments.GetBySiteId(29).ToList().Find(item => item.Department.Name == "ISD");
 
             var userDelegate = new DelegateRole
             {
@@ -539,35 +539,35 @@ namespace LyncBillingTesting
             {
                 DelegationType = 2,
                 DelegeeSipAccount = "aalhour@ccc.gr",
-                ManagedSiteDepartmentID = MOA_ISD.ID
+                ManagedSiteDepartmentId = moaIsd.Id
             };
 
             var siteDelegate = new DelegateRole
             {
                 DelegationType = 1,
                 DelegeeSipAccount = "aalhour@ccc.gr",
-                ManagedSiteID = MOA.ID
+                ManagedSiteId = moa.Id
             };
 
-            userDelegate.ID = _STORAGE.DelegateRoles.Insert(userDelegate);
-            departmentDelegate.ID = _STORAGE.DelegateRoles.Insert(departmentDelegate);
-            siteDelegate.ID = _STORAGE.DelegateRoles.Insert(siteDelegate);
+            userDelegate.Id = storage.DelegateRoles.Insert(userDelegate);
+            departmentDelegate.Id = storage.DelegateRoles.Insert(departmentDelegate);
+            siteDelegate.Id = storage.DelegateRoles.Insert(siteDelegate);
 
-            var allRoles = _STORAGE.DelegateRoles.GetByDelegeeSipAccount(userDelegate.DelegeeSipAccount);
+            var allRoles = storage.DelegateRoles.GetByDelegeeSipAccount(userDelegate.DelegeeSipAccount);
 
             userDelegate.DelegeeSipAccount = "sghaida@ccc.gr";
             departmentDelegate.DelegeeSipAccount = "sghaida@ccc.gr";
             siteDelegate.DelegeeSipAccount = "sghaida@ccc.gr";
 
-            status = _STORAGE.DelegateRoles.Update(userDelegate);
-            status = _STORAGE.DelegateRoles.Update(departmentDelegate);
-            status = _STORAGE.DelegateRoles.Update(siteDelegate);
+            status = storage.DelegateRoles.Update(userDelegate);
+            status = storage.DelegateRoles.Update(departmentDelegate);
+            status = storage.DelegateRoles.Update(siteDelegate);
 
-            allRoles = _STORAGE.DelegateRoles.GetByDelegeeSipAccount(userDelegate.DelegeeSipAccount);
+            allRoles = storage.DelegateRoles.GetByDelegeeSipAccount(userDelegate.DelegeeSipAccount);
 
-            status = _STORAGE.DelegateRoles.Delete(userDelegate);
-            status = _STORAGE.DelegateRoles.Delete(departmentDelegate);
-            status = _STORAGE.DelegateRoles.Delete(siteDelegate);
+            status = storage.DelegateRoles.Delete(userDelegate);
+            status = storage.DelegateRoles.Delete(departmentDelegate);
+            status = storage.DelegateRoles.Delete(siteDelegate);
 
 
             /***
@@ -575,32 +575,32 @@ namespace LyncBillingTesting
              */
             var newCurrency = new Currency
             {
-                ISO3Code = "ZVZ",
+                Iso3Code = "ZVZ",
                 Name = "ZeeVeeZee"
             };
-            newCurrency.ID = _STORAGE.Currencies.Insert(newCurrency);
+            newCurrency.Id = storage.Currencies.Insert(newCurrency);
             newCurrency.Name = "ZeeeeVeZe";
-            status = _STORAGE.Currencies.Update(newCurrency);
-            status = _STORAGE.Currencies.Delete(newCurrency);
+            status = storage.Currencies.Update(newCurrency);
+            status = storage.Currencies.Delete(newCurrency);
 
 
             /***
              * TESTING COUNTRIES DATA MAPPER
              */
-            var EURO = _STORAGE.Currencies.GetByISO3Code("EUR");
+            var euro = storage.Currencies.GetByIso3Code("EUR");
             var newCountry = new Country
             {
-                CurrencyID = EURO.ID,
-                ISO2Code = "ZZ",
-                ISO3Code = "ZVZ",
+                CurrencyId = euro.Id,
+                Iso2Code = "ZZ",
+                Iso3Code = "ZVZ",
                 Name = "ZeeVeeZee"
             };
-            newCountry.ID = _STORAGE.Countries.Insert(newCountry);
-            newCountry = _STORAGE.Countries.GetById(newCountry.ID);
-            newCountry.ISO3Code = "VVZ";
+            newCountry.Id = storage.Countries.Insert(newCountry);
+            newCountry = storage.Countries.GetById(newCountry.Id);
+            newCountry.Iso3Code = "VVZ";
             newCountry.Name = "VeeVeeZee";
-            status = _STORAGE.Countries.Update(newCountry);
-            status = _STORAGE.Countries.Delete(newCountry);
+            status = storage.Countries.Update(newCountry);
+            status = storage.Countries.Delete(newCountry);
 
 
             /***
@@ -610,16 +610,16 @@ namespace LyncBillingTesting
             {
                 Description = "Testing call types data mapper.",
                 Name = "TEST-CALL-TYPE",
-                TypeID = 2345123
+                TypeId = 2345123
             };
 
-            newCallType.ID = _STORAGE.CallTypes.Insert(newCallType);
+            newCallType.Id = storage.CallTypes.Insert(newCallType);
 
             newCallType.Description = newCallType.Description.ToUpper();
             newCallType.Name = (newCallType.Name + "-02").ToUpper();
 
-            status = _STORAGE.CallTypes.Update(newCallType);
-            status = _STORAGE.CallTypes.Delete(newCallType);
+            status = storage.CallTypes.Update(newCallType);
+            status = storage.CallTypes.Delete(newCallType);
 
 
             /***
@@ -629,16 +629,16 @@ namespace LyncBillingTesting
             {
                 PhoneCallsTable = "PhoneCalls2015",
                 Timestamp = DateTime.Now,
-                Type = GLOBALS.CallMarkerStatus.Type.CallsMarking.Value()
+                Type = Globals.CallMarkerStatus.Type.CallsMarking.Value()
             };
 
-            newMarkerStatus.ID = _STORAGE.CallMarkers.Insert(newMarkerStatus);
+            newMarkerStatus.Id = storage.CallMarkers.Insert(newMarkerStatus);
 
-            newMarkerStatus.Type = GLOBALS.CallMarkerStatus.Type.ApplyingRates.Value();
+            newMarkerStatus.Type = Globals.CallMarkerStatus.Type.ApplyingRates.Value();
             newMarkerStatus.Timestamp = DateTime.Now;
 
-            status = _STORAGE.CallMarkers.Update(newMarkerStatus);
-            status = _STORAGE.CallMarkers.Delete(newMarkerStatus);
+            status = storage.CallMarkers.Update(newMarkerStatus);
+            status = storage.CallMarkers.Delete(newMarkerStatus);
 
 
             /***
@@ -656,17 +656,17 @@ namespace LyncBillingTesting
                 AssociatedSipAccount = "ghassan@ccc.gr"
             };
 
-            bundled1.ID = _STORAGE.BundledAccounts.Insert(bundled1);
-            bundled2.ID = _STORAGE.BundledAccounts.Insert(bundled2);
+            bundled1.Id = storage.BundledAccounts.Insert(bundled1);
+            bundled2.Id = storage.BundledAccounts.Insert(bundled2);
 
-            var allBundled = _STORAGE.BundledAccounts.GetAll();
-            var aalhourBundled = _STORAGE.BundledAccounts.GetAssociatedSipAccounts("aalhour@ccc.gr");
+            var allBundled = storage.BundledAccounts.GetAll();
+            var aalhourBundled = storage.BundledAccounts.GetAssociatedSipAccounts("aalhour@ccc.gr");
 
             bundled2.AssociatedSipAccount = "nafez@ccc.gr";
 
-            status = _STORAGE.BundledAccounts.Update(bundled2);
-            status = _STORAGE.BundledAccounts.Delete(bundled1);
-            status = _STORAGE.BundledAccounts.Delete(bundled2);
+            status = storage.BundledAccounts.Update(bundled2);
+            status = storage.BundledAccounts.Delete(bundled1);
+            status = storage.BundledAccounts.Delete(bundled2);
 
 
             /***
@@ -680,14 +680,14 @@ namespace LyncBillingTesting
                 AnnouncementBody = "Hello Developer."
             };
 
-            ann.ID = _STORAGE.Announcements.Insert(ann);
+            ann.Id = storage.Announcements.Insert(ann);
 
-            ann = _STORAGE.Announcements.GetById(ann.ID);
+            ann = storage.Announcements.GetById(ann.Id);
 
             ann.AnnouncementBody = "Hello Developer. Things have changed.";
 
-            status = _STORAGE.Announcements.Update(ann);
-            status = _STORAGE.Announcements.Delete(ann);
+            status = storage.Announcements.Update(ann);
+            status = storage.Announcements.Delete(ann);
         }
     }
 }

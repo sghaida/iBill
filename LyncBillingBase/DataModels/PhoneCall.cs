@@ -5,17 +5,17 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "MonitoringServersInfo", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.DistributedSource)]
+    [DataSource(Name = "MonitoringServersInfo", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.DistributedSource)]
     public class PhoneCall : DataModel
     {
         //This is used to tell where to find and update this PhoneCalls
 
 
-        private decimal _Marker_CallCost;
+        private decimal _markerCallCost;
 
-        [IsIDField]
-        [AllowIDInsert]
+        [IsIdField]
+        [AllowIdInsert]
         [DbColumn("SessionIdTime")]
         public DateTime SessionIdTime { set; get; }
 
@@ -38,53 +38,53 @@ namespace LyncBillingBase.DataModels
 
         [AllowNull]
         [DbColumn("Marker_CallToCountry")]
-        public string Marker_CallToCountry { set; get; }
+        public string MarkerCallToCountry { set; get; }
 
         [DbColumn("Marker_CallType")]
-        public string Marker_CallType { set; get; }
+        public string MarkerCallType { set; get; }
 
         [DbColumn("Duration")]
         public decimal Duration { set; get; }
 
         [AllowNull]
         [DbColumn("UI_UpdatedByUser")]
-        public string UI_UpdatedByUser { set; get; }
+        public string UiUpdatedByUser { set; get; }
 
         [AllowNull]
         [DbColumn("UI_MarkedOn")]
-        public DateTime UI_MarkedOn { set; get; }
+        public DateTime UiMarkedOn { set; get; }
 
         [AllowNull]
         [DbColumn("UI_CallType")]
-        public string UI_CallType { set; get; }
+        public string UiCallType { set; get; }
 
         [AllowNull]
         [DbColumn("UI_AssignedByUser")]
-        public string UI_AssignedByUser { set; get; }
+        public string UiAssignedByUser { set; get; }
 
         [AllowNull]
         [DbColumn("UI_AssignedToUser")]
-        public string UI_AssignedToUser { set; get; }
+        public string UiAssignedToUser { set; get; }
 
         [AllowNull]
         [DbColumn("UI_AssignedOn")]
-        public DateTime UI_AssignedOn { set; get; }
+        public DateTime UiAssignedOn { set; get; }
 
         [AllowNull]
         [DbColumn("AC_DisputeStatus")]
-        public string AC_DisputeStatus { set; get; }
+        public string AcDisputeStatus { set; get; }
 
         [AllowNull]
         [DbColumn("AC_DisputeResolvedOn")]
-        public DateTime AC_DisputeResolvedOn { set; get; }
+        public DateTime AcDisputeResolvedOn { set; get; }
 
         [AllowNull]
         [DbColumn("AC_IsInvoiced")]
-        public string AC_IsInvoiced { set; get; }
+        public string AcIsInvoiced { set; get; }
 
         [AllowNull]
         [DbColumn("AC_InvoiceDate")]
-        public DateTime AC_InvoiceDate { set; get; }
+        public DateTime AcInvoiceDate { set; get; }
 
         [DbColumn("SourceUserUri")]
         public string SourceUserUri { set; get; }
@@ -121,10 +121,10 @@ namespace LyncBillingBase.DataModels
         public string DestinationUserEdgeServer { set; get; }
 
         [DbColumn("ServerFQDN")]
-        public string ServerFQDN { set; get; }
+        public string ServerFqdn { set; get; }
 
         [DbColumn("PoolFQDN")]
-        public string PoolFQDN { set; get; }
+        public string PoolFqdn { set; get; }
 
         [AllowNull]
         [DbColumn("OnBehalf")]
@@ -136,19 +136,19 @@ namespace LyncBillingBase.DataModels
 
         [AllowNull]
         [DbColumn("CalleeURI")]
-        public string CalleeURI { get; set; }
+        public string CalleeUri { get; set; }
 
         [AllowNull]
         [DbColumn("Marker_CallFrom")]
-        public long Marker_CallFrom { set; get; }
+        public long MarkerCallFrom { set; get; }
 
         [AllowNull]
         [DbColumn("Marker_CallTo")]
-        public long Marker_CallTo { set; get; }
+        public long MarkerCallTo { set; get; }
 
         [AllowNull]
         [DbColumn("Marker_CallTypeID")]
-        public long Marker_CallTypeID { set; get; }
+        public long MarkerCallTypeId { set; get; }
 
         [DbColumn("PhoneCallsTableName")]
         [Exclude(OnInsert = true, OnUpdate = true)]
@@ -158,10 +158,10 @@ namespace LyncBillingBase.DataModels
         public string PhoneCallsTable { set; get; }
 
         [DbColumn("Marker_CallCost")]
-        public decimal Marker_CallCost
+        public decimal MarkerCallCost
         {
-            set { _Marker_CallCost = value; }
-            get { return decimal.Round(_Marker_CallCost, 2); }
+            set { _markerCallCost = value; }
+            get { return decimal.Round(_markerCallCost, 2); }
         }
     }
 

@@ -17,7 +17,7 @@ namespace LyncBillingBase.DataMappers
         // internal datastorage singleton container
         private static SitesDepartmentsDataMapper _instance;
         // lock for thread-safety laziness
-        private static readonly object _mutex = new object();
+        private static readonly object Mutex = new object();
         /***
          * The local cache store of all sites departments
          */
@@ -34,7 +34,7 @@ namespace LyncBillingBase.DataMappers
             {
                 if (_instance == null)
                 {
-                    lock (_mutex)
+                    lock (Mutex)
                     {
                         if (_instance == null)
                         {
@@ -63,12 +63,12 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Site's ID, return the list of it's Site-Departments.
         /// </summary>
-        /// <param name="SiteID">Site.ID (int)</param>
+        /// <param name="siteId">Site.ID (int)</param>
         /// <returns>List of SiteDepartment objects</returns>
-        public List<SiteDepartment> GetBySiteID(long SiteID)
+        public List<SiteDepartment> GetBySiteId(long siteId)
         {
             var condition = new Dictionary<string, object>();
-            condition.Add("SiteID", SiteID);
+            condition.Add("SiteID", siteId);
 
             try
             {
@@ -83,15 +83,15 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         ///     Given a Site's ID, return the list of it's Departments.
         /// </summary>
-        /// <param name="SiteID">Site.ID (int)</param>
+        /// <param name="siteId">Site.ID (int)</param>
         /// <returns>List of Department objects</returns>
-        public List<Department> GetDepartmentsBySiteID(long SiteID)
+        public List<Department> GetDepartmentsBySiteId(long siteId)
         {
             List<Department> departments = null;
             List<SiteDepartment> siteDepartments = null;
 
             var condition = new Dictionary<string, object>();
-            condition.Add("SiteID", SiteID);
+            condition.Add("SiteID", siteId);
 
             try
             {
@@ -115,7 +115,7 @@ namespace LyncBillingBase.DataMappers
          */
 
         public override int Insert(SiteDepartment dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var rowId = 0;
 
@@ -123,7 +123,7 @@ namespace LyncBillingBase.DataMappers
             {
                 rowId = base.Insert(dataObject, dataSourceName, dataSourceType);
 
-                dataObject.ID = rowId;
+                dataObject.Id = rowId;
                 dataObject = dataObject.GetWithRelations(item => item.Site, item => item.Department);
 
                 _cachedData.Add(dataObject);
@@ -137,7 +137,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Update(SiteDepartment dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var status = false;
 
@@ -148,7 +148,7 @@ namespace LyncBillingBase.DataMappers
                 if (status)
                 {
                     // Remove the old site department
-                    var oldSiteDepartment = _cachedData.Find(item => item.ID == dataObject.ID);
+                    var oldSiteDepartment = _cachedData.Find(item => item.Id == dataObject.Id);
 
                     if (oldSiteDepartment != null)
                     {
@@ -169,7 +169,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Delete(SiteDepartment dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var status = false;
 
@@ -179,7 +179,7 @@ namespace LyncBillingBase.DataMappers
 
                 if (status)
                 {
-                    var oldSiteDepartment = _cachedData.Find(item => item.ID == dataObject.ID);
+                    var oldSiteDepartment = _cachedData.Find(item => item.Id == dataObject.Id);
 
                     if (oldSiteDepartment != null)
                     {
@@ -196,11 +196,11 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override SiteDepartment GetById(long id, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             try
             {
-                return _cachedData.Find(item => item.ID == id);
+                return _cachedData.Find(item => item.Id == id);
             }
             catch (Exception ex)
             {
@@ -209,7 +209,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override IEnumerable<SiteDepartment> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             return _cachedData;
         }
@@ -235,19 +235,19 @@ namespace LyncBillingBase.DataMappers
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<SiteDepartment> GetAll(string SQL_QUERY)
+        public override IEnumerable<SiteDepartment> GetAll(string sqlQuery)
         {
             throw new NotImplementedException();
         }
 
         public override IEnumerable<SiteDepartment> Get(Expression<Func<SiteDepartment, bool>> predicate,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }
 
         public override IEnumerable<SiteDepartment> Get(Dictionary<string, object> whereConditions, int limit = 25,
-            string dataSourceName = null, GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotImplementedException();
         }

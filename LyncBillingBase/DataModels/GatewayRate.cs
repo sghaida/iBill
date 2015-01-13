@@ -5,16 +5,16 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "GatewaysRates", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "GatewaysRates", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class GatewayRate : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("GatewaysRatesID")]
-        public int ID { set; get; }
+        public int Id { set; get; }
 
         [DbColumn("GatewayID")]
-        public int GatewayID { set; get; }
+        public int GatewayId { set; get; }
 
         [AllowNull]
         [DbColumn("RatesTableName")]

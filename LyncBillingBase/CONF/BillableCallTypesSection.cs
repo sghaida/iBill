@@ -78,7 +78,7 @@ namespace LyncBillingBase.Conf
             }
         }
 
-        public List<int> NGNLinesIdsList
+        public List<int> NgnLinesIdsList
         {
             get
             {

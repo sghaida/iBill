@@ -8,7 +8,7 @@ namespace LyncBillingBase.DataMappers
 {
     public class GatewaysDataMapper : DataAccess<Gateway>
     {
-        private static List<Gateway> _Gateways = new List<Gateway>();
+        private static List<Gateway> _gateways = new List<Gateway>();
 
         public GatewaysDataMapper()
         {
@@ -17,43 +17,43 @@ namespace LyncBillingBase.DataMappers
 
         private void LoadGateways()
         {
-            if (_Gateways == null || _Gateways.Count == 0)
+            if (_gateways == null || _gateways.Count == 0)
             {
-                _Gateways = base.GetAll().ToList();
+                _gateways = base.GetAll().ToList();
             }
         }
 
         public override IEnumerable<Gateway> GetAll(string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            return _Gateways;
+            return _gateways;
         }
 
         public override int Insert(Gateway dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var isContained = _Gateways.Contains(dataObject);
-            var itExists = _Gateways.Exists(item => item.Name == dataObject.Name);
+            var isContained = _gateways.Contains(dataObject);
+            var itExists = _gateways.Exists(item => item.Name == dataObject.Name);
 
             if (isContained || itExists)
             {
                 return -1;
             }
-            dataObject.ID = base.Insert(dataObject, dataSourceName, dataSourceType);
-            _Gateways.Add(dataObject);
+            dataObject.Id = base.Insert(dataObject, dataSourceName, dataSourceType);
+            _gateways.Add(dataObject);
 
-            return dataObject.ID;
+            return dataObject.Id;
         }
 
         public override bool Update(Gateway dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var gateway = _Gateways.Find(item => item.ID == dataObject.ID);
+            var gateway = _gateways.Find(item => item.Id == dataObject.Id);
 
             if (gateway != null)
             {
-                _Gateways.Remove(gateway);
-                _Gateways.Add(dataObject);
+                _gateways.Remove(gateway);
+                _gateways.Add(dataObject);
 
                 return base.Update(dataObject, dataSourceName, dataSourceType);
             }
@@ -61,13 +61,13 @@ namespace LyncBillingBase.DataMappers
         }
 
         public override bool Delete(Gateway dataObject, string dataSourceName = null,
-            GLOBALS.DataSource.Type dataSourceType = GLOBALS.DataSource.Type.Default)
+            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var gateway = _Gateways.Find(item => item.ID == dataObject.ID);
+            var gateway = _gateways.Find(item => item.Id == dataObject.Id);
 
             if (gateway != null)
             {
-                _Gateways.Remove(gateway);
+                _gateways.Remove(gateway);
 
                 return base.Delete(dataObject, dataSourceName, dataSourceType);
             }

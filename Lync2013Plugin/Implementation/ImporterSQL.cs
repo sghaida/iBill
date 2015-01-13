@@ -2,26 +2,26 @@
 
 namespace Lync2013Plugin.Implementation
 {
-    public static class SQLs
+    public static class SqLs
     {
-        public static string CreateImportCallsQueryLync2013(DateTime LastImportedPhoneCallDate)
+        public static string CreateImportCallsQueryLync2013(DateTime lastImportedPhoneCallDate)
         {
-            var SQL = string.Empty;
-            var WHERE_STATEMENT = string.Empty;
-            var SELECT_STATEMENT = string.Empty;
-            var ORDER_BY = string.Empty;
+            var sql = string.Empty;
+            var whereStatement = string.Empty;
+            var selectStatement = string.Empty;
+            var orderBy = string.Empty;
 
             //Reset the time part in the date time object
-            Helpers.ResetTime(ref LastImportedPhoneCallDate);
+            Helpers.ResetTime(ref lastImportedPhoneCallDate);
 
             //Process the LastImportedPhoneCallDate as it is.
-            var fromDate = LastImportedPhoneCallDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            var fromDate = lastImportedPhoneCallDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
             //The toDate is one day after the last date
-            var toDate = LastImportedPhoneCallDate.AddDays(+1).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            var toDate = lastImportedPhoneCallDate.AddDays(+1).ToString("yyyy-MM-dd HH:mm:ss.fff");
 
 
-            SELECT_STATEMENT = String.Format
+            selectStatement = String.Format
                 (
                     "SELECT  " +
                     "VoipDetails.SessionIdTime,   " +
@@ -88,9 +88,9 @@ namespace Lync2013Plugin.Implementation
                     "QoEMetricsSession.CalleeURI = UserCalleeURI.UserKey "
                 );
 
-            if (LastImportedPhoneCallDate != null)
+            if (lastImportedPhoneCallDate != null)
             {
-                WHERE_STATEMENT = String.Format(
+                whereStatement = String.Format(
                     " WHERE " +
                     "Users_1.UserUri IS NOT NULL AND " +
                     "Users_1.UserUri NOT LIKE '%;phone%' AND " +
@@ -105,7 +105,7 @@ namespace Lync2013Plugin.Implementation
             }
             else
             {
-                WHERE_STATEMENT = string.Format(
+                whereStatement = string.Format(
                     " WHERE " +
                     "Users_1.UserUri IS NOT NULL AND " +
                     "Users_1.UserUri NOT LIKE '%;phone%' AND " +
@@ -116,9 +116,9 @@ namespace Lync2013Plugin.Implementation
                     );
             }
 
-            ORDER_BY = " ORDER BY VoipDetails.SessionIdTime ASC ";
+            orderBy = " ORDER BY VoipDetails.SessionIdTime ASC ";
 
-            return SELECT_STATEMENT + WHERE_STATEMENT + ORDER_BY;
+            return selectStatement + whereStatement + orderBy;
         }
 
         public static string GetLastImportedPhonecallDate(string tableName, bool isRemote)

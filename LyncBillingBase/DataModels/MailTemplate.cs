@@ -4,13 +4,13 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "MailTemplates", Type = GLOBALS.DataSource.Type.DBTable,
-        AccessMethod = GLOBALS.DataSource.AccessMethod.SingleSource)]
+    [DataSource(Name = "MailTemplates", Type = Globals.DataSource.Type.DBTable,
+        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class MailTemplate : DataModel
     {
-        [IsIDField]
+        [IsIdField]
         [DbColumn("TemplateID")]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [AllowNull]
         [DbColumn("TemplateSubject")]
