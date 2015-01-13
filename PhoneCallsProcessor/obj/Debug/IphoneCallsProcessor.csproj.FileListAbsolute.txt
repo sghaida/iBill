@@ -1,4 +1,0 @@
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\IphoneCallsProcessor\bin\Debug\IphoneCallsProcessor.dll
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\IphoneCallsProcessor\bin\Debug\IphoneCallsProcessor.pdb
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\IphoneCallsProcessor\obj\Debug\IphoneCallsProcessor.dll
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\IphoneCallsProcessor\obj\Debug\IphoneCallsProcessor.pdb
