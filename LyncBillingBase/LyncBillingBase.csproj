@@ -145,9 +145,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ORMDotNet\DALDotNet.csproj">
+    <ProjectReference Include="..\ORM\ORM.csproj">
       <Project>{6fcd2469-2b10-419b-bd55-c42b486b6869}</Project>
-      <Name>DALDotNet</Name>
+      <Name>ORM</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

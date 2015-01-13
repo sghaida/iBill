@@ -7,9 +7,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-using DALDotNet;
-using DALDotNet.DataAccess;
-using DALDotNet.DataAttributes;
+using ORM;
+using ORM.DataAccess;
+using ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {

@@ -58,9 +58,9 @@
       <Project>{4d303f14-08ed-4f92-b7e1-377569a8d7eb}</Project>
       <Name>LyncBillingBase</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ORMDotNet\DALDotNet.csproj">
+    <ProjectReference Include="..\ORM\ORM.csproj">
       <Project>{6fcd2469-2b10-419b-bd55-c42b486b6869}</Project>
-      <Name>DALDotNet</Name>
+      <Name>ORM</Name>
     </ProjectReference>
     <ProjectReference Include="..\PhoneCallsProcessor\PhoneCallsProcessor.csproj">
       <Project>{ecbeb87a-859d-4aec-8529-7ac23581cb65}</Project>
