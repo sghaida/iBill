@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-<<<<<<< HEAD
-using ORM.DataAccess;
-=======
+
+
+
 using CCC.ORM.DataAccess;
->>>>>>> 4d2825ed2d6c07fa47ef8a534e938e39e0b8f09c
+
 using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
