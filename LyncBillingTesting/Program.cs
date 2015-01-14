@@ -19,14 +19,18 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
-            //Lync2013 processor = new Lync2013();
-            //processor.ProcessPhoneCalls();
+            DataStorage DB = DataStorage.Instance;
 
-            var delegatesRolesDm = new DelegateRolesDataMapper();
-            var departmentHeadsDm = new DepartmentHeadRolesDataMapper();
+            var startDate = new DateTime(2014, 1, 1);
+            var endDate = DateTime.Now;
 
-            var allDelegates = delegatesRolesDm.GetAll().ToList();
-            var allDepartmentHeads = departmentHeadsDm.GetAll().ToList();
+            //var users_summaries = DB.UsersCallsSummaries.GetBySipAccount("aalhour@ccc.gr", startDate, endDate);
+            //users_summaries = DB.UsersCallsSummaries.GetBySite("MOA", startDate, endDate, Globals.CallsSummary.GroupBy.UserAndInvoiceFlag);
+            //var first_user_summary = summaries.First();
+
+            var sites_summaries = DB.SitesCallsSummaries.GetBySite("MOA", startDate, endDate);
+
+            string x = string.Empty;
         }
 
         public static void InsertUpdateDeleteTests()

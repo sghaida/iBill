@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace LyncBillingBase.DataMappers.SQLQueries
 {
-    public class CallsSummariesSql
+    public class CallsSummariesForUsersSql
     {
         /// <summary>
         /// </summary>
@@ -178,5 +178,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
 
             return sqlQuery;
         }
+
     }
+
 }
