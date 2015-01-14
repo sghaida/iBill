@@ -47,8 +47,11 @@ namespace Lync2013Plugin.Implementation
                 {
                     if (gatewayRatesObj != null && !string.IsNullOrEmpty(gatewayRatesObj.RatesTableName))
                     {
-                        tempCountryRates.Add(countryCodeIso3, tempNationalRates);
-                        NationalRates[gateway.Name] = tempCountryRates;
+                        if (tempCountryRates != null)
+                        {
+                            tempCountryRates.Add(countryCodeIso3, tempNationalRates);
+                            NationalRates[gateway.Name] = tempCountryRates;
+                        }
                     }
                 }
             }
