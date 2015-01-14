@@ -46,11 +46,11 @@ namespace LyncBillingBase.DataModels
             RelationType = Globals.DataRelation.Type.UNION)]
         public User ManagedUser { get; set; }
 
-        [DataRelation(WithDataModel = typeof (SiteDepartment), OnDataModelKey = "ID",
-            ThisKey = "ManagedSiteDepartmentID" , RelationType = Globals.DataRelation.Type.UNION )]
+        [DataRelation(WithDataModel = typeof (SiteDepartment), OnDataModelKey = "Id",
+            ThisKey = "ManagedSiteDepartmentId" , RelationType = Globals.DataRelation.Type.UNION )]
         public SiteDepartment ManagedSiteDepartment { get; set; }
 
-        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "ID", ThisKey = "ManagedSiteID",
+        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "Id", ThisKey = "ManagedSiteId",
             RelationType = Globals.DataRelation.Type.UNION)]
         public Site ManagedSite { get; set; }
     }

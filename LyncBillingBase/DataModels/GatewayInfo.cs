@@ -25,17 +25,17 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(WithDataModel = typeof (Gateway), OnDataModelKey = "ID", ThisKey = "GatewayID")]
+        [DataRelation(WithDataModel = typeof (Gateway), OnDataModelKey = "Id", ThisKey = "GatewayId")]
         public Gateway Gateway { get; set; }
 
-        [DataRelation(WithDataModel = typeof (GatewayRate), OnDataModelKey = "GatewayID", ThisKey = "GatewayID",
+        [DataRelation(WithDataModel = typeof (GatewayRate), OnDataModelKey = "GatewayId", ThisKey = "GatewayId",
             RelationType = Globals.DataRelation.Type.UNION)]
         public GatewayRate GatewayRatesInfo { get; set; }
 
-        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
+        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "Id", ThisKey = "SiteId")]
         public Site Site { get; set; }
 
-        [DataRelation(WithDataModel = typeof (Pool), OnDataModelKey = "ID", ThisKey = "PoolID")]
+        [DataRelation(WithDataModel = typeof (Pool), OnDataModelKey = "Id", ThisKey = "PoolId")]
         public Pool Pool { get; set; }
     }
 }

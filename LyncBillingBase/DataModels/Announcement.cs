@@ -29,10 +29,10 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(WithDataModel = typeof (Role), OnDataModelKey = "RoleID", ThisKey = "ForRole")]
+        [DataRelation( WithDataModel = typeof( Role ) , OnDataModelKey = "RoleId" , ThisKey = "ForRole" )]
         public Role Role { get; set; }
 
-        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "ID", ThisKey = "ForSite")]
+        [DataRelation( WithDataModel = typeof( Site ) , OnDataModelKey = "Id" , ThisKey = "ForSite" )]
         public Site Site { get; set; }
     }
 }
