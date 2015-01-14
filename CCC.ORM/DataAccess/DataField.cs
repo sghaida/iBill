@@ -121,9 +121,11 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         public Globals.DataRelation.Type RelationType { get; set; }
 
+/*
         private static T Cast<T>(object o)
         {
             return (T) o;
         }
+*/
     }
 }

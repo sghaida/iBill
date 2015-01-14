@@ -1,4 +1,5 @@
-﻿namespace CCC.ORM.DataAccess
+﻿// ReSharper disable DoNotCallOverridableMethodsInConstructor
+namespace CCC.ORM.DataAccess
 {
     public class DataModel
     {

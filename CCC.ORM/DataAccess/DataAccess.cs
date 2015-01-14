@@ -32,28 +32,21 @@ namespace CCC.ORM.DataAccess
         public DataAccess()
         {
             //Get the Table Name and List of Class Attributes
-            try
-            {
-                //Initialize the schema for the class T
-                _schema = new DataSourceSchema<T>();
+            //Initialize the schema for the class T
+            _schema = new DataSourceSchema<T>();
 
-                //Check for absent or invalid DataModel attributes and throw the respective exception if they exist.
-                if (string.IsNullOrEmpty(_schema.DataSourceName))
-                {
-                    throw new NoDataSourceNameException(typeof (T).Name);
-                }
-                if (!_schema.DataFields.Where(item => item.TableField != null).ToList().Any())
-                {
-                    throw new NoTableFieldsException(typeof (T).Name);
-                }
-                if (string.IsNullOrEmpty(_schema.IdFieldName))
-                {
-                    throw new NoTableFieldsException( typeof( T ).Name );
-                }
-            }
-            catch (Exception ex)
+            //Check for absent or invalid DataModel attributes and throw the respective exception if they exist.
+            if (string.IsNullOrEmpty(_schema.DataSourceName))
             {
-                throw ex;
+                throw new NoDataSourceNameException(typeof (T).Name);
+            }
+            if (!_schema.DataFields.Where(item => item.TableField != null).ToList().Any())
+            {
+                throw new NoTableFieldsException(typeof (T).Name);
+            }
+            if (string.IsNullOrEmpty(_schema.IdFieldName))
+            {
+                throw new NoTableFieldsException( typeof( T ).Name );
             }
         }
 
@@ -61,7 +54,7 @@ namespace CCC.ORM.DataAccess
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var rowId = 0;
-            var finalDataSourceName = string.Empty;
+            string finalDataSourceName;
             var columnsValues = new Dictionary<string, object>();
 
 
@@ -139,37 +132,33 @@ namespace CCC.ORM.DataAccess
                     }
                     else
                     {
-                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
-
-                        if (dataObjectAttrValue != null)
+                        if (dataObjectAttr != null)
                         {
-                            //
-                            // Only update the int/long values to zeros if they are not foreign keys
-                            if (NumericTypes.Contains(field.TableField.FieldType))
+                            var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                            if (dataObjectAttrValue != null)
                             {
-                                var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
-
-                                if (Convert.ToInt64(value) <= 0 && field.TableField.IsKey)
+                                //
+                                // Only update the int/long values to zeros if they are not foreign keys
+                                if (NumericTypes.Contains(field.TableField.FieldType))
                                 {
-                                    continue;
-                                }
-                            }
+                                    var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
 
-                            columnsValues.Add(field.TableField.ColumnName,
-                                Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
+                                    if (Convert.ToInt64(value) <= 0 && field.TableField.IsKey)
+                                    {
+                                        continue;
+                                    }
+                                }
+
+                                columnsValues.Add(field.TableField.ColumnName,
+                                    Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
+                            }
                         }
                     }
                     //end-inner-if
                 } //end-foreach
 
-                try
-                {
-                    rowId = DbRoutines.Insert(finalDataSourceName, columnsValues, _schema.IdFieldName);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                rowId = DbRoutines.Insert(finalDataSourceName, columnsValues, _schema.IdFieldName);
             } //end-outer-if
 
             return rowId;
@@ -179,7 +168,7 @@ namespace CCC.ORM.DataAccess
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var status = false;
-            var finalDataSourceName = string.Empty;
+            string finalDataSourceName;
             var columnsValues = new Dictionary<string, object>();
             var whereConditions = new Dictionary<string, object>();
 
@@ -288,24 +277,27 @@ namespace CCC.ORM.DataAccess
                     }
                     else
                     {
-                        var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
-
-                        if (dataObjectAttrValue != null)
+                        if (dataObjectAttr != null)
                         {
-                            //
-                            // Only update the int/long values to zeros if they are not foreign keys
-                            if (NumericTypes.Contains(field.TableField.FieldType))
+                            var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
+
+                            if (dataObjectAttrValue != null)
                             {
-                                var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
-
-                                if (Convert.ToInt64(value) <= 0 && field.TableField.IsKey)
+                                //
+                                // Only update the int/long values to zeros if they are not foreign keys
+                                if (NumericTypes.Contains(field.TableField.FieldType))
                                 {
-                                    continue;
-                                }
-                            }
+                                    var value = Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType);
 
-                            columnsValues.Add(field.TableField.ColumnName,
-                                Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
+                                    if (Convert.ToInt64(value) <= 0 && field.TableField.IsKey)
+                                    {
+                                        continue;
+                                    }
+                                }
+
+                                columnsValues.Add(field.TableField.ColumnName,
+                                    Convert.ChangeType(dataObjectAttrValue, field.TableField.FieldType));
+                            }
                         }
                     }
                     //end-inner-if
@@ -333,11 +325,11 @@ namespace CCC.ORM.DataAccess
         public virtual bool Delete(T dataObject, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var finalDataSourceName = string.Empty;
+            string finalDataSourceName;
             var whereConditions = new Dictionary<string, object>();
 
             DataField idField;
-            var objectFieldNameWithIdAttribute = string.Empty;
+            //var objectFieldNameWithIdAttribute = string.Empty;
 
 
             //
@@ -393,52 +385,33 @@ namespace CCC.ORM.DataAccess
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var dt = new DataTable();
-            var finalDataSourceName = string.Empty;
 
-            var maximumLimit = 1;
-            List<string> thisModelTableColumns;
-            Dictionary<string, object> condition;
-
-            var errorMessage = string.Empty;
+            const int maximumLimit = 1;
 
             //Get our table columns from the schema
-            thisModelTableColumns = _schema.DataFields
+            var thisModelTableColumns = _schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select(field => field.TableField.ColumnName)
                 .ToList();
 
             //Decide on the Data Source Name
-            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? _schema.DataSourceName : dataSourceName);
+            var finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? _schema.DataSourceName : dataSourceName);
 
             //Validate the presence of the ID
             if (id <= 0)
             {
-                errorMessage =
-                    String.Format("The ID Field is either null or zero. Kindly pass a valid ID. Class name: \"{0}\".",
-                        typeof (T).Name);
+                var errorMessage = String.Format("The ID Field is either null or zero. Kindly pass a valid ID. Class name: \"{0}\".",
+                    typeof (T).Name);
                 throw new Exception(errorMessage);
             }
 
             //Construct the record ID condition
-            condition = new Dictionary<string, object>();
+            var condition = new Dictionary<string, object>();
             condition.Add(_schema.IdFieldName, id);
 
             //Proceed with getting the data
             if (_schema.DataSourceType == Globals.DataSource.Type.DbTable)
-            {
-                //switch (IncludeDataRelations)
-                //{
-                //    case true:
-                //        //Get our data relations list (SqlJoinRelation objects)
-                //        dataRelations = GetDataRelations();
-                //        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, condition, dataRelations, maximumLimit);
-                //        break;
-
-                //    case false:
-                //        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, condition, maximumLimit);
-                //        break;
-                //}
-
+            { 
                 dt = DbRoutines.Select(finalDataSourceName, thisModelTableColumns, condition, maximumLimit);
             }
 
@@ -447,13 +420,13 @@ namespace CCC.ORM.DataAccess
             {
                 return (T) Activator.CreateInstance(typeof (T));
             }
-            return dt.ConvertToList<T>().FirstOrDefault<T>() ?? null;
+            return dt.ConvertToList<T>().FirstOrDefault<T>();
         }
 
         public virtual IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var dt = new DataTable();
+            DataTable dt;
 
             if (predicate == null)
             {
@@ -495,48 +468,29 @@ namespace CCC.ORM.DataAccess
             string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var dt = new DataTable();
-            var finalDataSourceName = string.Empty;
-
-            List<string> thisModelTableColumns;
-
-            var errorMessage = string.Empty;
 
             //Get our table columns from the schema
-            thisModelTableColumns = _schema.DataFields
+            var thisModelTableColumns = _schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select(field => field.TableField.ColumnName)
                 .ToList();
 
             //Decide on the Data Source Name
-            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? _schema.DataSourceName : dataSourceName);
+            var finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? _schema.DataSourceName : dataSourceName);
 
             //Validate the presence of the where conditions
             if (whereConditions == null || whereConditions.Count == 0)
             {
-                errorMessage =
-                    String.Format(
-                        "The \"whereConditions\" parameter is either null or empty. Kindly pass a valid \"whereConditions\" parameter. Class name: \"{0}\".",
-                        typeof (T).Name);
+                var errorMessage = String.Format(
+                    "The \"whereConditions\" parameter is either null or empty. Kindly pass a valid \"whereConditions\" parameter. Class name: \"{0}\".",
+                    typeof (T).Name);
                 throw new Exception(errorMessage);
             }
 
 
             //Proceed with getting the data
             if (_schema.DataSourceType == Globals.DataSource.Type.DbTable)
-            {
-                //switch (IncludeDataRelations)
-                //{
-                //    case true:
-                //        //Get our data relations list (SqlJoinRelation objects)
-                //        dataRelations = GetDataRelations();
-                //        dt = DBRoutines.SELECT_WITH_JOIN(finalDataSourceName, thisModelTableColumns, whereConditions, dataRelations, 0);
-                //        break;
-
-                //    case false:
-                //        dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, limit);
-                //        break;
-                //}
-
+            {  
                 dt = DbRoutines.Select(finalDataSourceName, thisModelTableColumns, whereConditions, limit);
             }
 
@@ -547,25 +501,22 @@ namespace CCC.ORM.DataAccess
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var dt = new DataTable();
-            var finalDataSourceName = string.Empty;
 
-            var maximumLimit = 0;
-            List<string> thisModelTableColumns;
-            Dictionary<string, object> whereConditions = null;
+            const int maximumLimit = 0;
 
             //Get our table columns from the schema
-            thisModelTableColumns = _schema.DataFields
+            var thisModelTableColumns = _schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select(field => field.TableField.ColumnName)
-                .ToList<string>();
+                .ToList();
 
             //Decide on the Data Source Name
-            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? _schema.DataSourceName : dataSourceName);
+            var finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? _schema.DataSourceName : dataSourceName);
 
             //Proceed with getting the data
             if (_schema.DataSourceType == Globals.DataSource.Type.DbTable)
             {
-                dt = DbRoutines.Select(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
+                dt = DbRoutines.Select(finalDataSourceName, thisModelTableColumns, null, maximumLimit);
             }
 
             return dt.ConvertToList<T>();
@@ -599,6 +550,7 @@ namespace CCC.ORM.DataAccess
             return status;
         }
 
+/*
         /// <summary>
         ///     This is a private function. It is responsible for returning a list of the data relations on this data model
         ///     translated to a list of SqlJoinRelation objects.
@@ -668,5 +620,6 @@ namespace CCC.ORM.DataAccess
 
             return tableRelationsMap;
         }
+*/
     }
 }
