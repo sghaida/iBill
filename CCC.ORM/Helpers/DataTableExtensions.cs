@@ -18,10 +18,7 @@ namespace CCC.ORM.Helpers
         // Helper function
         private static string ConvertToDateString(object date)
         {
-            if (date == null)
-                return string.Empty;
-
-            return Convert.ToDateTime(date).ConvertDate();
+            return date == null ? string.Empty : Convert.ToDateTime(date).ConvertDate();
         } //end-ConvertToDateString-function
 
         [Obsolete]
@@ -31,8 +28,8 @@ namespace CCC.ORM.Helpers
 
 
             // List of class property infos
-            var masterPropertyInfoFields = new List<PropertyInfo>();
-            var cdtPropertyInfo = new Dictionary<string, List<ObjectPropertyInfoField>>();
+            //var masterPropertyInfoFields = new List<PropertyInfo>();
+            //var cdtPropertyInfo = new Dictionary<string, List<ObjectPropertyInfoField>>();
 
             //List of T object data fields (DbColumnAttribute Values), and types.
             var masterObjectFields = new List<ObjectPropertyInfoField>();
@@ -41,18 +38,17 @@ namespace CCC.ORM.Helpers
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
 
             // Initialize Master the property info fields list
-            masterPropertyInfoFields = typeof (T).GetProperties(flags)
+            var  masterPropertyInfoFields = typeof( T ).GetProperties( flags )
                 .Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null)
-                .Cast<PropertyInfo>()
                 .ToList();
 
             //Read Datatable column names and types
-            var dtlFieldNames = dataTable.Columns.Cast<DataColumn>()
-                .Select(item => new
-                {
-                    Name = item.ColumnName,
-                    Type = item.DataType
-                }).ToList();
+            //var dtlFieldNames = dataTable.Columns.Cast<DataColumn>()
+            //    .Select(item => new
+            //    {
+            //        Name = item.ColumnName,
+            //        Type = item.DataType
+            //    }).ToList();
 
             // Initialize the object data fields  list for Master Object
             foreach (var item in masterPropertyInfoFields)
@@ -104,7 +100,7 @@ namespace CCC.ORM.Helpers
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof (String))
                             {
-                                if (datarow[dtField.DataFieldName].GetType() == typeof (DateTime))
+                                if (datarow[dtField.DataFieldName] is DateTime)
                                 {
                                     dataFieldPropertyInfo.SetValue(masterObj,
                                         ConvertToDateString(datarow[dtField.DataFieldName]), null);
@@ -135,7 +131,7 @@ namespace CCC.ORM.Helpers
             var dataList = new List<T>();
 
             // List of class property infos
-            var masterPropertyInfoFields = new List<PropertyInfo>();
+            //var masterPropertyInfoFields = new List<PropertyInfo>();
             var childPropertInfoFields = new List<PropertyInfo>();
 
             var childrenObjectsProperties = new Dictionary<string, List<ObjectPropertyInfoField>>();
@@ -151,13 +147,14 @@ namespace CCC.ORM.Helpers
 
             foreach (var t in path)
             {
-                expressionLookup.Add((t.Body as MemberExpression).Member.Name, t.Body.Type.Name);
+                var memberExpression = t.Body as MemberExpression;
+                if (memberExpression != null)
+                    expressionLookup.Add(memberExpression.Member.Name, t.Body.Type.Name);
             }
 
             // Initialize Master the property info fields list
-            masterPropertyInfoFields = typeof (T).GetProperties(flags)
-                .Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null)
-                .Cast<PropertyInfo>()
+           var masterPropertyInfoFields = typeof (T).GetProperties(flags)
+               .Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null)
                 .ToList();
 
             //Read Datatable column names and types
@@ -180,7 +177,7 @@ namespace CCC.ORM.Helpers
             }
 
 
-            if (path.Count() > 0)
+            if (path.Any())
             {
                 // Initialize child the property info fields list
                 childPropertInfoFields = typeof (T).GetProperties(flags)
@@ -188,7 +185,6 @@ namespace CCC.ORM.Helpers
                         property =>
                             property.GetCustomAttribute<DataRelationAttribute>() != null &&
                             expressionLookup.Keys.Contains(property.Name))
-                    .Cast<PropertyInfo>()
                     .ToList();
 
                 // Fill the childrenObjectsProperties dictionary with the name of the children class for reflection and their corrospndant attributes
@@ -241,7 +237,7 @@ namespace CCC.ORM.Helpers
                 {
                     var masterObj = new T();
 
-                    if (path.Count() > 0)
+                    if (path.Any())
                     {
                         //Fill the Data for children objects
                         foreach (var property in childPropertInfoFields)
@@ -293,7 +289,7 @@ namespace CCC.ORM.Helpers
                                         }
                                         else if (dataFieldPropertyInfo.PropertyType == typeof (String))
                                         {
-                                            if (datarow[dtField.DataFieldName].GetType() == typeof (DateTime))
+                                            if (datarow[dtField.DataFieldName] is DateTime)
                                             {
                                                 dataFieldPropertyInfo.SetValue(childObj,
                                                     ConvertToDateString(datarow[dtField.DataFieldName]), null);
@@ -349,7 +345,7 @@ namespace CCC.ORM.Helpers
                             }
                             else if (dataFieldPropertyInfo.PropertyType == typeof (String))
                             {
-                                if (datarow[dtField.DataFieldName].GetType() == typeof (DateTime))
+                                if (datarow[dtField.DataFieldName] is DateTime)
                                 {
                                     dataFieldPropertyInfo.SetValue(masterObj,
                                         ConvertToDateString(datarow[dtField.DataFieldName]), null);
@@ -379,18 +375,15 @@ namespace CCC.ORM.Helpers
 
             var setters = new Dictionary<string, Action<T, object>>();
 
-            // List of class property infos
-            var masterPropertyInfoFields = new List<PropertyInfo>();
 
             //List of T object data fields (DbColumnAttribute Values), and types.
-            var masterObjectFields = new List<ObjectPropertyInfoField>();
+            //var masterObjectFields = new List<ObjectPropertyInfoField>();
 
             //Define what attributes to be read from the class
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
 
-            masterPropertyInfoFields = typeof (T).GetProperties(flags)
+            var masterPropertyInfoFields = typeof( T ).GetProperties( flags )
                 .Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null)
-                .Cast<PropertyInfo>()
                 .ToList();
 
             foreach (var field in masterPropertyInfoFields)
@@ -432,6 +425,7 @@ namespace CCC.ORM.Helpers
         /// </summary>
         /// <typeparam name="T">Class name</typeparam>
         /// <param name="dataTable">data table to convert</param>
+        /// <param name="path"></param>
         /// <returns>List<T></returns>
         public static List<T> ConvertToList<T>(this DataTable dataTable, params Expression<Func<T, object>>[] path)
             where T : class, new()
@@ -440,14 +434,12 @@ namespace CCC.ORM.Helpers
 
             //
             // List of class property infos
-            var masterPropertyInfoFields = new List<PropertyInfo>();
-            var childPropertInfoFields = new List<PropertyInfo>();
+            List<PropertyInfo> childPropertInfoFields;
 
             //
             // List of T object data fields (DbColumnAttribute Values), and types.
             var settersMasterObject = new Dictionary<string, Action<T, object>>();
-            var settersChildObjects = new Dictionary<string, Dictionary<string, Action<dynamic, object>>>();
-
+            
             //
             // Define what attributes to be read from the class
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
@@ -456,15 +448,17 @@ namespace CCC.ORM.Helpers
 
             foreach (var t in path)
             {
-                expressionLookup.Add((t.Body as MemberExpression).Member.Name, t.Body.Type.Name);
+                var memberExpression = t.Body as MemberExpression;
+                
+                if (memberExpression != null)
+                    expressionLookup.Add(memberExpression.Member.Name, t.Body.Type.Name);
             }
 
 
             // Begin
             // Initialize Master the property info fields list
-            masterPropertyInfoFields = typeof (T).GetProperties(flags)
+            var masterPropertyInfoFields = typeof (T).GetProperties(flags)
                 .Where(property => property.GetCustomAttribute<DbColumnAttribute>() != null)
-                .Cast<PropertyInfo>()
                 .ToList();
 
             // Initialize the master object setters dictionary
@@ -474,14 +468,6 @@ namespace CCC.ORM.Helpers
                 var columnName = field.GetCustomAttribute<DbColumnAttribute>().Name;
                 settersMasterObject.Add(columnName, Invoker.CreateSetter<T>(propertyInfo));
             }
-
-            // Read Datatable column names and types
-            var dtlFieldNames = dataTable.Columns.Cast<DataColumn>()
-                .Select(item => new
-                {
-                    Name = item.ColumnName,
-                    Type = item.DataType
-                }).ToList();
 
             //
             // Fill The data
@@ -494,7 +480,7 @@ namespace CCC.ORM.Helpers
 
                 //
                 // Process the path, in case there are relations
-                if (path.Count() > 0)
+                if (path.Any())
                 {
                     // Initialize child the property info fields list
                     childPropertInfoFields = typeof (T).GetProperties(flags)
@@ -502,7 +488,6 @@ namespace CCC.ORM.Helpers
                             property =>
                                 property.GetCustomAttribute<DataRelationAttribute>() != null &&
                                 expressionLookup.Keys.Contains(property.Name))
-                        .Cast<PropertyInfo>()
                         .ToList();
 
 
@@ -531,7 +516,6 @@ namespace CCC.ORM.Helpers
                         // Get this child-object's fields
                         var childObjectFields = typeOfChildObject.GetProperties(flags)
                             .Where(item => item.GetCustomAttribute<DbColumnAttribute>() != null)
-                            .Cast<PropertyInfo>()
                             .ToList();
 
                         //
@@ -547,8 +531,6 @@ namespace CCC.ORM.Helpers
                             dynamic setter = genericSetterMethod.Invoke(null, setterMethodParams);
 
                             // Fill the setter in he childSetters dictionary
-                            // childSetters.Add(columnName, Invoker.BuildUntypedSetter<T>(propertyInfo));
-                            // columnName = String.Format("{0}.{1}", childRelationName, columnName);
                             childSetters.Add(columnName, setter);
                         }
 
@@ -622,11 +604,9 @@ namespace CCC.ORM.Helpers
                 .Where(property =>
                     property.GetCustomAttribute<DbColumnAttribute>() != null &&
                     property.GetCustomAttribute<DbColumnAttribute>().Name != "PhoneCallsTableName")
-                //this is the only exception in the who solution 
-                .Cast<PropertyInfo>()
                 .ToList();
 
-            var propertiesLength = masterPropertyInfoFields.ToArray().Length;
+            //var propertiesLength = masterPropertyInfoFields.ToArray().Length;
 
             foreach (var field in masterPropertyInfoFields)
             {
@@ -663,7 +643,7 @@ namespace CCC.ORM.Helpers
             //dt.PrimaryKey = new[] { dt.Columns[0], dt.Columns[1] };
 
             //this object will be loacked during parallel loop
-            var status = new object();
+            //var status = new object();
 
             //Add Rows
             Parallel.ForEach(list, phonecall =>
@@ -693,7 +673,7 @@ namespace CCC.ORM.Helpers
         /// <summary>
         ///     Gets the Name of DB table Field
         /// </summary>
-        /// <param name="value">Enum Name</param>
+        /// <param name="enumObject"></param>
         /// <returns>Field Description</returns>
         public static string Description(this Enum enumObject)
         {
@@ -702,7 +682,7 @@ namespace CCC.ORM.Helpers
             var descAttributes =
                 (DescriptionAttribute[]) fieldInfo.GetCustomAttributes(typeof (DescriptionAttribute), false);
 
-            if (descAttributes != null && descAttributes.Length > 0)
+            if (descAttributes.Length > 0)
             {
                 return descAttributes[0].Description;
             }
@@ -712,7 +692,7 @@ namespace CCC.ORM.Helpers
         /// <summary>
         ///     Gets the DefaultValue attribute of the enum
         /// </summary>
-        /// <param name="value">Enum Name</param>
+        /// <param name="enumObject"></param>
         /// <returns>Field Description</returns>
         public static string Value(this Enum enumObject)
         {
@@ -721,7 +701,7 @@ namespace CCC.ORM.Helpers
             var valueAttributes =
                 (DefaultValueAttribute[]) fieldInfo.GetCustomAttributes(typeof (DefaultValueAttribute), false);
 
-            if (valueAttributes != null && valueAttributes.Length > 0)
+            if (valueAttributes.Length > 0)
             {
                 return valueAttributes[0].Value.ToString();
             }
