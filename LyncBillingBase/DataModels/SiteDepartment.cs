@@ -20,10 +20,10 @@ namespace LyncBillingBase.DataModels
         [DbColumn("DepartmentID")]
         public int DepartmentId { get; set; }
 
-        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "ID", ThisKey = "SiteID")]
+        [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "Id", ThisKey = "SiteId")]
         public Site Site { get; set; }
 
-        [DataRelation(WithDataModel = typeof (Department), OnDataModelKey = "ID", ThisKey = "DepartmentID")]
+        [DataRelation(WithDataModel = typeof (Department), OnDataModelKey = "Id", ThisKey = "DepartmentId")]
         public Department Department { get; set; }
     }
 }

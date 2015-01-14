@@ -104,40 +104,40 @@ namespace CCC.ORM.DataAccess
         }
 
         //SELECT FROM a table and JOIN with other tables
-        public DataTable SELECT_WITH_JOIN(string tableName, List<string> masterTableColumns,
-            Dictionary<string, object> whereConditions, List<SqlJoinRelation> tableRelationsMap, int limits)
+        public DataTable SELECT_WITH_JOIN( string tableName , List<string> masterTableColumns ,
+            Dictionary<string , object> whereConditions , List<SqlJoinRelation> tableRelationsMap , int limits )
         {
             var dt = new DataTable();
 
             OleDbDataReader dr;
-            var FinalSelectQuery = string.Empty;
-            var TRUTH_OPERATOR = "AND";
+            var finalSelectQuery = string.Empty;
+            var truthOperator = "AND";
 
-            var SelectColumns = new StringBuilder("");
-            var WhereStatement = new StringBuilder("");
-            var JoinStatement = new StringBuilder("");
-            var GroupByFields = new StringBuilder("");
-            var OrderBy = new StringBuilder("");
+            var selectColumns = new StringBuilder( "" );
+            var whereStatement = new StringBuilder( "" );
+            var joinStatement = new StringBuilder( "" );
+            var groupByFields = new StringBuilder( "" );
+            var orderBy = new StringBuilder( "" );
 
 
             //Handle Order By
-            if (tableName.Contains("Phonecalls"))
+            if ( tableName.Contains( "Phonecalls" ) )
             {
-                OrderBy.Append("ORDER BY [SessionIdTime] DESC");
+                orderBy.Append( "ORDER BY [SessionIdTime] DESC" );
             }
 
 
             //Handle the JOIN statement
-            if (tableRelationsMap != null && tableRelationsMap.Count > 0)
+            if ( tableRelationsMap != null && tableRelationsMap.Count > 0 )
             {
-                foreach (var relation in tableRelationsMap)
+                foreach ( var relation in tableRelationsMap )
                 {
                     //The two parts of the JOIN STATEMENT
                     var joinType = string.Empty;
                     var keysStatement = string.Empty;
 
                     //Decide the join type
-                    if (Globals.DataRelation.Type.INTERSECTION == relation.RelationType)
+                    if ( Globals.DataRelation.Type.INTERSECTION == relation.RelationType )
                     {
                         joinType = "INNER JOIN";
                     }
@@ -148,176 +148,176 @@ namespace CCC.ORM.DataAccess
                     }
 
                     //Construct the JOIN KEYS statement 
-                    keysStatement = String.Format(" AS {4} ON [{0}].[{1}] = [{4}].[{3}]", tableName,
-                        relation.MasterTableKey, relation.JoinedTableName, relation.JoinedTableKey,
-                        relation.RelationName);
+                    keysStatement = String.Format( " AS {4} ON [{0}].[{1}] = [{4}].[{3}]" , tableName ,
+                        relation.MasterTableKey , relation.JoinedTableName , relation.JoinedTableKey ,
+                        relation.RelationName );
 
-                    foreach (var column in relation.JoinedTableColumns)
+                    foreach ( var column in relation.JoinedTableColumns )
                     {
-                        SelectColumns.Append(string.Format("{0}.{1} AS '{0}.{1}',", relation.RelationName, column));
+                        selectColumns.Append( string.Format( "{0}.{1} AS '{0}.{1}'," , relation.RelationName , column ) );
                     }
 
-                    JoinStatement.Append(String.Format("{0} {1} {2} ", joinType, relation.JoinedTableName, keysStatement));
+                    joinStatement.Append( String.Format( "{0} {1} {2} " , joinType , relation.JoinedTableName , keysStatement ) );
                 } //end-foreach
             } //end-outer-if
 
 
             //Concatenate the Master Table Columns with the local list
-            if (masterTableColumns == null)
+            if ( masterTableColumns == null )
             {
                 masterTableColumns = new List<string>();
             }
             masterTableColumns =
-                masterTableColumns.Select(col => String.Format("[{0}].[{1}]", tableName, col, tableName, col)).ToList();
+                masterTableColumns.Select( col => String.Format( "[{0}].[{1}]" , tableName , col , tableName , col ) ).ToList();
             //Columns = masterTableColumns.Concat(Columns).ToList();
 
 
             //Handle the fields collection
-            if (masterTableColumns.Count > 0)
+            if ( masterTableColumns.Count > 0 )
             {
-                foreach (var field in masterTableColumns)
+                foreach ( var field in masterTableColumns )
                 {
                     //selectedfields.Append(fieldName + ",");
-                    if (!string.IsNullOrEmpty(field))
+                    if ( !string.IsNullOrEmpty( field ) )
                     {
-                        SelectColumns.Append(field + ",");
+                        selectColumns.Append( field + "," );
                     }
                 }
 
-                SelectColumns.Remove(SelectColumns.Length - 1, 1);
+                selectColumns.Remove( selectColumns.Length - 1 , 1 );
             }
             else
             {
-                SelectColumns.Append("*");
+                selectColumns.Append( "*" );
             }
 
 
             //Handle the whereClause collection
-            if (whereConditions != null && whereConditions.Count != 0)
+            if ( whereConditions != null && whereConditions.Count != 0 )
             {
-                WhereStatement.Append("WHERE ");
+                whereStatement.Append( "WHERE " );
 
-                foreach (var pair in whereConditions)
+                foreach ( var pair in whereConditions )
                 {
                     var key = pair.Key;
 
                     //If the key doesn't contain the table separator ("."), then add the master table name and the table separator.
-                    if (!key.Contains("."))
+                    if ( !key.Contains( "." ) )
                     {
-                        key = String.Format("[{0}].[{1}]", tableName, key);
+                        key = String.Format( "[{0}].[{1}]" , tableName , key );
                     }
 
 
-                    if (pair.Value == null)
+                    if ( pair.Value == null )
                     {
-                        WhereStatement.Append(String.Format("{0} IS NULL {1} ", key, TRUTH_OPERATOR));
+                        whereStatement.Append( String.Format( "{0} IS NULL {1} " , key , truthOperator ) );
                     }
 
-                    else if (pair.Value.ToString() == "!null")
+                    else if ( pair.Value.ToString() == "!null" )
                     {
-                        WhereStatement.Append(String.Format("{0} IS NOT NULL {1} ", key, TRUTH_OPERATOR));
+                        whereStatement.Append( String.Format( "{0} IS NOT NULL {1} " , key , truthOperator ) );
                     }
 
-                    else if (pair.Value.ToString() == "!=0")
+                    else if ( pair.Value.ToString() == "!=0" )
                     {
-                        WhereStatement.Append(String.Format("{0} <> 0 {1} ", key, TRUTH_OPERATOR));
+                        whereStatement.Append( String.Format( "{0} <> 0 {1} " , key , truthOperator ) );
                     }
 
-                    else if (pair.Value is string && pair.Value.ToString().ToLower().Contains("like"))
+                    else if ( pair.Value is string && pair.Value.ToString().ToLower().Contains( "like" ) )
                     {
                         //key like value: key = "columnX", value = "like '%ABC%'"
-                        WhereStatement.Append(String.Format("{0} {1} {2} ", key, pair.Value, TRUTH_OPERATOR));
+                        whereStatement.Append( String.Format( "{0} {1} {2} " , key , pair.Value , truthOperator ) );
                     }
 
-                    else if (pair.Value is string && (pair.Value.ToString()).Contains("BETWEEN"))
+                    else if ( pair.Value is string && ( pair.Value.ToString() ).Contains( "BETWEEN" ) )
                     {
                         //key like value: key = "columnX", value = "BETWEEN abc AND xyz"
-                        WhereStatement.Append(String.Format("{0} {1} {2} ", key, pair.Value, TRUTH_OPERATOR));
+                        whereStatement.Append( String.Format( "{0} {1} {2} " , key , pair.Value , truthOperator ) );
                     }
 
-                    else if (pair.Value is List<int>)
+                    else if ( pair.Value is List<int> )
                     {
-                        WhereStatement.Append(key + " in ( ");
+                        whereStatement.Append( key + " in ( " );
 
-                        foreach (var item in (List<int>) pair.Value)
+                        foreach ( var item in (List<int>)pair.Value )
                         {
-                            WhereStatement.Append(item + ",");
+                            whereStatement.Append( item + "," );
                         }
                         //Remove last ','
-                        WhereStatement.Remove(WhereStatement.Length - 1, 1);
+                        whereStatement.Remove( whereStatement.Length - 1 , 1 );
 
-                        WhereStatement.Append(" ) " + TRUTH_OPERATOR + " ");
+                        whereStatement.Append( " ) " + truthOperator + " " );
                     }
 
-                    else if (pair.Value is List<string>)
+                    else if ( pair.Value is List<string> )
                     {
-                        WhereStatement.Append(key + " in ( ");
+                        whereStatement.Append( key + " in ( " );
 
-                        foreach (var item in (List<string>) pair.Value)
+                        foreach ( var item in (List<string>)pair.Value )
                         {
-                            WhereStatement.Append(item + ",");
+                            whereStatement.Append( item + "," );
                         }
                         //Remove last ','
-                        WhereStatement.Remove(WhereStatement.Length - 1, 1);
+                        whereStatement.Remove( whereStatement.Length - 1 , 1 );
 
-                        WhereStatement.Append(" ) " + TRUTH_OPERATOR + " ");
+                        whereStatement.Append( " ) " + truthOperator + " " );
                     }
 
                     else
                     {
                         var valueType = pair.Value.GetType();
-                        if (valueType == typeof (int) || valueType == typeof (Double))
+                        if ( valueType == typeof( int ) || valueType == typeof( Double ) )
                         {
-                            WhereStatement.Append(String.Format("{0}={1} {2} ", key, pair.Value, TRUTH_OPERATOR));
+                            whereStatement.Append( String.Format( "{0}={1} {2} " , key , pair.Value , truthOperator ) );
                         }
                         else
                         {
-                            WhereStatement.Append(String.Format("{0}='{1}' {2} ", key, pair.Value, TRUTH_OPERATOR));
+                            whereStatement.Append( String.Format( "{0}='{1}' {2} " , key , pair.Value , truthOperator ) );
                         }
                     }
                 }
 
                 //Trim the whereStatement
-                WhereStatement.Remove(WhereStatement.Length - 5, 5);
+                whereStatement.Remove( whereStatement.Length - 5 , 5 );
             }
 
 
             //Start constructing the FINAL SELECT QUERY
             //Start by formatting the select columns and limits
-            if (limits == 0)
-                FinalSelectQuery = string.Format("SELECT {0}", SelectColumns);
+            if ( limits == 0 )
+                finalSelectQuery = string.Format( "SELECT {0}" , selectColumns );
             else
-                FinalSelectQuery = string.Format("SELECT TOP({0}) {1}", limits, SelectColumns);
+                finalSelectQuery = string.Format( "SELECT TOP({0}) {1}" , limits , selectColumns );
 
             //Add the JOINED tables part
-            if (JoinStatement.ToString().Length > 0)
-                FinalSelectQuery = String.Format("{0} FROM [{1}] {2}", FinalSelectQuery, tableName, JoinStatement);
+            if ( joinStatement.ToString().Length > 0 )
+                finalSelectQuery = String.Format( "{0} FROM [{1}] {2}" , finalSelectQuery , tableName , joinStatement );
             else
-                FinalSelectQuery = String.Format("{0} FROM [{1}]", FinalSelectQuery, tableName);
+                finalSelectQuery = String.Format( "{0} FROM [{1}]" , finalSelectQuery , tableName );
 
             //Add the where conditions to the FINAL SELECT QUERY
-            if (WhereStatement.ToString().Length > 0)
-                FinalSelectQuery = String.Format("{0} {1}", FinalSelectQuery, WhereStatement);
+            if ( whereStatement.ToString().Length > 0 )
+                finalSelectQuery = String.Format( "{0} {1}" , finalSelectQuery , whereStatement );
 
             //Add the order by part
-            if (OrderBy.ToString().Length > 0)
-                FinalSelectQuery = String.Format("{0} {1}", FinalSelectQuery, OrderBy);
+            if ( orderBy.ToString().Length > 0 )
+                finalSelectQuery = String.Format( "{0} {1}" , finalSelectQuery , orderBy );
 
 
             //Initialize the connection and command
-            var conn = DBInitializeConnection(ConnectionString);
-            var comm = new OleDbCommand(FinalSelectQuery, conn);
+            var conn = DBInitializeConnection( ConnectionString );
+            var comm = new OleDbCommand( finalSelectQuery , conn );
 
             try
             {
                 conn.Open();
                 dr = comm.ExecuteReader();
 
-                dt.Load(dr);
+                dt.Load( dr );
             }
-            catch (Exception ex)
+            catch ( Exception ex )
             {
-                var argEx = new ArgumentException("Exception", "ex", ex);
+                var argEx = new ArgumentException( "Exception" , "ex" , ex );
                 throw argEx;
             }
             finally
@@ -327,6 +327,7 @@ namespace CCC.ORM.DataAccess
 
             return dt;
         }
+
 
         public DataTable SELECT(string tableName, string wherePart, string customConnectionString = null)
         {

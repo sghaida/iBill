@@ -48,7 +48,7 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(WithDataModel = typeof (Gateway), OnDataModelKey = "ID", ThisKey = "GatewayID")]
+        [DataRelation(WithDataModel = typeof (Gateway), OnDataModelKey = "Id", ThisKey = "GatewayId")]
         public Gateway Gateway { get; set; }
     }
 }
