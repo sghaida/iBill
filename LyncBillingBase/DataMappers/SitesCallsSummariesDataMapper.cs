@@ -42,6 +42,9 @@ namespace LyncBillingBase.DataMappers
         /// <returns></returns>
         public List<CallsSummaryForSite> GetBySite(string siteName)
         {
+            List<CallsSummaryForSite> summaries;
+            CallsSummaryForSiteComparer summariesComparer = new CallsSummaryForSiteComparer();
+
             try
             {
                 var startingDate = (new DateTime(DateTime.Now.Year, 1, 1)).ConvertDate(true);
@@ -50,7 +53,10 @@ namespace LyncBillingBase.DataMappers
                 var sqlQuery = _summariesSqlQueries.GetCallsSummariesForSite(siteName, startingDate, endingDate,
                     _dbTables);
 
-                return base.GetAll(sqlQuery).ToList();
+                summaries = base.GetAll(sqlQuery).ToList();
+                summaries.Sort(summariesComparer);
+
+                return summaries;
             }
             catch (Exception ex)
             {
@@ -68,6 +74,9 @@ namespace LyncBillingBase.DataMappers
         /// <returns></returns>
         public List<CallsSummaryForSite> GetBySite(string siteName, DateTime startingDate, DateTime endingDate)
         {
+            List<CallsSummaryForSite> summaries;
+            CallsSummaryForSiteComparer summariesComparer = new CallsSummaryForSiteComparer();
+
             try
             {
                 var sqlQuery = _summariesSqlQueries.GetCallsSummariesForSite(
@@ -76,7 +85,10 @@ namespace LyncBillingBase.DataMappers
                     endingDate.ConvertDate(true),
                     _dbTables);
 
-                return base.GetAll(sqlQuery).ToList();
+                summaries = base.GetAll(sqlQuery).ToList();
+                summaries.Sort(summariesComparer);
+
+                return summaries;
             }
             catch (Exception ex)
             {
