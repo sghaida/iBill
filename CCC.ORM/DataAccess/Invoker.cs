@@ -63,7 +63,7 @@ namespace CCC.ORM.DataAccess
 
             var info = propertyInfo.GetGetMethod();
 
-            var type = info.ReturnType;
+            //var type = info.ReturnType;
 
             var exTarget = Expression.Parameter(targetType, "t");
             var exBody = Expression.Call(exTarget, info);

@@ -123,7 +123,6 @@ namespace CCC.ORM.DataAccess
             }
             else if (m.Method.Name == "Input")
             {
-                var x = string.Empty;
             }
 
             throw new NotSupportedException(string.Format("The method '{0}' is not supported", m.Method.Name));
@@ -349,7 +348,7 @@ namespace CCC.ORM.DataAccess
 
         private bool ParseSkipExpression(MethodCallExpression expression)
         {
-            var fieldName = GetMemberName(expression);
+            //var fieldName = GetMemberName(expression);
             var sizeExpression = (ConstantExpression) expression.Arguments[1];
 
             int size;
@@ -364,7 +363,7 @@ namespace CCC.ORM.DataAccess
 
         private bool ParseTakeExpression(MethodCallExpression expression)
         {
-            var fieldName = GetMemberName(expression);
+            //var fieldName = GetMemberName(expression);
             var sizeExpression = (ConstantExpression) expression.Arguments[1];
 
             int size;
@@ -399,26 +398,31 @@ namespace CCC.ORM.DataAccess
 
         private string GetMemberName(MethodCallExpression expression)
         {
-            var fieldName = string.Empty;
-            var member = ((MemberExpression) expression.Object).Member;
-
-            if (member != null && member.CustomAttributes != null && member.CustomAttributes.Count() > 0)
+            string fieldName = null;
+            var memberExpression = (MemberExpression) expression.Object;
+            
+            if (memberExpression != null)
             {
-                var dbColumn =
-                    member.CustomAttributes.FirstOrDefault(item => item.AttributeType == typeof (DbColumnAttribute));
+                var member = memberExpression.Member;
 
-                if (dbColumn != null && dbColumn.ConstructorArguments.Count > 0)
+                if (member.CustomAttributes != null && member.CustomAttributes.Any())
                 {
-                    fieldName = Convert.ToString(dbColumn.ConstructorArguments.First().Value);
+                    var dbColumn =
+                        member.CustomAttributes.FirstOrDefault(item => item.AttributeType == typeof (DbColumnAttribute));
+
+                    if (dbColumn != null && dbColumn.ConstructorArguments.Count > 0)
+                    {
+                        fieldName = Convert.ToString(dbColumn.ConstructorArguments.First().Value);
+                    }
+                    else
+                    {
+                        fieldName = member.Name;
+                    }
                 }
                 else
                 {
                     fieldName = member.Name;
                 }
-            }
-            else
-            {
-                fieldName = member.Name;
             }
 
             return fieldName;
@@ -426,10 +430,10 @@ namespace CCC.ORM.DataAccess
 
         private string GetMemberName(MemberExpression expression)
         {
-            var fieldName = string.Empty;
+            string fieldName;
             var member = expression.Member;
 
-            if (member != null && member.CustomAttributes != null && member.CustomAttributes.Count() > 0)
+            if (member.CustomAttributes != null && member.CustomAttributes.Any())
             {
                 var dbColumn =
                     member.CustomAttributes.FirstOrDefault(item => item.AttributeType == typeof (DbColumnAttribute));

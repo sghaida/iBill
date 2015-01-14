@@ -44,7 +44,7 @@ namespace CCC.ORM.DataAccess
 
             internal SubtreeEvaluator(HashSet<Expression> candidates)
             {
-                this._candidates = candidates;
+                _candidates = candidates;
             }
 
             internal Expression Eval(Expression exp)
@@ -89,7 +89,7 @@ namespace CCC.ORM.DataAccess
 
             internal Nominator(Func<Expression, bool> fnCanBeEvaluated)
             {
-                this._fnCanBeEvaluated = fnCanBeEvaluated;
+                _fnCanBeEvaluated = fnCanBeEvaluated;
             }
 
             internal HashSet<Expression> Nominate(Expression expression)

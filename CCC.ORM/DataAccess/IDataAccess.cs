@@ -9,6 +9,8 @@ namespace CCC.ORM.DataAccess
         /// <summary>
         /// </summary>
         /// <param name="dataObject"></param>
+        /// <param name="dataSourceName"></param>
+        /// <param name="dataSourceType"></param>
         /// <returns></returns>
         int Insert(T dataObject, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default);
@@ -16,13 +18,6 @@ namespace CCC.ORM.DataAccess
         /// <summary>
         /// </summary>
         /// <param name="dataObject"></param>
-        /// <param name="dataSourceName"></param>
-        /// <param name="dataSource"></param>
-        /// <returns></returns>
-        /// <summary>
-        /// </summary>
-        /// <param name="dataObject"></param>
-        /// <param name="whereConditions"></param>
         /// <param name="dataSourceName"></param>
         /// <param name="dataSourceType"></param>
         /// <returns></returns>
@@ -43,7 +38,6 @@ namespace CCC.ORM.DataAccess
         /// <param name="id"></param>
         /// <param name="dataSourceName"></param>
         /// <param name="dataSourceType"></param>
-        /// <param name="IncludeDataRelations"></param>
         /// <returns></returns>
         T GetById(long id, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default);
@@ -51,18 +45,21 @@ namespace CCC.ORM.DataAccess
         /// <summary>
         ///     Gets the data from repository
         /// </summary>
-        /// <param name="fields">List<string> represents the fields that should be set</param>
-        /// <param name="where">Dictionary<string, object> Represents the where part that should be executed</param>
+        /// <param name="where">Dictionary&lt;string, object&gt;Represents the where part that should be executed</param>
         /// <param name="limit">Number of T objects to be populated</param>
-        /// <returns>IQueryable<T>  Results</returns>
+        /// <param name="dataSourceName"></param>
+        /// <param name="dataSourceType"></param>
+        /// <returns>IQueryable&lt;T&gt;  Results</returns>
         IEnumerable<T> Get(Dictionary<string, object> where, int limit = 25, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default);
 
         /// <summary>
         ///     Gets the data from the repository and filter it based on the specified predicate expression
         /// </summary>
-        /// <param name="predicate">Expression<Func<T, bool>> predicate specify the expression that should be evaluated</param>
-        /// <returns>IQueryable<T>  Results</returns>
+        /// <param name="predicate">Expression&lt;Func&lt;T, bool&gt;&gt; predicate specify the expression that should be evaluated</param>
+        /// <param name="dataSourceName"></param>
+        /// <param name="dataSourceType"></param>
+        /// <returns>IQueryable&lt;T&gt;  Results</returns>
         IEnumerable<T> Get(Expression<Func<T, bool>> predicate, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default);
 
