@@ -8,11 +8,3 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.ORM\b
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.ORM\obj\Debug\CCC.ORM.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.ORM\obj\Debug\CCC.ORM.pdb
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.ORM\obj\Debug\CCC.ORM.csprojResolveAssemblyReference.cache
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\CCC.ORM.dll.config
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\CCC.ORM.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\CCC.ORM.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\FastMember.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\FastMember.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\bin\Debug\FastMember.xml
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\obj\Debug\CCC.ORM.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.ORM\obj\Debug\CCC.ORM.pdb
