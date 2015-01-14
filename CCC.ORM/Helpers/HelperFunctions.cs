@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
@@ -13,13 +15,12 @@ namespace CCC.ORM.Helpers
         public static bool GetResolvedConnecionIpAddress(string serverNameOrUrl, out string resolvedIpAddress)
         {
             var isResolved = false;
-            IPHostEntry hostEntry = null;
             IPAddress resolvIp = null;
             try
             {
                 if (!IPAddress.TryParse(serverNameOrUrl, out resolvIp))
                 {
-                    hostEntry = Dns.GetHostEntry(serverNameOrUrl);
+                    var hostEntry = Dns.GetHostEntry(serverNameOrUrl);
 
                     if (hostEntry != null && hostEntry.AddressList != null
                         && hostEntry.AddressList.Length > 0)
@@ -31,14 +32,11 @@ namespace CCC.ORM.Helpers
                         }
                         else
                         {
-                            foreach (var var in hostEntry.AddressList)
+                            foreach (var var in hostEntry.AddressList.Where(var => var.AddressFamily == AddressFamily.InterNetwork))
                             {
-                                if (var.AddressFamily == AddressFamily.InterNetwork)
-                                {
-                                    resolvIp = var;
-                                    isResolved = true;
-                                    break;
-                                }
+                                resolvIp = var;
+                                isResolved = true;
+                                break;
                             }
                         }
                     }
@@ -55,9 +53,10 @@ namespace CCC.ORM.Helpers
             }
             finally
             {
-                resolvedIpAddress = resolvIp.ToString();
+                if (resolvIp != null) resolvedIpAddress = resolvIp.ToString();
             }
 
+            resolvedIpAddress = null;
             return isResolved;
         }
 
@@ -177,7 +176,7 @@ namespace CCC.ORM.Helpers
 
         public static string ConvertDate(this DateTime datetTime, bool excludeHoursAndMinutes = false)
         {
-            if (datetTime != DateTime.MinValue || datetTime != null)
+            if (datetTime != DateTime.MinValue)
             {
                 if (excludeHoursAndMinutes)
                     return datetTime.ToString("yyyy-MM-dd");
@@ -186,6 +185,7 @@ namespace CCC.ORM.Helpers
             return null;
         }
 
+        [SuppressMessage("ReSharper", "PossibleLossOfFraction")]
         public static string ConvertSecondsToReadable(this int secondsParam)
         {
             var hours = Convert.ToInt32(Math.Floor((double) (secondsParam/3600)));
@@ -213,6 +213,7 @@ namespace CCC.ORM.Helpers
             return hoursStr + ':' + minsStr + ':' + secsStr;
         }
 
+        [SuppressMessage("ReSharper", "PossibleLossOfFraction")]
         public static string ConvertSecondsToReadable(this long secondsParam)
         {
             var hours = Convert.ToInt32(Math.Floor((double) (secondsParam/3600)));

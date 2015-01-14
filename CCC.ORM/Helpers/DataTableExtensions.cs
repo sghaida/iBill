@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlTypes;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -125,6 +126,7 @@ namespace CCC.ORM.Helpers
         }
 
         [Obsolete]
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
         public static List<T> ConvertToList_OLD<T>(this DataTable dataTable, params Expression<Func<T, object>>[] path)
             where T : class, new()
         {
@@ -421,12 +423,12 @@ namespace CCC.ORM.Helpers
         }
 
         /// <summary>
-        ///     Converts datatable to list<T> dynamically
+        ///     Converts datatable to list&lt;T&gt; dynamically
         /// </summary>
         /// <typeparam name="T">Class name</typeparam>
         /// <param name="dataTable">data table to convert</param>
         /// <param name="path"></param>
-        /// <returns>List<T></returns>
+        /// <returns>List&lt;T&gt;</returns>
         public static List<T> ConvertToList<T>(this DataTable dataTable, params Expression<Func<T, object>>[] path)
             where T : class, new()
         {
@@ -586,7 +588,7 @@ namespace CCC.ORM.Helpers
         }
 
         /// <summary>
-        ///     Converts List<T> to Datatable
+        ///     Converts List&lt;T&gt; to Datatable
         /// </summary>
         /// <typeparam name="T">ClassName</typeparam>
         /// <param name="list">List to be converted</param>

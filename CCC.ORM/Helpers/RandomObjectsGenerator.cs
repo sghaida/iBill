@@ -127,16 +127,14 @@ namespace CCC.ORM.Helpers
             var setters = new Dictionary<string, Action<T, object>>();
 
             // List of class property infos
-            var masterPropertyInfoFields = new List<PropertyInfo>();
 
             //List of T object data fields (DbColumnAttribute Values), and types.
-            var masterObjectFields = new List<ObjectPropertyInfoField>();
+            //var masterObjectFields = new List<ObjectPropertyInfoField>();
 
             //Define what attributes to be read from the class
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
 
-            masterPropertyInfoFields = typeof (T).GetProperties(flags)
-                .Cast<PropertyInfo>()
+            var masterPropertyInfoFields = typeof (T).GetProperties(flags)
                 .ToList();
 
             foreach (var field in masterPropertyInfoFields)
