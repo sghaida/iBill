@@ -610,7 +610,7 @@ namespace LyncBillingBase.Libs
             Paragraph pageSubTitleParagraph;
             var userInfo = new AdUserInfo();
 
-            var employeeIdKey = Globals.PhoneCallSummary.EmployeeID.Description();
+            var employeeIdKey = Globals.PhoneCallSummary.EmployeeId.Description();
             var displayNameKey = Globals.PhoneCallSummary.DisplayName.Description();
             var sipAccountKey = Globals.PhoneCallSummary.ChargingParty.Description();
 

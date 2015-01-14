@@ -40,11 +40,11 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         private class SubtreeEvaluator : ExpressionVisitor
         {
-            private readonly HashSet<Expression> candidates;
+            private readonly HashSet<Expression> _candidates;
 
             internal SubtreeEvaluator(HashSet<Expression> candidates)
             {
-                this.candidates = candidates;
+                this._candidates = candidates;
             }
 
             internal Expression Eval(Expression exp)
@@ -58,7 +58,7 @@ namespace CCC.ORM.DataAccess
                 {
                     return null;
                 }
-                if (candidates.Contains(exp))
+                if (_candidates.Contains(exp))
                 {
                     return Evaluate(exp);
                 }
@@ -83,41 +83,41 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         private class Nominator : ExpressionVisitor
         {
-            private readonly Func<Expression, bool> fnCanBeEvaluated;
-            private HashSet<Expression> candidates;
-            private bool cannotBeEvaluated;
+            private readonly Func<Expression, bool> _fnCanBeEvaluated;
+            private HashSet<Expression> _candidates;
+            private bool _cannotBeEvaluated;
 
             internal Nominator(Func<Expression, bool> fnCanBeEvaluated)
             {
-                this.fnCanBeEvaluated = fnCanBeEvaluated;
+                this._fnCanBeEvaluated = fnCanBeEvaluated;
             }
 
             internal HashSet<Expression> Nominate(Expression expression)
             {
-                candidates = new HashSet<Expression>();
+                _candidates = new HashSet<Expression>();
                 Visit(expression);
-                return candidates;
+                return _candidates;
             }
 
             public override Expression Visit(Expression expression)
             {
                 if (expression != null)
                 {
-                    var saveCannotBeEvaluated = cannotBeEvaluated;
-                    cannotBeEvaluated = false;
+                    var saveCannotBeEvaluated = _cannotBeEvaluated;
+                    _cannotBeEvaluated = false;
                     base.Visit(expression);
-                    if (!cannotBeEvaluated)
+                    if (!_cannotBeEvaluated)
                     {
-                        if (fnCanBeEvaluated(expression))
+                        if (_fnCanBeEvaluated(expression))
                         {
-                            candidates.Add(expression);
+                            _candidates.Add(expression);
                         }
                         else
                         {
-                            cannotBeEvaluated = true;
+                            _cannotBeEvaluated = true;
                         }
                     }
-                    cannotBeEvaluated |= saveCannotBeEvaluated;
+                    _cannotBeEvaluated |= saveCannotBeEvaluated;
                 }
                 return expression;
             }

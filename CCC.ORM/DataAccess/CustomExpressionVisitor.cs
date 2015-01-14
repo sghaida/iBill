@@ -12,13 +12,13 @@ namespace CCC.ORM.DataAccess
         private string _orderBy = string.Empty;
         private string _toLower = string.Empty;
         private string _toUpper = string.Empty;
-        private StringBuilder sb;
+        private StringBuilder _sb;
 
         public CustomExpressionVisitor()
         {
             Take = null;
             Skip = null;
-            sb = new StringBuilder();
+            _sb = new StringBuilder();
         }
 
         public int? Skip { get; private set; }
@@ -46,10 +46,10 @@ namespace CCC.ORM.DataAccess
 
         public string Translate(Expression expression)
         {
-            sb = new StringBuilder();
+            _sb = new StringBuilder();
             Visit(expression);
 
-            return sb.ToString();
+            return _sb.ToString();
         }
 
         private static Expression StripQuotes(Expression e)
@@ -134,7 +134,7 @@ namespace CCC.ORM.DataAccess
             switch (u.NodeType)
             {
                 case ExpressionType.Not:
-                    sb.Append(" NOT ");
+                    _sb.Append(" NOT ");
                     Visit(u.Operand);
                     break;
                 case ExpressionType.Convert:
@@ -156,63 +156,63 @@ namespace CCC.ORM.DataAccess
         /// <returns></returns>
         protected override Expression VisitBinary(BinaryExpression b)
         {
-            sb.Append("(");
+            _sb.Append("(");
             Visit(b.Left);
 
             switch (b.NodeType)
             {
                 case ExpressionType.And:
-                    sb.Append(" AND ");
+                    _sb.Append(" AND ");
                     break;
 
                 case ExpressionType.AndAlso:
-                    sb.Append(" AND ");
+                    _sb.Append(" AND ");
                     break;
 
                 case ExpressionType.Or:
-                    sb.Append(" OR ");
+                    _sb.Append(" OR ");
                     break;
 
                 case ExpressionType.OrElse:
-                    sb.Append(" OR ");
+                    _sb.Append(" OR ");
                     break;
 
                 case ExpressionType.Equal:
                     if (IsNullConstant(b.Right))
                     {
-                        sb.Append(" IS ");
+                        _sb.Append(" IS ");
                     }
                     else
                     {
-                        sb.Append(" = ");
+                        _sb.Append(" = ");
                     }
                     break;
 
                 case ExpressionType.NotEqual:
                     if (IsNullConstant(b.Right))
                     {
-                        sb.Append(" IS NOT ");
+                        _sb.Append(" IS NOT ");
                     }
                     else
                     {
-                        sb.Append(" <> ");
+                        _sb.Append(" <> ");
                     }
                     break;
 
                 case ExpressionType.LessThan:
-                    sb.Append(" < ");
+                    _sb.Append(" < ");
                     break;
 
                 case ExpressionType.LessThanOrEqual:
-                    sb.Append(" <= ");
+                    _sb.Append(" <= ");
                     break;
 
                 case ExpressionType.GreaterThan:
-                    sb.Append(" > ");
+                    _sb.Append(" > ");
                     break;
 
                 case ExpressionType.GreaterThanOrEqual:
-                    sb.Append(" >= ");
+                    _sb.Append(" >= ");
                     break;
 
                 default:
@@ -221,7 +221,7 @@ namespace CCC.ORM.DataAccess
             }
 
             Visit(b.Right);
-            sb.Append(")");
+            _sb.Append(")");
             return b;
         }
 
@@ -231,33 +231,33 @@ namespace CCC.ORM.DataAccess
 
             if (q == null && c.Value == null)
             {
-                sb.Append("NULL");
+                _sb.Append("NULL");
             }
             else if (q == null)
             {
                 switch (Type.GetTypeCode(c.Value.GetType()))
                 {
                     case TypeCode.Boolean:
-                        sb.Append(((bool) c.Value) ? 1 : 0);
+                        _sb.Append(((bool) c.Value) ? 1 : 0);
                         break;
 
                     case TypeCode.String:
-                        sb.Append("'");
-                        sb.Append(c.Value);
-                        sb.Append("'");
+                        _sb.Append("'");
+                        _sb.Append(c.Value);
+                        _sb.Append("'");
                         break;
 
                     case TypeCode.DateTime:
-                        sb.Append("'");
-                        sb.Append(c.Value);
-                        sb.Append("'");
+                        _sb.Append("'");
+                        _sb.Append(c.Value);
+                        _sb.Append("'");
                         break;
 
                     case TypeCode.Object:
                         throw new NotSupportedException(string.Format("The constant for '{0}' is not supported", c.Value));
 
                     default:
-                        sb.Append(c.Value);
+                        _sb.Append(c.Value);
                         break;
                 }
             }
@@ -272,7 +272,7 @@ namespace CCC.ORM.DataAccess
             if (m.Expression != null && m.Expression.NodeType == ExpressionType.Parameter)
             {
                 //sb.Append(m.Member.Name);
-                sb.Append(fieldName);
+                _sb.Append(fieldName);
                 return m;
             }
             if (m.Expression != null && m.Expression.NodeType == ExpressionType.Constant)
@@ -281,15 +281,15 @@ namespace CCC.ORM.DataAccess
 
                 if (m.Type == typeof (string) || m.Type == typeof (char))
                 {
-                    sb.Append("'" + value + "'");
+                    _sb.Append("'" + value + "'");
                 }
                 else if (m.Type == typeof (DateTime))
                 {
-                    sb.Append("'" + Convert.ToDateTime(value).ToString("yyyy-MM-dd hh:mm:ss.fff") + "'");
+                    _sb.Append("'" + Convert.ToDateTime(value).ToString("yyyy-MM-dd hh:mm:ss.fff") + "'");
                 }
                 else
                 {
-                    sb.Append(value);
+                    _sb.Append(value);
                 }
 
                 return null;
@@ -300,11 +300,11 @@ namespace CCC.ORM.DataAccess
 
                 if (m.Type == typeof (string) || m.Type == typeof (char))
                 {
-                    sb.Append("'" + value + "'");
+                    _sb.Append("'" + value + "'");
                 }
                 else
                 {
-                    sb.Append(value);
+                    _sb.Append(value);
                 }
 
                 return null;
@@ -382,7 +382,7 @@ namespace CCC.ORM.DataAccess
             var fieldName = GetMemberName(expression);
 
             _toUpper = string.Format("{0}({1})", toUpper, fieldName);
-            sb.Append(_toUpper);
+            _sb.Append(_toUpper);
 
             return true;
         }
@@ -392,7 +392,7 @@ namespace CCC.ORM.DataAccess
             var fieldName = GetMemberName(expression);
 
             _toLower = string.Format("{0}({1})", toLower, fieldName);
-            sb.Append(_toLower);
+            _sb.Append(_toLower);
 
             return true;
         }

@@ -172,7 +172,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Insert(ngnRateObject, tableName, Globals.DataSource.Type.DBTable);
+                return base.Insert(ngnRateObject, tableName, Globals.DataSource.Type.DbTable);
             }
             catch (Exception ex)
             {
@@ -192,7 +192,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Update(ngnRateObject, tableName, Globals.DataSource.Type.DBTable);
+                return base.Update(ngnRateObject, tableName, Globals.DataSource.Type.DbTable);
             }
             catch (Exception ex)
             {
@@ -212,7 +212,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Delete(ngnRateObject, tableName, Globals.DataSource.Type.DBTable);
+                return base.Delete(ngnRateObject, tableName, Globals.DataSource.Type.DbTable);
             }
             catch (Exception ex)
             {

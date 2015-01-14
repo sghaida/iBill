@@ -7,7 +7,7 @@ namespace CCC.ORM
         public enum ActualRates
         {
             [Description("GatewaysDetails")] TableName,
-            [Description("Rate_ID")] RateID,
+            [Description("Rate_ID")] RateId,
             [Description("Dialing_prefix")] DialingPrefix,
             [Description("Country_Name")] CountryName,
             [Description("Two_Digits_country_code")] TwoDigitsCountryCode,
@@ -21,37 +21,37 @@ namespace CCC.ORM
         // List of Database Functions and their DB Names
         public enum DatabaseFunctionsNames
         {
-            [Description("Get_ChargeableCalls_ForUser")] Get_ChargeableCalls_ForUser,
+            [Description("Get_ChargeableCalls_ForUser")] GetChargeableCallsForUser,
 
-            [Description("Get_ChargeableCalls_ForSite")] Get_ChargeableCalls_ForSite,
+            [Description("Get_ChargeableCalls_ForSite")] GetChargeableCallsForSite,
 
-            [Description("Get_DisputedCalls_ForUser")] Get_DisputedCalls_ForUser,
+            [Description("Get_DisputedCalls_ForUser")] GetDisputedCallsForUser,
 
-            [Description("Get_DisputedCalls_ForSite")] Get_DisputedCalls_ForSite,
+            [Description("Get_DisputedCalls_ForSite")] GetDisputedCallsForSite,
 
-            [Description("Get_CallsSummary_ForUser")] Get_CallsSummary_ForUser,
+            [Description("Get_CallsSummary_ForUser")] GetCallsSummaryForUser,
 
-            [Description("Get_CallsSummary_ForSiteDepartment")] Get_CallsSummary_ForSiteDepartment,
+            [Description("Get_CallsSummary_ForSiteDepartment")] GetCallsSummaryForSiteDepartment,
 
-            [Description("Get_CallsSummary_ForUsers_PerSite")] Get_CallsSummary_ForUsers_PerSite,
+            [Description("Get_CallsSummary_ForUsers_PerSite")] GetCallsSummaryForUsersPerSite,
 
-            [Description("Get_CallsSummary_ForUsers_PerSite_PDF")] Get_CallsSummary_ForUsers_PerSite_PDF,
+            [Description("Get_CallsSummary_ForUsers_PerSite_PDF")] GetCallsSummaryForUsersPerSitePdf,
 
-            [Description("Get_CallsSummary_ForSite")] Get_CallsSummary_ForSite,
+            [Description("Get_CallsSummary_ForSite")] GetCallsSummaryForSite,
 
-            [Description("Get_DestinationsNumbers_ForUser")] Get_DestinationsNumbers_ForUser,
+            [Description("Get_DestinationsNumbers_ForUser")] GetDestinationsNumbersForUser,
 
-            [Description("Get_DestinationCountries_ForUser")] Get_DestinationCountries_ForUser,
+            [Description("Get_DestinationCountries_ForUser")] GetDestinationCountriesForUser,
 
-            [Description("Get_DestinationCountries_ForSiteDepartment")] Get_DestinationCountries_ForSiteDepartment,
+            [Description("Get_DestinationCountries_ForSiteDepartment")] GetDestinationCountriesForSiteDepartment,
 
-            [Description("Get_DestinationCountries_ForSite")] Get_DestinationCountries_ForSite,
+            [Description("Get_DestinationCountries_ForSite")] GetDestinationCountriesForSite,
 
-            [Description("Get_GatewaySummary_PerSite")] Get_GatewaySummary_PerSite,
+            [Description("Get_GatewaySummary_PerSite")] GetGatewaySummaryPerSite,
 
-            [Description("Get_GatewaySummary_ForAll_Sites")] Get_GatewaySummary_ForAll_Sites,
+            [Description("Get_GatewaySummary_ForAll_Sites")] GetGatewaySummaryForAllSites,
 
-            [Description("Get_MailStatistics_PerSiteDepartment")] Get_MailStatistics_PerSiteDepartment
+            [Description("Get_MailStatistics_PerSiteDepartment")] GetMailStatisticsPerSiteDepartment
         }
 
         public enum GatewaysSummary
@@ -72,12 +72,12 @@ namespace CCC.ORM
             [Description("Date")] Date,
             [Description("startingDate")] StartingDate,
             [Description("endingDate")] EndingDate,
-            [Description("AD_UserID")] EmployeeID,
+            [Description("AD_UserID")] EmployeeId,
             [Description("ChargingParty")] ChargingParty,
             [Description("AD_DisplayName")] DisplayName,
             [Description("AD_Department")] Department,
             [Description("AD_PhysicalDeliveryOfficeName")] SiteName,
-            [Description("ac_IsInvoiced")] AC_IsInvoiced,
+            [Description("ac_IsInvoiced")] AcIsInvoiced,
             [Description("Duration")] Duration,
 
             [Description("BusinessCallsDuration")] BusinessCallsDuration,
@@ -104,25 +104,25 @@ namespace CCC.ORM
         /// </summary>
         public enum Rates
         {
-            [Description("Rate_ID")] RateID,
+            [Description("Rate_ID")] RateId,
             [Description("Three_Digits_Country_Code")] CountryCode,
             [Description("Country_Name")] CountryName,
             [Description("Fixedline")] FixedlineRate,
             [Description("GSM")] MobileLineRate
         }
 
-        public enum Rates_International
+        public enum RatesInternational
         {
-            [Description("RateID")] RateID,
+            [Description("RateID")] RateId,
             [Description("Three_Digits_Country_Code")] CountryCode,
             [Description("Country_Name")] CountryName,
             [Description("Fixedline")] FixedlineRate,
             [Description("GSM")] MobileLineRate
         }
 
-        public enum Rates_National
+        public enum RatesNational
         {
-            [Description("Rate_ID")] RateID,
+            [Description("Rate_ID")] RateId,
             [Description("Three_Digits_Country_Code")] CountryCode,
             [Description("Country_Name")] CountryName,
             [Description("Dialing_prefix")] DialingPrefix,
@@ -130,20 +130,20 @@ namespace CCC.ORM
             [Description("Rate")] Rate
         }
 
-        public enum RatesNGN
+        public enum RatesNgn
         {
-            [Description("RateID")] RateID,
-            [Description("DialingCodeID")] DialingCodeID,
+            [Description("RateID")] RateId,
+            [Description("DialingCodeID")] DialingCodeId,
             [Description("DialingCode")] DialingCode,
-            [Description("CountryCodeISO3")] CountryCodeISO3,
+            [Description("CountryCodeISO3")] CountryCodeIso3,
             [Description("CountryName")] CountryName,
-            [Description("TypeOfServiceID")] TypeOfServiceID,
+            [Description("TypeOfServiceID")] TypeOfServiceId,
             [Description("CallType")] CallType,
             [Description("Rate")] Rate
         }
 
         // Store Procedure Parameters
-        public enum SP_Invoice_Allocated_ChargeableCalls_ForSite
+        public enum SpInvoiceAllocatedChargeableCallsForSite
         {
             [Description("OfficeName")] OfficeName,
             [Description("FromDate")] FromDate,
@@ -151,7 +151,7 @@ namespace CCC.ORM
             [Description("InvoiceDate")] InvoiceDate
         }
 
-        public enum SP_Invoice_Unallocated_ChargeableCalls_ForSite
+        public enum SpInvoiceUnallocatedChargeableCallsForSite
         {
             [Description("OfficeName")] OfficeName,
             [Description("FromDate")] FromDate,
@@ -159,7 +159,7 @@ namespace CCC.ORM
             [Description("InvoiceDate")] InvoiceDate
         }
 
-        public enum SP_Mark_UnallocatedCalls_AsPending_ForSite
+        public enum SpMarkUnallocatedCallsAsPendingForSite
         {
             [Description("OfficeName")] OfficeName,
             [Description("FromDate")] FromDate,
@@ -187,11 +187,11 @@ namespace CCC.ORM
         // List of Store Procedures and their DB names.
         public enum StoreProcedureNames
         {
-            [Description("sp_Invoice_Allocated_ChargeableCalls_ForSite")] SP_Invoice_Allocated_ChargeableCalls_ForSite,
+            [Description("sp_Invoice_Allocated_ChargeableCalls_ForSite")] SpInvoiceAllocatedChargeableCallsForSite,
 
-            [Description("sp_Invoice_Unallocated_ChargeableCalls_ForSite")] SP_Invoice_Unallocated_ChargeableCalls_ForSite,
+            [Description("sp_Invoice_Unallocated_ChargeableCalls_ForSite")] SpInvoiceUnallocatedChargeableCallsForSite,
 
-            [Description("sp_Mark_UnallocatedCalls_AsPending_ForSite")] SP_Mark_UnallocatedCalls_AsPending_ForSite
+            [Description("sp_Mark_UnallocatedCalls_AsPending_ForSite")] SpMarkUnallocatedCallsAsPendingForSite
         }
 
         public enum TopDestinationCountries
@@ -231,7 +231,7 @@ namespace CCC.ORM
                 // Data Source Types
                 [Description("Default Value")] [DefaultValue("N/A")] Default = 0,
 
-                [Description("Data is read from a database table.")] [DefaultValue("DBTable")] DBTable = 1,
+                [Description("Data is read from a database table.")] [DefaultValue("DBTable")] DbTable = 1,
 
                 [Description("Data is read from a webservice endpoint.")] [DefaultValue("WebService")] WebService = 2
             }
@@ -242,9 +242,9 @@ namespace CCC.ORM
         {
             public enum Type
             {
-                [Description("The intersection of two data models. Equivalent to an SQL INNER JOIN.")] [DefaultValue("INTERSECTION")] INTERSECTION = 0,
+                [Description("The intersection of two data models. Equivalent to an SQL INNER JOIN.")] [DefaultValue("INTERSECTION")] Intersection = 0,
 
-                [Description("The union of two data models. Equivalent to an SQL OUTER JOIN.")] [DefaultValue("UNION")] UNION = 1
+                [Description("The union of two data models. Equivalent to an SQL OUTER JOIN.")] [DefaultValue("UNION")] Union = 1
             }
         }
 
