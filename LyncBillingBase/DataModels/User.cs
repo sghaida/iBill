@@ -5,7 +5,7 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "ActiveDirectoryUsers", Type = Globals.DataSource.Type.DBTable,
+    [DataSource(Name = "ActiveDirectoryUsers", Type = Globals.DataSource.Type.DbTable,
         AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class User : DataModel
     {
@@ -50,11 +50,11 @@ namespace LyncBillingBase.DataModels
         //
         // Relations
         [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "Name", ThisKey = "SiteName",
-            RelationType = Globals.DataRelation.Type.UNION )]
+            RelationType = Globals.DataRelation.Type.Union )]
         public Site Site { get; set; }
 
         [DataRelation(WithDataModel = typeof (Department), OnDataModelKey = "Name", ThisKey = "DepartmentName",
-            RelationType = Globals.DataRelation.Type.UNION )]
+            RelationType = Globals.DataRelation.Type.Union )]
         public Department Department { get; set; }
     }
 }

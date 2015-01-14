@@ -10,7 +10,7 @@ namespace CCC.ORM.DataAccess
 {
     public class DataAccess<T> : IDataAccess<T> where T : DataModel, new()
     {
-        private static readonly DbLib DBRoutines = new DbLib();
+        private static readonly DbLib DbRoutines = new DbLib();
 
         private static readonly List<Type> NumericTypes = new List<Type>
         {
@@ -24,7 +24,7 @@ namespace CCC.ORM.DataAccess
         /**
          * Private instance variables
          */
-        private readonly DataSourceSchema<T> Schema;
+        private readonly DataSourceSchema<T> _schema;
         /**
          * Repository Constructor
          */
@@ -35,18 +35,18 @@ namespace CCC.ORM.DataAccess
             try
             {
                 //Initialize the schema for the class T
-                Schema = new DataSourceSchema<T>();
+                _schema = new DataSourceSchema<T>();
 
                 //Check for absent or invalid DataModel attributes and throw the respective exception if they exist.
-                if (string.IsNullOrEmpty(Schema.DataSourceName))
+                if (string.IsNullOrEmpty(_schema.DataSourceName))
                 {
                     throw new NoDataSourceNameException(typeof (T).Name);
                 }
-                if (!Schema.DataFields.Where(item => item.TableField != null).ToList().Any())
+                if (!_schema.DataFields.Where(item => item.TableField != null).ToList().Any())
                 {
                     throw new NoTableFieldsException(typeof (T).Name);
                 }
-                if (string.IsNullOrEmpty(Schema.IdFieldName))
+                if (string.IsNullOrEmpty(_schema.IdFieldName))
                 {
                     throw new NoTableFieldsException( typeof( T ).Name );
                 }
@@ -60,7 +60,7 @@ namespace CCC.ORM.DataAccess
         public virtual int Insert(T dataObject, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
-            var rowID = 0;
+            var rowId = 0;
             var finalDataSourceName = string.Empty;
             var columnsValues = new Dictionary<string, object>();
 
@@ -71,9 +71,9 @@ namespace CCC.ORM.DataAccess
             {
                 finalDataSourceName = dataSourceName;
             }
-            else if (false == string.IsNullOrEmpty(Schema.DataSourceName))
+            else if (false == string.IsNullOrEmpty(_schema.DataSourceName))
             {
-                finalDataSourceName = Schema.DataSourceName;
+                finalDataSourceName = _schema.DataSourceName;
             }
             else
             {
@@ -87,17 +87,17 @@ namespace CCC.ORM.DataAccess
             if (dataObject != null)
             {
                 // Get only the Data Fields from Schema which have TableFields objects
-                var objectSchemaFields = Schema.DataFields
+                var objectSchemaFields = _schema.DataFields
                     .Where(field => field.TableField != null)
                     .ToList();
 
                 foreach (var field in objectSchemaFields)
                 {
                     // Don't insert the ID Field in the Data Source, unless it's marked as AllowIDInsert
-                    var skipIDInsert = (field.TableField.IsIdField && field.TableField.AllowIdInsert == false);
+                    var skipIdInsert = (field.TableField.IsIdField && field.TableField.AllowIdInsert == false);
                     var skipExcludedColumn = field.TableField.ExcludeOnInsert;
 
-                    if (skipIDInsert || skipExcludedColumn)
+                    if (skipIdInsert || skipExcludedColumn)
                     {
                         continue;
                     }
@@ -164,7 +164,7 @@ namespace CCC.ORM.DataAccess
 
                 try
                 {
-                    rowID = DBRoutines.Insert(finalDataSourceName, columnsValues, Schema.IdFieldName);
+                    rowId = DbRoutines.Insert(finalDataSourceName, columnsValues, _schema.IdFieldName);
                 }
                 catch (Exception ex)
                 {
@@ -172,7 +172,7 @@ namespace CCC.ORM.DataAccess
                 }
             } //end-outer-if
 
-            return rowID;
+            return rowId;
         }
 
         public virtual bool Update(T dataObject, string dataSourceName = null,
@@ -189,9 +189,9 @@ namespace CCC.ORM.DataAccess
             {
                 finalDataSourceName = dataSourceName;
             }
-            else if (false == string.IsNullOrEmpty(Schema.DataSourceName))
+            else if (false == string.IsNullOrEmpty(_schema.DataSourceName))
             {
-                finalDataSourceName = Schema.DataSourceName;
+                finalDataSourceName = _schema.DataSourceName;
             }
             else
             {
@@ -205,7 +205,7 @@ namespace CCC.ORM.DataAccess
             if (dataObject != null)
             {
                 // Get only the Data Fields from Schema which have TableFields objects
-                var objectSchemaFields = Schema.DataFields
+                var objectSchemaFields = _schema.DataFields
                     .Where(field => field.TableField != null)
                     .ToList();
 
@@ -319,7 +319,7 @@ namespace CCC.ORM.DataAccess
                             "Update Error: Cannot update data object unless there is at least one WHERE CONDITION. Please revise the update procedures on " +
                             dataObject.GetType().Name);
                     }
-                    status = DBRoutines.Update(finalDataSourceName, columnsValues, whereConditions);
+                    status = DbRoutines.Update(finalDataSourceName, columnsValues, whereConditions);
                 }
                 catch (Exception ex)
                 {
@@ -336,8 +336,8 @@ namespace CCC.ORM.DataAccess
             var finalDataSourceName = string.Empty;
             var whereConditions = new Dictionary<string, object>();
 
-            DataField IDField;
-            var ObjectFieldNameWithIDAttribute = string.Empty;
+            DataField idField;
+            var objectFieldNameWithIdAttribute = string.Empty;
 
 
             //
@@ -346,9 +346,9 @@ namespace CCC.ORM.DataAccess
             {
                 finalDataSourceName = dataSourceName;
             }
-            else if (false == string.IsNullOrEmpty(Schema.DataSourceName))
+            else if (false == string.IsNullOrEmpty(_schema.DataSourceName))
             {
-                finalDataSourceName = Schema.DataSourceName;
+                finalDataSourceName = _schema.DataSourceName;
             }
             else
             {
@@ -359,9 +359,9 @@ namespace CCC.ORM.DataAccess
 
             //
             // Decide the IDField value
-            IDField = Schema.DataFields.Find(field => field.TableField != null && field.TableField.IsIdField);
+            idField = _schema.DataFields.Find(field => field.TableField != null && field.TableField.IsIdField);
 
-            if (null == IDField)
+            if (null == idField)
             {
                 throw new Exception(
                     "Delete Error: The Data Model does not have IDField property. Kindly mark the properties of " +
@@ -371,7 +371,7 @@ namespace CCC.ORM.DataAccess
 
             //
             // Get the object field that is marked with the IsIDField attribute
-            var dataObjectAttr = dataObject.GetType().GetProperty(IDField.Name);
+            var dataObjectAttr = dataObject.GetType().GetProperty(idField.Name);
 
             var dataObjectAttrValue = dataObjectAttr.GetValue(dataObject, null);
 
@@ -384,9 +384,9 @@ namespace CCC.ORM.DataAccess
             //long.TryParse(dataObjectAttrValue.ToString(), out ID);
             //return DBRoutines.DELETE(tableName: finalDataSourceName, idFieldName: IDField.TableField.ColumnName, ID: ID);
 
-            whereConditions.Add(IDField.TableField.ColumnName,
-                Convert.ChangeType(dataObjectAttrValue, IDField.TableField.FieldType));
-            return DBRoutines.Delete(finalDataSourceName, whereConditions);
+            whereConditions.Add(idField.TableField.ColumnName,
+                Convert.ChangeType(dataObjectAttrValue, idField.TableField.FieldType));
+            return DbRoutines.Delete(finalDataSourceName, whereConditions);
         }
 
         public virtual T GetById(long id, string dataSourceName = null,
@@ -402,13 +402,13 @@ namespace CCC.ORM.DataAccess
             var errorMessage = string.Empty;
 
             //Get our table columns from the schema
-            thisModelTableColumns = Schema.DataFields
+            thisModelTableColumns = _schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select(field => field.TableField.ColumnName)
                 .ToList();
 
             //Decide on the Data Source Name
-            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? Schema.DataSourceName : dataSourceName);
+            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? _schema.DataSourceName : dataSourceName);
 
             //Validate the presence of the ID
             if (id <= 0)
@@ -421,10 +421,10 @@ namespace CCC.ORM.DataAccess
 
             //Construct the record ID condition
             condition = new Dictionary<string, object>();
-            condition.Add(Schema.IdFieldName, id);
+            condition.Add(_schema.IdFieldName, id);
 
             //Proceed with getting the data
-            if (Schema.DataSourceType == Globals.DataSource.Type.DBTable)
+            if (_schema.DataSourceType == Globals.DataSource.Type.DbTable)
             {
                 //switch (IncludeDataRelations)
                 //{
@@ -439,7 +439,7 @@ namespace CCC.ORM.DataAccess
                 //        break;
                 //}
 
-                dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, condition, maximumLimit);
+                dt = DbRoutines.Select(finalDataSourceName, thisModelTableColumns, condition, maximumLimit);
             }
 
             //It will either return a data table with one row or zero rows
@@ -469,22 +469,22 @@ namespace CCC.ORM.DataAccess
             {
                 if (string.IsNullOrEmpty(whereClause))
                 {
-                    dt = DBRoutines.SELECT(Schema.DataSourceName);
+                    dt = DbRoutines.Select(_schema.DataSourceName);
                 }
                 else
                 {
-                    dt = DBRoutines.SELECT(Schema.DataSourceName, whereClause);
+                    dt = DbRoutines.Select(_schema.DataSourceName, whereClause);
                 }
             }
             else
             {
                 if (string.IsNullOrEmpty(whereClause))
                 {
-                    dt = DBRoutines.SELECT(dataSourceName);
+                    dt = DbRoutines.Select(dataSourceName);
                 }
                 else
                 {
-                    dt = DBRoutines.SELECT(dataSourceName, whereClause);
+                    dt = DbRoutines.Select(dataSourceName, whereClause);
                 }
             }
 
@@ -502,13 +502,13 @@ namespace CCC.ORM.DataAccess
             var errorMessage = string.Empty;
 
             //Get our table columns from the schema
-            thisModelTableColumns = Schema.DataFields
+            thisModelTableColumns = _schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select(field => field.TableField.ColumnName)
                 .ToList();
 
             //Decide on the Data Source Name
-            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? Schema.DataSourceName : dataSourceName);
+            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? _schema.DataSourceName : dataSourceName);
 
             //Validate the presence of the where conditions
             if (whereConditions == null || whereConditions.Count == 0)
@@ -522,7 +522,7 @@ namespace CCC.ORM.DataAccess
 
 
             //Proceed with getting the data
-            if (Schema.DataSourceType == Globals.DataSource.Type.DBTable)
+            if (_schema.DataSourceType == Globals.DataSource.Type.DbTable)
             {
                 //switch (IncludeDataRelations)
                 //{
@@ -537,7 +537,7 @@ namespace CCC.ORM.DataAccess
                 //        break;
                 //}
 
-                dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, limit);
+                dt = DbRoutines.Select(finalDataSourceName, thisModelTableColumns, whereConditions, limit);
             }
 
             return dt.ConvertToList<T>();
@@ -554,47 +554,47 @@ namespace CCC.ORM.DataAccess
             Dictionary<string, object> whereConditions = null;
 
             //Get our table columns from the schema
-            thisModelTableColumns = Schema.DataFields
+            thisModelTableColumns = _schema.DataFields
                 .Where(field => field.TableField != null)
                 .Select(field => field.TableField.ColumnName)
                 .ToList<string>();
 
             //Decide on the Data Source Name
-            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? Schema.DataSourceName : dataSourceName);
+            finalDataSourceName = (string.IsNullOrEmpty(dataSourceName) ? _schema.DataSourceName : dataSourceName);
 
             //Proceed with getting the data
-            if (Schema.DataSourceType == Globals.DataSource.Type.DBTable)
+            if (_schema.DataSourceType == Globals.DataSource.Type.DbTable)
             {
-                dt = DBRoutines.SELECT(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
+                dt = DbRoutines.Select(finalDataSourceName, thisModelTableColumns, whereConditions, maximumLimit);
             }
 
             return dt.ConvertToList<T>();
         }
 
-        public virtual IEnumerable<T> GetAll(string SQL_QUERY)
+        public virtual IEnumerable<T> GetAll(string sqlQuery)
         {
-            var dt = DBRoutines.SELECTFROMSQL(SQL_QUERY);
+            var dt = DbRoutines.Selectfromsql(sqlQuery);
 
             return dt.ConvertToList<T>();
         }
 
         public virtual int Insert(string sql)
         {
-            var id = DBRoutines.Insert(sql);
+            var id = DbRoutines.Insert(sql);
 
             return id;
         }
 
         public virtual bool Update(string sql)
         {
-            var status = DBRoutines.Update(sql);
+            var status = DbRoutines.Update(sql);
 
             return status;
         }
 
         public virtual bool Delete(string sql)
         {
-            var status = DBRoutines.Delete(sql);
+            var status = DbRoutines.Delete(sql);
 
             return status;
         }
@@ -608,18 +608,18 @@ namespace CCC.ORM.DataAccess
         {
             //Table Relations Map
             //To be sent to the DB Lib for SQL Query generation
-            var TableRelationsMap = new List<SqlJoinRelation>();
+            var tableRelationsMap = new List<SqlJoinRelation>();
 
             //TableRelationsList
             //To be used to looking up the relations and extracting information from them and copying them into the TableRelationsMap
-            var DbRelationsList =
-                Schema.DataFields.Where(field => field.Relation != null).Select(field => field.Relation).ToList();
+            var dbRelationsList =
+                _schema.DataFields.Where(field => field.Relation != null).Select(field => field.Relation).ToList();
 
             //Start processing the list of table relations
-            if (DbRelationsList != null && DbRelationsList.Count() > 0)
+            if (dbRelationsList != null && dbRelationsList.Count() > 0)
             {
                 //Foreach relation in the relations list, process it and construct the big TablesRelationsMap
-                foreach (var relation in DbRelationsList)
+                foreach (var relation in dbRelationsList)
                 {
                     //Create a temporary map for this target table relation
                     var joinedTableInfo = new SqlJoinRelation();
@@ -647,26 +647,26 @@ namespace CCC.ORM.DataAccess
 
                     //Get the field that describes our key on which we are in relation with the target model
                     var thisKey =
-                        Schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
+                        _schema.DataFields.Find(item => item.TableField != null && item.Name == relation.ThisKey);
 
                     if (thisKey != null && joinedModelKey != null)
                     {
                         //Initialize the temporary map and add it to the original relations map
                         joinedTableInfo.RelationName = relation.RelationName;
                         joinedTableInfo.RelationType = relation.RelationType;
-                        joinedTableInfo.MasterTableName = Schema.DataSourceName;
+                        joinedTableInfo.MasterTableName = _schema.DataSourceName;
                         joinedTableInfo.MasterTableKey = thisKey.TableField.ColumnName;
                         joinedTableInfo.JoinedTableName = joinedModelSchema.GetDataSourceName();
                         joinedTableInfo.JoinedTableKey = joinedModelKey.TableField.ColumnName;
                         joinedTableInfo.JoinedTableColumns = joinedModelTableColumns;
 
                         //Add the relation keys to the TableRelationsMap
-                        TableRelationsMap.Add(joinedTableInfo);
+                        tableRelationsMap.Add(joinedTableInfo);
                     }
                 } //end-foreach
             } //end-outer-if
 
-            return TableRelationsMap;
+            return tableRelationsMap;
         }
     }
 }

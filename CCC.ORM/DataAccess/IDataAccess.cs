@@ -75,7 +75,7 @@ namespace CCC.ORM.DataAccess
 
         #region Native SQL Execute Commands
 
-        IEnumerable<T> GetAll(string sql);
+        IEnumerable<T> GetAll(string sqlQuery);
 
         int Insert(string sql);
 

@@ -5,7 +5,7 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NumberingPlan", Type = Globals.DataSource.Type.DBTable,
+    [DataSource(Name = "NumberingPlan", Type = Globals.DataSource.Type.DbTable,
         AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class NumberingPlan : DataModel
     {

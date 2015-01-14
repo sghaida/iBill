@@ -4,7 +4,7 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "NEW_Roles_Delegates", Type = Globals.DataSource.Type.DBTable,
+    [DataSource(Name = "NEW_Roles_Delegates", Type = Globals.DataSource.Type.DbTable,
         AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class DelegateRole : DataModel
     {
@@ -39,19 +39,19 @@ namespace LyncBillingBase.DataModels
         //
         // Relations
         [DataRelation(WithDataModel = typeof (User), OnDataModelKey = "SipAccount", ThisKey = "DelegeeSipAccount",
-            RelationType = Globals.DataRelation.Type.UNION)]
+            RelationType = Globals.DataRelation.Type.Union)]
         public User DelegeeAccount { get; set; }
 
         [DataRelation(WithDataModel = typeof (User), OnDataModelKey = "SipAccount", ThisKey = "ManagedUserSipAccount",
-            RelationType = Globals.DataRelation.Type.UNION)]
+            RelationType = Globals.DataRelation.Type.Union)]
         public User ManagedUser { get; set; }
 
         [DataRelation(WithDataModel = typeof (SiteDepartment), OnDataModelKey = "Id",
-            ThisKey = "ManagedSiteDepartmentId" , RelationType = Globals.DataRelation.Type.UNION )]
+            ThisKey = "ManagedSiteDepartmentId" , RelationType = Globals.DataRelation.Type.Union )]
         public SiteDepartment ManagedSiteDepartment { get; set; }
 
         [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "Id", ThisKey = "ManagedSiteId",
-            RelationType = Globals.DataRelation.Type.UNION)]
+            RelationType = Globals.DataRelation.Type.Union)]
         public Site ManagedSite { get; set; }
     }
 }

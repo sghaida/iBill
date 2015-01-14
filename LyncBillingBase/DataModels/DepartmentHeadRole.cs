@@ -4,7 +4,7 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "Roles_DepartmentsHeads", Type = Globals.DataSource.Type.DBTable,
+    [DataSource(Name = "Roles_DepartmentsHeads", Type = Globals.DataSource.Type.DbTable,
         AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class DepartmentHeadRole : DataModel
     {

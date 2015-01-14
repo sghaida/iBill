@@ -4,7 +4,7 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "GatewaysDetails", Type = Globals.DataSource.Type.DBTable,
+    [DataSource(Name = "GatewaysDetails", Type = Globals.DataSource.Type.DbTable,
         AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class GatewayInfo : DataModel
     {
@@ -29,7 +29,7 @@ namespace LyncBillingBase.DataModels
         public Gateway Gateway { get; set; }
 
         [DataRelation(WithDataModel = typeof (GatewayRate), OnDataModelKey = "GatewayId", ThisKey = "GatewayId",
-            RelationType = Globals.DataRelation.Type.UNION)]
+            RelationType = Globals.DataRelation.Type.Union)]
         public GatewayRate GatewayRatesInfo { get; set; }
 
         [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "Id", ThisKey = "SiteId")]

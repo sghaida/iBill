@@ -104,7 +104,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.GetAll(tableName, Globals.DataSource.Type.DBTable).ToList();
+                return base.GetAll(tableName, Globals.DataSource.Type.DbTable).ToList();
             }
             catch (Exception ex)
             {
@@ -126,7 +126,7 @@ namespace LyncBillingBase.DataMappers
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
                 return
-                    base.Get(condition, dataSourceName: tableName, dataSourceType: Globals.DataSource.Type.DBTable)
+                    base.Get(condition, dataSourceName: tableName, dataSourceType: Globals.DataSource.Type.DbTable)
                         .ToList();
             }
             catch (Exception ex)
@@ -233,7 +233,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Insert(rateObject, tableName, Globals.DataSource.Type.DBTable);
+                return base.Insert(rateObject, tableName, Globals.DataSource.Type.DbTable);
             }
             catch (Exception ex)
             {
@@ -253,7 +253,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Update(rateObject, tableName, Globals.DataSource.Type.DBTable);
+                return base.Update(rateObject, tableName, Globals.DataSource.Type.DbTable);
             }
             catch (Exception ex)
             {
@@ -273,7 +273,7 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return base.Delete(rateObject, tableName, Globals.DataSource.Type.DBTable);
+                return base.Delete(rateObject, tableName, Globals.DataSource.Type.DbTable);
             }
             catch (Exception ex)
             {
