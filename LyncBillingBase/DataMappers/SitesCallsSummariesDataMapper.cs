@@ -22,7 +22,7 @@ namespace LyncBillingBase.DataMappers
         /***
          * DB Tables, to get calculate the summaries from.
          */
-        private readonly List<string> _dbTables = new List<string>();
+        private readonly List<string> _dbTables;
 
         /***
          * Predefined SQL Queries Store.
@@ -38,11 +38,9 @@ namespace LyncBillingBase.DataMappers
         /// 
         /// </summary>
         /// <param name="siteName"></param>
-        /// <param name="groupBy"></param>
         /// <returns></returns>
         public List<CallsSummaryForSite> GetBySite(string siteName)
         {
-            List<CallsSummaryForSite> summaries;
             CallsSummaryForSiteComparer summariesComparer = new CallsSummaryForSiteComparer();
 
             try
@@ -53,7 +51,7 @@ namespace LyncBillingBase.DataMappers
                 var sqlQuery = _summariesSqlQueries.GetCallsSummariesForSite(siteName, startingDate, endingDate,
                     _dbTables);
 
-                summaries = base.GetAll(sqlQuery).ToList();
+                var summaries = base.GetAll(sqlQuery).ToList();
                 summaries.Sort(summariesComparer);
 
                 return summaries;
@@ -70,11 +68,9 @@ namespace LyncBillingBase.DataMappers
         /// <param name="siteName"></param>
         /// <param name="startingDate"></param>
         /// <param name="endingDate"></param>
-        /// <param name="groupBy"></param>
         /// <returns></returns>
         public List<CallsSummaryForSite> GetBySite(string siteName, DateTime startingDate, DateTime endingDate)
         {
-            List<CallsSummaryForSite> summaries;
             CallsSummaryForSiteComparer summariesComparer = new CallsSummaryForSiteComparer();
 
             try
@@ -85,7 +81,7 @@ namespace LyncBillingBase.DataMappers
                     endingDate.ConvertDate(true),
                     _dbTables);
 
-                summaries = base.GetAll(sqlQuery).ToList();
+                var summaries = base.GetAll(sqlQuery).ToList();
                 summaries.Sort(summariesComparer);
 
                 return summaries;
