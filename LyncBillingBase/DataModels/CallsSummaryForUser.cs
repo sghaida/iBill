@@ -1,6 +1,4 @@
-﻿using System;
-using CCC.ORM;
-using CCC.ORM.DataAccess;
+﻿using CCC.ORM;
 using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
