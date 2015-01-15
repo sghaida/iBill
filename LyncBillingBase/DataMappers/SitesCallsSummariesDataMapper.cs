@@ -54,7 +54,11 @@ namespace LyncBillingBase.DataMappers
                     _dbTables);
 
                 summaries = base.GetAll(sqlQuery).ToList();
-                summaries.Sort(summariesComparer);
+                
+                if (summaries != null && summaries.Count > 0)
+                {
+                    summaries.Sort(summariesComparer);
+                }
 
                 return summaries;
             }
@@ -86,7 +90,11 @@ namespace LyncBillingBase.DataMappers
                     _dbTables);
 
                 summaries = base.GetAll(sqlQuery).ToList();
-                summaries.Sort(summariesComparer);
+
+                if (summaries != null && summaries.Count > 0)
+                {
+                    summaries.Sort(summariesComparer);
+                }
 
                 return summaries;
             }
