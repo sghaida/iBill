@@ -12,11 +12,5 @@ namespace LyncBillingBase.DataModels
 
         [DbColumn("AC_IsInvoiced")]
         public string IsInvoiced { get; set; }
-
-        
-        //
-        // Relations
-        [DataRelation(WithDataModel = typeof (User), OnDataModelKey = "SipAccount", ThisKey = "SipAccount")]
-        public User User { get; set; }
     }
 }
