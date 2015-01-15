@@ -28,7 +28,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <returns>The current collection</returns>
-        private MongoCollection<T> GetCollection<T>() where T : MongoEntity
+        private MongoCollection<T> GetCollection<T>() where T : MongoDbObject
         {
             return _db.GetCollection<T>(typeof(T).Name);
         }
@@ -38,7 +38,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <returns>The total of rows of the T collection</returns>
-        public int Count<T>() where T : MongoEntity
+        public int Count<T>() where T : MongoDbObject
         {
            return Find<T>().Count<T>();            
         }
@@ -49,7 +49,7 @@ namespace CCC.ORM.DataAccess
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <param name="exp">Mongo LINQ expression</param>
         /// <returns>The total of rows of the query</returns>
-        public int Count<T>(Expression<Func<T, bool>> exp) where T : MongoEntity
+        public int Count<T>(Expression<Func<T, bool>> exp) where T : MongoDbObject
         {
             return Find(exp).Count();
         }
@@ -60,7 +60,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <returns>returns all the elements of a collection</returns>
-        public IEnumerable<T> Find<T>() where T : MongoEntity
+        public IEnumerable<T> Find<T>() where T : MongoDbObject
         {
             return GetCollection<T>().FindAll();
         }
@@ -71,7 +71,7 @@ namespace CCC.ORM.DataAccess
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <param name="exp">Mongo LINQ expression</param>
         /// <returns>returns a Collection</returns>
-        public IEnumerable<T> Find<T>(Expression<Func<T, bool>> exp) where T : MongoEntity
+        public IEnumerable<T> Find<T>(Expression<Func<T, bool>> exp) where T : MongoDbObject
         {
             return GetCollection<T>().AsQueryable<T>().Where(exp).ToList();
         }
@@ -82,7 +82,7 @@ namespace CCC.ORM.DataAccess
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <param name="exp">Mongo LINQ expression</param>
         /// <returns>returns a single result</returns>
-        public T FindOne<T>(Expression<Func<T, bool>> exp) where T : MongoEntity
+        public T FindOne<T>(Expression<Func<T, bool>> exp) where T : MongoDbObject
         {
             // TODO more than one result throws an exception
             return Find(exp).SingleOrDefault();
@@ -94,7 +94,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <param name="entity">Entity name</param>
-        public void Insert<T>(T entity) where T : MongoEntity
+        public void Insert<T>(T entity) where T : MongoDbObject
         {
             if (entity != null)
             {
@@ -107,7 +107,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <param name="entities">ICollection of Entities of T typeof</param>
-        public void Insert<T>(ICollection<T> entities) where T : MongoEntity
+        public void Insert<T>(ICollection<T> entities) where T : MongoDbObject
         {
             if (entities != null)
             {
@@ -122,7 +122,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <param name="entity">Entity name</param>
-        public void Update<T>(T entity) where T : MongoEntity
+        public void Update<T>(T entity) where T : MongoDbObject
         {
             if (entity != null)
             {
@@ -135,7 +135,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <param name="id">id of the row to be deleted</param>
-        public void Delete<T>(ObjectId id) where T : MongoEntity
+        public void Delete<T>(ObjectId id) where T : MongoDbObject
         {  
             IMongoQuery query = Query<T>.EQ(e => e.Id, id);
             GetCollection<T>().Remove(query);
@@ -146,7 +146,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <param name="entity">Entity name</param>
-        public void Delete<T>(T entity) where T : MongoEntity
+        public void Delete<T>(T entity) where T : MongoDbObject
         {
             if (entity != null)
             {
@@ -160,7 +160,7 @@ namespace CCC.ORM.DataAccess
         /// </summary>
         /// <typeparam name="T">Class TypeOf</typeparam>
         /// <param name="query">query to find the row to be deleted</param>
-        public void Delete<T>(IMongoQuery query) where T : MongoEntity
+        public void Delete<T>(IMongoQuery query) where T : MongoDbObject
         {
             if (query != null)
             {
@@ -168,7 +168,7 @@ namespace CCC.ORM.DataAccess
             }
         }
 
-        public void Delete<T>(Expression<Func<T, bool>> exp) where T : MongoEntity
+        public void Delete<T>(Expression<Func<T, bool>> exp) where T : MongoDbObject
         {
             IMongoQuery query = Query<T>.EQ(e => e.Id, FindOne(exp).Id);
             GetCollection<T>().Remove(query);            
@@ -178,7 +178,7 @@ namespace CCC.ORM.DataAccess
         /// Deletes a given Table (mongo collection)
         /// </summary>
         /// <typeparam name="T">Class TypeOf</typeparam>
-        public void DropCollection<T>() where T : MongoEntity
+        public void DropCollection<T>() where T : MongoDbObject
         {
             GetCollection<T>().Drop();
         }
