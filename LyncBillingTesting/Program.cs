@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using CCC.ORM;
@@ -7,6 +8,14 @@ using CCC.ORM.Helpers;
 using LyncBillingBase.DataMappers;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.Repository;
+
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+using MongoDB.Driver.Linq;
+
 
 namespace LyncBillingTesting
 {
@@ -22,11 +31,85 @@ namespace LyncBillingTesting
             //Lync2013 processor = new Lync2013();
             //processor.ProcessPhoneCalls();
 
-            var delegatesRolesDm = new DelegateRolesDataMapper();
-            var departmentHeadsDm = new DepartmentHeadRolesDataMapper();
+            //var delegatesRolesDm = new DelegateRolesDataMapper();
+            //var departmentHeadsDm = new DepartmentHeadRolesDataMapper();
 
-            var allDelegates = delegatesRolesDm.GetAll().ToList();
-            var allDepartmentHeads = departmentHeadsDm.GetAll().ToList();
+            //var allDelegates = delegatesRolesDm.GetAll().ToList();
+            //var allDepartmentHeads = departmentHeadsDm.GetAll().ToList();
+
+            DataStorage ds = DataStorage.Instance;
+
+            //List<PhoneCall> phoneCalls = ds.PhoneCalls.GetAll("Select * from PhoneCalls2013 where SessionIdTime between '2014-01-01' and '2014-06-01'").ToList();
+
+            List<GatewayRate> gr = ds.GatewaysRates.GetAll().ToList();
+
+
+            //MongoDB
+            var client = new MongoClient( "mongodb://localhost" );
+            var server = client.GetServer();
+
+            var database = server.GetDatabase( "lync" );
+            var collection = database.GetCollection<GatewayRate>( "GatewayRates" );
+
+            //foreach ( var obj in gr )
+            //{
+            //    collection.Insert( obj );
+            //}
+
+            //BsonClassMap.RegisterClassMap<GatewayRate>(item =>
+            //{
+            //    item.AutoMap();
+            //    item.MapCreator(p => new GatewayRate());
+            //});
+
+            var values = collection.FindAll();
+
+
+            List<GatewayRate> theResult = new List<GatewayRate>();
+            GatewayRate rate;
+
+            //foreach (var obj in values)
+            //{
+            //    rate = new GatewayRate();
+            //    rate.Gateway = obj.Gateway;
+            //    rate.GatewayId = obj.GatewayId;
+            //}
+
+            var query = collection.AsQueryable<GatewayRate>();   
+
+            var results = query.ToList();
+
+            //test.TestData = "this is a test";
+            //test.ListData = query.ToList();
+
+            //collection1.Insert(test);
+
+            //foreach (var phoneCall in phoneCalls)
+            //{
+            //    collection.Insert(phoneCall);
+            //}
+
+            var testListCollection = database.GetCollection<TestList>("TestList");
+
+            int Index = 0;
+
+            foreach (var item in results)
+            {   
+                TestList obj = new TestList();
+                obj.Id = Index;
+                obj.Value = "value_" + Index;
+                obj.Rates = results;
+
+                testListCollection.Insert(obj);
+                
+                Index++;
+            }
+
+            var results1 = testListCollection.AsQueryable<TestList>().ToList();
+
+
+            //var query = collection.AsQueryable<PhoneCall>().Where(item=> item.ChargingParty.ToLower().Contains( "aalhour" ) ||  item.ChargingParty.ToLower().Contains( "sghaida" )).ToList();
+            string x = string.Empty;
         }
 
         public static void InsertUpdateDeleteTests()
@@ -690,4 +773,78 @@ namespace LyncBillingTesting
             status = storage.Announcements.Delete(ann);
         }
     }
+
+    public class PhoneCall : DataModel
+    {
+
+        public ObjectId Id { get; set; }
+        private decimal _markerCallCost;
+
+        public DateTime SessionIdTime { set; get; }
+        public int SessionIdSeq { get; set; }
+        public DateTime ResponseTime { set; get; }
+        public DateTime SessionEndTime { set; get; }
+        public string ChargingParty { set; get; }
+        public string DestinationNumberUri { set; get; }
+        public string MarkerCallToCountry { set; get; }
+        public string MarkerCallType { set; get; }
+        public decimal Duration { set; get; }
+        public string UiUpdatedByUser { set; get; }
+        public DateTime UiMarkedOn { set; get; }
+        public string UiCallType { set; get; }
+        public string UiAssignedByUser { set; get; }
+        public string UiAssignedToUser { set; get; }
+        public DateTime UiAssignedOn { set; get; }
+        public string AcDisputeStatus { set; get; }
+        public DateTime AcDisputeResolvedOn { set; get; }
+        public string AcIsInvoiced { set; get; }
+        public DateTime AcInvoiceDate { set; get; }
+        public string SourceUserUri { set; get; }     
+        public string SourceNumberUri { set; get; }
+        public string DestinationUserUri { get; set; }
+        public string FromMediationServer { set; get; }
+        public string ToMediationServer { set; get; }
+        public string FromGateway { set; get; }
+        public string ToGateway { set; get; }
+        public string SourceUserEdgeServer { set; get; }
+        public string DestinationUserEdgeServer { set; get; }
+        public string ServerFqdn { set; get; }
+        public string PoolFqdn { set; get; }
+        public string OnBehalf { set; get; }
+        public string ReferredBy { set; get; }
+        public string CalleeUri { get; set; }
+        public long MarkerCallFrom { set; get; }
+        public long MarkerCallTo { set; get; }
+        public long MarkerCallTypeId { set; get; }
+        public string PhoneCallsTableName { get; set; }
+        public string PhoneBookName { set; get; }
+        public string PhoneCallsTable { set; get; }
+        public decimal MarkerCallCost
+        {
+            set { _markerCallCost = value; }
+            get { return decimal.Round( _markerCallCost , 2 ); }
+        }
+    }
+
+    public class GatewayRates
+    {  
+        public int Id { set; get; }
+        public int GatewayId { set; get; }
+        public string RatesTableName { set; get; }
+        public string NgnRatesTableName { set; get; }
+        public DateTime StartingDate { set; get; }
+        public DateTime EndingDate { set; get; }
+        public string ProviderName { set; get; }
+        public string CurrencyCode { set; get; }
+        public Gateway Gateway { get; set; }
+
+    }
+
+    public class TestList
+    {
+        public int Id { get; set; }
+        public string Value { get; set; }
+        public List<GatewayRate> Rates { get; set; }
+    }
+
 }
