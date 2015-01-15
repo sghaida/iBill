@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -14,6 +15,7 @@ using LyncBillingBase.DataModels;
 
 namespace LyncBillingBase.DataMappers
 {
+    [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
     public class UsersCallsSummariesDataMapper : DataAccess<CallsSummaryForUser>
     {
         /***
@@ -123,8 +125,8 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// </summary>
         /// <param name="sipAccount"></param>
-        /// <param name="StartingDate"></param>
-        /// <param name="EndingDate"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
         /// <returns></returns>
         public List<CallsSummaryForUser> GetBySipAccount(string sipAccount, DateTime? startDate = null, DateTime? endDate = null)
         {
