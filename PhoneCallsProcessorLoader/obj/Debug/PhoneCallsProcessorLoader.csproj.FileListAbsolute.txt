@@ -14,6 +14,7 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCall
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\CCC.UTILS.pdb
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.exe
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\CCC.ORM.dll.config
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\LyncBillingBase.dll.config
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\PhoneCallsProcessorLoader.exe.config
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\PhoneCallsProcessorLoader.exe

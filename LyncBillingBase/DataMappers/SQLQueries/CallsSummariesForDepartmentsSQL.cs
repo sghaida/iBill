@@ -44,7 +44,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                 var index = 0;
                 foreach (var tableName in dbTables)
                 {
-                    fromPart += String.Format(
+                    fromPart = String.Format(
                         "{0} " +
                         "SELECT * FROM [{1}] " +
                         "LEFT OUTER JOIN [ActiveDirectoryUsers] ON [{1}].[ChargingParty] = [ActiveDirectoryUsers].[SipAccount] " +
@@ -124,7 +124,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                 var index = 0;
                 foreach (var tableName in dbTables)
                 {
-                    fromPart += String.Format(
+                    fromPart = String.Format(
                         "{0} " +
                         "SELECT * FROM [{1}] " +
                         "LEFT OUTER JOIN [ActiveDirectoryUsers] ON [{1}].[ChargingParty] = [ActiveDirectoryUsers].[SipAccount] " +
@@ -135,7 +135,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                             "[Exclude]=0 AND " +
                             "[ToGateway] IS NOT NULL AND " +
                             "([SessionIdTime] BETWEEN '{4}' AND '{5}') AND " + 
-                            "([AC_DisputeStatus]='Rejected' OR [AC_DisputeStatus] IS NULL "
+                            "([AC_DisputeStatus]='Rejected' OR [AC_DisputeStatus] IS NULL) "
                         , fromPart
                         , tableName
                         , siteName
