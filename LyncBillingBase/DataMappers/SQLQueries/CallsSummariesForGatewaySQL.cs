@@ -279,7 +279,68 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                     fromPart = String.Format(
                         "{0} " +
                         "SELECT * FROM [{1}] " +
-                        "LEFT OUTER JOIN [ActiveDirectoryUsers] ON [{1}].[ChargingParty] = [ActiveDirectoryUsers].[SipAccount] " +
+                        "WHERE " +
+                            "[Marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
+                            "([SessionIdTime] BETWEEN '{2}' AND '{3}') AND " +
+                            "[ToGateway] IS NOT NULL  "
+                        , fromPart //0
+                        , tableName //1
+                        , startingDate //2
+                        , endingDate //3
+                    );
+
+                    if (index < (dbTables.Count() - 1))
+                    {
+                        fromPart += " UNION ALL ";
+                        index++;
+                    }
+                }
+
+                // 
+                // Close the FROM PART
+                fromPart += String.Format(") AS [AllSitesCallsSummary] ");
+
+                groupByOrderByPart = String.Format(
+                    "GROUP BY " +
+                        "[ToGateway], " +
+                        "YEAR(ResponseTime), " +
+                        "MONTH(ResponseTime) " +
+                    "ORDER BY " +
+                        "[ToGateway] ASC, " +
+                        "YEAR(ResponseTime) ASC, " +
+                        "MONTH(ResponseTime) ASC ");
+
+                sqlQuery = String.Format("{0} {1} {2}", selectPart, fromPart, groupByOrderByPart);
+            }
+
+            return sqlQuery;
+        }
+
+        public string GetCallsSummariesYears(string startingDate, string endingDate, List<string> dbTables)
+        {
+            var sqlQuery = string.Empty;
+            var selectPart = string.Empty;
+            var fromPart = string.Empty;
+            var groupByOrderByPart = string.Empty;
+
+            if (dbTables != null && dbTables.Count > 0)
+            {
+                selectPart = String.Format(
+                    "SELECT TOP 100 PERCENT " +
+                        "[ToGateway] AS [Gateway], " +
+                        "YEAR(ResponseTime) AS [Year] "
+                    );
+
+                //
+                // Start the FROM_PART
+                fromPart = String.Format("FROM  ( ");
+
+                var index = 0;
+                foreach (var tableName in dbTables)
+                {
+                    fromPart = String.Format(
+                        "{0} " +
+                        "SELECT * FROM [{1}] " +
                         "WHERE " +
                             "[Marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
                             "([SessionIdTime] BETWEEN '{2}' AND '{3}') AND " +
