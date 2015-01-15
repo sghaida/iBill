@@ -2,7 +2,7 @@
 
 namespace CCC.ORM.DataAccess
 {
-    public class MongoEntity
+    public class MongoDbObject
     {
         public ObjectId Id { get; set; }
     }
