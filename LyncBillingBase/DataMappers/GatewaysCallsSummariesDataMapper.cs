@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Linq.Expressions;
 
@@ -63,7 +61,7 @@ namespace LyncBillingBase.DataMappers
 
                 var summaries = base.GetAll(sql).ToList();
 
-                if(summaries != null && summaries.Any())
+                if(summaries.Any())
                 {
                     _years = summaries
                         .Select(item => item.Year)
