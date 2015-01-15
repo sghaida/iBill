@@ -9,12 +9,5 @@ namespace LyncBillingBase.DataModels
     {
         [DbColumn("SiteName")]
         public string SiteName { get; set; }
-
-
-        //
-        // Relations
-        [DataRelation(WithDataModel = typeof(Site), OnDataModelKey = "Name", ThisKey = "SiteName")]
-        public Site Site { get; set; }
     }
-
 }

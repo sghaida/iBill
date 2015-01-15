@@ -59,6 +59,7 @@ namespace LyncBillingBase.Repository
 
         // Calls Summaries
         public UsersCallsSummariesDataMapper UsersCallsSummaries = new UsersCallsSummariesDataMapper();
+        public DepartmentCallsSummariesDataMapper DepartmensCallsSummaries = new DepartmentCallsSummariesDataMapper();
         public SitesCallsSummariesDataMapper SitesCallsSummaries = new SitesCallsSummariesDataMapper();
 
         // empty constuctor

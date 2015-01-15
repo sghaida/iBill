@@ -34,6 +34,7 @@ namespace LyncBillingBase.DataMappers
         }
     }
 
+
     public class SitesCallsSummariesDataMapper : DataAccess<CallsSummaryForSite>
     {
         /***
@@ -93,6 +94,11 @@ namespace LyncBillingBase.DataMappers
 
                 if (summaries.Count > 0)
                 {
+                    summaries.ForEach(
+                        (summary) => {
+                            summary.SiteName = siteName;
+                        });
+
                     summaries.Sort(summariesComparer);
                 }
 

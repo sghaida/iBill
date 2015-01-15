@@ -51,7 +51,8 @@ namespace LyncBillingBase.DataMappers
         public List<CallsSummaryForDepartment> GetByDepartment(string siteName, string departmentName, DateTime? startDate = null, DateTime? endDate = null)
         {
             DateTime fromDate, toDate;
-            
+            List<CallsSummaryForDepartment> departmentSummaries;
+
             if (startDate == null || endDate == null)
             {
                 fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
@@ -73,7 +74,18 @@ namespace LyncBillingBase.DataMappers
                     toDate.ConvertDate(true),
                     _dbTables);
 
-                return base.GetAll(sql).ToList();
+                departmentSummaries = base.GetAll(sql).ToList();
+
+                if (departmentSummaries != null && departmentSummaries.Any())
+                {
+                    departmentSummaries.ForEach(
+                        (summary) => {
+                            summary.SiteName = siteName;
+                            summary.DepartmentName = departmentName;
+                        });
+                }
+
+                return departmentSummaries;
             }
             catch (Exception ex)
             {
