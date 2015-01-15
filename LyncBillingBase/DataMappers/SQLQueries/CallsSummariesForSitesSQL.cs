@@ -17,31 +17,28 @@ namespace LyncBillingBase.DataMappers.SQLQueries
             List<string> dbTables)
         {
             var sqlQuery = string.Empty;
-            var selectPart = string.Empty;
-            var fromPart = string.Empty;
-            var groupByOrderByPart = string.Empty;
 
             if (dbTables != null && dbTables.Count > 0)
             {
-                selectPart = String.Format(
+                var selectPart = String.Format(
                     "SELECT TOP 100 PERCENT " + 
-		            "YEAR(ResponseTime) AS [Year], " + 
-		            "MONTH(ResponseTime) AS [Month], " + 
-		            "(CAST(CAST(YEAR(ResponseTime) AS varchar) + '/' + CAST(MONTH(ResponseTime) AS varchar) + '/' + CAST(1 AS VARCHAR) AS DATETIME)) AS Date, " + 
-		            "CAST(SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Duration] END) AS BIGINT) AS [BusinessCallsDuration], " + 
-		            "CAST(COUNT(CASE WHEN [UI_CallType] = 'Business' THEN 1 END) AS BIGINT) AS [BusinessCallsCount], " +
+                    "YEAR(ResponseTime) AS [Year], " + 
+                    "MONTH(ResponseTime) AS [Month], " + 
+                    "(CAST(CAST(YEAR(ResponseTime) AS varchar) + '/' + CAST(MONTH(ResponseTime) AS varchar) + '/' + CAST(1 AS VARCHAR) AS DATETIME)) AS Date, " + 
+                    "CAST(SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Duration] END) AS BIGINT) AS [BusinessCallsDuration], " + 
+                    "CAST(COUNT(CASE WHEN [UI_CallType] = 'Business' THEN 1 END) AS BIGINT) AS [BusinessCallsCount], " +
                     "SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Marker_CallCost] END) AS [BusinessCallsCost], " +
                     "CAST(SUM(CASE WHEN [UI_CallType] = 'Personal' THEN [Duration] END) AS BIGINT) AS [PersonalCallsDuration], " +
                     "CAST(COUNT(CASE WHEN [UI_CallType] = 'Personal' THEN 1 END) AS BIGINT) AS [PersonalCallsCount], " +
                     "SUM(CASE WHEN [UI_CallType] = 'Personal' THEN [Marker_CallCost] END) AS [PersonalCallsCost], " +
                     "CAST(SUM(CASE WHEN [UI_CallType] IS NULL THEN [Duration] END) AS BIGINT) AS [UnmarkedCallsDuration], " +
                     "CAST(COUNT(CASE WHEN [UI_CallType] IS NULL THEN 1 END) AS BIGINT) AS [UnmarkedCallsCount], " + 
-		            "SUM(CASE WHEN [UI_CallType] IS NULL THEN [Marker_CallCost] END) AS [UnmarkedCallsCost] "
-	            );
+                    "SUM(CASE WHEN [UI_CallType] IS NULL THEN [Marker_CallCost] END) AS [UnmarkedCallsCost] "
+                    );
 
                 //
                 // Start the FROM_PART
-                fromPart = String.Format("FROM  (");
+                var fromPart = String.Format("FROM  (");
 
                 var index = 0;
                 foreach (var tableName in dbTables)
@@ -77,13 +74,13 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                 // Close the FROM PART
                 fromPart = String.Format("{0} ) AS [SitePhoneCallsStats] ", fromPart);
 
-                groupByOrderByPart = String.Format(
+                var groupByOrderByPart = String.Format(
                     "GROUP BY " +
-                        "YEAR(ResponseTime), " +
-                        "MONTH(ResponseTime) " +
+                    "YEAR(ResponseTime), " +
+                    "MONTH(ResponseTime) " +
                     "ORDER BY " + 
-                        "YEAR(ResponseTime) ASC, " +
-                        "MONTH(ResponseTime) ASC ");
+                    "YEAR(ResponseTime) ASC, " +
+                    "MONTH(ResponseTime) ASC ");
 
                 sqlQuery = String.Format("{0} {1} {2}", selectPart, fromPart, groupByOrderByPart);
             }
