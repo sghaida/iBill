@@ -28,7 +28,7 @@ namespace LyncBillingBase.DataMappers
         /***
          * DB Tables, to get calculate the summaries from.
          */
-        private readonly List<string> _dbTables = new List<string>();
+        private readonly List<string> _dbTables;
 
         /***
          * Predefined SQL Queries Store.
@@ -45,39 +45,32 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="SiteName"></param>
         /// <param name="DepartmentName"></param>
-        /// <returns></returns>
-        public List<CallsSummaryForDepartment> GetByDepartment(string SiteName, string DepartmentName)
-        {
-            DateTime StartDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
-            DateTime EndDate = DateTime.Now;
-
-            try
-            {
-                return this.GetByDepartment(SiteName, DepartmentName, StartDate, EndDate);
-            }
-            catch(Exception ex)
-            {
-                throw ex.InnerException;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="SiteName"></param>
-        /// <param name="DepartmentName"></param>
         /// <param name="StartDate"></param>
         /// <param name="EndDate"></param>
         /// <returns></returns>
-        public List<CallsSummaryForDepartment> GetByDepartment(string SiteName, string DepartmentName, DateTime StartDate, DateTime EndDate)
+        public List<CallsSummaryForDepartment> GetByDepartment(string siteName, string departmentName, DateTime? startDate = null, DateTime? endDate = null)
         {
+            DateTime fromDate, toDate;
+            
+            if (startDate == null || endDate == null)
+            {
+                fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
+                toDate = DateTime.Now;
+            }
+            else
+            {
+                //Assign the beginning of date.Month to the startingDate and the end of it to the endingDate 
+                fromDate = (DateTime)startDate;
+                toDate = (DateTime)endDate;
+            }
+
             try
             {
                 var sql = _summariesSqlQueries.GetCallsSummariesForDepartment(
-                    SiteName, 
-                    DepartmentName, 
-                    StartDate.ConvertDate(true),
-                    EndDate.ConvertDate(true),
+                    siteName, 
+                    departmentName,
+                    fromDate.ConvertDate(true),
+                    toDate.ConvertDate(true),
                     _dbTables);
 
                 return base.GetAll(sql).ToList();
@@ -96,16 +89,29 @@ namespace LyncBillingBase.DataMappers
         /// <param name="StartDate"></param>
         /// <param name="EndDate"></param>
         /// <returns></returns>
-        public CallsSummaryForDepartment GetTotalByDepartment(string SiteName, string DepartmentName, DateTime StartDate, DateTime EndDate)
+        public CallsSummaryForDepartment GetTotalByDepartment(string siteName, string departmentName, DateTime? startDate = null, DateTime? endDate = null)
         {
+            DateTime fromDate, toDate;
             CallsSummaryForDepartment departmentTotalSummary = new CallsSummaryForDepartment();
 
-            departmentTotalSummary.SiteName = SiteName;
-            departmentTotalSummary.DepartmentName = DepartmentName;
+            if (startDate == null || endDate == null)
+            {
+                fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
+                toDate = DateTime.Now;
+            }
+            else
+            {
+                //Assign the beginning of date.Month to the startingDate and the end of it to the endingDate 
+                fromDate = (DateTime)startDate;
+                toDate = (DateTime)endDate;
+            }
+
+            departmentTotalSummary.SiteName = siteName;
+            departmentTotalSummary.DepartmentName = departmentName;
 
             try
             {
-                var summaries = GetByDepartment(SiteName, DepartmentName, StartDate, EndDate);
+                var summaries = GetByDepartment(siteName, departmentName, fromDate, toDate);
 
                 foreach(var summary in summaries)
                 {
@@ -133,35 +139,26 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="SiteName"></param>
-        /// <returns></returns>
-        public Dictionary<string, CallsSummaryForDepartment> GetTotalsForEachDepartmentInSite(string SiteName)
-        {
-            Dictionary<string, CallsSummaryForDepartment> siteDepartmentsTotals = new Dictionary<string, CallsSummaryForDepartment>();
-
-            DateTime StartDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
-            DateTime EndDate = DateTime.Now;
-
-            try
-            {
-                return this.GetTotalsForEachDepartmentInSite(SiteName);
-            }
-            catch(Exception ex)
-            {
-                throw ex.InnerException;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="siteName"></param>
         /// <returns></returns>
-        public Dictionary<string, CallsSummaryForDepartment> GetTotalsForEachDepartmentInSite(string SiteName, DateTime StartDate, DateTime EndDate)
+        public Dictionary<string, CallsSummaryForDepartment> GetTotalsForEachDepartmentInSite(string siteName, DateTime? startDate = null, DateTime? endDate = null)
         {
+            DateTime fromDate, toDate;
+            CallsSummaryForDepartment departmentTotalSummary = new CallsSummaryForDepartment();
             Dictionary<string, CallsSummaryForDepartment> siteDepartmentsTotals = new Dictionary<string, CallsSummaryForDepartment>();
+            List<SiteDepartment> departments = _siteDepartmentsDataMapper.GetAll().Where(item => item.Site != null && item.Site.Name == siteName).ToList();
 
-            List<SiteDepartment> departments = _siteDepartmentsDataMapper.GetAll().Where(item => item.Site != null && item.Site.Name == SiteName).ToList();
+            if (startDate == null || endDate == null)
+            {
+                fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
+                toDate = DateTime.Now;
+            }
+            else
+            {
+                //Assign the beginning of date.Month to the startingDate and the end of it to the endingDate 
+                fromDate = (DateTime)startDate;
+                toDate = (DateTime)endDate;
+            }
 
             if (departments != null && departments.Count > 0)
             {
@@ -171,10 +168,9 @@ namespace LyncBillingBase.DataMappers
 
                     foreach (SiteDepartment department in departments)
                     {
-                        string siteName = department.Site.Name;
                         string departmentName = department.Department.Name;
 
-                        tempTotalSummary = this.GetTotalByDepartment(siteName, departmentName, StartDate, EndDate);
+                        tempTotalSummary = this.GetTotalByDepartment(siteName, departmentName, fromDate, endDate);
 
                         siteDepartmentsTotals.Add(departmentName, tempTotalSummary);
                     }
