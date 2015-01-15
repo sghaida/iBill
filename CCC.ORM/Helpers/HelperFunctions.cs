@@ -168,12 +168,17 @@ namespace CCC.ORM.Helpers
 
         public static bool IsValidEmail(this string emailAddress)
         {
-            var pattern =
-                @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
+            const string pattern = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
 
             return Regex.IsMatch(emailAddress, pattern);
         }
 
+        /// <summary>
+        /// Convert DateTime to string
+        /// </summary>
+        /// <param name="datetTime"></param>
+        /// <param name="excludeHoursAndMinutes">if true it will execlude time from datetime string. Default is false</param>
+        /// <returns></returns>
         public static string ConvertDate(this DateTime datetTime, bool excludeHoursAndMinutes = false)
         {
             if (datetTime != DateTime.MinValue)
