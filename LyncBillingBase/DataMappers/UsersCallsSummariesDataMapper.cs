@@ -165,8 +165,7 @@ namespace LyncBillingBase.DataMappers
         /// <param name="endDate"></param>
         /// <param name="groupBy"></param>
         /// <returns></returns>
-        public List<CallsSummaryForUser> GetBySite(string siteName, DateTime? startDate = null, DateTime? endDate = null,
-            Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
+        public List<CallsSummaryForUser> GetBySite(string siteName, DateTime? startDate = null, DateTime? endDate = null, Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
         {
             DateTime fromDate, toDate;
 
@@ -220,8 +219,7 @@ namespace LyncBillingBase.DataMappers
         /// <param name="endDate"></param>
         /// <param name="invoiceStatus"></param>
         /// <returns></returns>
-        public Dictionary<string, CallsSummaryForUser> GetBySite(string siteName, List<string> sipAccountsList, 
-            DateTime? startDate = null, DateTime? endDate = null, string invoiceStatus = "NO")
+        public Dictionary<string, CallsSummaryForUser> GetBySite(string siteName, List<string> sipAccountsList, DateTime? startDate = null, DateTime? endDate = null, string invoiceStatus = "NO")
         {
             DateTime fromDate, toDate;
             const Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.UserAndInvoiceFlag;
@@ -251,28 +249,70 @@ namespace LyncBillingBase.DataMappers
             return usersSummaryList;
         }
 
+        public List<CallsSummaryForUser> GetByGateway(string gatewayName, DateTime? startDate = null, DateTime? endDate = null, Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
+        {
+            DateTime fromDate, toDate;
+
+            if (startDate == null || endDate == null)
+            {
+                fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
+                toDate = DateTime.Now;
+            }
+            else
+            {
+                //Assign the beginning of date.Month to the startingDate and the end of it to the endingDate 
+                fromDate = (DateTime)startDate;
+                toDate = (DateTime)endDate;
+            }
+
+            try
+            {
+                string sqlQuery = _summariesSqlQueries.GetCallsSummariesForUsersPerGateway(
+                    gatewayName,
+                    fromDate.ConvertDate(true),
+                    toDate.ConvertDate(true),
+                    _dbTables);
+
+                var summaries = base.GetAll(sqlQuery);
+
+                if (summaries != null && summaries.Any())
+                {
+                    if (groupBy == Globals.CallsSummary.GroupBy.UserOnly)
+                    {
+                        GroupByUserOnly(ref summaries);
+                    }
+                    else if (groupBy == Globals.CallsSummary.GroupBy.UserAndInvoiceFlag)
+                    {
+                        GroupByUserAndInvoiceFlag(ref summaries);
+                    }
+                }
+
+                return summaries.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
         /***
          * DISABLED FUNCTIONS
          */
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual CallsSummaryForUser GetById(long id, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual CallsSummaryForUser GetById(long id, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> Get(Dictionary<string, object> whereConditions,
-            int limit = 25, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual IEnumerable<CallsSummaryForUser> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> Get(Expression<Func<CallsSummaryForUser, bool>> predicate,
-            string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual IEnumerable<CallsSummaryForUser> Get(Expression<Func<CallsSummaryForUser, bool>> predicate, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
@@ -284,8 +324,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> GetAll(string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual IEnumerable<CallsSummaryForUser> GetAll(string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
@@ -297,8 +336,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual int Insert(CallsSummaryForUser dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual int Insert(CallsSummaryForUser dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
@@ -310,8 +348,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual bool Update(CallsSummaryForUser dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual bool Update(CallsSummaryForUser dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
@@ -323,8 +360,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual bool Delete(CallsSummaryForUser dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual bool Delete(CallsSummaryForUser dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
