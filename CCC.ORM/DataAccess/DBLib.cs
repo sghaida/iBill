@@ -276,13 +276,21 @@ namespace CCC.ORM.DataAccess
                 finalSelectQuery = String.Format( "{0} {1}" , finalSelectQuery , orderBy );
 
 
-            //Initialize the connection and command
-            var conn = DbInitializeConnection( ConnectionString );
+            // 
+            // Initialize the connection and command
+            var localConnectionString = ConnectionString;
+            if (!localConnectionString.Contains("ConnectionTimout"))
+            {
+                localConnectionString += ";ConnectionTimeout=1800";
+            }
+
+            var conn = DbInitializeConnection(localConnectionString);
             var comm = new OleDbCommand( finalSelectQuery , conn );
 
             try
             {
                 conn.Open();
+                comm.CommandTimeout = (30 * 60); //30 minutes
                 dr = comm.ExecuteReader();
 
                 dt.Load( dr );

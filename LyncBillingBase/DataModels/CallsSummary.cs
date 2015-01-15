@@ -5,10 +5,11 @@ using CCC.ORM.DataAttributes;
 
 namespace LyncBillingBase.DataModels
 {
-    [DataSource(Name = "", Type = Globals.DataSource.Type.DbTable,
-        AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
-    internal class CallsSummaryForUsersInSite : DataModel
+    [DataSource(Name = "MonitoringServersInfo", Type = Globals.DataSource.Type.DbTable,
+        AccessMethod = Globals.DataSource.AccessMethod.DistributedSource)]
+    public class CallsSummary : DataModel
     {
+        [IsIdField]
         [DbColumn("Date")]
         public DateTime Date { get; set; }
 
@@ -18,35 +19,32 @@ namespace LyncBillingBase.DataModels
         [DbColumn("Month")]
         public int Month { get; set; }
 
-        [DbColumn("ChargingParty")]
-        public string SipAccount { get; set; }
-
-        [DbColumn("AC_IsInvoiced")]
-        public string IsInvoiced { get; set; }
-
+        // Business
         [DbColumn("BusinessCallsCount")]
-        public int BusinessCallsCount { get; set; }
+        public long BusinessCallsCount { get; set; }
+
+        [DbColumn("BusinessCallsDuration")]
+        public long BusinessCallsDuration { get; set; }
 
         [DbColumn("BusinessCallsCost")]
         public decimal BusinessCallsCost { get; set; }
 
-        [DbColumn("BusinessCallsDuration")]
-        public int BusinessCallsDuration { get; set; }
-
+        // Personal
         [DbColumn("PersonalCallsCount")]
-        public int PersonalCallsCount { get; set; }
+        public long PersonalCallsCount { get; set; }
 
         [DbColumn("PersonalCallsDuration")]
-        public int PersonalCallsDuration { get; set; }
+        public long PersonalCallsDuration { get; set; }
 
         [DbColumn("PersonalCallsCost")]
         public decimal PersonalCallsCost { get; set; }
 
+        // Unmarked
         [DbColumn("UnmarkedCallsCount")]
-        public int UnmarkedCallsCount { get; set; }
+        public long UnmarkedCallsCount { get; set; }
 
         [DbColumn("UnmarkedCallsDuration")]
-        public int UnmarkedCallsDuration { get; set; }
+        public long UnmarkedCallsDuration { get; set; }
 
         [DbColumn("UnmarkedCallsCost")]
         public decimal UnmarkedCallsCost { get; set; }
@@ -65,10 +63,6 @@ namespace LyncBillingBase.DataModels
         {
             get { return (BusinessCallsCount + PersonalCallsCount + UnmarkedCallsCount); }
         }
-
-        //
-        // Relations
-        [DataRelation(WithDataModel = typeof (User), OnDataModelKey = "SipAccount", ThisKey = "SipAccount")]
-        public User User { get; set; }
     }
+
 }

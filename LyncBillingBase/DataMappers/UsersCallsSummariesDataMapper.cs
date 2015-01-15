@@ -16,7 +16,6 @@ namespace LyncBillingBase.DataMappers
         /***
          * Get the phone calls tables list from the MonitoringServersInfo table
          */
-
         private readonly DataAccess<MonitoringServerInfo> _monitoringServersInfoDataMapper =
             new DataAccess<MonitoringServerInfo>();
 
@@ -24,10 +23,11 @@ namespace LyncBillingBase.DataMappers
          * DB Tables, to get calculate the summaries from.
          */
         private readonly List<string> _dbTables = new List<string>();
+
         /***
          * Predefined SQL Queries Store.
          */
-        private readonly CallsSummariesSql _summariesSqlQueries = new CallsSummariesSql();
+        private readonly CallsSummariesForUsersSql _summariesSqlQueries = new CallsSummariesForUsersSql();
 
         public UsersCallsSummariesDataMapper()
         {
@@ -311,4 +311,5 @@ namespace LyncBillingBase.DataMappers
             throw new NotSupportedException();
         }
     }
+
 }
