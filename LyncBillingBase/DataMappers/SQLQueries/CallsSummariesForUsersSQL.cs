@@ -78,7 +78,10 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                     "YEAR(ResponseTime), " +
                     "MONTH(ResponseTime), " +
                     "[ChargingParty] " +
-                    "ORDER BY [ChargingParty] ASC ");
+                    "ORDER BY " + 
+                        "[ChargingParty] ASC, " + 
+                        "YEAR(ResponseTime) ASC, " +
+                        "MONTH(ResponseTime) ASC ");
 
                 sqlQuery = String.Format("{0} {1} {2}", selectPart, fromPart, groupByOrderByPart);
             }

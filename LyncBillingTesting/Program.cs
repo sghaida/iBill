@@ -28,7 +28,9 @@ namespace LyncBillingTesting
             //users_summaries = DB.UsersCallsSummaries.GetBySite("MOA", startDate, endDate, Globals.CallsSummary.GroupBy.UserAndInvoiceFlag);
             //var first_user_summary = summaries.First();
 
-            var sites_summaries = DB.SitesCallsSummaries.GetBySite("MOA", startDate, endDate);
+            //var sites_summaries = DB.SitesCallsSummaries.GetBySite("MOA", startDate, endDate);
+
+            var yearsForAAlhour = DB.UsersCallsSummaries.GetYearsBySipAccount("aalhour@ccc.gr");
 
             string x = string.Empty;
         }
