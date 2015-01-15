@@ -33,6 +33,12 @@
     <Reference Include="FastMember">
       <HintPath>..\packages\FastMember.1.0.0.11\lib\net40\FastMember.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>D:\Development\NoSQL\MongoDB .NET Driver\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>D:\Development\NoSQL\MongoDB .NET Driver\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -55,6 +61,8 @@
     <Compile Include="DataAccess\Evaluator.cs" />
     <Compile Include="DataAccess\IDataAccess.cs" />
     <Compile Include="DataAccess\Invoker.cs" />
+    <Compile Include="DataAccess\MongoDB.cs" />
+    <Compile Include="DataAccess\MongoEntity.cs" />
     <Compile Include="DataAttributes\AllowIdInsertAttribute.cs" />
     <Compile Include="DataAttributes\AllowNullAttribute.cs" />
     <Compile Include="DataAttributes\DataRelationAttribute.cs" />
