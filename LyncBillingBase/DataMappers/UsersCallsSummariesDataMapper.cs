@@ -40,7 +40,7 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// </summary>
         /// <param name="summaries"></param>
-        private void GroupByUserOnly(ref IEnumerable<CallsSummaryForUser> summaries)
+        private static void GroupByUserOnly(ref IEnumerable<CallsSummaryForUser> summaries)
         {
             summaries = summaries.AsParallel();
 
@@ -67,7 +67,7 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// </summary>
         /// <param name="summaries"></param>
-        private void GroupByUserAndInvoiceFlag(ref IEnumerable<CallsSummaryForUser> summaries)
+        private static void GroupByUserAndInvoiceFlag(ref IEnumerable<CallsSummaryForUser> summaries)
         {
             summaries = summaries.AsParallel();
 
@@ -123,39 +123,31 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// </summary>
         /// <param name="sipAccount"></param>
+        /// <param name="StartingDate"></param>
+        /// <param name="EndingDate"></param>
         /// <returns></returns>
-        public List<CallsSummaryForUser> GetBySipAccount(string sipAccount)
+        public List<CallsSummaryForUser> GetBySipAccount(string sipAccount, DateTime? startDate = null, DateTime? endDate = null)
         {
-            try
+            DateTime fromDate, toDate;
+
+            if (startDate == null || endDate == null)
             {
-                var startingDate = (new DateTime(DateTime.Now.Year, 1, 1)).ConvertDate(true);
-                var endingDate = DateTime.Now.ConvertDate(true);
-
-                var sqlQuery = _summariesSqlQueries.GetCallsSummariesForUser(sipAccount, startingDate, endingDate,
-                    _dbTables);
-
-                return base.GetAll(sqlQuery).ToList();
+                fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
+                toDate = DateTime.Now;
             }
-            catch (Exception ex)
+            else
             {
-                throw ex.InnerException;
+                //Assign the beginning of date.Month to the startingDate and the end of it to the endingDate 
+                fromDate = (DateTime)startDate;
+                toDate = (DateTime)endDate;
             }
-        }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="sipAccount"></param>
-        /// <param name="startingDate"></param>
-        /// <param name="endingDate"></param>
-        /// <returns></returns>
-        public List<CallsSummaryForUser> GetBySipAccount(string sipAccount, DateTime startingDate, DateTime endingDate)
-        {
             try
             {
                 var sqlQuery = _summariesSqlQueries.GetCallsSummariesForUser(
                     sipAccount,
-                    startingDate.ConvertDate(true),
-                    endingDate.ConvertDate(true),
+                    fromDate.ConvertDate(true),
+                    toDate.ConvertDate(true),
                     _dbTables);
 
                 return base.GetAll(sqlQuery).ToList();
@@ -169,40 +161,33 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// </summary>
         /// <param name="siteName"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
         /// <param name="groupBy"></param>
         /// <returns></returns>
-        public List<CallsSummaryForUser> GetBySite(string siteName,
+        public List<CallsSummaryForUser> GetBySite(string siteName, DateTime? startDate = null, DateTime? endDate = null,
             Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
         {
-            try
-            {
-                var startingDate = new DateTime(DateTime.Now.Year, 1, 1);
-                var endingDate = DateTime.Now;
+            DateTime fromDate, toDate;
 
-                return this.GetBySite(siteName, startingDate, endingDate, groupBy);
-            }
-            catch (Exception ex)
+            if (startDate == null || endDate == null)
             {
-                throw ex.InnerException;
+                fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
+                toDate = DateTime.Now;
             }
-        }
+            else
+            {
+                //Assign the beginning of date.Month to the startingDate and the end of it to the endingDate 
+                fromDate = (DateTime)startDate;
+                toDate = (DateTime)endDate;
+            }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="siteName"></param>
-        /// <param name="startingDate"></param>
-        /// <param name="endingDate"></param>
-        /// <param name="groupBy"></param>
-        /// <returns></returns>
-        public List<CallsSummaryForUser> GetBySite(string siteName, DateTime startingDate, DateTime endingDate,
-            Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
-        {
             try
             {
                 string sqlQuery = _summariesSqlQueries.GetCallsSummariesForUsersInSite(
                     siteName,
-                    startingDate.ConvertDate(true),
-                    endingDate.ConvertDate(true),
+                    fromDate.ConvertDate(true),
+                    toDate.ConvertDate(true),
                     _dbTables);
 
                 var summaries = base.GetAll(sqlQuery);
@@ -231,17 +216,31 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="siteName"></param>
         /// <param name="sipAccountsList"></param>
-        /// <param name="startingDate"></param>
-        /// <param name="endingDate"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
         /// <param name="invoiceStatus"></param>
         /// <returns></returns>
         public Dictionary<string, CallsSummaryForUser> GetBySite(string siteName, List<string> sipAccountsList, 
-            DateTime startingDate, DateTime endingDate, string invoiceStatus = "NO")
+            DateTime? startDate = null, DateTime? endDate = null, string invoiceStatus = "NO")
         {
-            if (string.IsNullOrEmpty(invoiceStatus)) invoiceStatus = "NO";
+            DateTime fromDate, toDate;
             const Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.UserAndInvoiceFlag;
 
-            List<CallsSummaryForUser> listOfUsersSummaries = GetBySite(siteName, startingDate, endingDate, groupBy)
+            if (string.IsNullOrEmpty(invoiceStatus)) invoiceStatus = "NO";
+
+            if (startDate == null || endDate == null)
+            {
+                fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
+                toDate = DateTime.Now;
+            }
+            else
+            {
+                //Assign the beginning of date.Month to the startingDate and the end of it to the endingDate 
+                fromDate = (DateTime)startDate;
+                toDate = (DateTime)endDate;
+            }
+
+            List<CallsSummaryForUser> listOfUsersSummaries = GetBySite(siteName, fromDate, toDate, groupBy)
                 .Where(summary => !string.IsNullOrEmpty(summary.IsInvoiced) && summary.IsInvoiced == invoiceStatus)
                 .ToList();
 
