@@ -37,30 +37,17 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="siteName"></param>
+        /// <param name="SiteName"></param>
         /// <param name="groupBy"></param>
         /// <returns></returns>
-        public List<CallsSummaryForSite> GetBySite(string siteName)
+        public List<CallsSummaryForSite> GetBySite(string SiteName)
         {
-            List<CallsSummaryForSite> summaries;
-            CallsSummaryForSiteComparer summariesComparer = new CallsSummaryForSiteComparer();
-
             try
             {
-                var startingDate = (new DateTime(DateTime.Now.Year, 1, 1)).ConvertDate(true);
-                var endingDate = DateTime.Now.ConvertDate(true);
+                DateTime StartDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
+                DateTime EndDate = DateTime.Now;
 
-                var sqlQuery = _summariesSqlQueries.GetCallsSummariesForSite(siteName, startingDate, endingDate,
-                    _dbTables);
-
-                summaries = base.GetAll(sqlQuery).ToList();
-                
-                if (summaries != null && summaries.Count > 0)
-                {
-                    summaries.Sort(summariesComparer);
-                }
-
-                return summaries;
+                return this.GetBySite(SiteName, StartDate, EndDate);
             }
             catch (Exception ex)
             {
@@ -73,10 +60,10 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="siteName"></param>
         /// <param name="startingDate"></param>
-        /// <param name="endingDate"></param>
+        /// <param name="EndDate"></param>
         /// <param name="groupBy"></param>
         /// <returns></returns>
-        public List<CallsSummaryForSite> GetBySite(string siteName, DateTime startingDate, DateTime endingDate)
+        public List<CallsSummaryForSite> GetBySite(string SiteName, DateTime StartDate, DateTime EndDate)
         {
             List<CallsSummaryForSite> summaries;
             CallsSummaryForSiteComparer summariesComparer = new CallsSummaryForSiteComparer();
@@ -84,9 +71,9 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 var sqlQuery = _summariesSqlQueries.GetCallsSummariesForSite(
-                    siteName,
-                    startingDate.ConvertDate(true),
-                    endingDate.ConvertDate(true),
+                    SiteName,
+                    StartDate.ConvertDate(true),
+                    EndDate.ConvertDate(true),
                     _dbTables);
 
                 summaries = base.GetAll(sqlQuery).ToList();
@@ -110,14 +97,14 @@ namespace LyncBillingBase.DataMappers
          */
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual CallsSummaryForUser GetById(long id, string dataSourceName = null,
+        public new virtual CallsSummaryForSite GetById(long id, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> Get(Dictionary<string, object> whereConditions,
+        public new virtual IEnumerable<CallsSummaryForSite> Get(Dictionary<string, object> whereConditions,
             int limit = 25, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
@@ -125,20 +112,20 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> Get(Expression<Func<CallsSummaryForUser, bool>> predicate,
+        public new virtual IEnumerable<CallsSummaryForSite> Get(Expression<Func<CallsSummaryForSite, bool>> predicate,
             string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> GetAll(string sqlQuery)
+        public new virtual IEnumerable<CallsSummaryForSite> GetAll(string sqlQuery)
         {
             throw new NotSupportedException();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> GetAll(string dataSourceName = null,
+        public new virtual IEnumerable<CallsSummaryForSite> GetAll(string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
@@ -151,7 +138,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual int Insert(CallsSummaryForUser dataObject, string dataSourceName = null,
+        public new virtual int Insert(CallsSummaryForSite dataObject, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
@@ -164,7 +151,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual bool Update(CallsSummaryForUser dataObject, string dataSourceName = null,
+        public new virtual bool Update(CallsSummaryForSite dataObject, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
@@ -177,7 +164,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual bool Delete(CallsSummaryForUser dataObject, string dataSourceName = null,
+        public new virtual bool Delete(CallsSummaryForSite dataObject, string dataSourceName = null,
             Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
