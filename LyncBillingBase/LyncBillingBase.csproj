@@ -58,7 +58,9 @@
     <Compile Include="DataMappers\BundledAccountsDataMapper.cs" />
     <Compile Include="DataMappers\CallMarkerStatusDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentCallsSummariesDataMapper.cs" />
+    <Compile Include="DataMappers\GatewaysCallsSummariesDataMapper.cs" />
     <Compile Include="DataMappers\SitesCallsSummariesDataMapper.cs" />
+    <Compile Include="DataMappers\SQLQueries\CallsSummariesForGatewaySQL.cs" />
     <Compile Include="DataMappers\SQLQueries\CallsSummariesForSitesSQL.cs" />
     <Compile Include="DataMappers\SQLQueries\CallsSummariesForDepartmentsSQL.cs" />
     <Compile Include="DataMappers\SQLQueries\CallsSummariesForUsersSQL.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="DataModels\CallsSummary.cs" />
     <Compile Include="DataModels\CallsSummaryForDepartment.cs" />
     <Compile Include="DataModels\CallsSummaryForSite.cs" />
+    <Compile Include="DataModels\CallsSummaryForGateway.cs" />
     <Compile Include="DataModels\CallType.cs" />
     <Compile Include="DataModels\Country.cs" />
     <Compile Include="DataModels\Currency.cs" />
