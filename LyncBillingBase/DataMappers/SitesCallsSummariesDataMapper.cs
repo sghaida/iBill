@@ -62,8 +62,8 @@ namespace LyncBillingBase.DataMappers
         /// 
         /// </summary>
         /// <param name="siteName"></param>
-        /// <param name="startingDate"></param>
-        /// <param name="endingDate"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
         /// <returns></returns>
         public List<CallsSummaryForSite> GetBySite(string siteName, DateTime? startDate = null, DateTime? endDate = null)
         {
@@ -95,7 +95,7 @@ namespace LyncBillingBase.DataMappers
                 if (summaries.Count > 0)
                 {
                     summaries.ForEach(
-                        (summary) => {
+                        summary => {
                             summary.SiteName = siteName;
                         });
 
