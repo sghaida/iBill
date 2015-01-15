@@ -23,7 +23,7 @@ namespace LyncBillingBase.DataMappers
         /***
          * DB Tables, to get calculate the summaries from.
          */
-        private readonly List<string> _dbTables = new List<string>();
+        private readonly List<string> _dbTables;
 
         /***
          * Predefined SQL Queries Store.
@@ -37,13 +37,13 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="Summaries"></param>
-        private void GroupByUserOnly(ref IEnumerable<CallsSummaryForUser> Summaries)
+        /// <param name="summaries"></param>
+        private void GroupByUserOnly(ref IEnumerable<CallsSummaryForUser> summaries)
         {
-            Summaries = Summaries.AsParallel();
+            summaries = summaries.AsParallel();
 
-            Summaries = (
-                from summary in Summaries
+            summaries = (
+                from summary in summaries
                 group summary by new {summary.SipAccount}
                 into result
                 select new CallsSummaryForUser
@@ -64,13 +64,13 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="Summaries"></param>
-        private void GroupByUserAndInvoiceFlag(ref IEnumerable<CallsSummaryForUser> Summaries)
+        /// <param name="summaries"></param>
+        private void GroupByUserAndInvoiceFlag(ref IEnumerable<CallsSummaryForUser> summaries)
         {
-            Summaries = Summaries.AsParallel();
+            summaries = summaries.AsParallel();
 
-            Summaries = (
-                from summary in Summaries
+            summaries = (
+                from summary in summaries
                 group summary by new {summary.SipAccount, summary.IsInvoiced}
                 into result
                 select new CallsSummaryForUser
@@ -93,26 +93,26 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="SipAccount"></param>
+        /// <param name="sipAccount"></param>
         /// <returns></returns>
-        public List<SpecialDateTime> GetYearsBySipAccount(string SipAccount)
+        public List<SpecialDateTime> GetYearsBySipAccount(string sipAccount)
         {
             List<SpecialDateTime> yearsList = new List<SpecialDateTime>();
 
-            var summaries = GetBySipAccount(SipAccount, DateTime.MinValue, DateTime.Now);
+            var summaries = GetBySipAccount(sipAccount, DateTime.MinValue, DateTime.Now);
 
             if(summaries != null && summaries.Count > 0)
             {
                 yearsList = summaries
-                    .Select<CallsSummaryForUser, int>(item => item.Year)
+                    .Select(item => item.Year)
                     .Distinct()
-                    .Select<int, SpecialDateTime>(item => new SpecialDateTime
+                    .Select(item => new SpecialDateTime
                     {
                         YearAsNumber = item,
                         YearAsText = item.ToString()
                     })
                     .OrderBy(item => item.YearAsNumber)
-                    .ToList<SpecialDateTime>();
+                    .ToList();
             }
 
             return yearsList;
@@ -120,16 +120,16 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="SipAccount"></param>
+        /// <param name="sipAccount"></param>
         /// <returns></returns>
-        public List<CallsSummaryForUser> GetBySipAccount(string SipAccount)
+        public List<CallsSummaryForUser> GetBySipAccount(string sipAccount)
         {
             try
             {
                 var startingDate = (new DateTime(DateTime.Now.Year, 1, 1)).ConvertDate(true);
                 var endingDate = DateTime.Now.ConvertDate(true);
 
-                var sqlQuery = _summariesSqlQueries.GetCallsSummariesForUser(SipAccount, startingDate, endingDate,
+                var sqlQuery = _summariesSqlQueries.GetCallsSummariesForUser(sipAccount, startingDate, endingDate,
                     _dbTables);
 
                 return base.GetAll(sqlQuery).ToList();
@@ -142,18 +142,18 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="SipAccount"></param>
-        /// <param name="StartingDate"></param>
-        /// <param name="EndingDate"></param>
+        /// <param name="sipAccount"></param>
+        /// <param name="startingDate"></param>
+        /// <param name="endingDate"></param>
         /// <returns></returns>
-        public List<CallsSummaryForUser> GetBySipAccount(string SipAccount, DateTime StartingDate, DateTime EndingDate)
+        public List<CallsSummaryForUser> GetBySipAccount(string sipAccount, DateTime startingDate, DateTime endingDate)
         {
             try
             {
                 var sqlQuery = _summariesSqlQueries.GetCallsSummariesForUser(
-                    SipAccount,
-                    StartingDate.ConvertDate(true),
-                    EndingDate.ConvertDate(true),
+                    sipAccount,
+                    startingDate.ConvertDate(true),
+                    endingDate.ConvertDate(true),
                     _dbTables);
 
                 return base.GetAll(sqlQuery).ToList();
@@ -166,18 +166,18 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="SiteName"></param>
-        /// <param name="GroupBy"></param>
+        /// <param name="siteName"></param>
+        /// <param name="groupBy"></param>
         /// <returns></returns>
-        public List<CallsSummaryForUser> GetBySite(string SiteName,
-            Globals.CallsSummary.GroupBy GroupBy = Globals.CallsSummary.GroupBy.DontGroup)
+        public List<CallsSummaryForUser> GetBySite(string siteName,
+            Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
         {
             try
             {
                 var startingDate = new DateTime(DateTime.Now.Year, 1, 1);
                 var endingDate = DateTime.Now;
 
-                return this.GetBySite(SiteName, startingDate, endingDate, GroupBy);
+                return this.GetBySite(siteName, startingDate, endingDate, groupBy);
             }
             catch (Exception ex)
             {
@@ -187,33 +187,31 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="SiteName"></param>
-        /// <param name="StartingDate"></param>
-        /// <param name="EndingDate"></param>
-        /// <param name="GroupBy"></param>
+        /// <param name="siteName"></param>
+        /// <param name="startingDate"></param>
+        /// <param name="endingDate"></param>
+        /// <param name="groupBy"></param>
         /// <returns></returns>
-        public List<CallsSummaryForUser> GetBySite(string SiteName, DateTime StartingDate, DateTime EndingDate,
-            Globals.CallsSummary.GroupBy GroupBy = Globals.CallsSummary.GroupBy.DontGroup)
+        public List<CallsSummaryForUser> GetBySite(string siteName, DateTime startingDate, DateTime endingDate,
+            Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
         {
-            IEnumerable<CallsSummaryForUser> summaries = null;
-
             try
             {
                 string sqlQuery = _summariesSqlQueries.GetCallsSummariesForUsersInSite(
-                    SiteName,
-                    StartingDate.ConvertDate(true),
-                    EndingDate.ConvertDate(true),
+                    siteName,
+                    startingDate.ConvertDate(true),
+                    endingDate.ConvertDate(true),
                     _dbTables);
 
-                summaries = base.GetAll(sqlQuery);
+                var summaries = base.GetAll(sqlQuery);
 
-                if(summaries != null && summaries.Count() > 0)
+                if(summaries != null && summaries.Any())
                 {
-                    if (GroupBy == Globals.CallsSummary.GroupBy.UserOnly)
+                    if (groupBy == Globals.CallsSummary.GroupBy.UserOnly)
                     {
                         GroupByUserOnly(ref summaries);
                     }
-                    else if (GroupBy == Globals.CallsSummary.GroupBy.UserAndInvoiceFlag)
+                    else if (groupBy == Globals.CallsSummary.GroupBy.UserAndInvoiceFlag)
                     {
                         GroupByUserAndInvoiceFlag(ref summaries);
                     }
@@ -229,24 +227,24 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// </summary>
-        /// <param name="SiteName"></param>
-        /// <param name="SipAccountsList"></param>
-        /// <param name="StartingDate"></param>
+        /// <param name="siteName"></param>
+        /// <param name="sipAccountsList"></param>
+        /// <param name="startingDate"></param>
         /// <param name="endingDate"></param>
         /// <param name="invoiceStatus"></param>
         /// <returns></returns>
-        public Dictionary<string, CallsSummaryForUser> GetBySite(string SiteName, List<string> SipAccountsList, 
-            DateTime StartingDate, DateTime EndingDate, string InvoiceStatus = "NO")
+        public Dictionary<string, CallsSummaryForUser> GetBySite(string siteName, List<string> sipAccountsList, 
+            DateTime startingDate, DateTime endingDate, string invoiceStatus = "NO")
         {
-            if (string.IsNullOrEmpty(InvoiceStatus)) InvoiceStatus = "NO";
-            Globals.CallsSummary.GroupBy GroupBy = Globals.CallsSummary.GroupBy.UserAndInvoiceFlag;
+            if (string.IsNullOrEmpty(invoiceStatus)) invoiceStatus = "NO";
+            const Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.UserAndInvoiceFlag;
 
-            List<CallsSummaryForUser> ListOfUsersSummaries = GetBySite(SiteName, StartingDate, EndingDate, GroupBy)
-                .Where(summary => !string.IsNullOrEmpty(summary.IsInvoiced) && summary.IsInvoiced == InvoiceStatus)
+            List<CallsSummaryForUser> listOfUsersSummaries = GetBySite(siteName, startingDate, endingDate, groupBy)
+                .Where(summary => !string.IsNullOrEmpty(summary.IsInvoiced) && summary.IsInvoiced == invoiceStatus)
                 .ToList();
 
-            Dictionary<string, CallsSummaryForUser> usersSummaryList = ListOfUsersSummaries
-                .Where(summary => SipAccountsList.Contains(summary.SipAccount))
+            Dictionary<string, CallsSummaryForUser> usersSummaryList = listOfUsersSummaries
+                .Where(summary => sipAccountsList.Contains(summary.SipAccount))
                 .ToDictionary(summary => summary.SipAccount);
 
             return usersSummaryList;
