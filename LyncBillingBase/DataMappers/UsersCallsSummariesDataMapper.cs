@@ -22,7 +22,7 @@ namespace LyncBillingBase.DataMappers
         /***
          * DB Tables, to get calculate the summaries from.
          */
-        private readonly List<string> _dbTables = new List<string>();
+        private readonly List<string> _dbTables;
 
         /***
          * Predefined SQL Queries Store.
@@ -95,8 +95,6 @@ namespace LyncBillingBase.DataMappers
         /// <returns></returns>
         public List<CallsSummaryForUser> GetBySipAccount(string sipAccount)
         {
-            List<CallsSummaryForUser> summaries = null;
-
             try
             {
                 var startingDate = (new DateTime(DateTime.Now.Year, 1, 1)).ConvertDate(true);
@@ -105,7 +103,7 @@ namespace LyncBillingBase.DataMappers
                 var sqlQuery = _summariesSqlQueries.GetCallsSummariesForUser(sipAccount, startingDate, endingDate,
                     _dbTables);
 
-                summaries = base.GetAll(sqlQuery).ToList();
+                var summaries = base.GetAll(sqlQuery).ToList();
 
                 return summaries;
             }
@@ -123,8 +121,6 @@ namespace LyncBillingBase.DataMappers
         /// <returns></returns>
         public List<CallsSummaryForUser> GetBySipAccount(string sipAccount, DateTime startingDate, DateTime endingDate)
         {
-            List<CallsSummaryForUser> summaries = null;
-
             try
             {
                 var sqlQuery = _summariesSqlQueries.GetCallsSummariesForUser(
@@ -133,7 +129,7 @@ namespace LyncBillingBase.DataMappers
                     endingDate.ConvertDate(true),
                     _dbTables);
 
-                summaries = base.GetAll(sqlQuery).ToList();
+                var summaries = base.GetAll(sqlQuery).ToList();
 
                 return summaries;
             }
@@ -151,8 +147,6 @@ namespace LyncBillingBase.DataMappers
         public List<CallsSummaryForUser> GetBySite(string siteName,
             Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
         {
-            IEnumerable<CallsSummaryForUser> summaries = null;
-
             try
             {
                 var startingDate = (new DateTime(DateTime.Now.Year, 1, 1)).ConvertDate(true);
@@ -161,7 +155,7 @@ namespace LyncBillingBase.DataMappers
                 var sqlQuery = _summariesSqlQueries.GetCallsSummariesForUsersInSite(siteName, startingDate, endingDate,
                     _dbTables);
 
-                summaries = base.GetAll(sqlQuery);
+                var summaries = base.GetAll(sqlQuery);
 
                 if (groupBy == Globals.CallsSummary.GroupBy.UserOnly)
                 {
@@ -190,8 +184,6 @@ namespace LyncBillingBase.DataMappers
         public List<CallsSummaryForUser> GetBySite(string siteName, DateTime startingDate, DateTime endingDate,
             Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
         {
-            IEnumerable<CallsSummaryForUser> summaries = null;
-
             try
             {
                 var sqlQuery = _summariesSqlQueries.GetCallsSummariesForUsersInSite(
@@ -200,7 +192,7 @@ namespace LyncBillingBase.DataMappers
                     endingDate.ConvertDate(true),
                     _dbTables);
 
-                summaries = base.GetAll(sqlQuery);
+                var summaries = base.GetAll(sqlQuery);
 
                 if (groupBy == Globals.CallsSummary.GroupBy.UserOnly)
                 {
