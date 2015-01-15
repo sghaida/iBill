@@ -157,31 +157,31 @@ namespace LyncBillingBase.DataMappers
          */
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual CallsSummaryForUser GetById(long id, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual CallsSummaryForGateway GetById(long id, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual IEnumerable<CallsSummaryForGateway> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> Get(Expression<Func<CallsSummaryForUser, bool>> predicate, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual IEnumerable<CallsSummaryForGateway> Get(Expression<Func<CallsSummaryForGateway, bool>> predicate, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> GetAll(string sqlQuery)
+        public new virtual IEnumerable<CallsSummaryForGateway> GetAll(string sqlQuery)
         {
             throw new NotSupportedException();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual IEnumerable<CallsSummaryForUser> GetAll(string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual IEnumerable<CallsSummaryForGateway> GetAll(string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
@@ -193,7 +193,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual int Insert(CallsSummaryForUser dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual int Insert(CallsSummaryForGateway dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
@@ -205,7 +205,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual bool Update(CallsSummaryForUser dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual bool Update(CallsSummaryForGateway dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
@@ -217,7 +217,7 @@ namespace LyncBillingBase.DataMappers
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new virtual bool Delete(CallsSummaryForUser dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public new virtual bool Delete(CallsSummaryForGateway dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             throw new NotSupportedException();
         }
