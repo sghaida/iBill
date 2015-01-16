@@ -60,10 +60,14 @@
     <Compile Include="DataMappers\DepartmentCallsSummariesDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysCallsSummariesDataMapper.cs" />
     <Compile Include="DataMappers\SitesCallsSummariesDataMapper.cs" />
+    <Compile Include="DataMappers\SQLQueries\CallsSummariesForDestinationCountriesSQL.cs" />
+    <Compile Include="DataMappers\SQLQueries\CallsSummariesForDestinationNumbersSQL.cs" />
     <Compile Include="DataMappers\SQLQueries\CallsSummariesForGatewaySQL.cs" />
     <Compile Include="DataMappers\SQLQueries\CallsSummariesForSitesSQL.cs" />
     <Compile Include="DataMappers\SQLQueries\CallsSummariesForDepartmentsSQL.cs" />
     <Compile Include="DataMappers\SQLQueries\CallsSummariesForUsersSQL.cs" />
+    <Compile Include="DataMappers\TopDestinationNumbersDataMapper.cs" />
+    <Compile Include="DataMappers\TopDestinationCountriesDataMapper.cs" />
     <Compile Include="DataMappers\UsersCallsSummariesDataMapper.cs" />
     <Compile Include="DataMappers\CallTypesDataMapper.cs" />
     <Compile Include="DataMappers\CountriesDataMapper.cs" />
@@ -96,6 +100,8 @@
     <Compile Include="DataModels\CallMarkerStatus.cs" />
     <Compile Include="DataModels\CallsSummary.cs" />
     <Compile Include="DataModels\CallsSummaryForDepartment.cs" />
+    <Compile Include="DataModels\CallsSummaryForDestinationCountries.cs" />
+    <Compile Include="DataModels\CallsSummaryForDestinationNumbers.cs" />
     <Compile Include="DataModels\CallsSummaryForSite.cs" />
     <Compile Include="DataModels\CallsSummaryForGateway.cs" />
     <Compile Include="DataModels\CallType.cs" />

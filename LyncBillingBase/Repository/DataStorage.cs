@@ -62,6 +62,8 @@ namespace LyncBillingBase.Repository
         public DepartmentCallsSummariesDataMapper DepartmensCallsSummaries = new DepartmentCallsSummariesDataMapper();
         public SitesCallsSummariesDataMapper SitesCallsSummaries = new SitesCallsSummariesDataMapper();
         public GatewaysCallsSummariesDataMapper GatewaysCallsSummaries = new GatewaysCallsSummariesDataMapper();
+        public TopDestinationNumbersDataMapper TopDestinationNumbers = new TopDestinationNumbersDataMapper();
+        public TopDestinationCountriesDataMapper TopDestinationCountries = new TopDestinationCountriesDataMapper();
 
         // empty constuctor
         private DataStorage()
