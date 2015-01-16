@@ -29,9 +29,10 @@ namespace LyncBillingBase.DataMappers
         private readonly CallsSummariesForDestinationNumbersSQL _summariesSqlQueries = new CallsSummariesForDestinationNumbersSQL();
 
         /// <summary>
-        /// 
+        /// Given an enumerable collection of CallsSummaryForDestinationNumbers objects, group the by phone number and country, and then calculate the totals for their 
+        /// Calls Count, Duration and Costs.
         /// </summary>
-        /// <param name="topDestinations"></param>
+        /// <param name="topDestinations">List of CallsSummaryForDestinationNumbers objects</param>
         private void GroupByPhoneNumber(ref IEnumerable<CallsSummaryForDestinationNumbers> topDestinationNumbers)
         {
             //group all and merge duplicates
@@ -56,12 +57,13 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
-        /// 
+        /// Given a SipAccount, a limit value and possibly a date adn time range, return the most called numbers for this user. The limit value controls the number of objects to return.
+        /// If the date and time range wasn't specified, a default range is constructed for one year before, starting from DateTime.Now.
         /// </summary>
-        /// <param name="sipAccount"></param>
-        /// <param name="limit"></param>
-        /// <param name="startingDate"></param>
-        /// <param name="endingDate"></param>
+        /// <param name="sipAccount">The User's SipAccount</param>
+        /// <param name="limit">Optional. By default it is 5. The limit of Destination Numbers to return</param>
+        /// <param name="startingDate">Optional. The starting date range.</param>
+        /// <param name="endingDate">Optional. The ending date range.</param>
         /// <returns></returns>
         public List<CallsSummaryForDestinationNumbers> GetBySipAccount(string sipAccount, int limit = 5, DateTime? startingDate = null, DateTime? endingDate = null)
         {
@@ -104,6 +106,7 @@ namespace LyncBillingBase.DataMappers
                 throw ex.InnerException;
             }
         }
+
 
         /***
          * DISABLED FUNCTIONS
