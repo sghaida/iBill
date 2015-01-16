@@ -52,6 +52,10 @@ namespace LyncBillingTesting
             //var topCountriesForDepartment = DB.TopDestinationCountries.GetByDepartment("MOA", "ISD", 10);
             //var topCountriesForSite = DB.TopDestinationCountries.GetBySite("MOA", 10);
 
+            //var mailReportsForUser = DB.MailReports.GetByUser("aalhour@ccc.gr", (new DateTime(2013, 10, 1)));
+            //var mailReportForUser = DB.MailReports.GetTotalByUser("aalhour@ccc.gr", (new DateTime(2013, 10, 1)));
+            //var mailReportForDepartment = DB.MailReports.GetByDepartment("MOA", "ISD", (new DateTime(2013, 10, 1)));
+
             string x = string.Empty;
         }
 
