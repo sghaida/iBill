@@ -266,7 +266,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                         "MONTH(ResponseTime) AS [Month], " +
                         "CAST(SUM([Duration]) AS BIGINT) AS [CallsDuration], " +
                         "CAST(COUNT([SessionIdTime]) AS BIGINT) AS [CallsCount], " +
-                        "SUM([Marker_CallCost]) AS [CallsCost], "
+                        "SUM([Marker_CallCost]) AS [CallsCost] "
                     );
 
                 //

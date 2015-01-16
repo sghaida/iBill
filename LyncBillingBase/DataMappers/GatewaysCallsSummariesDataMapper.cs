@@ -205,24 +205,85 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
-        /// 
+        /// Given a date and time range, return all the gateways usage per month.
+        /// If the date and time range was not specified, a default date and time range is constructed for one year before, starting from DateTime.Now.
         /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
-        public List<CallsSummaryForGateway> GetUsage(DateTime startDate, DateTime endDate)
+        /// <param name="startingDate">Optional. The Starting Date Range.</param>
+        /// <param name="endingDate">Optional. The Ending date Range.</param>
+        /// <returns>List of CallsSummaryForGateway for all gateways.</returns>
+        public List<CallsSummaryForGateway> GetUsageForAllGateways(DateTime? startingDate = null, DateTime? endingDate = null)
         {
-            throw new NotImplementedException();
+            DateTime fromDate, toDate;
+
+            if (startingDate == null || endingDate == null)
+            {
+                fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
+                toDate = DateTime.Now;
+            }
+            else
+            {
+                //Assign the beginning of date. Month to the startingDate and the end of it to the endingDate.
+                fromDate = (DateTime)startingDate;
+                toDate = (DateTime)endingDate;
+            }
+
+            try
+            {
+                var sql = _summariesSqlQueries.GetCallsSummariesForAllSites(
+                    fromDate.ConvertDate(true),
+                    toDate.ConvertDate(true),
+                    _dbTables
+                );
+
+                return base.GetAll(sql).ToList();
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         /// <summary>
-        /// 
+        /// Given a list of gateways calls summaries, return the totals of every gateway for every year of it's summaries.
         /// </summary>
-        /// <param name="gatewaysUsage"></param>
-        /// <returns></returns>
-        public List<CallsSummaryForGateway> GetGatewaysStatisticsResults(List<CallsSummaryForGateway> gatewaysUsage)
+        /// <param name="gatewaysUsage">List of CallsSummaryForGateway objects</param>
+        /// <param name="callsCountThreshold">Include the gateways whose total calls count is above this specified value.</param>
+        /// <returns>List of CallsSummaryForGateway objects.</returns>
+        public List<CallsSummaryForGateway> GetGatewaysStatisticsResults(List<CallsSummaryForGateway> gatewaysUsage, int minimumCallsCount = 200)
         {
-            throw new NotImplementedException();
+            List<CallsSummaryForGateway> gatewaysUsageData = new List<CallsSummaryForGateway>();
+
+            try
+            {
+                gatewaysUsageData = (
+                      from data in gatewaysUsage.AsEnumerable()
+                      group data by new { data.GatewayName, data.Year } into res
+                      select new CallsSummaryForGateway
+                      {
+                          GatewayName = res.Key.GatewayName,
+                          Year = res.Key.Year,
+                          CallsCount = res.Sum(x => x.CallsCount),
+                          CallsDuration = res.Sum(x => x.CallsDuration),
+                          CallsCost = res.Sum(x => x.CallsCost),
+                          BusinessCallsCost = res.Sum(item => item.BusinessCallsCost),
+                          BusinessCallsCount = res.Sum(item => item.BusinessCallsCount),
+                          BusinessCallsDuration = res.Sum(item => item.BusinessCallsDuration),
+                          PersonalCallsCost = res.Sum(item => item.PersonalCallsCost),
+                          PersonalCallsCount = res.Sum(item => item.PersonalCallsCount),
+                          PersonalCallsDuration = res.Sum(item => item.PersonalCallsDuration),
+                          UnmarkedCallsCost = res.Sum(item => item.UnmarkedCallsCost),
+                          UnmarkedCallsCount = res.Sum(item => item.UnmarkedCallsCount),
+                          UnmarkedCallsDuration = res.Sum(item => item.UnmarkedCallsDuration)
+                      })
+                      .Where(e => e.CallsCount > minimumCallsCount)
+                      .ToList();
+
+                return gatewaysUsageData;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
