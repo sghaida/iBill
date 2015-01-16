@@ -71,6 +71,47 @@ namespace LyncBillingBase.DataMappers
                     }
                 ).ToList<CallsSummaryForGateway>();
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gatewaysUsageData"></param>
+        private static void CalculatePercentages(ref List<CallsSummaryForGateway> gatewaysUsageData)
+        {
+            decimal totalCostCount = 0;
+            decimal totalDurationCount = 0;
+            decimal totalOutGoingCallsCount = 0;
+
+            string resolvedGatewayAddress = string.Empty;
+
+            if (gatewaysUsageData.Any())
+            {
+                gatewaysUsageData.ForEach((tmpGatewayUsage) =>
+                {
+                    //first
+                    if (CCC.UTILS.Helpers.HelperFunctions.GetResolvedConnecionIpAddress(tmpGatewayUsage.GatewayName, out resolvedGatewayAddress) == true)
+                        tmpGatewayUsage.GatewayName = resolvedGatewayAddress;
+
+                    //second
+                    if (tmpGatewayUsage.TotalCallsCount > 0)
+                        tmpGatewayUsage.CallsCountPercentage = Math.Round((tmpGatewayUsage.TotalCallsCount * 100 / totalOutGoingCallsCount), 2);
+                    else
+                        tmpGatewayUsage.CallsCountPercentage = 0;
+
+                    //third
+                    if (tmpGatewayUsage.TotalCallsCost > 0)
+                        tmpGatewayUsage.CallsCostPercentage = Math.Round((tmpGatewayUsage.TotalCallsCost * 100) / totalCostCount, 2);
+                    else
+                        tmpGatewayUsage.CallsCostPercentage = 0;
+
+                    //fourth
+                    if (tmpGatewayUsage.TotalCallsDuration > 0)
+                        tmpGatewayUsage.CallsDurationPercentage = Math.Round((tmpGatewayUsage.TotalCallsDuration * 100 / totalDurationCount), 2);
+                    else
+                        tmpGatewayUsage.CallsDurationPercentage = 0;
+                });
+            }
+        }
 
         public GatewaysCallsSummariesDataMapper()
         {
@@ -287,24 +328,61 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
-        /// 
+        /// This function uses the GetUsageForAllGateways and GetGatewaysStatisticsResults functions to generate a report where the values:
+        /// CallsDurationPercentage, CallsCostPercentage, and CallsCountPercentage are set. You can either use this right away, or use i's overloaded
+        /// method which takes an already summarized list of gateway usage data and calculates the percentages on it.
         /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
-        public List<CallsSummaryForGateway> SetGatewaysUsagePercentagesPerCallsCount(DateTime startDate, DateTime endDate)
+        /// <param name="startingDate">Optional. The Starting Date Range.</param>
+        /// <param name="endingDate">Optional. The Ending Date Range.</param>
+        /// <returns>List of CallsSummaryForGateway objects.</returns>
+        public List<CallsSummaryForGateway> SetGatewaysUsagePercentagesPerCallsCount(DateTime? startingDate = null, DateTime? endingDate = null, int minimumCallsCount = 200)
         {
-            throw new NotImplementedException();
+            List<CallsSummaryForGateway> gatewaysSummaries;
+            List<CallsSummaryForGateway> gatewaysUsageData;
+
+            try
+            {
+                //Get all the gateways usage summaries
+                gatewaysSummaries = this.GetUsageForAllGateways(startingDate, endingDate);
+
+                //Map all teh records for each gateway into a total-sum-one!
+                gatewaysUsageData = GetGatewaysStatisticsResults(gatewaysSummaries, minimumCallsCount);
+
+                // Calculate percentages
+                CalculatePercentages(ref gatewaysUsageData);
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
+
+            return gatewaysUsageData;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="gatewaysUsage"></param>
+        /// <param name="gatewaysUsageInputs"></param>
         /// <returns></returns>
-        public List<CallsSummaryForGateway> SetGatewaysUsagePercentagesPerCallsCount(List<CallsSummaryForGateway> gatewaysUsage)
+        public List<CallsSummaryForGateway> SetGatewaysUsagePercentagesPerCallsCount(List<CallsSummaryForGateway> gatewaysUsageInputs, int minimumCallsCount = 200)
         {
-            throw new NotImplementedException();
+            List<CallsSummaryForGateway> gatewaysUsageData;
+
+            try
+            {
+                //Map all teh records for each gateway into a total-sum-one!
+                gatewaysUsageData = this.GetGatewaysStatisticsResults(gatewaysUsageInputs, minimumCallsCount);
+
+                // Calculate percentages
+                CalculatePercentages(ref gatewaysUsageData);
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
+
+
+            return gatewaysUsageData;
         }
 
 
