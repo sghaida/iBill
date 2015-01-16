@@ -63,8 +63,8 @@ namespace LyncBillingBase.DataMappers
                     UnmarkedCallsCost = result.Sum(item => item.UnmarkedCallsCost),
                     UnmarkedCallsDuration = result.Sum(item => item.UnmarkedCallsDuration),
                     UnmarkedCallsCount = result.Sum(item => item.UnmarkedCallsCount)
-                }
-                ).ToList<CallsSummaryForUser>();
+                })
+                .ToList<CallsSummaryForUser>();
         }
 
         /// <summary>

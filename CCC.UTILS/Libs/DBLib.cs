@@ -466,18 +466,25 @@ namespace CCC.UTILS.Libs
             int limits)
         {
             var dt = new DataTable();
-            OleDbDataReader dr;
-            var selectQuery = string.Empty;
+            string selectQuery;
 
             var selectedfields = new StringBuilder();
             var whereStatement = new StringBuilder();
             var orderBy = new StringBuilder();
 
-            if (tableName == "PhoneCalls")
-                orderBy.Append("ORDER BY [SessionIdTime] DESC");
-            else
-                orderBy.Append("");
 
+            //table name
+            if (tableName == "PhoneCalls")
+            {
+                orderBy.Append("ORDER BY [SessionIdTime] DESC");
+            }
+            else
+            {
+                orderBy.Append("");
+            }
+
+
+            //fields
             if (fields != null)
             {
                 if (fields.Count != 0)
@@ -492,11 +499,16 @@ namespace CCC.UTILS.Libs
                     selectedfields.Append("*");
             }
             else
+            {
                 selectedfields.Append("*");
+            }
 
+
+            //whereClause
             if (whereClause != null && whereClause.Count != 0)
             {
                 whereStatement.Append("WHERE ");
+
                 foreach (var pair in whereClause)
                 {
                     if (pair.Value == null)
@@ -507,22 +519,38 @@ namespace CCC.UTILS.Libs
                     {
                         whereStatement.Append("[" + pair.Key + "] IS NOT NULL" + " AND ");
                     }
+                    else if (pair.Value.ToString() == "!=0")
+                    {
+                        whereStatement.Append("[" + pair.Key + "] <> 0 " + " AND ");
+                    }
+                    else if (pair.Value is string && pair.Value.ToString().ToLower().Contains("like"))
+                    {
+                        whereStatement.Append("[" + pair.Key + "] " + pair.Value + " AND ");
+                    }
+                    else if (pair.Value is string && (pair.Value.ToString()).Contains("BETWEEN"))
+                    {
+                        whereStatement.Append("[" + pair.Key + "]  " + pair.Value);
+
+                        whereStatement.Append(" AND ");
+                    }
                     else
                     {
                         var valueType = pair.Value.GetType();
-                        if (valueType == typeof (int) || valueType == typeof (Double))
+
+                        if (valueType == typeof(int) || valueType == typeof(Double))
                         {
                             whereStatement.Append("[" + pair.Key + "]=" + pair.Value + " AND ");
                         }
                         else
                         {
-                            whereStatement.Append("[" + pair.Key + "]='" + pair.Value +
-                                                  "' COLLATE SQL_Latin1_General_CP1_CI_AS AND ");
+                            whereStatement.Append("[" + pair.Key + "]='" + pair.Value + "' COLLATE SQL_Latin1_General_CP1_CI_AS AND ");
                         }
                     }
                 }
+
                 whereStatement.Remove(whereStatement.Length - 5, 5);
             }
+
 
             if (limits == 0)
             {
@@ -535,11 +563,9 @@ namespace CCC.UTILS.Libs
             else
             {
                 if (whereClause != null)
-                    selectQuery = string.Format("SELECT TOP({0}) {1} FROM [{2}] {3} {4}", limits, selectedfields,
-                        tableName, whereStatement, orderBy);
+                    selectQuery = string.Format("SELECT TOP({0}) {1} FROM [{2}] {3} {4}", limits, selectedfields, tableName, whereStatement, orderBy);
                 else
-                    selectQuery = string.Format("SELECT TOP({0}) {1} FROM [{2}] {3}", limits, selectedfields, tableName,
-                        orderBy);
+                    selectQuery = string.Format("SELECT TOP({0}) {1} FROM [{2}] {3}", limits, selectedfields, tableName, orderBy);
             }
 
             var conn = DbInitializeConnection(ConnectionString);
@@ -548,7 +574,7 @@ namespace CCC.UTILS.Libs
             try
             {
                 conn.Open();
-                dr = comm.ExecuteReader();
+                var dr = comm.ExecuteReader();
 
                 dt.Load(dr);
             }
