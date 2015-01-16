@@ -59,12 +59,13 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
-        /// 
+        /// Given a Site Name, and possibly a date and time range, return the calls summary for each month for tha Site.
+        /// If the date and time range was not specified, a default range will be constructed for one year before, starting from DateTime.Now.
         /// </summary>
-        /// <param name="siteName"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
+        /// <param name="siteName">Site Name.</param>
+        /// <param name="startDate">Optional. Specifies the Starting Date Range.</param>
+        /// <param name="endDate">Optional. Specifies the Ending Date Range.</param>
+        /// <returns>List of CallsSummaryForSite</returns>
         public List<CallsSummaryForSite> GetBySite(string siteName, DateTime? startDate = null, DateTime? endDate = null)
         {
             DateTime fromDate, toDate;
