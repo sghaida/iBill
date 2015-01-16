@@ -59,7 +59,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
 
                 groupByOrderByPart = String.Format(
                     "GROUP BY " +
-                        "[Marker_CallToCountry] " + 
+                        "[Marker_CallToCountry], " + 
                         "[Country_Name] " + 
                     "ORDER BY " +
                         "[CallsCount] DESC ");
@@ -104,7 +104,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                             "[AD_Department]='{3}' AND " +
                             "[Marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
                             "([AC_DisputeStatus]='Rejected' OR [AC_DisputeStatus] IS NULL ) AND " +
-                            "[SessionIdTime] BETWEEN '{3}' AND '{4}' "
+                            "[SessionIdTime] BETWEEN '{4}' AND '{5}' "
                         , fromPart
                         , tableName
                         , siteName
@@ -126,7 +126,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
 
                 groupByOrderByPart = String.Format(
                     "GROUP BY " +
-                        "[Marker_CallToCountry] " + 
+                        "[Marker_CallToCountry], " + 
                         "[Country_Name] " + 
                     "ORDER BY " +
                         "[CallsCount] DESC ");
@@ -191,7 +191,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
 
                 groupByOrderByPart = String.Format(
                     "GROUP BY " + 
-                        "[Marker_CallToCountry] " + 
+                        "[Marker_CallToCountry], " + 
                         "[Country_Name] " + 
                     "ORDER BY " + 
                         "[CallsCount] DESC ");
