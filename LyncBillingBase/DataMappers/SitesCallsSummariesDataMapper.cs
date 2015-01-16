@@ -91,9 +91,9 @@ namespace LyncBillingBase.DataMappers
                     toDate.ConvertDate(true),
                     _dbTables);
 
-                var summaries = base.GetAll(sqlQuery).ToList();
+                var summaries = base.GetAll(sqlQuery).ToList() ?? (new List<CallsSummaryForSite>());
 
-                if (summaries.Count > 0)
+                if (summaries.Any())
                 {
                     summaries.ForEach(
                         summary => {

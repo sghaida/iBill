@@ -75,9 +75,9 @@ namespace LyncBillingBase.DataMappers
                     toDate.ConvertDate(true),
                     _dbTables);
 
-                departmentSummaries = base.GetAll(sql).ToList();
+                departmentSummaries = base.GetAll(sql).ToList() ?? (new List<CallsSummaryForDepartment>());
 
-                if (departmentSummaries != null && departmentSummaries.Any())
+                if (departmentSummaries.Any())
                 {
                     departmentSummaries.ForEach(
                         (summary) => {
@@ -163,7 +163,7 @@ namespace LyncBillingBase.DataMappers
             DateTime fromDate, toDate;
             CallsSummaryForDepartment departmentTotalSummary = new CallsSummaryForDepartment();
             Dictionary<string, CallsSummaryForDepartment> siteDepartmentsTotals = new Dictionary<string, CallsSummaryForDepartment>();
-            List<SiteDepartment> departments = _siteDepartmentsDataMapper.GetAll().Where(item => item.Site != null && item.Site.Name == siteName).ToList();
+            List<SiteDepartment> departments = _siteDepartmentsDataMapper.GetAll().Where(item => item.Site != null && item.Site.Name == siteName).ToList() ?? (new List<SiteDepartment>());
 
             if (startDate == null || endDate == null)
             {
@@ -177,7 +177,7 @@ namespace LyncBillingBase.DataMappers
                 toDate = (DateTime)endDate;
             }
 
-            if (departments != null && departments.Count > 0)
+            if (departments.Any())
             {
                 try
                 {
