@@ -197,9 +197,9 @@ namespace LyncBillingBase.DataMappers
                     toDate.ConvertDate(true),
                     _dbTables);
 
-                var summaries = base.GetAll(sqlQuery);
+                var summaries = base.GetAll(sqlQuery) ?? (new List<CallsSummaryForUser>() as IEnumerable<CallsSummaryForUser>);
 
-                if(summaries != null && summaries.Any())
+                if(summaries.Any())
                 {
                     if (groupBy == Globals.CallsSummaryForUser.GroupBy.UserOnly)
                     {
@@ -292,9 +292,9 @@ namespace LyncBillingBase.DataMappers
                     toDate.ConvertDate(true),
                     _dbTables);
 
-                var summaries = base.GetAll(sqlQuery);
+                var summaries = base.GetAll(sqlQuery) ?? (new List<CallsSummaryForUser>() as IEnumerable<CallsSummaryForUser>);
 
-                if (summaries != null && summaries.Any())
+                if (summaries.Any())
                 {
                     if (groupBy == Globals.CallsSummaryForUser.GroupBy.UserOnly)
                     {
