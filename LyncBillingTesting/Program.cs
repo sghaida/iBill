@@ -40,7 +40,8 @@ namespace LyncBillingTesting
             //var departmentTotal = DB.DepartmensCallsSummaries.GetTotalByDepartment("MOA", "ISD");
             //var siteDepartmensTotals = DB.DepartmensCallsSummaries.GetTotalsForEachDepartmentInSite("MOA");
 
-
+            var MOA_Gateways_Summaries = DB.GatewaysCallsSummaries.GetBySite("MOA", groupBy: Globals.CallsSummaryForGateway.GroupBy.GatewayNameOnly);
+            var MOA_101012_Summaries = DB.GatewaysCallsSummaries.GetBySiteAndGateway("MOA", "10.1.0.12");
 
             string x = string.Empty;
         }

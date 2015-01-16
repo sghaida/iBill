@@ -173,7 +173,7 @@ namespace LyncBillingBase.DataMappers
         /// <param name="endDate">Optional. Specifies the Ending Date Range.</param>
         /// <param name="groupBy">Optional. Groups the data for each user either by the SipAccount only, or by SipAccount and IsInvoiced flag.</param>
         /// <returns>List of CallsSummaryForUsers objects, for the users in that Site.</returns>
-        public List<CallsSummaryForUser> GetBySite(string siteName, DateTime? startDate = null, DateTime? endDate = null, Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
+        public List<CallsSummaryForUser> GetBySite(string siteName, DateTime? startDate = null, DateTime? endDate = null, Globals.CallsSummaryForUser.GroupBy groupBy = Globals.CallsSummaryForUser.GroupBy.DontGroup)
         {
             DateTime fromDate, toDate;
 
@@ -201,11 +201,11 @@ namespace LyncBillingBase.DataMappers
 
                 if(summaries != null && summaries.Any())
                 {
-                    if (groupBy == Globals.CallsSummary.GroupBy.UserOnly)
+                    if (groupBy == Globals.CallsSummaryForUser.GroupBy.UserOnly)
                     {
                         GroupByUserOnly(ref summaries);
                     }
-                    else if (groupBy == Globals.CallsSummary.GroupBy.UserAndInvoiceFlag)
+                    else if (groupBy == Globals.CallsSummaryForUser.GroupBy.UserAndInvoiceFlag)
                     {
                         GroupByUserAndInvoiceFlag(ref summaries);
                     }
@@ -232,7 +232,7 @@ namespace LyncBillingBase.DataMappers
         public Dictionary<string, CallsSummaryForUser> GetBySite(string siteName, List<string> sipAccountsList, DateTime? startDate = null, DateTime? endDate = null, string invoiceStatus = "NO")
         {
             DateTime fromDate, toDate;
-            const Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.UserAndInvoiceFlag;
+            const Globals.CallsSummaryForUser.GroupBy groupBy = Globals.CallsSummaryForUser.GroupBy.UserAndInvoiceFlag;
 
             if (string.IsNullOrEmpty(invoiceStatus)) invoiceStatus = "NO";
 
@@ -268,7 +268,7 @@ namespace LyncBillingBase.DataMappers
         /// <param name="endDate">Optional. Specifies the Ending Date Range.</param>
         /// <param name="groupBy">Optional. Groups the data for each user either by the SipAccount only, or by SipAccount and IsInvoiced flag.</param>
         /// <returns></returns>
-        public List<CallsSummaryForUser> GetByGateway(string gatewayName, DateTime? startDate = null, DateTime? endDate = null, Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
+        public List<CallsSummaryForUser> GetByGateway(string gatewayName, DateTime? startDate = null, DateTime? endDate = null, Globals.CallsSummaryForUser.GroupBy groupBy = Globals.CallsSummaryForUser.GroupBy.DontGroup)
         {
             DateTime fromDate, toDate;
 
@@ -296,11 +296,11 @@ namespace LyncBillingBase.DataMappers
 
                 if (summaries != null && summaries.Any())
                 {
-                    if (groupBy == Globals.CallsSummary.GroupBy.UserOnly)
+                    if (groupBy == Globals.CallsSummaryForUser.GroupBy.UserOnly)
                     {
                         GroupByUserOnly(ref summaries);
                     }
-                    else if (groupBy == Globals.CallsSummary.GroupBy.UserAndInvoiceFlag)
+                    else if (groupBy == Globals.CallsSummaryForUser.GroupBy.UserAndInvoiceFlag)
                     {
                         GroupByUserAndInvoiceFlag(ref summaries);
                     }
