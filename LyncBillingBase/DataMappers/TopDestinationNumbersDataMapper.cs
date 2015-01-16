@@ -33,22 +33,23 @@ namespace LyncBillingBase.DataMappers
         /// Calls Count, Duration and Costs.
         /// </summary>
         /// <param name="topDestinations">List of CallsSummaryForDestinationNumbers objects</param>
-        private void GroupByPhoneNumber(ref IEnumerable<CallsSummaryForDestinationNumbers> topDestinationNumbers)
+        private static void GroupByPhoneNumber(ref IEnumerable<CallsSummaryForDestinationNumbers> topDestinationNumbers)
         {
-            //group all and merge duplicates
-            topDestinationNumbers = (
-                from summary in topDestinationNumbers
-                group summary by new { summary.PhoneNumber, summary.Country } into result
-                select new CallsSummaryForDestinationNumbers
-                {
-                    Country = result.Key.Country,
-                    PhoneNumber = result.Key.PhoneNumber,
-                    CallsCost = result.Sum(x => x.CallsCost),
-                    CallsCount = result.Sum(x => x.CallsCount),
-                    CallsDuration = result.Sum(x => x.CallsDuration)
-                }
-            )
-            .OrderByDescending(summary => summary.CallsCount);
+            if (topDestinationNumbers.Any())
+            {
+                topDestinationNumbers = (
+                    from summary in topDestinationNumbers
+                    group summary by new { summary.PhoneNumber, summary.Country } into result
+                    select new CallsSummaryForDestinationNumbers
+                    {
+                        Country = result.Key.Country ?? "N/A",
+                        PhoneNumber = result.Key.PhoneNumber,
+                        CallsCost = result.Sum(x => x.CallsCost),
+                        CallsCount = result.Sum(x => x.CallsCount),
+                        CallsDuration = result.Sum(x => x.CallsDuration)
+                    })
+                    .OrderByDescending(summary => summary.CallsCount);
+            }
         }
 
         public TopDestinationNumbersDataMapper()
@@ -57,14 +58,14 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
-        /// Given a SipAccount, a limit value and possibly a date adn time range, return the most called numbers for this user. The limit value controls the number of objects to return.
+        /// Given a SipAccount, a limit value and possibly a date and time range, return the most called numbers for this user. The limit value controls the number of objects to return.
         /// If the date and time range wasn't specified, a default range is constructed for one year before, starting from DateTime.Now.
         /// </summary>
         /// <param name="sipAccount">The User's SipAccount</param>
         /// <param name="limit">Optional. By default it is 5. The limit of Destination Numbers to return</param>
         /// <param name="startingDate">Optional. The starting date range.</param>
         /// <param name="endingDate">Optional. The ending date range.</param>
-        /// <returns></returns>
+        /// <returns>List of CallsSummaryForDestinationNumbers objects</returns>
         public List<CallsSummaryForDestinationNumbers> GetBySipAccount(string sipAccount, int limit = 5, DateTime? startingDate = null, DateTime? endingDate = null)
         {
             DateTime fromDate, toDate;

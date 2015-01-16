@@ -46,7 +46,11 @@ namespace LyncBillingTesting
             //var Gateways_Usage = DB.GatewaysCallsSummaries.GetUsageForAllGateways(startDate, endDate);
             //var Usage_Stats = DB.GatewaysCallsSummaries.GetGatewaysStatisticsResults(Gateways_Usage);
 
-            var topNumbers = DB.TopDestinationNumbers.GetBySipAccount("aalhour@ccc.gr", 10);
+            //var topNumbers = DB.TopDestinationNumbers.GetBySipAccount("aalhour@ccc.gr", 10);
+
+            //var topCountriesForUser = DB.TopDestinationCountries.GetByUser("aalhour@ccc.gr", 10);
+            //var topCountriesForDepartment = DB.TopDestinationCountries.GetByDepartment("MOA", "ISD", 10);
+            //var topCountriesForSite = DB.TopDestinationCountries.GetBySite("MOA", 10);
 
             string x = string.Empty;
         }
