@@ -73,9 +73,9 @@ namespace LyncBillingBase.DataMappers
         }
         
         /// <summary>
-        /// 
+        /// Given a list of Gateways Usage Data, return the same list with calculated Percentages for Calls Counts, Costs, and Durations.
         /// </summary>
-        /// <param name="gatewaysUsageData"></param>
+        /// <param name="gatewaysUsageData">List of Summed CallsSummaryForGateway objects.</param>
         private static void CalculatePercentages(ref List<CallsSummaryForGateway> gatewaysUsageData)
         {
             decimal totalCostCount = 0;
@@ -86,6 +86,14 @@ namespace LyncBillingBase.DataMappers
 
             if (gatewaysUsageData.Any())
             {
+                //Calculate totals
+                gatewaysUsageData.ForEach((gatewayUsage) =>
+                {
+                    totalCostCount += gatewayUsage.TotalCallsCost;
+                    totalOutGoingCallsCount += gatewayUsage.TotalCallsCount;
+                    totalDurationCount += gatewayUsage.TotalCallsDuration;
+                });
+
                 gatewaysUsageData.ForEach((tmpGatewayUsage) =>
                 {
                     //first
@@ -329,7 +337,7 @@ namespace LyncBillingBase.DataMappers
 
         /// <summary>
         /// This function uses the GetUsageForAllGateways and GetGatewaysStatisticsResults functions to generate a report where the values:
-        /// CallsDurationPercentage, CallsCostPercentage, and CallsCountPercentage are set. You can either use this right away, or use i's overloaded
+        /// CallsDurationPercentage, CallsCostPercentage, and CallsCountPercentage are set. You can either use this right away, or use it's overloaded
         /// method which takes an already summarized list of gateway usage data and calculates the percentages on it.
         /// </summary>
         /// <param name="startingDate">Optional. The Starting Date Range.</param>
@@ -360,10 +368,11 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
-        /// 
+        /// This function, unlike it's overloaded version which takes a date and time range, takes an already summarized list of gateway usage data and then calculates the percentages fields for every entry in it.
         /// </summary>
-        /// <param name="gatewaysUsageInputs"></param>
-        /// <returns></returns>
+        /// <param name="startingDate">Optional. The Starting Date Range.</param>
+        /// <param name="endingDate">Optional. The Ending Date Range.</param>
+        /// <returns>List of CallsSummaryForGateway objects.</returns>
         public List<CallsSummaryForGateway> SetGatewaysUsagePercentagesPerCallsCount(List<CallsSummaryForGateway> gatewaysUsageInputs, int minimumCallsCount = 200)
         {
             List<CallsSummaryForGateway> gatewaysUsageData;
