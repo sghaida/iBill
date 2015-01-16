@@ -108,20 +108,6 @@ namespace LyncBillingBase.DataMappers
 
         public List<CallsSummaryForGateway> GetBySiteAndGateway(string siteName, string gatewayName, DateTime? startingDate = null, DateTime? endingDate = null)
         {
-            //DateTime fromDate, toDate;
-
-            //if (startingDate == null || endingDate == null)
-            //{
-            //    fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
-            //    toDate = DateTime.Now;
-            //}
-            //else
-            //{
-            //    //Assign the beginning of date.Month to the startingDate and the end of it to the endingDate 
-            //    fromDate = (DateTime)startingDate;
-            //    toDate = (DateTime)endingDate;
-            //}
-
             throw new NotImplementedException();
         }
 

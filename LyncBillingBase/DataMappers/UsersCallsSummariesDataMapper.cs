@@ -40,8 +40,9 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
+        /// Given an enumerable list of CallsSummaryForUser objects, group the objects by the SipAccount field only.
         /// </summary>
-        /// <param name="summaries"></param>
+        /// <param name="summaries">Enumerable List of CallsSummaryForUser objects</param>
         private static void GroupByUserOnly(ref IEnumerable<CallsSummaryForUser> summaries)
         {
             summaries = summaries.AsParallel();
@@ -67,8 +68,9 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
+        /// Given an enumerable list of CallsSummaryForUser objects, group the objects by the SipAccount and Isnvoiced fields.
         /// </summary>
-        /// <param name="summaries"></param>
+        /// <param name="summaries">Enumerable List of CallsSummaryForUser objects</param>
         private static void GroupByUserAndInvoiceFlag(ref IEnumerable<CallsSummaryForUser> summaries)
         {
             summaries = summaries.AsParallel();
@@ -95,10 +97,10 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
-        /// 
+        /// Given a user's SipAccount, return the list of years of their CallsSummaries
         /// </summary>
-        /// <param name="sipAccount"></param>
-        /// <returns></returns>
+        /// <param name="sipAccount">User's SipAccount.</param>
+        /// <returns>List of SpecialDateTime objects with the Summaries Years.</returns>
         public List<SpecialDateTime> GetYearsBySipAccount(string sipAccount)
         {
             List<SpecialDateTime> yearsList = new List<SpecialDateTime>();
@@ -123,11 +125,13 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
+        /// Given a User's SipAccount, and possibly a datetime range (startDate, endDate), return their calls summary for that specified range.
+        /// If the Date and Time range was not specified, the function specifies a default date & time range for one year before, starting from DateTim.Now.
         /// </summary>
-        /// <param name="sipAccount"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
+        /// <param name="sipAccount">User's SipAccount</param>
+        /// <param name="startDate">Optional. Specifies the Starting Date Range.</param>
+        /// <param name="endDate">Optional. Specifies the Ending Date Range.</param>
+        /// <returns>List of CallsSummaryForUser object for that User, in a specified Date & Time Range.</returns>
         public List<CallsSummaryForUser> GetBySipAccount(string sipAccount, DateTime? startDate = null, DateTime? endDate = null)
         {
             DateTime fromDate, toDate;
@@ -161,12 +165,14 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
+        /// Given a Site's Name, and possibly a datetime range (startDate, endDate), return the site's calls summary for the users in that site for the specified range.
+        /// If the Date and Time range was not specified, the function specifies a default date & time range for one year before, starting from DateTim.Now.
         /// </summary>
-        /// <param name="siteName"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="groupBy"></param>
-        /// <returns></returns>
+        /// <param name="siteName">The Site's Name</param>
+        /// <param name="startDate">Optional. Specifies the Starting Date Range.</param>
+        /// <param name="endDate">Optional. Specifies the Ending Date Range.</param>
+        /// <param name="groupBy">Optional. Groups the data for each user either by the SipAccount only, or by SipAccount and IsInvoiced flag.</param>
+        /// <returns>List of CallsSummaryForUsers objects, for the users in that Site.</returns>
         public List<CallsSummaryForUser> GetBySite(string siteName, DateTime? startDate = null, DateTime? endDate = null, Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
         {
             DateTime fromDate, toDate;
@@ -214,13 +220,15 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
+        /// Given a Site's Name, a list of SipAccounts, and possibly a datetime range (startDate, endDate), return the site's calls summary for the users in that site who are in the SipAccounts list, the specified range.
+        /// If the Date and Time range was not specified, the function specifies a default date & time range for one year before, starting from DateTim.Now.
         /// </summary>
-        /// <param name="siteName"></param>
-        /// <param name="sipAccountsList"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="invoiceStatus"></param>
-        /// <returns></returns>
+        /// <param name="siteName">The Site's Name</param>
+        /// <param name="sipAccountsList">A list of SipAccounts to select a group of users from the whole Site's Users.</param>
+        /// <param name="startDate">Optional. Specifies the Starting Date Range.</param>
+        /// <param name="endDate">Optional. Specifies the Ending Date Range.</param>
+        /// <param name="invoiceStatus">Optional. By default it is set to "NO", which means it will only include the Non-invoiced phone calls in the report.</param>
+        /// <returns>Dictionary of CallsSummaryForUsers objects indexed by each User's SipAccount, for the users in that Site.</returns>
         public Dictionary<string, CallsSummaryForUser> GetBySite(string siteName, List<string> sipAccountsList, DateTime? startDate = null, DateTime? endDate = null, string invoiceStatus = "NO")
         {
             DateTime fromDate, toDate;
@@ -251,6 +259,15 @@ namespace LyncBillingBase.DataMappers
             return usersSummaryList;
         }
 
+        /// <summary>
+        /// Given a Gateway's Name (or IP string), and possibly a Date & Time range, return the users calls summary for that specific gateway's phone calls.
+        /// If the Date and Time range was not specified, the function specifies a default date & time range for one year before, starting from DateTim.Now.
+        /// </summary>
+        /// <param name="gatewayName">Gateway's Name (or IP string).</param>
+        /// <param name="startDate">Optional. Specifies the Starting Date Range.</param>
+        /// <param name="endDate">Optional. Specifies the Ending Date Range.</param>
+        /// <param name="groupBy">Optional. Groups the data for each user either by the SipAccount only, or by SipAccount and IsInvoiced flag.</param>
+        /// <returns></returns>
         public List<CallsSummaryForUser> GetByGateway(string gatewayName, DateTime? startDate = null, DateTime? endDate = null, Globals.CallsSummary.GroupBy groupBy = Globals.CallsSummary.GroupBy.DontGroup)
         {
             DateTime fromDate, toDate;
