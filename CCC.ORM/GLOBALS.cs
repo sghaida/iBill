@@ -295,24 +295,51 @@ namespace CCC.ORM
         {
             public enum CallTypes
             {
-                [Description("Business Phone Call")] [DefaultValue("Business")] Business,
+                [Description("Business Phone Call")]
+                [DefaultValue("Business")]
+                Business,
 
-                [Description("Personal Phone Call")] [DefaultValue("Personal")] Personal,
+                [Description("Personal Phone Call")]
+                [DefaultValue("Personal")]
+                Personal,
 
-                [Description("Disputed Phone Call")] [DefaultValue("Disputed")] Disputed
+                [Description("Disputed Phone Call")]
+                [DefaultValue("Disputed")]
+                Disputed
             }
         }
 
-        // The CallsSummary GLOBALS
-        public static class CallsSummary
+        // The CallsSummaryForUser GLOBALS
+        public static class CallsSummaryForUser
         {
             public enum GroupBy
             {
-                [Description("Group By User Only")] [DefaultValue("GroupByUserOnly")] DontGroup,
+                [Description("Don't Group Data")]
+                [DefaultValue("DontGroup")]
+                DontGroup,
 
-                [Description("Group By User Only")] [DefaultValue("GroupByUserOnly")] UserOnly,
+                [Description("Group By User Only")]
+                [DefaultValue("GroupByUserOnly")]
+                UserOnly,
 
-                [Description("Group By User And Invoice Flag")] [DefaultValue("GroupByUserAndInvoiceFlag")] UserAndInvoiceFlag
+                [Description("Group By User And Invoice Flag")]
+                [DefaultValue("GroupByUserAndInvoiceFlag")]
+                UserAndInvoiceFlag
+            }
+        }
+
+        // The CallsSummaryForGateways GLOBALS
+        public static class CallsSummaryForGateway
+        {
+            public enum GroupBy
+            {
+                [Description("Don't Group Data")]
+                [DefaultValue("DontGroup")]
+                DontGroup,
+
+                [Description("Group By GatewayName Only")]
+                [DefaultValue("GroupByGatewayNameOnly")]
+                GatewayNameOnly
             }
         }
     }

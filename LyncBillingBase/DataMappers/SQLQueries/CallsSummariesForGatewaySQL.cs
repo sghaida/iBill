@@ -20,7 +20,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                 selectPart = String.Format(
                     "SELECT TOP 100 PERCENT " +
                         "[ChargingParty] AS [ChargingParty], " + 
-                        "[ToGateway] AS [Gateway], " +
+                        "[ToGateway] AS [GatewayName], " +
                         "YEAR(ResponseTime) AS [Year], " +
                         "MONTH(ResponseTime) AS [Month], " +
                         "CAST(SUM([Duration]) AS BIGINT) AS [CallsDuration], " +
@@ -90,7 +90,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
             {
                 selectPart = String.Format(
                     "SELECT TOP 100 PERCENT " +
-                        "[ToGateway] AS [Gateway], " +
+                        "[ToGateway] AS [GatewayName], " +
                         "YEAR(ResponseTime) AS [Year], " +
                         "MONTH(ResponseTime) AS [Month], " +
                         "CAST(SUM([Duration]) AS BIGINT) AS [CallsDuration], " +
@@ -122,7 +122,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                                     "LEFT JOIN [Gateways] ON [Gateways].[GatewayId] = [GatewaysDetails].[GatewayID] " +
                                     "LEFT JOIN [Sites] ON [Sites].[SiteID] = [GatewaysDetails].[SiteID] " +
                                  "WHERE " +
-                                    "[SiteName]={4} " +
+                                    "[SiteName]='{4}' " +
                              ") "
                         , fromPart //0
                         , tableName //1
@@ -170,7 +170,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
             {
                 selectPart = String.Format(
                     "SELECT TOP 100 PERCENT " +
-                        "[ToGateway] AS [Gateway], " +
+                        "[ToGateway] AS [GatewayName], " +
 
                         "YEAR(ResponseTime) AS [Year], " +
                         "MONTH(ResponseTime) AS [Month], " +
@@ -205,7 +205,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                         "WHERE " +
                             "[Marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
                             "([SessionIdTime] BETWEEN '{2}' AND '{3}') AND " +
-                            "[ActiveDirectoryUsers].[AD_PhysicalDeliveryOfficeName] = '{4}' AND " +
+                            "[ActiveDirectoryUsers].[AD_PhysicalDeliveryOfficeName]='{4}' AND " +
                             "[Exclude]=0 AND " +
                             "([AC_DisputeStatus]='Rejected' OR [AC_DisputeStatus] IS NULL) AND " +
                             "[ToGateway] IN ( " +
@@ -214,7 +214,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                                 "LEFT JOIN [Gateways] ON [Gateways].[GatewayId] = [GatewaysDetails].[GatewayID] " +
                                 "LEFT JOIN [Sites] ON [Sites].[SiteID] = [GatewaysDetails].[SiteID] " +
                                  "WHERE " +
-                                    "[SiteName]={4} " +
+                                    "[SiteName]='{4}' " +
                              ") "
                         , fromPart //0
                         , tableName //1
@@ -261,7 +261,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
             {
                 selectPart = String.Format(
                     "SELECT TOP 100 PERCENT " +
-                        "[ToGateway] AS [Gateway], " +
+                        "[ToGateway] AS [GatewayName], " +
                         "YEAR(ResponseTime) AS [Year], " +
                         "MONTH(ResponseTime) AS [Month], " +
                         "CAST(SUM([Duration]) AS BIGINT) AS [CallsDuration], " +
@@ -327,7 +327,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
             {
                 selectPart = String.Format(
                     "SELECT TOP 100 PERCENT " +
-                        "[ToGateway] AS [Gateway], " +
+                        "[ToGateway] AS [GatewayName], " +
                         "YEAR(ResponseTime) AS [Year] "
                     );
 
