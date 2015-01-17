@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 using CCC.ORM;
@@ -22,7 +23,7 @@ namespace LyncBillingBase.DataMappers
         private readonly DataAccess<MonitoringServerInfo> _monitoringServersInfoDataMapper =
             new DataAccess<MonitoringServerInfo>();
 
-        private readonly SitesDepartmentsDataMapper _siteDepartmentsDataMapper = SitesDepartmentsDataMapper.Instance;
+        //private readonly SitesDepartmentsDataMapper _siteDepartmentsDataMapper = SitesDepartmentsDataMapper.Instance; 
 
         /***
          * YEARS FOR ALL GATEWAYS SUMMARIES
@@ -82,47 +83,39 @@ namespace LyncBillingBase.DataMappers
             decimal totalDurationCount = 0;
             decimal totalOutGoingCallsCount = 0;
 
-            string resolvedGatewayAddress = string.Empty;
+            string resolvedGatewayAddress;
 
             if (gatewaysUsageData.Any())
             {
                 //Calculate totals
-                gatewaysUsageData.ForEach((gatewayUsage) =>
+                gatewaysUsageData.ForEach(gatewayUsage =>
                 {
                     totalCostCount += gatewayUsage.TotalCallsCost;
                     totalOutGoingCallsCount += gatewayUsage.TotalCallsCount;
                     totalDurationCount += gatewayUsage.TotalCallsDuration;
                 });
 
-                gatewaysUsageData.ForEach((tmpGatewayUsage) =>
+                gatewaysUsageData.ForEach(tmpGatewayUsage =>
                 {
                     //first
-                    if (CCC.UTILS.Helpers.HelperFunctions.GetResolvedConnecionIpAddress(tmpGatewayUsage.GatewayName, out resolvedGatewayAddress) == true)
+                    if (CCC.UTILS.Helpers.HelperFunctions.GetResolvedConnecionIpAddress(tmpGatewayUsage.GatewayName, out resolvedGatewayAddress))
                         tmpGatewayUsage.GatewayName = resolvedGatewayAddress;
 
                     //second
-                    if (tmpGatewayUsage.TotalCallsCount > 0)
-                        tmpGatewayUsage.CallsCountPercentage = Math.Round((tmpGatewayUsage.TotalCallsCount * 100 / totalOutGoingCallsCount), 2);
-                    else
-                        tmpGatewayUsage.CallsCountPercentage = 0;
+                    tmpGatewayUsage.CallsCountPercentage = tmpGatewayUsage.TotalCallsCount > 0 ? Math.Round((tmpGatewayUsage.TotalCallsCount * 100 / totalOutGoingCallsCount), 2) : 0;
 
                     //third
-                    if (tmpGatewayUsage.TotalCallsCost > 0)
-                        tmpGatewayUsage.CallsCostPercentage = Math.Round((tmpGatewayUsage.TotalCallsCost * 100) / totalCostCount, 2);
-                    else
-                        tmpGatewayUsage.CallsCostPercentage = 0;
+                    tmpGatewayUsage.CallsCostPercentage = tmpGatewayUsage.TotalCallsCost > 0 ? Math.Round((tmpGatewayUsage.TotalCallsCost * 100) / totalCostCount, 2) : 0;
 
                     //fourth
-                    if (tmpGatewayUsage.TotalCallsDuration > 0)
-                        tmpGatewayUsage.CallsDurationPercentage = Math.Round((tmpGatewayUsage.TotalCallsDuration * 100 / totalDurationCount), 2);
-                    else
-                        tmpGatewayUsage.CallsDurationPercentage = 0;
+                    tmpGatewayUsage.CallsDurationPercentage = tmpGatewayUsage.TotalCallsDuration > 0 ? Math.Round((tmpGatewayUsage.TotalCallsDuration * 100 / totalDurationCount), 2) : 0;
                 });
             }
         }
 
         public GatewaysCallsSummariesDataMapper()
         {
+            
             _dbTables = _monitoringServersInfoDataMapper.GetAll().Select(item => item.PhoneCallsTable).ToList();
         }
 
@@ -180,6 +173,7 @@ namespace LyncBillingBase.DataMappers
         /// <param name="endingDate">Optional. The Ending Date Range.</param>
         /// <param name="groupBy">Optional. By default it is set to DontGroup. Can be Set to any values of the same class of enums.</param>
         /// <returns>List of CallsSummaryForGateway objects for all the gateways of that site.</returns>
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
         public List<CallsSummaryForGateway> GetBySite(string siteName, DateTime? startingDate = null, DateTime? endingDate = null, Globals.CallsSummaryForGateway.GroupBy groupBy = Globals.CallsSummaryForGateway.GroupBy.DontGroup)
         {
             DateTime fromDate, toDate;
@@ -229,6 +223,7 @@ namespace LyncBillingBase.DataMappers
         /// By default the data won't be grouped by, unless specified.
         /// </summary>
         /// <param name="siteName">Site Name</param>
+        /// <param name="gatewayName"></param>
         /// <param name="startingDate">Optional. The Starting Date Range.</param>
         /// <param name="endingDate">Optional. The Ending Date Range.</param>
         /// <param name="groupBy">Optional. By default it is set to DontGroup. Can be Set to any values of the same class of enums.</param>
@@ -241,8 +236,8 @@ namespace LyncBillingBase.DataMappers
 
                 if(summaries.Any())
                 {
-                    summaries = summaries.Where(item => item.GatewayName.ToLower() == gatewayName.ToLower()).ToList();
-                    summaries.OrderBy(item => item.Year).OrderBy(item => item.Year);
+                    summaries = summaries.Where(item => String.Equals(item.GatewayName, gatewayName, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                    return summaries.OrderBy(item => item.Year).ThenBy(item => item.Month).ToList();
                 }
 
                 return summaries;
@@ -296,36 +291,35 @@ namespace LyncBillingBase.DataMappers
         /// Given a list of gateways calls summaries, return the totals of every gateway for every year of it's summaries.
         /// </summary>
         /// <param name="gatewaysUsage">List of CallsSummaryForGateway objects</param>
-        /// <param name="callsCountThreshold">Include the gateways whose total calls count is above this specified value.</param>
+        /// <param name="minimumCallsCount"></param>
         /// <returns>List of CallsSummaryForGateway objects.</returns>
+        [SuppressMessage("ReSharper", "PossibleIntendedRethrow")]
         public List<CallsSummaryForGateway> GetGatewaysStatisticsResults(List<CallsSummaryForGateway> gatewaysUsage, int minimumCallsCount = 200)
         {
-            List<CallsSummaryForGateway> gatewaysUsageData = new List<CallsSummaryForGateway>();
-
             try
             {
-                gatewaysUsageData = (
-                      from data in gatewaysUsage.AsEnumerable()
-                      group data by new { data.GatewayName, data.Year } into res
-                      select new CallsSummaryForGateway
-                      {
-                          GatewayName = res.Key.GatewayName,
-                          Year = res.Key.Year,
-                          CallsCount = res.Sum(x => x.CallsCount),
-                          CallsDuration = res.Sum(x => x.CallsDuration),
-                          CallsCost = res.Sum(x => x.CallsCost),
-                          BusinessCallsCost = res.Sum(item => item.BusinessCallsCost),
-                          BusinessCallsCount = res.Sum(item => item.BusinessCallsCount),
-                          BusinessCallsDuration = res.Sum(item => item.BusinessCallsDuration),
-                          PersonalCallsCost = res.Sum(item => item.PersonalCallsCost),
-                          PersonalCallsCount = res.Sum(item => item.PersonalCallsCount),
-                          PersonalCallsDuration = res.Sum(item => item.PersonalCallsDuration),
-                          UnmarkedCallsCost = res.Sum(item => item.UnmarkedCallsCost),
-                          UnmarkedCallsCount = res.Sum(item => item.UnmarkedCallsCount),
-                          UnmarkedCallsDuration = res.Sum(item => item.UnmarkedCallsDuration)
-                      })
-                      .Where(e => e.CallsCount > minimumCallsCount)
-                      .ToList();
+                var gatewaysUsageData = (
+                    from data in gatewaysUsage.AsEnumerable()
+                    group data by new { data.GatewayName, data.Year } into res
+                    select new CallsSummaryForGateway
+                    {
+                        GatewayName = res.Key.GatewayName,
+                        Year = res.Key.Year,
+                        CallsCount = res.Sum(x => x.CallsCount),
+                        CallsDuration = res.Sum(x => x.CallsDuration),
+                        CallsCost = res.Sum(x => x.CallsCost),
+                        BusinessCallsCost = res.Sum(item => item.BusinessCallsCost),
+                        BusinessCallsCount = res.Sum(item => item.BusinessCallsCount),
+                        BusinessCallsDuration = res.Sum(item => item.BusinessCallsDuration),
+                        PersonalCallsCost = res.Sum(item => item.PersonalCallsCost),
+                        PersonalCallsCount = res.Sum(item => item.PersonalCallsCount),
+                        PersonalCallsDuration = res.Sum(item => item.PersonalCallsDuration),
+                        UnmarkedCallsCost = res.Sum(item => item.UnmarkedCallsCost),
+                        UnmarkedCallsCount = res.Sum(item => item.UnmarkedCallsCount),
+                        UnmarkedCallsDuration = res.Sum(item => item.UnmarkedCallsDuration)
+                    })
+                    .Where(e => e.CallsCount > minimumCallsCount)
+                    .ToList();
 
                 return gatewaysUsageData;
             }
@@ -342,6 +336,7 @@ namespace LyncBillingBase.DataMappers
         /// </summary>
         /// <param name="startingDate">Optional. The Starting Date Range.</param>
         /// <param name="endingDate">Optional. The Ending Date Range.</param>
+        /// <param name="minimumCallsCount"></param>
         /// <returns>List of CallsSummaryForGateway objects.</returns>
         public List<CallsSummaryForGateway> SetGatewaysUsagePercentagesPerCallsCount(DateTime? startingDate = null, DateTime? endingDate = null, int minimumCallsCount = 200)
         {
@@ -351,7 +346,7 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 //Get all the gateways usage summaries
-                gatewaysSummaries = this.GetUsageForAllGateways(startingDate, endingDate);
+                gatewaysSummaries = GetUsageForAllGateways(startingDate, endingDate);
 
                 //Map all teh records for each gateway into a total-sum-one!
                 gatewaysUsageData = GetGatewaysStatisticsResults(gatewaysSummaries, minimumCallsCount);
@@ -370,8 +365,6 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// This function, unlike it's overloaded version which takes a date and time range, takes an already summarized list of gateway usage data and then calculates the percentages fields for every entry in it.
         /// </summary>
-        /// <param name="startingDate">Optional. The Starting Date Range.</param>
-        /// <param name="endingDate">Optional. The Ending Date Range.</param>
         /// <returns>List of CallsSummaryForGateway objects.</returns>
         public List<CallsSummaryForGateway> SetGatewaysUsagePercentagesPerCallsCount(List<CallsSummaryForGateway> gatewaysUsageInputs, int minimumCallsCount = 200)
         {
@@ -380,7 +373,7 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 //Map all teh records for each gateway into a total-sum-one!
-                gatewaysUsageData = this.GetGatewaysStatisticsResults(gatewaysUsageInputs, minimumCallsCount);
+                gatewaysUsageData = GetGatewaysStatisticsResults(gatewaysUsageInputs, minimumCallsCount);
 
                 // Calculate percentages
                 CalculatePercentages(ref gatewaysUsageData);
