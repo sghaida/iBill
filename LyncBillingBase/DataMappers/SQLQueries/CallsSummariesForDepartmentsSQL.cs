@@ -6,13 +6,6 @@ namespace LyncBillingBase.DataMappers.SQLQueries
 {
     public class CallsSummariesForDepartmentsSQL
     {
-        /// <summary>
-        /// </summary>
-        /// <param name="userSipAccount"></param>
-        /// <param name="startingDate"></param>
-        /// <param name="endingDate"></param>
-        /// <param name="dbTables"></param>
-        /// <returns></returns>
         public string GetCallsSummariesForDepartment(string siteName, string departmentName, List<string> dbTables)
         {
             var sqlQuery = string.Empty;
@@ -86,13 +79,6 @@ namespace LyncBillingBase.DataMappers.SQLQueries
             return sqlQuery;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="siteName"></param>
-        /// <param name="startingDate"></param>
-        /// <param name="endingDate"></param>
-        /// <param name="dbTables"></param>
-        /// <returns></returns>
         public string GetCallsSummariesForDepartment(string siteName, string departmentName, string startingDate, string endingDate, List<string> dbTables)
         {
             var sqlQuery = string.Empty;
@@ -168,7 +154,5 @@ namespace LyncBillingBase.DataMappers.SQLQueries
 
             return sqlQuery;
         }
-
     }
-
 }
