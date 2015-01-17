@@ -16,6 +16,7 @@ namespace LyncBillingBase.DataMappers
          */
         // internal datastorage singleton container
         private static SitesDepartmentsDataMapper _instance;
+
         // lock for thread-safety laziness
         private static readonly object Mutex = new object();
         /***
