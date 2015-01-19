@@ -41,27 +41,27 @@ namespace LyncBillingBase.DataModels
 
         // Unmarked
         [DbColumn("UnmarkedCallsCount")]
-        public long UnmarkedCallsCount { get; set; }
+        public long UnallocatedCallsCount { get; set; }
 
         [DbColumn("UnmarkedCallsDuration")]
-        public long UnmarkedCallsDuration { get; set; }
+        public long UnallocatedCallsDuration { get; set; }
 
         [DbColumn("UnmarkedCallsCost")]
-        public decimal UnmarkedCallsCost { get; set; }
+        public decimal UnallocatedCallsCost { get; set; }
 
         public decimal TotalCallsCost
         {
-            get { return (BusinessCallsCost + PersonalCallsCost + UnmarkedCallsCost); }
+            get { return (BusinessCallsCost + PersonalCallsCost + UnallocatedCallsCost); }
         }
 
         public long TotalCallsDuration
         {
-            get { return (BusinessCallsDuration + PersonalCallsDuration + UnmarkedCallsDuration); }
+            get { return (BusinessCallsDuration + PersonalCallsDuration + UnallocatedCallsDuration); }
         }
 
         public long TotalCallsCount
         {
-            get { return (BusinessCallsCount + PersonalCallsCount + UnmarkedCallsCount); }
+            get { return (BusinessCallsCount + PersonalCallsCount + UnallocatedCallsCount); }
         }
     }
 

@@ -66,9 +66,9 @@ namespace LyncBillingBase.DataMappers
                         PersonalCallsCost = result.Sum(item => item.PersonalCallsCost),
                         PersonalCallsDuration = result.Sum(item => item.PersonalCallsDuration),
                         PersonalCallsCount = result.Sum(item => item.PersonalCallsCount),
-                        UnmarkedCallsCost = result.Sum(item => item.UnmarkedCallsCost),
-                        UnmarkedCallsDuration = result.Sum(item => item.UnmarkedCallsDuration),
-                        UnmarkedCallsCount = result.Sum(item => item.UnmarkedCallsCount)
+                        UnallocatedCallsCost = result.Sum(item => item.UnallocatedCallsCost),
+                        UnallocatedCallsDuration = result.Sum(item => item.UnallocatedCallsDuration),
+                        UnallocatedCallsCount = result.Sum(item => item.UnallocatedCallsCount)
                     }
                 ).ToList<CallsSummaryForGateway>();
         }
@@ -113,11 +113,12 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
+
         public GatewaysCallsSummariesDataMapper()
         {
-            
             _dbTables = _monitoringServersInfoDataMapper.GetAll().Select(item => item.PhoneCallsTable).ToList();
         }
+
 
         /// <summary>
         /// Get the list of years of the calls summaries for all gateways.
@@ -223,7 +224,7 @@ namespace LyncBillingBase.DataMappers
         /// By default the data won't be grouped by, unless specified.
         /// </summary>
         /// <param name="siteName">Site Name</param>
-        /// <param name="gatewayName"></param>
+        /// <param name="gatewayName">The Gateway Name / IP (string).</param>
         /// <param name="startingDate">Optional. The Starting Date Range.</param>
         /// <param name="endingDate">Optional. The Ending Date Range.</param>
         /// <param name="groupBy">Optional. By default it is set to DontGroup. Can be Set to any values of the same class of enums.</param>
@@ -314,9 +315,9 @@ namespace LyncBillingBase.DataMappers
                         PersonalCallsCost = res.Sum(item => item.PersonalCallsCost),
                         PersonalCallsCount = res.Sum(item => item.PersonalCallsCount),
                         PersonalCallsDuration = res.Sum(item => item.PersonalCallsDuration),
-                        UnmarkedCallsCost = res.Sum(item => item.UnmarkedCallsCost),
-                        UnmarkedCallsCount = res.Sum(item => item.UnmarkedCallsCount),
-                        UnmarkedCallsDuration = res.Sum(item => item.UnmarkedCallsDuration)
+                        UnallocatedCallsCost = res.Sum(item => item.UnallocatedCallsCost),
+                        UnallocatedCallsCount = res.Sum(item => item.UnallocatedCallsCount),
+                        UnallocatedCallsDuration = res.Sum(item => item.UnallocatedCallsDuration)
                     })
                     .Where(e => e.CallsCount > minimumCallsCount)
                     .ToList();
