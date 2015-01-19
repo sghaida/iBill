@@ -57,6 +57,7 @@
     <Compile Include="DataMappers\AnnouncementsDataMapper.cs" />
     <Compile Include="DataMappers\BundledAccountsDataMapper.cs" />
     <Compile Include="DataMappers\CallMarkerStatusDataMapper.cs" />
+    <Compile Include="DataMappers\ChartsReportsDataMapper.cs" />
     <Compile Include="DataMappers\DepartmentCallsSummariesDataMapper.cs" />
     <Compile Include="DataMappers\GatewaysCallsSummariesDataMapper.cs" />
     <Compile Include="DataMappers\MailReportsDataMapper.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="DataModels\CallsSummaryForSite.cs" />
     <Compile Include="DataModels\CallsSummaryForGateway.cs" />
     <Compile Include="DataModels\CallType.cs" />
+    <Compile Include="DataModels\ChartReport.cs" />
     <Compile Include="DataModels\Country.cs" />
     <Compile Include="DataModels\Currency.cs" />
     <Compile Include="DataModels\Department.cs" />
@@ -117,6 +119,7 @@
     <Compile Include="DataModels\CallsSummaryForUser.cs" />
     <Compile Include="DataModels\MailReport.cs" />
     <Compile Include="DataModels\PhoneCallExclusion.cs" />
+    <Compile Include="Globals.cs" />
     <Compile Include="Helpers\DataMapperExtensions.cs" />
     <Compile Include="Repository\DataStorage.cs" />
     <Compile Include="DataModels\Gateway.cs" />
@@ -139,14 +142,6 @@
     <Compile Include="SessionManagement\UserSession.cs" />
     <Compile Include="Libs\PDFLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reports\DepartmentCallsSummary.cs" />
-    <Compile Include="Reports\DetailedReport.cs" />
-    <Compile Include="Reports\GatewayCallsSummary.cs" />
-    <Compile Include="Reports\SiteCallsSummary.cs" />
-    <Compile Include="Reports\SummaryReport.cs" />
-    <Compile Include="Reports\TopDestinationCountries.cs" />
-    <Compile Include="Reports\TopDestinationNumbers.cs" />
-    <Compile Include="Reports\UserCallsSummary.cs" />
     <Compile Include="DataModels\DelegateRole.cs" />
     <Compile Include="DataModels\DelegeeAccountInfo.cs" />
     <Compile Include="DataModels\DepartmentHeadRole.cs" />

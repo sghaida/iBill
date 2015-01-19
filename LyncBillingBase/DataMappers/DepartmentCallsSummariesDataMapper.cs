@@ -137,9 +137,9 @@ namespace LyncBillingBase.DataMappers
                     departmentTotalSummary.PersonalCallsCount += summary.PersonalCallsCount;
                     departmentTotalSummary.PersonalCallsDuration += summary.PersonalCallsDuration;
 
-                    departmentTotalSummary.UnmarkedCallsCost += summary.UnmarkedCallsCost;
-                    departmentTotalSummary.UnmarkedCallsCount += summary.UnmarkedCallsCount;
-                    departmentTotalSummary.UnmarkedCallsDuration += summary.UnmarkedCallsDuration;
+                    departmentTotalSummary.UnallocatedCallsCost += summary.UnallocatedCallsCost;
+                    departmentTotalSummary.UnallocatedCallsCount += summary.UnallocatedCallsCount;
+                    departmentTotalSummary.UnallocatedCallsDuration += summary.UnallocatedCallsDuration;
                 }
 
                 return departmentTotalSummary;

@@ -56,6 +56,11 @@ namespace LyncBillingTesting
             //var mailReportForUser = DB.MailReports.GetTotalByUser("aalhour@ccc.gr", (new DateTime(2013, 10, 1)));
             //var mailReportForDepartment = DB.MailReports.GetByDepartment("MOA", "ISD", (new DateTime(2013, 10, 1)));
 
+            //var userChartReports = DB.ChartsReports.GetByUser("aalhour@ccc.gr");
+            //var departmentChartReports = DB.ChartsReports.GetByDepartment("MOA", "ISD");
+            //var siteChartsReports = DB.ChartsReports.GetBySite("MOA");
+            //var gatewayChartsReports = DB.ChartsReports.GetByGateway("MOA", "10.1.0.12");
+
             string x = string.Empty;
         }
 

@@ -60,9 +60,9 @@ namespace LyncBillingBase.DataMappers
                     PersonalCallsCost = result.Sum(item => item.PersonalCallsCost),
                     PersonalCallsDuration = result.Sum(item => item.PersonalCallsDuration),
                     PersonalCallsCount = result.Sum(item => item.PersonalCallsCount),
-                    UnmarkedCallsCost = result.Sum(item => item.UnmarkedCallsCost),
-                    UnmarkedCallsDuration = result.Sum(item => item.UnmarkedCallsDuration),
-                    UnmarkedCallsCount = result.Sum(item => item.UnmarkedCallsCount)
+                    UnallocatedCallsCost = result.Sum(item => item.UnallocatedCallsCost),
+                    UnallocatedCallsDuration = result.Sum(item => item.UnallocatedCallsDuration),
+                    UnallocatedCallsCount = result.Sum(item => item.UnallocatedCallsCount)
                 })
                 .ToList<CallsSummaryForUser>();
         }
@@ -89,9 +89,9 @@ namespace LyncBillingBase.DataMappers
                     PersonalCallsCost = result.Sum(item => item.PersonalCallsCost),
                     PersonalCallsDuration = result.Sum(item => item.PersonalCallsDuration),
                     PersonalCallsCount = result.Sum(item => item.PersonalCallsCount),
-                    UnmarkedCallsCost = result.Sum(item => item.UnmarkedCallsCost),
-                    UnmarkedCallsDuration = result.Sum(item => item.UnmarkedCallsDuration),
-                    UnmarkedCallsCount = result.Sum(item => item.UnmarkedCallsCount)
+                    UnallocatedCallsCost = result.Sum(item => item.UnallocatedCallsCost),
+                    UnallocatedCallsDuration = result.Sum(item => item.UnallocatedCallsDuration),
+                    UnallocatedCallsCount = result.Sum(item => item.UnallocatedCallsCount)
                 }
                 ).ToList<CallsSummaryForUser>();
         }
