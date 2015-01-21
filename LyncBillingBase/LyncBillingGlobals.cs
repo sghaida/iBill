@@ -33,6 +33,24 @@ namespace LyncBillingBase
             }
         }
 
+        public static class PhoneCalls
+        {
+            public enum UiCallType
+            {
+                [DefaultValue("Business")]
+                [Description("Business Ui Call Type")]
+                Business,
+
+                [DefaultValue("Personal")]
+                [Description("Personal Ui Call Type")]
+                Personal,
+
+                [DefaultValue("Unallocated")]
+                [Description("Unallocated Ui Call Type")]
+                Unallocated
+            }
+        }
+
     }
 
 }

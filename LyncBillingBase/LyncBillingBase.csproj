@@ -119,7 +119,7 @@
     <Compile Include="DataModels\CallsSummaryForUser.cs" />
     <Compile Include="DataModels\MailReport.cs" />
     <Compile Include="DataModels\PhoneCallExclusion.cs" />
-    <Compile Include="Globals.cs" />
+    <Compile Include="LyncBillingGlobals.cs" />
     <Compile Include="Helpers\DataMapperExtensions.cs" />
     <Compile Include="Repository\DataStorage.cs" />
     <Compile Include="DataModels\Gateway.cs" />
