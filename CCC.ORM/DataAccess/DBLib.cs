@@ -4,28 +4,19 @@ using System.Data;
 using System.Data.OleDb;
 using System.Linq;
 using System.Text;
+using System.Configuration;
 using CCC.ORM.Libs;
-// ReSharper disable UnusedVariable
 
 namespace CCC.ORM.DataAccess
 {
     public class DbLib
     {
-        //Load DLL Configs
-        public static LoadConfigs Config = new LoadConfigs();
+        public static string ConnectionString { get; set; }
+        public static ConfigurationLoader Config = new ConfigurationLoader();
 
-        public DbLib()
+        private OleDbConnection DbInitializeConnection(string connectionString)
         {
-            var connectionStringsSection = Config.DllConfig.ConnectionStrings;
-
-            if (connectionStringsSection != null && connectionStringsSection.ConnectionStrings.Count > 0)
-            {
-                ConnectionString = connectionStringsSection.ConnectionStrings[0].ConnectionString;
-            }
-            else
-            {
-                throw new Exception("No connection string was found in the DLL Config File.");
-            }
+            return new OleDbConnection(connectionString);
         }
 
         public DbLib(string connectionString)
@@ -33,11 +24,25 @@ namespace CCC.ORM.DataAccess
             ConnectionString = connectionString;
         }
 
-        public static string ConnectionString { get; set; }
-
-        private OleDbConnection DbInitializeConnection(string connectionString)
+        public DbLib()
         {
-            return new OleDbConnection(connectionString);
+            //var connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString.ToString();
+            //var connectionStrings = Config.DllConfig.ConnectionStrings;
+
+            //if (!string.IsNullOrEmpty(connectionString))
+            //{
+            //    ConnectionString = connectionString;
+            //}
+            //if(connectionStrings != null && connectionStrings.ConnectionStrings.Count > 0)
+            //{
+            //    ConnectionString = connectionStrings.ConnectionStrings[0].ConnectionString.ToString();
+            //}
+            //else
+            //{
+            //    throw new Exception("No connection string was found in the DLL Config File. Please add a connection string with the name 'ConnectionString'.");
+            //}
+
+            ConnectionString = @"Provider=SQLOLEDB.1;Data Source=10.1.60.55;Persist Security Info=True;Password='=25_ar;p1100';User ID=sa;Initial Catalog=tBill";
         }
 
         //SELECT with SQL query
