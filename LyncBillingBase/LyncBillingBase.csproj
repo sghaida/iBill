@@ -139,11 +139,9 @@
     <Compile Include="DataModels\Site.cs" />
     <Compile Include="DataModels\SiteDepartment.cs" />
     <Compile Include="DataModels\User.cs" />
-    <Compile Include="SessionManagement\UserSession.cs" />
     <Compile Include="Libs\PDFLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModels\DelegateRole.cs" />
-    <Compile Include="DataModels\DelegeeAccountInfo.cs" />
     <Compile Include="DataModels\DepartmentHeadRole.cs" />
     <Compile Include="DataModels\Roles.cs" />
     <Compile Include="DataModels\SystemRole.cs" />

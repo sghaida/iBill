@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using LyncBillingUI;
 using LyncBillingBase.DataMappers;
 using LyncBillingBase.DataModels;
 
-namespace LyncBillingBase.SessionManagement
+namespace LyncBillingUI.Account
 {
     public class UserSession
     {
@@ -14,8 +15,7 @@ namespace LyncBillingBase.SessionManagement
 
         public UserSession()
         {
-            NormalUserInfo = new User();
-            TelephoneNumber = string.Empty;
+            User = new User();
             IpAddress = string.Empty;
             UserAgent = string.Empty;
 
@@ -26,9 +26,7 @@ namespace LyncBillingBase.SessionManagement
             DelegeeAccount = null;
 
             //Initialized other containers
-            PhonecallsPerPage = string.Empty;
             Phonecalls = new List<PhoneCall>();
-            PhonecallsHistory = new List<PhoneCall>();
             Addressbook = new Dictionary<string, PhoneBookContact>();
 
             //By default the roles are set to false unless initialized as otherwise!
@@ -50,12 +48,13 @@ namespace LyncBillingBase.SessionManagement
         }
 
         //Normal user data
-        public User NormalUserInfo { get; set; }
-        public string TelephoneNumber { set; get; }
+        public User User { get; set; }
         public string IpAddress { set; get; }
         public string UserAgent { set; get; }
+
         //Bundled Accounts List
         public List<string> BundledAccountsList { get; set; }
+        
         //Roles Related
         public string ActiveRoleName { set; get; }
         public List<SystemRole> SystemRoles { set; get; }
@@ -63,19 +62,22 @@ namespace LyncBillingBase.SessionManagement
         public List<DelegateRole> SiteDelegateRoles { get; set; }
         public List<DelegateRole> DepartmentDelegateRoles { get; set; }
         public DelegeeAccountInfo DelegeeAccount { get; set; }
+        
         //Phone Calls and Phone Book Related
-        public string PhonecallsPerPage { set; get; }
         public List<PhoneCall> Phonecalls { set; get; }
-        public List<PhoneCall> PhonecallsHistory { set; get; }
         public Dictionary<string, PhoneBookContact> Addressbook { set; get; }
+        
         //Generic Users SystemRoles
         public bool IsDeveloper { set; get; }
+        
         //System Roles
         public bool IsSystemAdmin { set; get; }
         public bool IsSiteAdmin { set; get; }
         public bool IsSiteAccountant { set; get; }
+        
         //Departments Head Role
         public bool IsDepartmentHead { get; set; }
+        
         //Delegates Roles
         public bool IsDelegee { set; get; }
         public bool IsUserDelegate { set; get; }
@@ -106,13 +108,13 @@ namespace LyncBillingBase.SessionManagement
         private void InitializeDelegeesInformation(string userSipAccount = "")
         {
             //This is a mandatory check, because we can't go on with the procedure without a SipAccount!!
-            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(User.SipAccount))
             {
                 throw new Exception("No SipAccount was assigned to this session instance!");
             }
-            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(User.SipAccount))
             {
-                userSipAccount = NormalUserInfo.SipAccount;
+                userSipAccount = User.SipAccount;
             }
 
             //Initialize the Delegees SystemRoles Flags
@@ -141,13 +143,13 @@ namespace LyncBillingBase.SessionManagement
         private void InitializeDepartmentHeadRoles(string userSipAccount = "")
         {
             //This is a mandatory check, because we can't go on with the procedure without a SipAccount!!
-            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(User.SipAccount))
             {
                 throw new Exception("No SipAccount was assigned to this session instance!");
             }
-            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(User.SipAccount))
             {
-                userSipAccount = NormalUserInfo.SipAccount;
+                userSipAccount = User.SipAccount;
             }
 
             //IsDepartmentHead = DepartmentHeadRole.IsDepartmentHead(userSipAccount);
@@ -173,13 +175,13 @@ namespace LyncBillingBase.SessionManagement
         public void InitializeBundledAccountsList(string userSipAccount)
         {
             //Make sure the parameter was given
-            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(User.SipAccount))
             {
                 throw new Exception("No SipAccount was assigned to this session instance!");
             }
-            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(User.SipAccount))
             {
-                userSipAccount = NormalUserInfo.SipAccount;
+                userSipAccount = User.SipAccount;
             }
 
             // this.BundledAccountsList = BundledAccounts.GetBundledAccountsForUser(userSipAccount);
@@ -188,13 +190,13 @@ namespace LyncBillingBase.SessionManagement
         public void InitializeAllRolesInformation(string userSipAccount)
         {
             //This is a mandatory check, because we can't go on with the procedure without a SipAccount!!
-            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && string.IsNullOrEmpty(User.SipAccount))
             {
                 throw new Exception("No SipAccount was assigned to this session instance!");
             }
-            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(NormalUserInfo.SipAccount))
+            if (string.IsNullOrEmpty(userSipAccount) && !string.IsNullOrEmpty(User.SipAccount))
             {
-                userSipAccount = NormalUserInfo.SipAccount;
+                userSipAccount = User.SipAccount;
             }
 
             //SystemRoles = SystemRole.GetSystemRolesPerSipAccount(userSipAccount);
@@ -216,7 +218,7 @@ namespace LyncBillingBase.SessionManagement
                 return (DelegeeAccount.DelegeeUserAccount.SipAccount);
             }
                 //else then the user is a normal one, just return the normal user sipaccount.
-            return (NormalUserInfo.SipAccount);
+            return (User.SipAccount);
         }
 
         //Get the user displayname.
@@ -230,7 +232,7 @@ namespace LyncBillingBase.SessionManagement
                 return (DelegeeAccount.DelegeeUserAccount.DisplayName);
             }
                 //else then the user is a normal one, just return the normal user sipaccount.
-            return (NormalUserInfo.DisplayName);
+            return (User.DisplayName);
         }
     }
 }

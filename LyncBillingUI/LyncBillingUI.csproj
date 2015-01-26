@@ -194,6 +194,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\DelegeeAccountInfo.cs" />
+    <Compile Include="Account\UserSession.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Pages\About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
