@@ -8,8 +8,8 @@ using Ext;
 using Ext.Net;
 
 using CCC.ORM.Helpers;
+using LyncBillingUI;
 using LyncBillingBase;
-using LyncBillingBase.Repository;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;
 
@@ -18,14 +18,20 @@ namespace LyncBillingUI.Pages.User
     public partial class ManagePhoneCalls : System.Web.UI.Page
     {
         private static List<PhoneCall> phoneCalls;
-        private static DataStorage _DB = DataStorage.Instance;
-
+        private static List<Country> countries;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!X.IsAjaxRequest)
             {
-                phoneCalls = _DB.PhoneCalls.GetChargableCallsPerUser("aalhour@ccc.gr").ToList();
+                phoneCalls = Global.DATABASE.PhoneCalls.GetChargableCallsPerUser("aalhour@ccc.gr").ToList();
+                countries = Global.DATABASE.Countries.GetAll().ToList();
+
+                phoneCalls.ForEach((phoneCall) =>
+                    {
+                        var country = countries.Find(item => item.Iso3Code == phoneCall.MarkerCallToCountry);
+                        phoneCall.MarkerCallToCountry = (country != null ? country.Name : phoneCall.MarkerCallToCountry);
+                    });
             }
         }
 

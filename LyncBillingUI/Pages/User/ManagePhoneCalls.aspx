@@ -63,8 +63,6 @@
 </asp:Content>
 
 <asp:Content ID="BodyContents" ContentPlaceHolderID="MainContent" runat="server">
-    <br /><br />
-    
     <ext:Hidden ID="FormatType" runat="server" />
 
     <ext:GridPanel
@@ -125,21 +123,22 @@
                 <ext:RowNumbererColumn
                     ID="RowNumbererColumn2"
                     runat="server"
-                    Width="25" />
+                    Width="40" />
 
                 <ext:Column
                     ID="SessionIdTime"
                     runat="server"
                     Text="Date"
-                    Width="135"
+                    Width="150"
                     DataIndex="SessionIdTime">
+                    <Renderer Fn="formatDate" />
                 </ext:Column>
 
                 <ext:Column
                     ID="MarkerCallToCountry"
                     runat="server"
                     Text="Country"
-                    Width="90"
+                    Width="150"
                     DataIndex="MarkerCallToCountry">
                 </ext:Column>
 
@@ -154,7 +153,7 @@
                 <ext:Column ID="PhoneBookNameCol"
                     runat="server"
                     Text="Contact Name"
-                    Width="190"
+                    Width="250"
                     DataIndex="PhoneBookName">
                     <Editor>
                         <ext:TextField
@@ -170,7 +169,7 @@
                     ID="Duration"
                     runat="server"
                     Text="Duration"
-                    Width="90"
+                    Width="100"
                     DataIndex="Duration">
                     <Renderer Fn="GetMinutes" />
                 </ext:Column>
@@ -179,9 +178,17 @@
                     ID="MarkerCallCost"
                     runat="server"
                     Text="Cost"
-                    Width="70"
+                    Width="100"
                     DataIndex="MarkerCallCost">
                     <Renderer Fn="RoundCost" />
+                </ext:Column>
+
+                <ext:Column
+                    ID="MarkerCallTypeCol"
+                    runat="server"
+                    Text="MarkerCallType"
+                    Width="200"
+                    DataIndex="MarkerCallType">
                 </ext:Column>
             </Columns>
         </ColumnModel>

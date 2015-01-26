@@ -33,6 +33,11 @@ namespace LyncBillingUI
                 "UserManagePhoneCallsPageRoute",
                 "User/Manage/Phonecalls",
                 "~/Pages/User/ManagePhoneCalls.aspx");
+
+            routes.MapPageRoute(
+                "LoginPageRoute",
+                "Login",
+                "~/Pages/Account/Login.aspx");
         }
     }
 }
