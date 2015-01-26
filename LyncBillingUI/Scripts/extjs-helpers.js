@@ -44,6 +44,13 @@ function RoundCostsToTwoDecimalDigits(value) {
 }
 
 
+// 
+// formatDate
+// 
+function formatDate(value) {
+    return Ext.Date.format(value, "M d, Y H:m:s");
+}
+
 //This handles the PhoneCalls grid, History page, and Delegees PhoneCalls grid
 //Input should be of this format: "2013-10-30 11:02:51.073"
 var DateRenderer = function (value) {
