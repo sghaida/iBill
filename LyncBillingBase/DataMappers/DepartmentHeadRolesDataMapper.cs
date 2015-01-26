@@ -39,6 +39,26 @@ namespace LyncBillingBase.DataMappers
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userSipAccount"></param>
+        /// <returns></returns>
+        public List<DepartmentHeadRole> GetBySipAccount(string userSipAccount)
+        {
+            var condition = new Dictionary<string, object>();
+            condition.Add("SipAccount", userSipAccount);
+
+            try
+            {
+                return Get(condition, 0).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+        /// <summary>
         ///     Given a Site-Deparment's ID, return all the associated Department-Head User Roles.
         /// </summary>
         /// <param name="siteDepartmentId">SiteDepartment.ID (int).</param>

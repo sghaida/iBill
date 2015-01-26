@@ -15,7 +15,7 @@ namespace LyncBillingUI.Account
         public SiteDepartment DelegeeDepartmentAccount { get; set; }
         
         //Users Delegate Role related
-        public User DelegeeUserAccount { get; set; }
+        public User User { get; set; }
         public List<PhoneCall> DelegeeUserPhonecalls { get; set; }
         public Dictionary<string, PhoneBookContact> DelegeeUserAddressbook { set; get; }
     }
