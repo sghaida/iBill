@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 using LyncBillingUI;
 using LyncBillingBase.DataMappers;
 using LyncBillingBase.DataModels;
+using LyncBillingBase.Helpers;
 
 namespace LyncBillingUI.Account
 {
@@ -132,19 +133,20 @@ namespace LyncBillingUI.Account
                 this.IsUserDelegate = delegees.Exists(item => item.DelegationType == 1);
                 this.IsDepartmentDelegate = delegees.Exists(item => item.DelegationType == 2);
                 this.IsSiteDelegate = delegees.Exists(item => item.DelegationType == 3);
+
+                //Initialize the Delegees Information Lists
+                if (IsSiteDelegate)
+                    this.SiteDelegateRoles = delegees.Where(item => item.DelegationType == 1).ToList();
+
+                if (IsDepartmentDelegate)
+                    this.DepartmentDelegateRoles = delegees.Where(item => item.DelegationType == 2).ToList();
+
+                if (IsUserDelegate)
+                    this.UserDelegateRoles = delegees.Where(item => item.DelegationType == 3).ToList();
+
+                // Decide the general IsDelegee flag value
+                IsDelegee = IsUserDelegate || IsDepartmentDelegate || IsSiteDelegate;
             }
-
-            IsDelegee = IsUserDelegate || IsDepartmentDelegate || IsSiteDelegate;
-
-            //Initialize the Delegees Information Lists
-            if (IsUserDelegate)
-                this.UserDelegateRoles = delegees.Where(item => item.DelegationType == 1).ToList();
-
-            if (IsDepartmentDelegate)
-                this.DepartmentDelegateRoles = delegees.Where(item => item.DelegationType == 2).ToList();
-
-            if (IsSiteDelegate)
-                this.SiteDelegateRoles = delegees.Where(item => item.DelegationType == 3).ToList();
         }
 
 

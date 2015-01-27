@@ -15,6 +15,8 @@
         <div class="col-md-5">
             <section id="loginForm">
                 <div class="form-horizontal">
+                    <asp:HiddenField ID="RedirectToUrl" runat="server" />
+
                     <asp:PlaceHolder runat="server" ID="ErrorMessage" Visible="false">
                         <p class="text-danger">
                             <asp:Literal runat="server" ID="FailureText" />
@@ -53,6 +55,10 @@
                     </div>
                 </div>
             </section>
+        </div>
+
+        <div class="col-md-7">
+            <h5><%= AuthenticationMessage.ToString() %></h5>
         </div>
     </div>
 </asp:Content>

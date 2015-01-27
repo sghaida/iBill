@@ -16,9 +16,9 @@ namespace LyncBillingBase.DataMappers
         public int SiteAdminRoleID { get; set; }
         public int SiteAccountantRoleID { get; set; }
         public int DepartmentHeadRoleID { get; set; }
-        //public int SiteDelegeeRoleID { get; set; }
-        //public int DepartmentDelegeeRoleID { get; set; }
-        //public int UserDelegeeRoleID { get; set; }
+        public int SiteDelegeeRoleID { get; set; }
+        public int DepartmentDelegeeRoleID { get; set; }
+        public int UserDelegeeRoleID { get; set; }
         public int UserRoleID { get; set; }
 
         private void LoadRoles()
@@ -47,17 +47,17 @@ namespace LyncBillingBase.DataMappers
                 var departmentHead = _roles.Find(item => item.RoleName.ToLower() == "dephead");
                 DepartmentHeadRoleID = (departmentHead != null ? departmentHead.RoleId : -1);
 
-                //// Site Delegee Role
-                //var siteDelegee = _roles.Find(item => item.RoleName.ToLower() == "sitedelegee");
-                //SiteDelegeeRoleID = (siteDelegee != null ? siteDelegee.RoleId : -1);
+                // Site Delegee Role
+                var siteDelegee = _roles.Find(item => item.RoleName.ToLower() == "sitedelegee");
+                SiteDelegeeRoleID = (siteDelegee != null ? siteDelegee.RoleId : -1);
 
-                //// Department Delegee Role
-                //var departmentDelegee = _roles.Find(item => item.RoleName.ToLower() == "depdelegee");
-                //DepartmentDelegeeRoleID = (departmentDelegee != null ? departmentDelegee.RoleId : -1);
+                // Department Delegee Role
+                var departmentDelegee = _roles.Find(item => item.RoleName.ToLower() == "depdelegee");
+                DepartmentDelegeeRoleID = (departmentDelegee != null ? departmentDelegee.RoleId : -1);
 
-                //// User Delegee Role
-                //var userDelegee = _roles.Find(item => item.RoleName.ToLower() == "userdelegee");
-                //UserDelegeeRoleID = (userDelegee != null ? userDelegee.RoleId : -1);
+                // User Delegee Role
+                var userDelegee = _roles.Find(item => item.RoleName.ToLower() == "userdelegee");
+                UserDelegeeRoleID = (userDelegee != null ? userDelegee.RoleId : -1);
 
                 // Normal User Role
                 var user = _roles.Find(item => item.RoleName.ToLower() == "user");
