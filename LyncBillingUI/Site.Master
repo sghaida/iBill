@@ -17,28 +17,7 @@
     <body>
         <form runat="server">
             <ext:ResourceManager ID="ExtResourceManager" runat="server" />
-
-            <%--<div class="navbar navbar-inverse navbar-fixed-top">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" runat="server" href="~/">iBill</a>
-                    </div>
-                    <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li><a runat="server" href="~/User/Dashboard">User Dashboard</a></li>
-                            <li><a runat="server" href="~/User/Manage/Phonecalls">Manage Phonecalls</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <br />
-            <br />--%>
+            <asp:HiddenField ID="ThisPageReferrer" runat="server" Value="" />
 
             <div class="ibill-masthead">
                 <div class="container">
@@ -51,34 +30,99 @@
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                 </button>
-                                <a class="ibill-nav-item active" href="#">iBILL</a>
+                                <a id="home-tab" class="ibill-nav-item" href="<%= global_asax.APPLICATION_URL %>/">iBILL</a>
                             </div>
 
                             <div id="navbar" class="navbar-collapse collapse">
-                                <%--<ul class="nav navbar-nav">--%>
-                                <ul class="nav navbar-nav navbar-right">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false">Ahmad <span class="caret"></span></a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#">Action</a></li>
-                                            <li><a href="#">Another action</a></li>
-                                            <li><a href="#">Something else here</a></li>
-                                            <li class="divider"></li>
-                                            <li class="dropdown-header">Nav header</li>
-                                            <li><a href="#">Separated link</a></li>
-                                            <li><a href="#">One more separated link</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="#">Logout</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-            </div>
+                                <% if(current_session != null) { %>
+                                    <%--<ul class="nav navbar-nav">--%>
+                                    <ul class="nav navbar-nav navbar-right">
 
-            <br /><br />
+                                        <%-- DELEGEES MENU--%>
+                                        <% if ((current_session.IsDelegee) && (current_session.ActiveRoleName == normalUserRoleName)) { %>
+                                            <li id="swtich-delegee-menu-tab" class="dropdown">
+                                                <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false">Switch to User&nbsp;<span class="caret"></span></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <% if(current_session.UserDelegateRoles.Any()) { %>
+                                                        <li class="dropdown-header">Users</li>
+                                                        <% foreach (var userDelegeeRecord in current_session.UserDelegateRoles) { %>
+                                                            <li class="last-child">
+                                                                <a href="<%= global_asax.APPLICATION_URL %>/Authorize?access=userdelegee&identity=<%= userDelegeeRecord.ManagedUserSipAccount %>">
+                                                                    <%= userDelegeeRecord.ManagedUser.DisplayName %>
+                                                                </a>
+                                                            </li>
+                                                        <% } %>
+                                                    <% } %>
+
+
+                                                    <% if (current_session.UserDelegateRoles.Any() && current_session.DepartmentDelegateRoles.Any()) { %> <li class="divider"></li> <% } %>
+
+
+                                                    <% if(current_session.DepartmentDelegateRoles.Any()) { %>
+                                                        <li class="dropdown-header">Departments</li>
+                                                        <% foreach (var departmentDelegeeRecord in current_session.DepartmentDelegateRoles) { %>
+                                                            <li class="last-child">
+                                                                <a href="<%= global_asax.APPLICATION_URL %>/Authorize?access=depdelegee&identity=<%= departmentDelegeeRecord.ManagedSiteDepartment.Site.Name + "_" + departmentDelegeeRecord.ManagedSiteDepartment.Department.Name %>">
+                                                                    <%= departmentDelegeeRecord.ManagedSiteDepartment.Site.Name + " - " + departmentDelegeeRecord.ManagedSiteDepartment.Department.Name %>
+                                                                </a>
+                                                            </li>
+                                                        <% } %>
+                                                    <% } %>
+
+
+                                                    <% if (current_session.DepartmentDelegateRoles.Any() && current_session.SiteDelegateRoles.Any()) { %> <li class="divider"></li> <% } %>
+
+
+                                                    <% if (current_session.SiteDelegateRoles.Any()) { %>
+                                                        <li class="dropdown-header">Sites</li>
+                                                        <% foreach (var siteDelegeeRecord in current_session.SiteDelegateRoles) { %>
+                                                            <li class="last-child">
+                                                                <a href="<%= global_asax.APPLICATION_URL %>/Authorize?access=sitedelegee&identity=<%= siteDelegeeRecord.ManagedSite.Name %>">
+                                                                    <%= siteDelegeeRecord.ManagedSite.Name %>
+                                                                </a>
+                                                            </li>
+                                                        <% } %>
+                                                    <% } %>
+                                                </ul>
+                                            </li>
+                                        <% } %>
+
+                                        <%-- USER MENU--%>
+                                        <li id="user-menu-tab" class="dropdown">
+                                            <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false"><%= DisplayName %>&nbsp;<span class="caret"></span></a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li class="dropdown-header">Manage</li>
+                                                <li><a href="#">Phone Calls</a></li>
+                                                <li><a href="#">Address Book</a></li>
+                                                <li class="divider"></li>
+                                                <li class="dropdown-header">History</li>
+                                                <li><a href="#">Bills History</a></li>
+                                                <li><a href="#">Calls History</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Statistics</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Providers Rates</a></li>
+                                                
+                                                <% if(current_session.ActiveRoleName == normalUserRoleName) { %>
+                                                    <li class="divider"></li>
+                                                    <li><a href="<%= global_asax.APPLICATION_URL %>/Logout">Logout</a></li>
+                                                <% } %>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                <% } else { %>
+                                    <ul class="nav navbar-nav navbar-right">
+                                        <a id="login-tab" class="ibill-nav-item" href="<%= global_asax.APPLICATION_URL %>/Login">Login</a>
+                                    </ul>
+                                <% } %>        
+                            </div><!-- ./navbar -->
+                        </div><!-- ./container-fluid -->
+                    </nav>
+                </div><!-- ./container -->
+            </div><!-- ./ibill-masthead -->
+
+            <br />
+            <br />
 
             <div class="container">
                 <asp:ContentPlaceHolder ID="MainContent" runat="server">
@@ -93,32 +137,44 @@
         </footer>
 
         <!-- SCRIPTS -->
-        <script type="text/javascript" src="/Scripts/modernizr-2.6.2.js"></script>
-        <script type="text/javascript" src="/Scripts/jquery-1.10.2.min.js"></script>
-        <script type="text/javascript" src="/Scripts/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/Scripts/respond.min.js"></script>
-        <script type="text/javascript" src="/Scripts/browserdetector.js"></script>
-        <script type="text/javascript" src="/Scripts/extjs-helpers.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/modernizr-2.6.2.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/respond.min.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/browserdetector.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/extjs-helpers.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var referrer = $("#ThisPageReferrer").val();
+
+                //if we are viewing the user pages, select the user-tab from the dropdown menu and the respective sidebar link
+                if (referrer.search("ui_user") != -1) {
+                    $('ul.nav>li.active').removeClass('active');
+
+                    if (referrer.search("user_dashboard") != -1) {
+                        $('#home-tab').addClass('active');
+                    } else if (referrer.search("ui_user") != -1) {
+                        $('#user-menu-tab').addClass('active');
+                    }
+
+                    //Add a "selected" class to the sidebar button with the PAGE_NAME as it's id
+                    //$("#" + referrer.toString()).addClass("selected");
+                    var starting_index = referrer.search("ui");
+                    var button_id = referrer.substr(starting_index, referrer.length);
+                    $("#" + button_id).addClass("selected");
+                }
+                else if (referrer.search("login") != -1) {
+                    $("#login-tab").addClass("active");
+                }
+                else {
+                    $('#home-tab').addClass('active');
+                }
+
+                $('#toggle-button').click(function () {
+                    $("#toggle-block").slideToggle("slow");
+                });
+            });
+        </script>
     </body>
 </html>
-
-
-<%--<asp:ScriptManager runat="server">
-    <Scripts>
-        <!-- To learn more about bundling scripts in ScriptManager see http://go.microsoft.com/fwlink/?LinkID=301884 -->
-        <!-- Framework Scripts -->
-        <asp:ScriptReference Name="MsAjaxBundle" />
-        <asp:ScriptReference Name="jquery" />
-        <asp:ScriptReference Name="bootstrap" />
-        <asp:ScriptReference Name="respond" />
-        <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
-        <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
-        <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
-        <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
-        <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
-        <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
-        <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
-        <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
-        <asp:ScriptReference Name="WebFormsBundle" />
-    </Scripts>
-</asp:ScriptManager>--%>

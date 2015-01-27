@@ -63,8 +63,16 @@ h6, .h6 {
 }
 
 .ibill-nav-dropdown .caret {
-    border-top-color: #cdddeb !important;
-    border-bottom-color: #cdddeb !important;
+    border-top-color: #cdddeb;
+    border-bottom-color: #cdddeb;
+}
+
+.open .ibill-nav-dropdown .caret,
+.ibill-nav-dropdown .caret:hover,
+.ibill-nav-dropdown .caret:focus
+{
+    border-top-color: #000000 !important;
+    border-bottom-color: #000000 !important;
 }
 
 /* Active state gets a caret at the bottom */
