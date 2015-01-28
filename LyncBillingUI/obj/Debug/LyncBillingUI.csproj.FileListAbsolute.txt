@@ -36,3 +36,43 @@ D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\CCC.UTILS.pdb
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.csprojResolveAssemblyReference.cache
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.csprojResolveAssemblyReference.cache
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\CCC.ORM.dll.config
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingBase.dll.config
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.dll.config
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Antlr3.Runtime.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\AspNet.ScriptManager.bootstrap.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\CCC.ORM.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\CCC.UTILS.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.Utilities.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingBase.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.AspNet.FriendlyUrls.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.ScriptManager.MSAjax.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.ScriptManager.WebForms.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Newtonsoft.Json.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\System.Web.Optimization.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Transformer.NET.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\WebActivatorEx.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\WebGrease.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\MongoDB.Driver.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\MongoDB.Bson.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\CCC.ORM.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\CCC.UTILS.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingBase.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.xml
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.Utilities.xml
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Newtonsoft.Json.xml
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\System.Web.Optimization.xml
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Transformer.NET.xml
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Antlr3.Runtime.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.AspNet.FriendlyUrls.xml
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\MongoDB.Driver.xml
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\MongoDB.Bson.xml
