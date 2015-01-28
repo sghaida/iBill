@@ -14,3 +14,7 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCall
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\CCC.UTILS.pdb
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.exe
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\obj\Debug\PhoneCallsProcessorLoader.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\MongoDB.Driver.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\MongoDB.Bson.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\MongoDB.Driver.xml
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\PhoneCallsProcessorLoader\bin\Debug\MongoDB.Bson.xml
