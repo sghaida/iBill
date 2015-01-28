@@ -4,13 +4,15 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Web;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+
 using CCC.ORM;
 using CCC.ORM.Helpers;
 using CCC.UTILS.Libs;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
+
+using LyncBillingBase.DataModels;
 using LyncBillingBase.Conf;
-using LyncBillingBase.Reports;
 
 namespace LyncBillingBase.Libs
 {
@@ -306,7 +308,7 @@ namespace LyncBillingBase.Libs
             return document;
         }
 
-        private static Document AddAccountingDetailedReportTotalsRow(ref Document document, UserCallsSummary userSummary)
+        private static Document AddAccountingDetailedReportTotalsRow(ref Document document, CallsSummaryForUser userSummary)
         {
             var pdfTable = new PdfPTable(5);
             pdfTable.HorizontalAlignment = 0;
@@ -324,7 +326,7 @@ namespace LyncBillingBase.Libs
             //int startMonth = ((DateTime)extraParams["StartDate"]).Month;
             //int endMonth = ((DateTime)extraParams["EndDate"]).Month;
 
-            //UsersCallsSummary userSummary = UsersCallsSummary.GetUserCallsSummary(sipAccount, year, startMonth, endMonth);
+            //UsersCallsSummary userSummary = UsersCallsSummary.GetCallsSummaryForUser(sipAccount, year, startMonth, endMonth);
 
             //TOTALS HEADERS
             pdfTable.AddCell(new Phrase("Totals", BoldTableFont));
@@ -355,8 +357,8 @@ namespace LyncBillingBase.Libs
             pdfTable.AddCell(new Phrase(string.Empty, BodyFont));
             pdfTable.AddCell(new Phrase(string.Empty, BodyFont));
             pdfTable.AddCell(new Phrase("Unallocated", BodyFont));
-            pdfTable.AddCell(new Phrase(Decimal.Round(userSummary.UnmarkedCallsCost, 2).ToString(), BodyFontSmall));
-            pdfTable.AddCell(new Phrase(userSummary.UnmarkedCallsDuration.ConvertSecondsToReadable(), BodyFontSmall));
+            pdfTable.AddCell(new Phrase(Decimal.Round(userSummary.UnallocatedCallsCost, 2).ToString(), BodyFontSmall));
+            pdfTable.AddCell(new Phrase(userSummary.UnallocatedCallsDuration.ConvertSecondsToReadable(), BodyFontSmall));
             pdfTable.CompleteRow();
 
             document.Add(pdfTable);
@@ -596,7 +598,7 @@ namespace LyncBillingBase.Libs
         public static Document CreateAccountingDetailedReport(HttpResponse responseStream, DataTable sourceDataTable,
             List<string> pdfColumnsSchema, int[] pdfColumnsWidths, Dictionary<string, string> pdfDocumentHeaders,
             string dataSeparatorName, Dictionary<string, Dictionary<string, object>> usersInfoCollections,
-            Dictionary<string, UserCallsSummary> usersSummariesMap)
+            Dictionary<string, CallsSummaryForUser> usersSummariesMap)
         {
             //----------------------------------
             //INITIALIZE THE REQUIRED VARIABLES

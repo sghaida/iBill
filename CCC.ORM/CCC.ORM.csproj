@@ -83,7 +83,7 @@
     <Compile Include="Helpers\ObjectPropertyInfoField.cs" />
     <Compile Include="Helpers\RandomObjectsGenerator.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
-    <Compile Include="Libs\LoadConfigs.cs" />
+    <Compile Include="Libs\ConfigurationLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

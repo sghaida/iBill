@@ -8,10 +8,10 @@ namespace LyncBillingBase.DataModels
         AccessMethod = Globals.DataSource.AccessMethod.SingleSource)]
     public class Role : DataModel
     {
-        [IsIdField]
         [DbColumn("ID")]
         public int Id { get; set; }
 
+        [IsIdField]
         [DbColumn("RoleID")]
         public int RoleId { get; set; }
 

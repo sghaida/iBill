@@ -1,0 +1,148 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="LyncBillingUI.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head runat="server">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%: Page.Title %> | iBill</title>
+        
+        <webopt:bundlereference runat="server" path="~/Content/css" />
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+        <asp:ContentPlaceHolder ID="HeaderContent" runat="server"></asp:ContentPlaceHolder>
+    </head>
+
+    <body>
+        <form runat="server">
+            <ext:ResourceManager ID="ExtResourceManager" runat="server" />
+            <asp:HiddenField ID="ThisPageReferrer" runat="server" Value="" />
+
+            <div class="ibill-masthead">
+                <div class="container">
+                    <nav class="ibill-nav">
+                        <div class="container-fluid">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                                <a id="home-tab" class="ibill-nav-item" href="<%= global_asax.APPLICATION_URL %>/">iBILL</a>
+                            </div>
+
+                            <div id="navbar" class="navbar-collapse collapse">
+                                <% if(CurrentSession != null) { %>
+                                    <%--<ul class="nav navbar-nav">--%>
+                                    <ul class="nav navbar-nav navbar-right">
+
+                                        <%-- THE ELEVATED ACCESS MENU--%>
+                                        <% bool higher_access = (CurrentSession.IsDeveloper || CurrentSession.IsSystemAdmin || CurrentSession.IsSiteAdmin || CurrentSession.IsSiteAccountant || CurrentSession.IsDepartmentHead) && (CurrentSession.ActiveRoleName == normalUserRoleName);
+                                            if (higher_access) 
+                                            { %>
+                                                <%-- THE MENU IS CONSTRUCTED FROM THE BACKEND --%>
+                                                <%= UiElevateAccessDropdown %>
+                                        <% } %>
+
+
+                                        <%-- THE SWTICH TO DELEGEES MENU --%>
+                                        <% if ((CurrentSession.IsDelegee) && (CurrentSession.ActiveRoleName == normalUserRoleName))
+                                           { %>
+                                                <%-- THE MENU IS CONSTRUCTED FROM THE BACKEND --%>
+                                                <%= UiSwtichToDelegeeDropdown %>
+                                        <% } %>
+
+
+                                        <%-- THE USER MENU --%>
+                                        <li id="user-menu-tab" class="dropdown">
+                                            <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false"><%= DisplayName %>&nbsp;<span class="caret"></span></a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li class="dropdown-header">Manage</li>
+                                                <li><a href="#">Phone Calls</a></li>
+                                                <li><a href="#">Address Book</a></li>
+                                                <li class="divider"></li>
+                                                <li class="dropdown-header">History</li>
+                                                <li><a href="#">Bills History</a></li>
+                                                <li><a href="#">Calls History</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Statistics</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Providers Rates</a></li>
+                                                
+                                                <% if(CurrentSession.ActiveRoleName == normalUserRoleName) { %>
+                                                    <li class="divider"></li>
+                                                    <li><a href="<%= global_asax.APPLICATION_URL %>/Logout">Logout</a></li>
+                                                <% } %>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                <% } else { %>
+                                    <ul class="nav navbar-nav navbar-right">
+                                        <a id="login-tab" class="ibill-nav-item" href="<%= global_asax.APPLICATION_URL %>/Login">Login</a>
+                                    </ul>
+                                <% } %>        
+                            </div><!-- ./navbar -->
+                        </div><!-- ./container-fluid -->
+                    </nav>
+                </div><!-- ./container -->
+            </div><!-- ./ibill-masthead -->
+
+            <br />
+            <br />
+
+            <div class="container">
+                <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+        </form>
+
+        <footer class="footer">
+            <div class="container">
+                <p class="text-muted">&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
+            </div>
+        </footer>
+
+        <!-- SCRIPTS -->
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/modernizr-2.6.2.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/respond.min.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/browserdetector.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/extjs-helpers.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var referrer = $("#ThisPageReferrer").val();
+
+                //if we are viewing the user pages, select the user-tab from the dropdown menu and the respective sidebar link
+                if (referrer.search("ui_user") != -1) {
+                    $('ul.nav>li.active').removeClass('active');
+
+                    if (referrer.search("user_dashboard") != -1) {
+                        $('#home-tab').addClass('active');
+                    } else if (referrer.search("ui_user") != -1) {
+                        $('#user-menu-tab').addClass('active');
+                    }
+
+                    //Add a "selected" class to the sidebar button with the PAGE_NAME as it's id
+                    //$("#" + referrer.toString()).addClass("selected");
+                    var starting_index = referrer.search("ui");
+                    var button_id = referrer.substr(starting_index, referrer.length);
+                    $("#" + button_id).addClass("selected");
+                }
+                else if (referrer.search("login") != -1) {
+                    $("#login-tab").addClass("active");
+                }
+                else {
+                    $('#home-tab').addClass('active');
+                }
+
+                $('#toggle-button').click(function () {
+                    $("#toggle-block").slideToggle("slow");
+                });
+            });
+        </script>
+    </body>
+</html>
