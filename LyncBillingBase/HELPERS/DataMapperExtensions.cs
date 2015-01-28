@@ -67,8 +67,7 @@ namespace LyncBillingBase.Helpers
                 //Fitler, join, and project
                 sitesDelegates = delegateRoles.Where(item => item.ManagedSiteId > 0).ToList();
                 sitesDepartmentsDelegates = delegateRoles.Where(item => item.ManagedSiteDepartmentId > 0).ToList();
-                userDelegates =
-                    delegateRoles.Where(item => false == string.IsNullOrEmpty(item.ManagedUserSipAccount)).ToList();
+                userDelegates = delegateRoles.Where(item => false == string.IsNullOrEmpty(item.ManagedUserSipAccount)).ToList();
 
                 sitesDepartmentsDelegates =
                     (from role in sitesDepartmentsDelegates
@@ -84,6 +83,7 @@ namespace LyncBillingBase.Helpers
                             ManagedSiteDepartmentId = siteDepartment.Id,
                             Description = role.Description,
                             //RELATIONS
+                            DelegeeAccount = role.DelegeeAccount,
                             ManagedUser = role.ManagedUser,
                             ManagedSiteDepartment = siteDepartment,
                             ManagedSite = role.ManagedSite

@@ -65,7 +65,7 @@ namespace LyncBillingBase.DataMappers
         /// <param name="siteName">Site Name.</param>
         /// <param name="startDate">Optional. Specifies the Starting Date Range.</param>
         /// <param name="endDate">Optional. Specifies the Ending Date Range.</param>
-        /// <returns>List of CallsSummaryForSite</returns>
+        /// <returns>List of CallsSummaryForSite objects.</returns>
         public List<CallsSummaryForSite> GetBySite(string siteName, DateTime? startDate = null, DateTime? endDate = null)
         {
             DateTime fromDate, toDate;

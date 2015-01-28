@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CCC.ORM.DataAccess;
+using CCC.ORM.Helpers;
 using LyncBillingBase.DataModels;
+using LyncBillingBase.Helpers;
 
 namespace LyncBillingBase.DataMappers
 {
@@ -21,7 +23,14 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                return Get(conditions, 0).ToList();
+                return Get(conditions, 0)
+                    .GetWithRelations(
+                        item => item.DelegeeAccount, 
+                        item => item.ManagedUser, 
+                        item => item.ManagedSite, 
+                        item => item.ManagedSiteDepartment)
+                    .IncludeSiteDepartments()
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -44,7 +53,32 @@ namespace LyncBillingBase.DataMappers
 
             try
             {
-                return Get(conditions, 0).ToList();
+                var delegees = Get(conditions, 0);
+
+                if(delegees != null)
+                {
+                    if(delegationType == 1)
+                    {
+                        delegees = delegees.GetWithRelations(
+                                item => item.DelegeeAccount,
+                                item => item.ManagedSite);
+                    }
+                    else if(delegationType == 2)
+                    {
+                        delegees = delegees.GetWithRelations(
+                                item => item.DelegeeAccount,
+                                item => item.ManagedSiteDepartment)
+                            .IncludeSiteDepartments();
+                    }
+                    else if(delegationType == 3)
+                    {
+                        delegees = delegees.GetWithRelations(
+                            item => item.DelegeeAccount,
+                            item => item.ManagedUser);
+                    }
+                }
+
+                return delegees.ToList();
             }
             catch (Exception ex)
             {
