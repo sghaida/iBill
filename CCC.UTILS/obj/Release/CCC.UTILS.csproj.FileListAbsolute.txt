@@ -1,0 +1,5 @@
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Release\CCC.UTILS.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Release\CCC.UTILS.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\obj\Release\CCC.UTILS.csprojResolveAssemblyReference.cache
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\obj\Release\CCC.UTILS.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\obj\Release\CCC.UTILS.pdb

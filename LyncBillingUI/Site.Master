@@ -34,60 +34,28 @@
                             </div>
 
                             <div id="navbar" class="navbar-collapse collapse">
-                                <% if(current_session != null) { %>
+                                <% if(CurrentSession != null) { %>
                                     <%--<ul class="nav navbar-nav">--%>
                                     <ul class="nav navbar-nav navbar-right">
 
-                                        <%-- DELEGEES MENU--%>
-                                        <% if ((current_session.IsDelegee) && (current_session.ActiveRoleName == normalUserRoleName)) { %>
-                                            <li id="swtich-delegee-menu-tab" class="dropdown">
-                                                <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false">Switch to User&nbsp;<span class="caret"></span></a>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <% if(current_session.UserDelegateRoles.Any()) { %>
-                                                        <li class="dropdown-header">Users</li>
-                                                        <% foreach (var userDelegeeRecord in current_session.UserDelegateRoles) { %>
-                                                            <li class="last-child">
-                                                                <a href="<%= global_asax.APPLICATION_URL %>/Authorize?access=userdelegee&identity=<%= userDelegeeRecord.ManagedUserSipAccount %>">
-                                                                    <%= userDelegeeRecord.ManagedUser.DisplayName %>
-                                                                </a>
-                                                            </li>
-                                                        <% } %>
-                                                    <% } %>
-
-
-                                                    <% if (current_session.UserDelegateRoles.Any() && current_session.DepartmentDelegateRoles.Any()) { %> <li class="divider"></li> <% } %>
-
-
-                                                    <% if(current_session.DepartmentDelegateRoles.Any()) { %>
-                                                        <li class="dropdown-header">Departments</li>
-                                                        <% foreach (var departmentDelegeeRecord in current_session.DepartmentDelegateRoles) { %>
-                                                            <li class="last-child">
-                                                                <a href="<%= global_asax.APPLICATION_URL %>/Authorize?access=depdelegee&identity=<%= departmentDelegeeRecord.ManagedSiteDepartment.Site.Name + "_" + departmentDelegeeRecord.ManagedSiteDepartment.Department.Name %>">
-                                                                    <%= departmentDelegeeRecord.ManagedSiteDepartment.Site.Name + " - " + departmentDelegeeRecord.ManagedSiteDepartment.Department.Name %>
-                                                                </a>
-                                                            </li>
-                                                        <% } %>
-                                                    <% } %>
-
-
-                                                    <% if (current_session.DepartmentDelegateRoles.Any() && current_session.SiteDelegateRoles.Any()) { %> <li class="divider"></li> <% } %>
-
-
-                                                    <% if (current_session.SiteDelegateRoles.Any()) { %>
-                                                        <li class="dropdown-header">Sites</li>
-                                                        <% foreach (var siteDelegeeRecord in current_session.SiteDelegateRoles) { %>
-                                                            <li class="last-child">
-                                                                <a href="<%= global_asax.APPLICATION_URL %>/Authorize?access=sitedelegee&identity=<%= siteDelegeeRecord.ManagedSite.Name %>">
-                                                                    <%= siteDelegeeRecord.ManagedSite.Name %>
-                                                                </a>
-                                                            </li>
-                                                        <% } %>
-                                                    <% } %>
-                                                </ul>
-                                            </li>
+                                        <%-- THE ELEVATED ACCESS MENU--%>
+                                        <% bool higher_access = (CurrentSession.IsDeveloper || CurrentSession.IsSystemAdmin || CurrentSession.IsSiteAdmin || CurrentSession.IsSiteAccountant || CurrentSession.IsDepartmentHead) && (CurrentSession.ActiveRoleName == normalUserRoleName);
+                                            if (higher_access) 
+                                            { %>
+                                                <%-- THE MENU IS CONSTRUCTED FROM THE BACKEND --%>
+                                                <%= UiElevateAccessDropdown %>
                                         <% } %>
 
-                                        <%-- USER MENU--%>
+
+                                        <%-- THE SWTICH TO DELEGEES MENU --%>
+                                        <% if ((CurrentSession.IsDelegee) && (CurrentSession.ActiveRoleName == normalUserRoleName))
+                                           { %>
+                                                <%-- THE MENU IS CONSTRUCTED FROM THE BACKEND --%>
+                                                <%= UiSwtichToDelegeeDropdown %>
+                                        <% } %>
+
+
+                                        <%-- THE USER MENU --%>
                                         <li id="user-menu-tab" class="dropdown">
                                             <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false"><%= DisplayName %>&nbsp;<span class="caret"></span></a>
                                             <ul class="dropdown-menu" role="menu">
@@ -103,7 +71,7 @@
                                                 <li class="divider"></li>
                                                 <li><a href="#">Providers Rates</a></li>
                                                 
-                                                <% if(current_session.ActiveRoleName == normalUserRoleName) { %>
+                                                <% if(CurrentSession.ActiveRoleName == normalUserRoleName) { %>
                                                     <li class="divider"></li>
                                                     <li><a href="<%= global_asax.APPLICATION_URL %>/Logout">Logout</a></li>
                                                 <% } %>
