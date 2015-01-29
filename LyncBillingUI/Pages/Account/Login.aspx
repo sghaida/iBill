@@ -12,7 +12,7 @@
     <br />
 
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-6">
             <section id="loginForm">
                 <div class="form-horizontal">
                     <asp:HiddenField ID="RedirectToUrl" runat="server" />
@@ -57,7 +57,7 @@
             </section>
         </div>
 
-        <div class="col-md-7">
+        <div class="col-md-6">
             <h5><%= AuthenticationMessage.ToString() %></h5>
         </div>
     </div>

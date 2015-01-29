@@ -23,5 +23,7 @@ namespace LyncBillingBase.DataModels
 
         [DbColumn("CallsDuration")]
         public long CallsDuration { set; get; }
+
+        public string DestinationContactName { get; set; }
     }
 }

@@ -185,7 +185,8 @@ namespace LyncBillingUI.Account
             }
         }
 
-        //Initialize the BundledAccounts List
+        // 
+        // Initialize the BundledAccounts List
         public void InitializeBundledAccountsList(string userSipAccount)
         {
             //Make sure the parameter was given
@@ -223,7 +224,8 @@ namespace LyncBillingUI.Account
             ActiveRoleName = (normalUser != null ? normalUser.RoleName : string.Empty);
         }
 
-        //Get the user sipaccount.
+        //
+        // Get the user sipaccount.
         public string GetEffectiveSipAccount()
         {
             var delegeesRoleNames = new List<string>();
@@ -238,7 +240,8 @@ namespace LyncBillingUI.Account
             return (User.SipAccount);
         }
 
-        //Get the user displayname.
+        //
+        // Get the user displayname.
         public string GetEffectiveDisplayName()
         {
             var delegeesRoleNames = new List<string>();
@@ -252,5 +255,156 @@ namespace LyncBillingUI.Account
             //else then the user is a normal one, just return the normal user sipaccount.
             return (User.DisplayName);
         }
+
+
+        //
+        // Get the user session phonecalls
+        // Handle normal user mode and user delegee mode
+        public List<PhoneCall> GetUserSessionPhoneCalls(bool force = false)
+        {
+            string sipAccount = this.GetEffectiveSipAccount();
+
+            List<string> DelegeesRoleNames = new List<string>()
+            {
+                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID).RoleName,
+                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.DepartmentDelegeeRoleID).RoleName,
+                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.SiteDelegeeRoleID).RoleName,
+            };
+
+            //
+            // Delegee Mode
+            if (DelegeesRoleNames.Contains(this.ActiveRoleName))
+            {
+                //Initialize the addressbook if it was not initialized already
+                if (this.DelegeeUserAccount.DelegeeUserAddressbook == null || this.DelegeeUserAccount.DelegeeUserAddressbook.Count == 0)
+                {
+                    this.DelegeeUserAccount.DelegeeUserAddressbook = Global.DATABASE.PhoneBooks.GetAddressBook(sipAccount);
+                }
+
+                //Initialize and/or return phonecalls.
+                if (this.DelegeeUserAccount.DelegeeUserPhonecalls == null || this.DelegeeUserAccount.DelegeeUserPhonecalls.Count == 0 || force == true)
+                {
+                    var userPhoneCalls = Global.DATABASE.PhoneCalls.GetChargableCallsPerUser(sipAccount)
+                        .Where(item => item.AcIsInvoiced == "NO" || string.IsNullOrEmpty(item.AcIsInvoiced) == true);
+
+                    var addressbook = this.DelegeeUserAccount.DelegeeUserAddressbook;
+
+                    //Skip the adding addressbook contact names to the phonecalls if there are no entries in the addressbook
+                    if (addressbook.Count > 0)
+                    {
+                        foreach (var phoneCall in userPhoneCalls)
+                        {
+                            if (addressbook.Keys.Contains(phoneCall.DestinationNumberUri))
+                            {
+                                phoneCall.PhoneBookName = ((PhoneBookContact)addressbook[phoneCall.DestinationNumberUri]).Name;
+                            }
+                        }
+                    }
+
+                    this.DelegeeUserAccount.DelegeeUserPhonecalls = userPhoneCalls.ToList();
+                }
+
+                return this.DelegeeUserAccount.DelegeeUserPhonecalls;
+            }
+            //
+            // Normal Users Mode
+            else
+            {
+                //Initialize the addressbook if it was not initialized already
+                if (this.Addressbook == null || this.Addressbook.Count == 0)
+                {
+                    this.Addressbook = Global.DATABASE.PhoneBooks.GetAddressBook(sipAccount);
+                }
+
+                //Initialize and/or return phonecalls.
+                if (this.Phonecalls == null || this.Phonecalls.Count == 0 || force == true)
+                {
+                    //var userPhoneCalls = PhoneCalls.GetPhoneCalls(sipAccount).Where(item => item.AC_IsInvoiced == "NO" || item.AC_IsInvoiced == string.Empty || item.AC_IsInvoiced == null);
+                    var userPhoneCalls = Global.DATABASE.PhoneCalls.GetChargableCallsPerUser(sipAccount)
+                        .Where(item => item.AcIsInvoiced == "NO" || string.IsNullOrEmpty(item.AcIsInvoiced) == true);
+
+                    var addressbook = this.Addressbook;
+
+                    //Skip the adding addressbook contact names to the phonecalls if there are no entries in the addressbook
+                    if (addressbook.Count > 0)
+                    {
+                        foreach (var phoneCall in userPhoneCalls)
+                        {
+                            if (phoneCall.DestinationNumberUri != null && addressbook.Keys.Contains(phoneCall.DestinationNumberUri))
+                            {
+                                phoneCall.PhoneBookName = ((PhoneBookContact)addressbook[phoneCall.DestinationNumberUri]).Name;
+                            }
+                        }
+                    }
+
+                    this.Phonecalls = userPhoneCalls.ToList();
+                }
+
+                return this.Phonecalls;
+            }
+        }
+
+
+        // 
+        // Get the user session phonecalls data, such as: phoneCalls list, AddressBook and PhoneCallsPerPage JSON String
+        // Handle normal user mode and user delegee mode
+        public void FetchSessionPhonecallsAndAddressbookData(out List<PhoneCall> userSessionPhoneCalls, out Dictionary<string, PhoneBookContact> userSessionAddressBook)
+        {
+            //Initialize the passed varaibles
+            userSessionPhoneCalls = new List<PhoneCall>();
+            userSessionAddressBook = new Dictionary<string, PhoneBookContact>();
+
+            List<string> DelegeesRoleNames = new List<string>()
+            {
+                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID).RoleName,
+                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.DepartmentDelegeeRoleID).RoleName,
+                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.SiteDelegeeRoleID).RoleName,
+            };
+
+            //This part is off-loaded to another procedure due to size of code
+            userSessionPhoneCalls = GetUserSessionPhoneCalls();
+
+            if (DelegeesRoleNames.Contains(this.ActiveRoleName))
+            {
+                userSessionAddressBook = this.DelegeeUserAccount.DelegeeUserAddressbook;
+            }
+            else
+            {
+                userSessionAddressBook = this.Addressbook;
+            }
+        }
+
+
+        // 
+        // Pass any of the three variables to this function and it will assign it's data to the respective UserSession container
+        // The functions respectively stand for the the list of user phonecalls, his/her addressbook contacts, and the phonecalls grid json string
+        // This handles the normal user mode and the user delegee mode.
+        public void AssignSessionPhonecallsAndAddressbookData(List<PhoneCall> userSessionPhoneCalls, Dictionary<string, PhoneBookContact> userSessionAddressBook)
+        {
+            List<string> DelegeesRoleNames = new List<string>()
+            {
+                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID).RoleName,
+                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.DepartmentDelegeeRoleID).RoleName,
+                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.SiteDelegeeRoleID).RoleName,
+            };
+
+            if (DelegeesRoleNames.Contains(this.ActiveRoleName))
+            {
+                if (userSessionPhoneCalls != null && userSessionPhoneCalls.Count > 0)
+                    this.DelegeeUserAccount.DelegeeUserPhonecalls = userSessionPhoneCalls;
+
+                if (userSessionAddressBook != null && userSessionAddressBook.Count > 0)
+                    this.DelegeeUserAccount.DelegeeUserAddressbook = userSessionAddressBook;
+            }
+            else
+            {
+                if (userSessionPhoneCalls != null && userSessionPhoneCalls.Count > 0)
+                    this.Phonecalls = userSessionPhoneCalls;
+
+                if (userSessionAddressBook != null && userSessionAddressBook.Count > 0)
+                    this.Addressbook = userSessionAddressBook;
+            }
+        }
+
     }
 }

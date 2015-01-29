@@ -73,7 +73,7 @@
         Border="true"
         AutoScroll="true"
         Scroll="Both"
-        Layout="TableLayout"
+        Layout="AutoLayout"
         ContextMenuID="PhoneCallsAllocationToolsMenu">
 
         <Store>
@@ -123,13 +123,13 @@
                 <ext:RowNumbererColumn
                     ID="RowNumbererColumn2"
                     runat="server"
-                    Width="40" />
+                    MinWidth="40" />
 
                 <ext:Column
                     ID="SessionIdTime"
                     runat="server"
                     Text="Date"
-                    Width="150"
+                    MinWidth="140"
                     DataIndex="SessionIdTime">
                     <Renderer Fn="formatDate" />
                 </ext:Column>
@@ -138,7 +138,7 @@
                     ID="MarkerCallToCountry"
                     runat="server"
                     Text="Country"
-                    Width="150"
+                    MinWidth="120"
                     DataIndex="MarkerCallToCountry">
                 </ext:Column>
 
@@ -146,14 +146,14 @@
                     ID="DestinationNumberUri"
                     runat="server"
                     Text="Destination"
-                    Width="130"
+                    MinWidth="110"
                     DataIndex="DestinationNumberUri">
                 </ext:Column>
 
                 <ext:Column ID="PhoneBookNameCol"
                     runat="server"
                     Text="Contact Name"
-                    Width="250"
+                    MinWidth="150"
                     DataIndex="PhoneBookName">
                     <Editor>
                         <ext:TextField
@@ -169,7 +169,7 @@
                     ID="Duration"
                     runat="server"
                     Text="Duration"
-                    Width="100"
+                    MinWidth="80"
                     DataIndex="Duration">
                     <Renderer Fn="GetMinutes" />
                 </ext:Column>
@@ -178,7 +178,7 @@
                     ID="MarkerCallCost"
                     runat="server"
                     Text="Cost"
-                    Width="100"
+                    MinWidth="80"
                     DataIndex="MarkerCallCost">
                     <Renderer Fn="RoundCost" />
                 </ext:Column>
@@ -187,7 +187,7 @@
                     ID="MarkerCallTypeCol"
                     runat="server"
                     Text="MarkerCallType"
-                    Width="200"
+                    MinWidth="150"
                     DataIndex="MarkerCallType">
                 </ext:Column>
             </Columns>
