@@ -8,8 +8,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title><%: Page.Title %> | iBill</title>
         
-        <webopt:bundlereference runat="server" path="~/Content/css" />
+        <%--<webopt:bundlereference runat="server" path="~/Content/css" />--%>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+        <%--<link href='<%= global_asax.APPLICATION_URL %>/Content/bootstrap.min.css' rel='stylesheet'>
+        <link href='<%= global_asax.APPLICATION_URL %>/Content/Site.css' rel='stylesheet'>--%>
+
+        <link rel="stylesheet" href="<%= global_asax.APPLICATION_URL %>/Content/foundation.min.css" />
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/vendor/modernizr.js"></script>
 
         <asp:ContentPlaceHolder ID="HeaderContent" runat="server"></asp:ContentPlaceHolder>
     </head>
@@ -19,7 +25,7 @@
             <ext:ResourceManager ID="ExtResourceManager" runat="server" />
             <asp:HiddenField ID="ThisPageReferrer" runat="server" Value="" />
 
-            <div class="ibill-masthead">
+            <div class="ibill-masthead" id="top" role="banner">
                 <div class="container">
                     <nav class="ibill-nav">
                         <div class="container-fluid">
@@ -95,35 +101,46 @@
             <div class="container">
                 <asp:ContentPlaceHolder ID="MainContent" runat="server">
                 </asp:ContentPlaceHolder>
+                
+                <br />
+                <hr />
+
+                <footer role="contentinfo">
+                    <p>&copy; <%: DateTime.Now.Year %> - CCC iBill</p>
+                </footer>
             </div>
         </form>
 
-        <footer class="footer">
+        <%--<footer class="footer" role="contentinfo">
             <div class="container">
                 <p class="text-muted">&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
             </div>
-        </footer>
+        </footer>--%>
 
         <!-- SCRIPTS -->
-        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/modernizr-2.6.2.js"></script>
+        <%--<script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/modernizr-2.6.2.js"></script>
         <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/bootstrap.min.js"></script>
-        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/respond.min.js"></script>
-        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/browserdetector.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/respond.min.js"></script>--%>
+
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/vendor/jquery.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/foundation.min.js"></script>
         <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/extjs-helpers.js"></script>
 
         <script type="text/javascript">
+            $(document).foundation();
+
             $(document).ready(function () {
                 var referrer = $("#ThisPageReferrer").val();
 
                 //if we are viewing the user pages, select the user-tab from the dropdown menu and the respective sidebar link
-                if (referrer.search("ui_user") != -1) {
+                if (referrer.search("user") != -1) {
                     $('ul.nav>li.active').removeClass('active');
 
                     if (referrer.search("user_dashboard") != -1) {
                         $('#home-tab').addClass('active');
-                    } else if (referrer.search("ui_user") != -1) {
-                        $('#user-menu-tab').addClass('active');
+                    } else if (referrer.search("user") != -1) {
+                        $('#user-menu-tab>a').addClass('active');
                     }
 
                     //Add a "selected" class to the sidebar button with the PAGE_NAME as it's id
@@ -144,5 +161,9 @@
                 });
             });
         </script>
+
+
+        <asp:ContentPlaceHolder ID="EndOfBodyScripts" runat="server">
+        </asp:ContentPlaceHolder>
     </body>
 </html>
