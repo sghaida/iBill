@@ -8,14 +8,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title><%: Page.Title %> | iBill</title>
         
-        <%--<webopt:bundlereference runat="server" path="~/Content/css" />--%>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
-        <%--<link href='<%= global_asax.APPLICATION_URL %>/Content/bootstrap.min.css' rel='stylesheet'>
-        <link href='<%= global_asax.APPLICATION_URL %>/Content/Site.css' rel='stylesheet'>--%>
-
-        <link rel="stylesheet" href="<%= global_asax.APPLICATION_URL %>/Content/foundation.min.css" />
-        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/vendor/modernizr.js"></script>
+        
+        <%--<link rel="stylesheet" href="/Content/bootstrap.noconflict.css" />--%>
+        <link rel="stylesheet" href="/Content/Site.css" />
 
         <asp:ContentPlaceHolder ID="HeaderContent" runat="server"></asp:ContentPlaceHolder>
     </head>
@@ -111,24 +107,19 @@
             </div>
         </form>
 
-        <%--<footer class="footer" role="contentinfo">
-            <div class="container">
-                <p class="text-muted">&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
-            </div>
-        </footer>--%>
-
         <!-- SCRIPTS -->
-        <%--<script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/modernizr-2.6.2.js"></script>
-        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/modernizr-2.6.2.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/jquery-1.11.2.min.js"></script>
         <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/bootstrap.min.js"></script>
-        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/respond.min.js"></script>--%>
 
-        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/vendor/jquery.js"></script>
-        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/foundation.min.js"></script>
+        <%--<script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/vendor/jquery.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/foundation.min.js"></script>--%>
         <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/extjs-helpers.js"></script>
 
         <script type="text/javascript">
-            $(document).foundation();
+            $(window).load(function () {
+                $('head').prepend("<link rel='stylesheet' href='<%= global_asax.APPLICATION_URL %>/Content/bootstrap.noconflict.css' />");
+            });
 
             $(document).ready(function () {
                 var referrer = $("#ThisPageReferrer").val();
