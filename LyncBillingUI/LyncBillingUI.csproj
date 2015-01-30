@@ -119,10 +119,19 @@
     <Content Include="App_Readme\Ext.NET\README.txt" />
     <Content Include="App_Readme\Transformer.NET\LICENSE.txt" />
     <Content Include="App_Readme\Transformer.NET\README.txt" />
+    <Content Include="Content\bootstrap.noconflict.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.noconflict.min.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\foundation.css" />
     <Content Include="Content\foundation.min.css" />
     <Content Include="Content\normalize.css" />
+    <Content Include="Content\normalize.noconflict.css" />
+    <Content Include="Content\Site.Foundation.css" />
     <Content Include="Ext.NET.Default.aspx" />
+    <Content Include="Images\logo_48.png" />
     <Content Include="Pages\About.aspx" />
     <Content Include="Pages\Account\Authorize.aspx" />
     <Content Include="Pages\Account\Login.aspx" />
@@ -135,7 +144,8 @@
     <Content Include="Error\Oops.aspx" />
     <Content Include="Pages\User\Dashboard.aspx" />
     <Content Include="Pages\User\ManagePhoneCalls.aspx" />
-    <Content Include="Scripts\browserdetector.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\extjs-helpers.js" />
     <Content Include="Scripts\foundation.min.js" />
     <Content Include="Scripts\foundation\foundation.abide.js" />
@@ -155,6 +165,8 @@
     <Content Include="Scripts\foundation\foundation.tab.js" />
     <Content Include="Scripts\foundation\foundation.tooltip.js" />
     <Content Include="Scripts\foundation\foundation.topbar.js" />
+    <Content Include="Scripts\jquery-1.11.2.js" />
+    <Content Include="Scripts\jquery-1.11.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -171,8 +183,12 @@
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
     <None Include="Project_Readme.html" />
     <Content Include="Site.Mobile.Master" />
+    <Content Include="Scripts\jquery-1.11.2.min.map" />
+    <Content Include="Site.Foundation.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -259,6 +275,13 @@
       <DependentUpon>ManagePhoneCalls.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Site.Foundation.Master.cs">
+      <DependentUpon>Site.Foundation.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Site.Foundation.Master.designer.cs">
+      <DependentUpon>Site.Foundation.Master</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -1,0 +1,152 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Foundation.master.cs" Inherits="LyncBillingUI.Site_Foundation" %>
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head runat="server">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%: Page.Title %> | iBill</title>
+        
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/vendor/modernizr.js"></script>
+        <link rel="stylesheet" href="/Content/Site.Foundation.css" />
+
+        <asp:ContentPlaceHolder ID="HeaderContent" runat="server"></asp:ContentPlaceHolder>
+    </head>
+
+    <body>
+        <form runat="server">
+            <ext:ResourceManager ID="ExtResourceManager" runat="server" />
+            <asp:HiddenField ID="ThisPageReferrer" runat="server" Value="" />
+
+            <%--<nav class="row">
+                <div class="large-12 columns">
+                    <h2>iBill</h2>
+                    <ul class="button-group radius even-4">
+                        <li><a class="button" href="#">User Dashboard</a></li>
+                        <li><a class="button" href="#">Manage Phonecalls</a></li>
+                        <li><a class="button" href="#">Address Book</a></li>
+                        <li><a class="button" href="#">Bills History</a></li>
+                    </ul>
+                </div>
+            </nav>--%>
+
+            <!-- Header and Nav -->
+            <nav class="top-bar" data-topbar role="navigation">
+              <ul class="title-area">
+                <li class="name">
+                  <h1><a href="#">My Site</a></h1>
+                </li>
+                 <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+              </ul>
+
+              <section class="top-bar-section">
+                <!-- Right Nav Section -->
+                <ul class="right">
+                  <li class="active"><a href="#">Right Button Active</a></li>
+                  <li class="has-dropdown">
+                    <a href="#">Right Button Dropdown</a>
+                    <ul class="dropdown">
+                      <li><a href="#">First link in dropdown</a></li>
+                      <li class="active"><a href="#">Active link in dropdown</a></li>
+                    </ul>
+                  </li>
+                </ul>
+
+                <!-- Left Nav Section -->
+                <ul class="left">
+                  <li><a href="#">Left Nav Button</a></li>
+                </ul>
+              </section>
+            </nav>
+
+            <br />
+
+            <div class="row">
+                <br />
+                <div class="large-3 columns">
+                    <h1><img src="<%= global_asax.APPLICATION_URL %>/Images/logo_48.png" /></h1>
+                </div>
+
+                <div class="large-9 columns">
+                    <ul class="button-group right">
+                        <li class="active"><a href="#" class="button">Link 1</a></li>
+                        <li><a href="#" class="button">Link 2</a></li>
+                        <li><a href="#" class="button">Link 3</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- End Header and Nav -->
+
+            <br />
+            <br />
+
+            <div class="row">
+                <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+
+            <br />
+            <hr />
+
+            <footer role="contentinfo">
+                <p>&copy; <%: DateTime.Now.Year %> - CCC iBill</p>
+            </footer>
+        </form>
+
+        <!-- SCRIPTS -->
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/vendor/jquery.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/foundation.min.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/extjs-helpers.js"></script>
+
+        <script type="text/javascript">
+            $(window).load(function () {
+                $("head").prepend(
+                  "<link href='<%= global_asax.APPLICATION_URL %>/Content/normalize.noconflict.css' rel='stylesheet' />" +
+                  "<link href='<%= global_asax.APPLICATION_URL %>/Content/foundation.min.css' rel='stylesheet' />");
+              });
+
+            // FOUNDATION
+            Foundation.global.namespace = '';
+            $(document).foundation();
+
+            $(document).ready(function () {
+                var referrer = $("#ThisPageReferrer").val();
+
+                //if we are viewing the user pages, select the user-tab from the dropdown menu and the respective sidebar link
+                if (referrer.search("user") != -1) {
+                    $('ul.nav>li.active').removeClass('active');
+
+                    if (referrer.search("user_dashboard") != -1) {
+                        $('#home-tab').addClass('active');
+                    } else if (referrer.search("user") != -1) {
+                        $('#user-menu-tab>a').addClass('active');
+                    }
+
+                    //Add a "selected" class to the sidebar button with the PAGE_NAME as it's id
+                    //$("#" + referrer.toString()).addClass("selected");
+                    var starting_index = referrer.search("ui");
+                    var button_id = referrer.substr(starting_index, referrer.length);
+                    $("#" + button_id).addClass("selected");
+                }
+                else if (referrer.search("login") != -1) {
+                    $("#login-tab").addClass("active");
+                }
+                else {
+                    $('#home-tab').addClass('active');
+                }
+
+                $('#toggle-button').click(function () {
+                    $("#toggle-block").slideToggle("slow");
+                });
+            });
+        </script>
+
+
+        <asp:ContentPlaceHolder ID="EndOfBodyScripts" runat="server">
+        </asp:ContentPlaceHolder>
+    </body>
+</html>

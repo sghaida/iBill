@@ -1,9 +1,4 @@
-﻿//FIRST CALL THE BROWSER-DETECTOR INIT FUNCTION
-//Note that you need to require the BrowserDetector script before this in the documents headers.
-BrowserDetect.init();
-
-
-////This is a function that handles the zero ids of departments and sites
+﻿////This is a function that handles the zero ids of departments and sites
 ////It is called from the System Admin ->>> Manage Delegates page.
 //function RenderZeroAsNA(value, meta, record, rowIndex, colIndex, store) {
 //    //if (typeof record.data.DepartmentID !== undefined){}
