@@ -92,7 +92,6 @@
             </div><!-- ./ibill-masthead -->
 
             <br />
-            <br />
 
             <div class="container">
                 <asp:ContentPlaceHolder ID="MainContent" runat="server">
