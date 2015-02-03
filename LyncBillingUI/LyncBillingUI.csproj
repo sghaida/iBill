@@ -43,13 +43,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="CCC.ORM">
-      <HintPath>..\CCC.ORM\bin\Release\CCC.ORM.dll</HintPath>
-    </Reference>
-    <Reference Include="CCC.UTILS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\CCC.UTILS\bin\Release\CCC.UTILS.dll</HintPath>
-    </Reference>
     <Reference Include="Ext.Net, Version=2.5.3.31229, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ext.NET.2.5.3.1\lib\net45\Ext.Net.dll</HintPath>
@@ -57,9 +50,6 @@
     <Reference Include="Ext.Net.Utilities, Version=2.5.0.0, Culture=neutral, PublicKeyToken=2c34ac34702a3c23, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ext.NET.Utilities.2.5.0\lib\Ext.Net.Utilities.dll</HintPath>
-    </Reference>
-    <Reference Include="LyncBillingBase">
-      <HintPath>..\LyncBillingBase\bin\Release\LyncBillingBase.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -304,7 +294,20 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CCC.ORM\CCC.ORM.csproj">
+      <Project>{5fb432b3-d581-4a6c-8718-d9038fed0630}</Project>
+      <Name>CCC.ORM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CCC.UTILS\CCC.UTILS.csproj">
+      <Project>{9f02e36f-a8a3-4c7d-8772-51838757fb6d}</Project>
+      <Name>CCC.UTILS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LyncBillingBase\LyncBillingBase.csproj">
+      <Project>{4d303f14-08ed-4f92-b7e1-377569a8d7eb}</Project>
+      <Name>LyncBillingBase</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

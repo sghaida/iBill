@@ -45,17 +45,12 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBilli
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.pdb
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Antlr3.Runtime.dll
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\AspNet.ScriptManager.bootstrap.dll
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\AspNet.ScriptManager.jQuery.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\CCC.ORM.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\CCC.UTILS.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.Utilities.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingBase.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.AspNet.FriendlyUrls.dll
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.ScriptManager.MSAjax.dll
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.ScriptManager.WebForms.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\Newtonsoft.Json.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\bin\System.Web.Optimization.dll
