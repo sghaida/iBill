@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="User Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="LyncBillingUI.Pages.User.Dashboard" %>
 
+
 <asp:Content ID="Header" ContentPlaceHolderID="HeaderContent" runat="server">
 </asp:Content>
 
@@ -13,7 +14,7 @@
 
     <div class="row" role="row">
         <div class="col-md-6">
-            <div class="panel panel-primary">
+            <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3 class="panel-title">Most Called Countries</h3>
                 </div>
@@ -161,86 +162,91 @@
 
     <div class="row" role="row">
         <div class="col-md-6">
-            <ext:GridPanel
-                ID="TopDestinationNumbersGrid"
-                runat="server"
-                Title="Most Called Numbers"
-                Width="465"
-                Height="200"
-                AutoScroll="true"
-                Header="true"
-                Scroll="Both"
-                Layout="FitLayout">
-                <Store>
-                    <ext:Store
-                        ID="TopDestinationNumbersStore"
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Most Called Numbers</h3>
+                </div>
+                
+                <div class="panel-body">
+                    <ext:GridPanel
+                        ID="TopDestinationNumbersGrid"
                         runat="server"
-                        OnLoad="TopDestinationNumbersStore_Load">
-                        <Model>
-                            <ext:Model ID="TopDestinationNumbersModel" runat="server" IDProperty="SessionIdTime">
-                                <Fields>
-                                    <ext:ModelField Name="PhoneNumber" Type="String" />
-                                    <ext:ModelField Name="DestinationContactName" Type="String" />
-                                    <ext:ModelField Name="CallsCount" Type="Int" />
-                                </Fields>
-                            </ext:Model>
-                        </Model>
-                    </ext:Store>
-                </Store>
+                        Width="430"
+                        Height="150"
+                        AutoScroll="true"
+                        Header="true"
+                        Scroll="Both"
+                        Layout="FitLayout"
+                        ComponentCls="table talbe-compact">
+                        <Store>
+                            <ext:Store
+                                ID="TopDestinationNumbersStore"
+                                runat="server"
+                                OnLoad="TopDestinationNumbersStore_Load">
+                                <Model>
+                                    <ext:Model ID="TopDestinationNumbersModel" runat="server" IDProperty="SessionIdTime">
+                                        <Fields>
+                                            <ext:ModelField Name="PhoneNumber" Type="String" />
+                                            <ext:ModelField Name="DestinationContactName" Type="String" />
+                                            <ext:ModelField Name="CallsCount" Type="Int" />
+                                        </Fields>
+                                    </ext:Model>
+                                </Model>
+                            </ext:Store>
+                        </Store>
 
-                <ColumnModel ID="TOPDestinationNumbersColumnModel" runat="server" Flex="1">
-                    <Columns>
-                        <ext:Column
-                            ID="PhoneNumber"
-                            runat="server"
-                            Text="Phone Number"
-                            Width="160"
-                            DataIndex="PhoneNumber">
-                        </ext:Column>
+                        <ColumnModel ID="TOPDestinationNumbersColumnModel" runat="server" Flex="1">
+                            <Columns>
+                                <ext:Column
+                                    ID="PhoneNumber"
+                                    runat="server"
+                                    Text="Phone Number"
+                                    Width="150"
+                                    DataIndex="PhoneNumber">
+                                </ext:Column>
 
-                        <ext:Column
-                            ID="DestinationContactName"
-                            runat="server"
-                            Text="Addressbook Contact Name"
-                            Width="180"
-                            DataIndex="DestinationContactName" />
+                                <ext:Column
+                                    ID="DestinationContactName"
+                                    runat="server"
+                                    Text="Addressbook Contact Name"
+                                    Width="170"
+                                    DataIndex="DestinationContactName" />
 
-                        <ext:Column
-                            ID="CallsCount"
-                            runat="server"
-                            Text="Number of Calls"
-                            Width="120"
-                            DataIndex="CallsCount" />
-                    </Columns>
-                </ColumnModel>
-            </ext:GridPanel>
+                                <ext:Column
+                                    ID="CallsCount"
+                                    runat="server"
+                                    Text="Number of Calls"
+                                    Width="90"
+                                    DataIndex="CallsCount" />
+                            </Columns>
+                        </ColumnModel>
+                    </ext:GridPanel>
+                </div>
+            </div>
         </div>
 
         <div class="col-md-6">
-            <ext:Panel
-                ID="UserMailStatisticsPanel" 
-                runat="server"
-                Header="true"
-                Title="Mail Statistics - Previous Month"
-                PaddingSummary="10px 10px 10px 10px"
-                Width="465"
-                Height="200"
-                ButtonAlign="Center">
-
-                <Defaults>
-                    <ext:Parameter Name="bodyPadding" Value="10" Mode="Raw" />
-                </Defaults>
-
-                <Content>
-                    <div class="p10 font-14">
-                        <p class="mb5">Number of Received Mails: <span class="bold red-color"><%= userMailStatistics.ReceivedCount %></span></p>
-                        <p class="mb5">Size of Received Mails: <span class="bold red-color"><%= userMailStatistics.ReceivedSize %> (in MB)</span></p>
-                        <div class="clear h15"></div>
-                        <p class="mb5">Number of Sent Mails: <span class="bold blue-color"><%= userMailStatistics.SentCount %></span></p>
-                        <p class="mb5">Size of Sent Mails: <span class="bold blue-color"><%= userMailStatistics.SentSize %> (in MB)</span></p>
-                    </div>
-                </Content>
-            </ext:Panel>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Mail Statistics - Previous Month</h3>
+                </div>
+                
+                <div class="panel-body">
+                    <h5><strong>Received Mails:</strong></h5>
+                    <ul>
+                        <li><h5>Number:&nbsp;<span class="bold red-color"><%= userMailStatistics.ReceivedCount %></span></h5></li>
+                        <li><h5>Size:&nbsp;<span class="bold red-color"><%= userMailStatistics.ReceivedSize %> (in MB)</span></h5></li>
+                    </ul>
+                    
+                    <br />
+                    
+                    <h5><strong>Sent Mails:</strong></h5>
+                    <ul>
+                        <li><h5>Number:&nbsp;<span class="bold blue-color"><%= userMailStatistics.SentCount %></span></h5></li>
+                        <li><h5>Size:&nbsp;<span class="bold blue-color"><%= userMailStatistics.SentSize %> (in MB)</span></h5></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div><!-- ./row -->
 </asp:Content>

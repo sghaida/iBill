@@ -8,20 +8,51 @@ using Ext;
 using Ext.Net;
 
 using CCC.ORM.Helpers;
-using LyncBillingUI;
 using LyncBillingBase;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;
+using LyncBillingUI;
+using LyncBillingUI.Account;
 
 namespace LyncBillingUI.Pages.User
 {
     public partial class ManagePhoneCalls : System.Web.UI.Page
     {
+        private string sipAccount = string.Empty;
+        private string normalUserRoleName { get; set; }
+        private string userDelegeeRoleName { get; set; }
+
         private static List<PhoneCall> phoneCalls;
         private static List<Country> countries;
 
+        // This actually takes a copy of the current session for some uses on the frontend.
+        public UserSession CurrentSession { get; set; }
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
+            SetRolesNames();
+
+            // If the user is not loggedin, redirect to Login page.
+            if (HttpContext.Current.Session == null || HttpContext.Current.Session.Contents["UserData"] == null)
+            {
+                string RedirectTo = @"/User/Manage/PhoneCalls";
+                string Url = @"/Login?RedirectTo=" + RedirectTo;
+                Response.Redirect(Url);
+            }
+            else
+            {
+                CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
+                if (CurrentSession.ActiveRoleName != normalUserRoleName && CurrentSession.ActiveRoleName != userDelegeeRoleName)
+                {
+                    string url = @"/Authenticate?access=" + CurrentSession.ActiveRoleName;
+                    Response.Redirect(url);
+                }
+            }
+
+
+            //
+            // ON LOAD
             if (!X.IsAjaxRequest)
             {
                 phoneCalls = Global.DATABASE.PhoneCalls.GetChargableCallsPerUser("aalhour@ccc.gr").ToList();
@@ -34,6 +65,25 @@ namespace LyncBillingUI.Pages.User
                     });
             }
         }
+
+
+        //
+        // Set the role names of User and Delegee
+        private void SetRolesNames()
+        {
+            if (string.IsNullOrEmpty(normalUserRoleName))
+            {
+                var normalUserRole = Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserRoleID);
+                normalUserRoleName = (normalUserRole != null ? normalUserRole.RoleName : string.Empty);
+            }
+
+            if (string.IsNullOrEmpty(userDelegeeRoleName))
+            {
+                var delegeeUserRole = Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID);
+                userDelegeeRoleName = (delegeeUserRole != null ? delegeeUserRole.RoleName : string.Empty);
+            }
+        }
+
 
 
         //STORE LOADERS
