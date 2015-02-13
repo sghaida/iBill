@@ -13,6 +13,8 @@ using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;
 using LyncBillingUI;
 using LyncBillingUI.Account;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace LyncBillingUI.Pages.User
 {
@@ -50,20 +52,14 @@ namespace LyncBillingUI.Pages.User
                 }
             }
 
+            sipAccount = CurrentSession.GetEffectiveSipAccount();
 
             //
-            // ON LOAD
-            if (!X.IsAjaxRequest)
-            {
-                phoneCalls = Global.DATABASE.PhoneCalls.GetChargableCallsPerUser("aalhour@ccc.gr").ToList();
-                countries = Global.DATABASE.Countries.GetAll().ToList();
-
-                phoneCalls.ForEach((phoneCall) =>
-                    {
-                        var country = countries.Find(item => item.Iso3Code == phoneCall.MarkerCallToCountry);
-                        phoneCall.MarkerCallToCountry = (country != null ? country.Name : phoneCall.MarkerCallToCountry);
-                    });
-            }
+            // Handle user delegee mode and normal user mode
+            if (CurrentSession.ActiveRoleName == userDelegeeRoleName)
+                CurrentSession.DelegeeUserAccount.DelegeeUserAddressbook = Global.DATABASE.PhoneBooks.GetAddressBook(sipAccount);
+            else
+                CurrentSession.Addressbook = Global.DATABASE.PhoneBooks.GetAddressBook(sipAccount);
         }
 
 
@@ -84,43 +80,187 @@ namespace LyncBillingUI.Pages.User
             }
         }
 
-
-
-        //STORE LOADERS
-        protected void PhoneCallsStore_Load(object sender, EventArgs e)
+        //
+        // Data Binding/Re-binding function
+        private void RebindDataToStore(List<PhoneCall> phoneCallsData)
         {
-            this.PhoneCallsStore.DataSource = phoneCalls;
-            this.PhoneCallsStore.DataBind();
+            ManagePhoneCallsGrid.GetSelectionModel().DeselectAll();
+
+            ManagePhoneCallsGrid.GetStore().RemoveAll();
+
+            //
+            // Trigger the PhoneCallsTypeFilter OnSelect Event
+            PhoneCallsTypeFilter(null, null);
         }
 
 
-        //User Controls
+        //
+        // STORE LOADERS
+        protected void PhoneCallsStore_Load(object sender, EventArgs e)
+        {
+            if (!Ext.Net.X.IsAjaxRequest)
+            {
+                //Get use session and user phonecalls list.
+                CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
+
+                //Get user session phonecalls; handle normal user mode and delegee mode
+                List<PhoneCall> userSessionPhoneCalls = CurrentSession.GetUserSessionPhoneCalls().Where(phoneCall => string.IsNullOrEmpty(phoneCall.UiCallType) == true).ToList();
+
+                ManagePhoneCallsGrid.GetStore().DataSource = userSessionPhoneCalls;
+                ManagePhoneCallsGrid.GetStore().DataBind();
+            }
+        }
+
+
+        //
+        // User Controls
         [DirectMethod]
         protected void PhoneCallsTypeFilter(object sender, DirectEventArgs e)
         {
+            //User session phonecalls container
+            List<PhoneCall> userSessionPhoneCalls;
 
+            //The phone calls type filter
+            string phoneCallsTypeFilter = Convert.ToString(HelperFunctions.ReturnEmptyIfNull(FilterTypeComboBox.SelectedItem.Value));
+
+
+            if (phoneCallsTypeFilter != "Unallocated")
+            {
+                //Get user session phonecalls; handle normal user mode and delegee mode
+                userSessionPhoneCalls = CurrentSession.GetUserSessionPhoneCalls().Where(phoneCall => phoneCall.UiCallType == phoneCallsTypeFilter).ToList();
+
+                //Bind them to the Grid
+                ManagePhoneCallsGrid.GetStore().DataSource = userSessionPhoneCalls;
+                ManagePhoneCallsGrid.GetStore().DataBind();
+
+                //Enable/Disable the context menu items
+                PhoneBookNameEditorTextbox.ReadOnly = true;
+
+                if (phoneCallsTypeFilter == "Personal")
+                {
+                    AllocatePhonecallsAsPersonal.Disabled = true;
+                    AllocateDestinationsAsAlwaysPersonal.Disabled = true;
+
+                    AllocatePhonecallsAsDispute.Disabled = false;
+                    AllocatePhonecallsAsBusiness.Disabled = false;
+                    AllocateDestinationsAsAlwaysBusiness.Disabled = false;
+                }
+
+                if (phoneCallsTypeFilter == "Business")
+                {
+                    AllocatePhonecallsAsBusiness.Disabled = true;
+                    AllocateDestinationsAsAlwaysBusiness.Disabled = true;
+
+                    AllocatePhonecallsAsDispute.Disabled = false;
+                    AllocatePhonecallsAsPersonal.Disabled = false;
+                    AllocateDestinationsAsAlwaysPersonal.Disabled = false;
+                }
+
+                if (phoneCallsTypeFilter == "Disputed")
+                {
+                    AllocatePhonecallsAsDispute.Disabled = true;
+
+                    AllocatePhonecallsAsBusiness.Disabled = false;
+                    AllocatePhonecallsAsPersonal.Disabled = false;
+                    AllocateDestinationsAsAlwaysBusiness.Disabled = false;
+                    AllocateDestinationsAsAlwaysPersonal.Disabled = false;
+                }
+            }
+            else
+            {
+                //Get user session phonecalls; handle normal user mode and delegee mode
+                userSessionPhoneCalls = CurrentSession.GetUserSessionPhoneCalls().Where(phoneCall => string.IsNullOrEmpty(phoneCall.UiCallType)).ToList();
+
+                //Bind them to the Grid
+                ManagePhoneCallsGrid.GetStore().DataSource = userSessionPhoneCalls;
+                ManagePhoneCallsGrid.GetStore().DataBind();
+
+                //Enable/Disable the context menu items
+                PhoneBookNameEditorTextbox.ReadOnly = false;
+
+                AllocatePhonecallsAsDispute.Disabled = false;
+                AllocatePhonecallsAsBusiness.Disabled = false;
+                AllocatePhonecallsAsPersonal.Disabled = false;
+
+                AllocateDestinationsAsAlwaysPersonal.Disabled = false;
+                AllocateDestinationsAsAlwaysBusiness.Disabled = false;
+            }
         }
 
         [DirectMethod]
         protected void ShowUserHelpPanel(object sender, DirectEventArgs e)
         {
-
+            this.UserHelpPanel.Show();
         }
 
         [DirectMethod]
         protected void PhoneCallsGridSelectDirectEvents(object sender, DirectEventArgs e)
         {
+            string json = string.Empty;
+            List<PhoneCall> submittedPhoneCalls;
 
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+
+
+            json = e.ExtraParams["Values"];
+            submittedPhoneCalls = serializer.Deserialize<List<PhoneCall>>(json);
+
+            var result = submittedPhoneCalls.Where(item => !string.IsNullOrEmpty(item.UiAssignedByUser)).ToList();
+
+            if (submittedPhoneCalls.Count > 0 && submittedPhoneCalls.Count == result.Count)
+                MoveToDepartmnet.Disabled = false;
+            else
+                MoveToDepartmnet.Disabled = true;
         }
 
         [DirectMethod]
         protected void AutomarkCalls_Clicked(object sender, DirectEventArgs e)
         {
+            List<PhoneCall> userSessionPhoneCalls;
+            Dictionary<string, PhoneBookContact> userSessionAddressbook;
+            PhoneBookContact addressBookEntry;
+            int numberOfRemainingUnmarked;
 
+            //Get the unmarked calls from the user session phonecalls container
+            CurrentSession.FetchSessionPhonecallsAndAddressbookData(out userSessionPhoneCalls, out userSessionAddressbook);
+
+            numberOfRemainingUnmarked = userSessionPhoneCalls.Where(phoneCall => string.IsNullOrEmpty(phoneCall.UiCallType)).ToList().Count;
+
+            //If the user has no addressbook contacts, skip the auto marking process
+            if (userSessionAddressbook.Keys.Count > 0)
+            {
+                foreach (var phoneCall in userSessionPhoneCalls.Where(phoneCall => string.IsNullOrEmpty(phoneCall.UiCallType)))
+                {
+                    if (userSessionAddressbook.Keys.Contains(phoneCall.DestinationNumberUri))
+                    {
+                        addressBookEntry = (PhoneBookContact)userSessionAddressbook[phoneCall.DestinationNumberUri];
+
+                        if (!string.IsNullOrEmpty(addressBookEntry.Type))
+                        {
+                            phoneCall.UiCallType = addressBookEntry.Type;
+                            phoneCall.UiUpdatedByUser = sipAccount;
+                            phoneCall.UiMarkedOn = DateTime.Now;
+
+                            Global.DATABASE.PhoneCalls.Update(phoneCall, phoneCall.PhoneCallsTableName);
+
+                            ModelProxy model = PhoneCallsStore.Find("SessionIdTime", phoneCall.SessionIdTime.ToString());
+                            model.Set(phoneCall);
+                            model.Commit();
+                        }
+                    }
+                }
+            }
+
+            ManagePhoneCallsGrid.GetSelectionModel().DeselectAll();
+            PhoneCallsStore.LoadPage(1);
+
+            CurrentSession.AssignSessionPhonecallsAndAddressbookData(userSessionPhoneCalls, userSessionAddressbook);
         }
 
 
-        //Phone Calls Allocation
+        //
+        // Phone Calls Allocation
         [DirectMethod]
         protected void RejectChanges_DirectEvent(object sender, DirectEventArgs e)
         {
