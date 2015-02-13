@@ -9,9 +9,9 @@
             };
              
             var clearFilter = function () {
-                #{CountryCodeFilter}.reset();
-                #{DestinationNumberFilter}.reset();
-                #{PhoneBookNameFilter}.reset();
+                //#{CountryCodeFilter}.reset();
+                //#{DestinationNumberFilter}.reset();
+                //#{PhoneBookNameFilter}.reset();
 
                 #{PhoneCallsStore}.clearFilter();
             }
@@ -222,14 +222,14 @@
                         Width="200"
                         Margins="5 5 5 5">
                         <Items>
-                            <ext:ListItem Text="Unallocated" Value="Unmarked" />
+                            <ext:ListItem Text="Unallocated" Value="Unallocated" />
                             <ext:ListItem Text="Business" Value="Business" />
                             <ext:ListItem Text="Personal" Value="Personal" />
                             <ext:ListItem Text="Disputed" Value="Disputed" />
                         </Items>
                                         
                         <SelectedItems>
-                            <ext:ListItem Text="Unallocated" Value="Unmarked" />
+                            <ext:ListItem Text="Unallocated" Value="Unallocated" />
                         </SelectedItems>
 
                         <DirectEvents>
