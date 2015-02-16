@@ -107,3 +107,23 @@ h6, .h6 {
   height: 60px;
   background-color: #f5f5f5;
 }
+
+
+/** UTILS **/
+.mb-5 {
+    margin-bottom: 5px;
+}
+
+.extjs-menuitem-label, 
+.extjs-menuitem-label *,
+.extjs-menuitem-label:hover,
+.extjs-menuitem-label *:hover,
+.extjs-menuitem-label:focus,
+.extjs-menuitem-label *:focus,
+.extjs-menuitem-label:visited,
+.extjs-menuitem-label *:visited {
+    text-decoration: none;
+    font-style: normal;
+    cursor: default;
+    font-weight: bold;
+}

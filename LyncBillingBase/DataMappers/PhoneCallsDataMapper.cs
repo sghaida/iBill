@@ -21,6 +21,7 @@ namespace LyncBillingBase.DataMappers
          * The list of phone calls tables
          */
         private readonly List<string> _dbTables = new List<string>();
+
         /**
          * The SQL Queries Generator
          */
@@ -137,16 +138,39 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public IEnumerable<PhoneCall> GetChargableCallsPerUser(string sipAccount)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sipAccount"></param>
+        /// <returns></returns>
+        public IEnumerable<PhoneCall> GetChargeableCallsBySipAccount(string sipAccount)
         {
-            var sqlStatemnet = _phonecallsSqlQueries.ChargableCallsPerUser(_dbTables, sipAccount);
+            var sqlStatemnet = _phonecallsSqlQueries.ChargableCallsBySipAccount(_dbTables, sipAccount);
 
             return base.GetAll(sqlStatemnet);
         }
 
-        public IEnumerable<PhoneCall> GetChargeableCallsForSite(string siteName)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="siteName"></param>
+        /// <returns></returns>
+        public IEnumerable<PhoneCall> GetChargeableCallsBySiteDepartment(string departmentName)
         {
-            var sqlStatemnet = _phonecallsSqlQueries.ChargeableCallsForSite(_dbTables, siteName);
+            //string sqlStatemnet = _phonecallsSqlQueries.ChargeableCallsBySiteDepartment(_dbTables, siteName);
+            //return base.GetAll(sqlStatemnet);
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="siteName"></param>
+        /// <returns></returns>
+        public IEnumerable<PhoneCall> GetChargeableCallsBySiteName(string siteName)
+        {
+            var sqlStatemnet = _phonecallsSqlQueries.ChargeableCallsBySiteName(_dbTables, siteName);
 
             return base.GetAll(sqlStatemnet);
         }
