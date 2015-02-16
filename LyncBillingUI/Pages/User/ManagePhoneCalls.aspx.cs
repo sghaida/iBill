@@ -24,9 +24,6 @@ namespace LyncBillingUI.Pages.User
         private string normalUserRoleName { get; set; }
         private string userDelegeeRoleName { get; set; }
 
-        private static List<PhoneCall> phoneCalls;
-        private static List<Country> countries;
-
         // This actually takes a copy of the current session for some uses on the frontend.
         public UserSession CurrentSession { get; set; }
 
@@ -108,6 +105,21 @@ namespace LyncBillingUI.Pages.User
 
                 ManagePhoneCallsGrid.GetStore().DataSource = userSessionPhoneCalls;
                 ManagePhoneCallsGrid.GetStore().DataBind();
+            }
+        }
+
+        protected void DepartmentPhoneCallsStore_Load(object sender, EventArgs e)
+        {
+            if (!Ext.Net.X.IsAjaxRequest)
+            {
+                //string SiteDepartment = session.NormalUserInfo.SiteName + "_" + session.NormalUserInfo.Departments;
+                string SiteDepartment =
+                    (CurrentSession.ActiveRoleName == userDelegeeRoleName) ?
+                    CurrentSession.DelegeeUserAccount.User.SiteName + "-" + CurrentSession.DelegeeUserAccount.User.DepartmentName :
+                    CurrentSession.User.SiteName + "-" + CurrentSession.User.DepartmentName;
+
+                DepartmentPhoneCallsGrid.GetStore().DataSource = Global.DATABASE.PhoneCalls.GetChargeableCallsBySipAccount(SiteDepartment);
+                DepartmentPhoneCallsGrid.GetStore().DataBind();
             }
         }
 
