@@ -284,7 +284,7 @@ namespace LyncBillingUI.Account
                 //Initialize and/or return phonecalls.
                 if (this.DelegeeUserAccount.DelegeeUserPhonecalls == null || this.DelegeeUserAccount.DelegeeUserPhonecalls.Count == 0 || force == true)
                 {
-                    var userPhoneCalls = Global.DATABASE.PhoneCalls.GetChargableCallsPerUser(sipAccount)
+                    var userPhoneCalls = Global.DATABASE.PhoneCalls.GetChargeableCallsBySipAccount(sipAccount)
                         .Where(item => item.AcIsInvoiced == "NO" || string.IsNullOrEmpty(item.AcIsInvoiced) == true);
 
                     var addressbook = this.DelegeeUserAccount.DelegeeUserAddressbook;
@@ -320,7 +320,7 @@ namespace LyncBillingUI.Account
                 if (this.Phonecalls == null || this.Phonecalls.Count == 0 || force == true)
                 {
                     //var userPhoneCalls = PhoneCalls.GetPhoneCalls(sipAccount).Where(item => item.AC_IsInvoiced == "NO" || item.AC_IsInvoiced == string.Empty || item.AC_IsInvoiced == null);
-                    var userPhoneCalls = Global.DATABASE.PhoneCalls.GetChargableCallsPerUser(sipAccount)
+                    var userPhoneCalls = Global.DATABASE.PhoneCalls.GetChargeableCallsBySipAccount(sipAccount)
                         .Where(item => item.AcIsInvoiced == "NO" || string.IsNullOrEmpty(item.AcIsInvoiced) == true);
 
                     var addressbook = this.Addressbook;
