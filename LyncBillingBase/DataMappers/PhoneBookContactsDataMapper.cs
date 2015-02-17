@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using CCC.UTILS.Helpers;
 using CCC.ORM.DataAccess;
 using LyncBillingBase.DataModels;
 
@@ -79,6 +81,34 @@ namespace LyncBillingBase.DataMappers
             catch (Exception ex)
             {
                 throw ex.InnerException;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sipAccount"></param>
+        /// <param name="phoneBookEntries"></param>
+        public void AddOrUpdatePhoneBookEntries(string sipAccount, List<PhoneBookContact> phoneBookEntries)
+        {
+            Dictionary<string, PhoneBookContact> existingContacts = this.GetAddressBook(sipAccount);
+
+            foreach (PhoneBookContact phoneBookEntry in phoneBookEntries)
+            {
+                try
+                {
+                    phoneBookEntry.DestinationNumber = HelperFunctions.FormatUserTelephoneNumber(phoneBookEntry.DestinationNumber);
+
+                    //Either update or insert to the database
+                    if (existingContacts.ContainsKey(phoneBookEntry.DestinationNumber))
+                        this.Update(phoneBookEntry);
+                    else
+                        this.Insert(phoneBookEntry);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
         }
     } //end-of-data-mapper-class
