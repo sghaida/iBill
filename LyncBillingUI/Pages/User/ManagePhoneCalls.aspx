@@ -119,6 +119,7 @@
                                     <ext:ModelField Name="UiMarkedOn" Type="Date" />
                                     <ext:ModelField Name="PhoneBookName" Type="String" />
                                     <ext:ModelField Name="PhoneCallsTable" Type="String" />
+                                    <ext:ModelField Name="PhoneCallsTableName" Type="String" />
                                 </Fields>
                             </ext:Model>
                         </Model>
@@ -380,6 +381,7 @@
                                     <ext:ModelField Name="UI_AssignedToUser" Type="String" />
                                     <ext:ModelField Name="UI_AssignedOn" Type="Date" />
                                     <ext:ModelField Name="PhoneBookName" Type="String" />
+                                    <ext:ModelField Name="PhoneCallsTable" Type="String" />
                                     <ext:ModelField Name="PhoneCallTableName" Type="String" />
                                 </Fields>
                             </ext:Model>
