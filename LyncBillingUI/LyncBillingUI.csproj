@@ -188,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\DelegeeUserAccount.cs" />
+    <Compile Include="Account\Encryption.cs" />
     <Compile Include="Account\UserSession.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Pages\About.aspx.cs">

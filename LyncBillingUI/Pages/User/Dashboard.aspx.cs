@@ -17,6 +17,7 @@ namespace LyncBillingUI.Pages.User
 {
     public partial class Dashboard : System.Web.UI.Page
     {
+        private string password { get; set; }
         private string sipAccount = string.Empty;
         private string normalUserRoleName { get; set; }
         private string userDelegeeRoleName { get; set; }
@@ -76,6 +77,8 @@ namespace LyncBillingUI.Pages.User
             //Try to auto-mark phonecalls using the user's addressbook
             //Return the number of still-unmarked phone calls
             unmarkedCallsCount = TryAutoMarkPhoneCalls();
+
+            password = Global.ENCRYPTION.DecryptRijndael(CurrentSession.EncryptedPassword);
         }
 
 

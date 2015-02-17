@@ -55,6 +55,7 @@ namespace LyncBillingUI.Account
         public User User { get; set; }
         public string IpAddress { set; get; }
         public string UserAgent { set; get; }
+        public string EncryptedPassword { get; set; }
 
         //Bundled Accounts List
         public List<string> BundledAccountsList { get; set; }
