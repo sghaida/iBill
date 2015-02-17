@@ -150,8 +150,13 @@ namespace LyncBillingUI.Pages.Account
                             Global.DATABASE.Users.Insert(iBillUser);
                         }
 
+                        //
                         //Assign the current userInfo to the UserSession fields.
                         SetUserSessionFields(ref session, userInfo);
+
+                        //
+                        // Encrypt the password and assign it to the session
+                        session.EncryptedPassword = Global.ENCRYPTION.EncryptRijndael(Password.Text);
 
                         Session.Add("UserData", session);
 
