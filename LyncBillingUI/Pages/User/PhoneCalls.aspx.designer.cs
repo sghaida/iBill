@@ -10,7 +10,7 @@
 namespace LyncBillingUI.Pages.User {
     
     
-    public partial class ManagePhoneCalls {
+    public partial class PhoneCalls {
         
         /// <summary>
         /// XScript1 control.

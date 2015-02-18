@@ -62,8 +62,8 @@
                                             <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false"><%= DisplayName %>&nbsp;<span class="caret"></span></a>
                                             <ul class="dropdown-menu" role="menu">
                                                 <li class="dropdown-header">Manage</li>
-                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/Manage/PhoneCalls">Phone Calls</a></li>
-                                                <li><a href="#">Address Book</a></li>
+                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/PhoneCalls">Phone Calls</a></li>
+                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/Addressbook">Address Book</a></li>
                                                 <li class="divider"></li>
                                                 <li class="dropdown-header">History</li>
                                                 <li><a href="#">Bills History</a></li>

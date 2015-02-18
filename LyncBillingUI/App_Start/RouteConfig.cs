@@ -18,10 +18,6 @@ namespace LyncBillingUI
             routes.MapPageRoute("", "About", "~/Pages/About.aspx");
             routes.MapPageRoute("", "Contact", "~/Pages/Contact.aspx");
 
-            // User Pages
-            routes.MapPageRoute("", "User/Dashboard", "~/Pages/User/Dashboard.aspx");
-            routes.MapPageRoute("", "User/Manage/Phonecalls", "~/Pages/User/ManagePhoneCalls.aspx");
-
             // Account Pages
             routes.MapPageRoute("", "Login", "~/Pages/Account/Login.aspx");
             routes.MapPageRoute("", "Logout", "~/Pages/Account/Logout.aspx");
@@ -30,6 +26,11 @@ namespace LyncBillingUI
             // Error Pages
             routes.MapPageRoute("404", "404", "~/Error/404.aspx");
             routes.MapPageRoute("Error", "Oops", "~/Error/Oops.aspx");
+
+            // User Pages
+            routes.MapPageRoute("", "User/Dashboard", "~/Pages/User/Dashboard.aspx");
+            routes.MapPageRoute("", "User/Phonecalls", "~/Pages/User/PhoneCalls.aspx");
+            routes.MapPageRoute("", "User/Addressbook", "~/Pages/User/Addressbook.aspx");
         }
     }
 }
