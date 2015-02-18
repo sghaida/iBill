@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Manage Phonecalls" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ManagePhoneCalls.aspx.cs" Inherits="LyncBillingUI.Pages.User.ManagePhoneCalls" %>
+﻿<%@ Page Title="Manage Phonecalls" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PhoneCalls.aspx.cs" Inherits="LyncBillingUI.Pages.User.PhoneCalls" %>
 
 <asp:Content ID="HeaderScripts" ContentPlaceHolderID="HeaderContent" runat="server">
     <ext:XScript ID="XScript1" runat="server">
@@ -118,7 +118,6 @@
                                     <ext:ModelField Name="UiCallType" Type="String" />
                                     <ext:ModelField Name="UiMarkedOn" Type="Date" />
                                     <ext:ModelField Name="PhoneBookName" Type="String" />
-                                    <ext:ModelField Name="PhoneCallsTable" Type="String" />
                                     <ext:ModelField Name="PhoneCallsTableName" Type="String" />
                                 </Fields>
                             </ext:Model>
@@ -381,7 +380,6 @@
                                     <ext:ModelField Name="UI_AssignedToUser" Type="String" />
                                     <ext:ModelField Name="UI_AssignedOn" Type="Date" />
                                     <ext:ModelField Name="PhoneBookName" Type="String" />
-                                    <ext:ModelField Name="PhoneCallsTable" Type="String" />
                                     <ext:ModelField Name="PhoneCallTableName" Type="String" />
                                 </Fields>
                             </ext:Model>

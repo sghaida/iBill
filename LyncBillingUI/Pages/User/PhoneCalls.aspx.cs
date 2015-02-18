@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 
 namespace LyncBillingUI.Pages.User
 {
-    public partial class ManagePhoneCalls : System.Web.UI.Page
+    public partial class PhoneCalls : System.Web.UI.Page
     {
         private string sipAccount = string.Empty;
         private string normalUserRoleName { get; set; }
@@ -35,7 +35,7 @@ namespace LyncBillingUI.Pages.User
             // If the user is not loggedin, redirect to Login page.
             if (HttpContext.Current.Session == null || HttpContext.Current.Session.Contents["UserData"] == null)
             {
-                string RedirectTo = @"/User/Manage/PhoneCalls";
+                string RedirectTo = @"/User/PhoneCalls";
                 string Url = @"/Login?RedirectTo=" + RedirectTo;
                 Response.Redirect(Url);
             }
