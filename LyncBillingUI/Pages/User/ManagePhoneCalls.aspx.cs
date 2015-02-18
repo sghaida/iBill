@@ -468,9 +468,7 @@ namespace LyncBillingUI.Pages.User
             //Get the submitted grid data
             json = e.ExtraParams["Values"];
             settings.NullValueHandling = NullValueHandling.Ignore;
-
             selectiomModel = this.ManagePhoneCallsGrid.GetSelectionModel() as RowSelectionModel;
-
             submittedPhoneCalls = serializer.Deserialize<List<PhoneCall>>(json);
             
             //Start allocating the submitted phone calls
@@ -500,13 +498,7 @@ namespace LyncBillingUI.Pages.User
                     newOrUpdatedPhoneBookEntries.Add(phoneBookEntry);
                 }
 
-                matchedDestinationCalls = userSessionPhoneCalls
-                    .Where(
-                        o => 
-                            o.DestinationNumberUri == phoneCall.DestinationNumberUri && 
-                            (string.IsNullOrEmpty(o.UiCallType) || o.UiCallType == "Business")
-                    ).ToList();
-
+                matchedDestinationCalls = userSessionPhoneCalls.Where(o => o.DestinationNumberUri == phoneCall.DestinationNumberUri && (string.IsNullOrEmpty(o.UiCallType) || o.UiCallType == "Business")).ToList();
 
                 foreach (PhoneCall matchedDestinationCall in matchedDestinationCalls)
                 {
@@ -535,214 +527,215 @@ namespace LyncBillingUI.Pages.User
         [DirectMethod]
         protected void AssignAlwaysBusiness(object sender, DirectEventArgs e)
         {
-            //string json = string.Empty;
-            //RowSelectionModel selectiomModel;
-            //JavaScriptSerializer serializer = new JavaScriptSerializer();
-            //JsonSerializerSettings settings = new JsonSerializerSettings();
+            string json = string.Empty;
+            RowSelectionModel selectiomModel;
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            JsonSerializerSettings settings = new JsonSerializerSettings();
 
-            ////These are used for querying the filtering the submitted phonecalls and their destinations
-            //PhoneBook phoneBookEntry;
-            //List<PhoneCalls> submittedPhoneCalls;
-            //IEnumerable<PhoneCalls> matchedDestinationCalls;
-            //List<PhoneBook> newOrUpdatedPhoneBookEntries = new List<PhoneBook>();
+            //These are used for querying the filtering the submitted phonecalls and their destinations
+            PhoneBookContact phoneBookEntry;
+            List<PhoneCall> submittedPhoneCalls;
+            List<PhoneCall> matchedDestinationCalls;
+            List<PhoneBookContact> newOrUpdatedPhoneBookEntries = new List<PhoneBookContact>();
 
-            ////These would refer to either the the user's or the delegee's
-            //List<PhoneCalls> userSessionPhoneCalls = new List<PhoneCalls>();
-            //Dictionary<string, PhoneBook> userSessionAddressBook = new Dictionary<string, PhoneBook>();
+            //These would refer to either the the user's or the delegee's
+            List<PhoneCall> userSessionPhoneCalls = new List<PhoneCall>();
+            Dictionary<string, PhoneBookContact> userSessionAddressBook = new Dictionary<string, PhoneBookContact>();
 
-            ////Get user session and effective sip account
-            //session = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
-            //sipAccount = session.GetEffectiveSipAccount();
+            //Get user session and effective sip account
+            //CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
+            sipAccount = CurrentSession.GetEffectiveSipAccount();
 
-            ////Get user phoneCalls, addressbook, and phoneCallsPerPage;
-            ////Handle user delegee mode and normal user mode
-            //session.FetchSessionPhonecallsAndAddressbookData(out userSessionPhoneCalls, out userSessionAddressBook);
+            //Get user phoneCalls, addressbook, and phoneCallsPerPage;
+            //Handle user delegee mode and normal user mode
+            CurrentSession.FetchSessionPhonecallsAndAddressbookData(out userSessionPhoneCalls, out userSessionAddressBook);
 
+            //Get the submitted grid data
+            json = e.ExtraParams["Values"];
+            settings.NullValueHandling = NullValueHandling.Ignore;
+            selectiomModel = this.ManagePhoneCallsGrid.GetSelectionModel() as RowSelectionModel;
+            submittedPhoneCalls = serializer.Deserialize<List<PhoneCall>>(json);
 
-            ////Get the submitted grid data
-            //json = e.ExtraParams["Values"];
-            //settings.NullValueHandling = NullValueHandling.Ignore;
-            //selectiomModel = this.ManagePhoneCallsGrid.GetSelectionModel() as RowSelectionModel;
-            //submittedPhoneCalls = serializer.Deserialize<List<PhoneCalls>>(json);
+            //Start allocating the submitted phone calls
+            foreach (PhoneCall phoneCall in submittedPhoneCalls)
+            {
+                //Create a Phonebook Entry
+                phoneBookEntry = new PhoneBookContact();
 
-            ////Start allocating the submitted phone calls
-            //foreach (PhoneCalls phoneCall in submittedPhoneCalls)
-            //{
-            //    //Create a Phonebook Entry
-            //    phoneBookEntry = new PhoneBook();
+                //Check if this entry Already exists by either destination number and destination name (in case it's edited)
+                bool found = userSessionAddressBook.ContainsKey(phoneCall.DestinationNumberUri) &&
+                             (userSessionAddressBook.Values.Select(phoneBookContact => phoneBookContact.Name == phoneCall.PhoneBookName) == null ? false : true);
 
-            //    //Check if this entry Already exists by either destination number and destination name (in case it's edited)
-            //    bool found = userSessionAddressBook.ContainsKey(phoneCall.DestinationNumberUri) &&
-            //                 (userSessionAddressBook.Values.Select(phoneBookContact => phoneBookContact.Name == phoneCall.PhoneBookName) == null ? false : true);
+                if (!found)
+                {
+                    phoneBookEntry.Name = phoneCall.PhoneBookName ?? string.Empty;
+                    phoneBookEntry.DestinationCountry = phoneCall.MarkerCallToCountry;
+                    phoneBookEntry.DestinationNumber = phoneCall.DestinationNumberUri;
+                    phoneBookEntry.SipAccount = sipAccount;
+                    phoneBookEntry.Type = "Business";
 
-            //    if (!found)
-            //    {
-            //        phoneBookEntry.Name = phoneCall.PhoneBookName ?? string.Empty;
-            //        phoneBookEntry.DestinationCountry = phoneCall.Marker_CallToCountry;
-            //        phoneBookEntry.DestinationNumber = phoneCall.DestinationNumberUri;
-            //        phoneBookEntry.SipAccount = sipAccount;
-            //        phoneBookEntry.Type = "Business";
+                    //Add Phonebook entry to Session and to the list which will be written to database 
+                    if (userSessionAddressBook.ContainsKey(phoneCall.DestinationNumberUri))
+                        userSessionAddressBook[phoneCall.DestinationNumberUri] = phoneBookEntry;
+                    else
+                        userSessionAddressBook.Add(phoneCall.DestinationNumberUri, phoneBookEntry);
 
-            //        //Add Phonebook entry to Session and to the list which will be written to database 
-            //        if (userSessionAddressBook.ContainsKey(phoneCall.DestinationNumberUri))
-            //            userSessionAddressBook[phoneCall.DestinationNumberUri] = phoneBookEntry;
-            //        else
-            //            userSessionAddressBook.Add(phoneCall.DestinationNumberUri, phoneBookEntry);
+                    newOrUpdatedPhoneBookEntries.Add(phoneBookEntry);
+                }
 
-            //        newOrUpdatedPhoneBookEntries.Add(phoneBookEntry);
-            //    }
+                matchedDestinationCalls = userSessionPhoneCalls.Where(o => o.DestinationNumberUri == phoneCall.DestinationNumberUri && (string.IsNullOrEmpty(o.UiCallType) || o.UiCallType == "Personal")).ToList();
 
+                foreach (PhoneCall matchedDestinationCall in matchedDestinationCalls)
+                {
+                    matchedDestinationCall.UiCallType = "Business";
+                    matchedDestinationCall.UiMarkedOn = DateTime.Now;
+                    matchedDestinationCall.UiUpdatedByUser = sipAccount;
+                    matchedDestinationCall.PhoneBookName = phoneCall.PhoneBookName ?? string.Empty;
 
-            //    matchedDestinationCalls = userSessionPhoneCalls.Where(
-            //        o => o.DestinationNumberUri == phoneCall.DestinationNumberUri && (string.IsNullOrEmpty(o.UI_CallType) || o.UI_CallType == "Personal")
-            //    ).ToList();
+                    Global.DATABASE.PhoneCalls.Update(matchedDestinationCall, matchedDestinationCall.PhoneCallsTableName);
+                }
+            }
 
-            //    foreach (PhoneCalls matchedDestinationCall in matchedDestinationCalls)
-            //    {
-            //        matchedDestinationCall.UI_CallType = "Business";
-            //        matchedDestinationCall.UI_MarkedOn = DateTime.Now;
-            //        matchedDestinationCall.UI_UpdatedByUser = sipAccount;
-            //        matchedDestinationCall.PhoneBookName = phoneCall.PhoneBookName ?? string.Empty;
+            PhoneCallsAllocationToolsMenu.Hide();
 
-            //        PhoneCalls.UpdatePhoneCall(matchedDestinationCall);
-            //    }
-            //}
+            //Add To Users Addressbook Store
+            Global.DATABASE.PhoneBooks.AddOrUpdatePhoneBookEntries(sipAccount, newOrUpdatedPhoneBookEntries);
 
-            //PhoneCallsAllocationToolsMenu.Hide();
+            //Reassign the user session data
+            //Handle the normal user mode and user delegee mode
+            CurrentSession.AssignSessionPhonecallsAndAddressbookData(userSessionPhoneCalls: userSessionPhoneCalls, userSessionAddressBook: userSessionAddressBook);
 
-            ////Add To Users Addressbook Store
-            //PhoneBook.AddOrUpdatePhoneBookEntries(sipAccount, newOrUpdatedPhoneBookEntries);
-
-            ////Reassign the user session data
-            ////Handle the normal user mode and user delegee mode
-            //session.AssignSessionPhonecallsAndAddressbookData(
-            //    userSessionPhoneCalls: userSessionPhoneCalls,
-            //    userSessionAddressBook: userSessionAddressBook);
-
-            ////Rebind data to the grid store
-            //RebindDataToStore(userSessionPhoneCalls);
+            //Rebind data to the grid store
+            RebindDataToStore(userSessionPhoneCalls);
         }
 
         [DirectMethod]
         protected void MoveToDepartmnent(object sender, DirectEventArgs e)
         {
-            //PhoneCalls sessionPhoneCallRecord;
-            //List<PhoneCalls> submittedPhoneCalls;
-            //List<PhoneCalls> userSessionPhoneCalls;
-            //string userSiteDepartment = string.Empty;
+            PhoneCall sessionPhoneCallRecord;
+            List<PhoneCall> submittedPhoneCalls;
+            List<PhoneCall> userSessionPhoneCalls;
+            string userSiteDepartment = string.Empty;
 
-            //string json = string.Empty;
-            //JavaScriptSerializer serializer = new JavaScriptSerializer();
-            //JsonSerializerSettings settings = new JsonSerializerSettings();
+            string json = string.Empty;
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            JsonSerializerSettings settings = new JsonSerializerSettings();
 
-            ////Get the session and sip account of the current user
-            //session = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
-            //sipAccount = session.GetEffectiveSipAccount();
+            //Get the session and sip account of the current user
+            //CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
+            sipAccount = CurrentSession.GetEffectiveSipAccount();
 
-            ////Get user phonecalls from the session
-            ////Handle user delegee mode and normal user mode
-            //userSessionPhoneCalls = session.GetUserSessionPhoneCalls();
+            //Get user phonecalls from the session
+            //Handle user delegee mode and normal user mode
+            userSessionPhoneCalls = CurrentSession.GetUserSessionPhoneCalls();
 
-            //json = e.ExtraParams["Values"];
-            //submittedPhoneCalls = serializer.Deserialize<List<PhoneCalls>>(json);
+            json = e.ExtraParams["Values"];
+            submittedPhoneCalls = serializer.Deserialize<List<PhoneCall>>(json);
 
-            //foreach (PhoneCalls phoneCall in submittedPhoneCalls)
-            //{
-            //    sessionPhoneCallRecord = userSessionPhoneCalls.Where(o => o.SessionIdTime == phoneCall.SessionIdTime).First();
+            foreach (PhoneCall phoneCall in submittedPhoneCalls)
+            {
+                var sessionIdTime = phoneCall.SessionIdTime;
 
-            //    if (sessionPhoneCallRecord.UI_AssignedToUser == sipAccount && !string.IsNullOrEmpty(sessionPhoneCallRecord.UI_AssignedByUser))
-            //    {
-            //        userSiteDepartment =
-            //            (session.ActiveRoleName == userDelegeeRoleName) ?
-            //            session.DelegeeAccount.DelegeeUserAccount.SiteName + "-" + session.DelegeeAccount.DelegeeUserAccount.Department :
-            //            session.NormalUserInfo.SiteName + "-" + session.NormalUserInfo.Department;
+                sessionPhoneCallRecord = userSessionPhoneCalls.Find(
+                    item => item.SessionIdTime.Year == sessionIdTime.Year
+                        && item.SessionIdTime.Month == sessionIdTime.Month
+                        && item.SessionIdTime.Day == sessionIdTime.Day
+                        && item.SessionIdTime.Hour == sessionIdTime.Hour
+                        && item.SessionIdTime.Minute == sessionIdTime.Minute
+                        && item.SessionIdTime.Second == sessionIdTime.Second);
 
-            //        sessionPhoneCallRecord.UI_AssignedToUser = userSiteDepartment;
+                if (sessionPhoneCallRecord.UiAssignedToUser == sipAccount && !string.IsNullOrEmpty(sessionPhoneCallRecord.UiAssignedByUser))
+                {
+                    userSiteDepartment =
+                        (CurrentSession.ActiveRoleName == userDelegeeRoleName) ?
+                        CurrentSession.DelegeeUserAccount.User.SiteName + "-" + CurrentSession.DelegeeUserAccount.User.DepartmentName :
+                        CurrentSession.User.SiteName + "-" + CurrentSession.User.DepartmentName;
 
-            //        PhoneCalls.UpdatePhoneCall(sessionPhoneCallRecord, FORCE_RESET_UI_CallType: true);
+                    sessionPhoneCallRecord.UiCallType = string.Empty;
+                    sessionPhoneCallRecord.UiAssignedToUser = userSiteDepartment;
 
-            //        ModelProxy model = PhoneCallsStore.Find(Enums.GetDescription(Enums.PhoneCalls.SessionIdTime), sessionPhoneCallRecord.SessionIdTime.ToString());
+                    Global.DATABASE.PhoneCalls.Update(sessionPhoneCallRecord, sessionPhoneCallRecord.PhoneCallsTableName);
 
-            //        //Remove it from the PhoneCallsStore
-            //        PhoneCallsStore.Remove(model);
+                    ModelProxy model = PhoneCallsStore.Find("SessionIdTime", sessionPhoneCallRecord.SessionIdTime.ToString());
 
-            //        //Add it to the Departments's phoneCalls Store
-            //        DepartmentPhoneCallsStore.Add(phoneCall);
+                    //Remove it from the PhoneCallsStore
+                    PhoneCallsStore.Remove(model);
 
-            //        //Remove from the user own session phoneCalls list.
-            //        userSessionPhoneCalls.Remove(sessionPhoneCallRecord);
-            //    }
-            //    else
-            //    {
-            //        continue;
-            //    }
-            //}
+                    //Add it to the Departments's phoneCalls Store
+                    DepartmentPhoneCallsStore.Add(phoneCall);
 
-            //ManagePhoneCallsGrid.GetSelectionModel().DeselectAll();
+                    //Remove from the user own session phoneCalls list.
+                    userSessionPhoneCalls.Remove(sessionPhoneCallRecord);
+                }
+                else
+                {
+                    continue;
+                }
+            }
 
-            ////Reassign the user session data
-            ////Handle the normal user mode and user delegee mode
-            //session.AssignSessionPhonecallsAndAddressbookData(
-            //    userSessionPhoneCalls: userSessionPhoneCalls,
-            //    userSessionAddressBook: null);
+            //Deselect all the grid's records
+            ManagePhoneCallsGrid.GetSelectionModel().DeselectAll();
 
-            ////Rebind data to the grid store
-            //RebindDataToStore(userSessionPhoneCalls);
+            //Reassign the user session data
+            //Handle the normal user mode and user delegee mode
+            CurrentSession.AssignSessionPhonecallsAndAddressbookData(userSessionPhoneCalls: userSessionPhoneCalls, userSessionAddressBook: null);
+
+            //Rebind data to the grid store
+            RebindDataToStore(userSessionPhoneCalls);
         }
 
         [DirectMethod]
         protected void AssignSelectedPhonecallsToMe_DirectEvent(object sender, DirectEventArgs e)
         {
-            //List<PhoneCalls> submittedPhoneCalls;
-            //List<PhoneCalls> userSessionPhoneCalls;
+            List<PhoneCall> submittedPhoneCalls;
+            List<PhoneCall> userSessionPhoneCalls;
 
-            //string json = string.Empty;
-            //JavaScriptSerializer serializer = new JavaScriptSerializer();
-            //JsonSerializerSettings settings = new JsonSerializerSettings();
+            string json = string.Empty;
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            JsonSerializerSettings settings = new JsonSerializerSettings();
 
-            ////Get the session and sip account of the current user
-            //session = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
-            //sipAccount = session.GetEffectiveSipAccount();
+            //Get the session and sip account of the current user
+            //CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
+            sipAccount = CurrentSession.GetEffectiveSipAccount();
 
-            ////Get user phonecalls from the session
-            ////Handle user delegee mode and normal user mode
-            //userSessionPhoneCalls = session.GetUserSessionPhoneCalls();
+            //Get user phonecalls from the session
+            //Handle user delegee mode and normal user mode
+            userSessionPhoneCalls = CurrentSession.GetUserSessionPhoneCalls();
 
-            //json = e.ExtraParams["Values"];
-            //submittedPhoneCalls = serializer.Deserialize<List<PhoneCalls>>(json);
+            json = e.ExtraParams["Values"];
+            submittedPhoneCalls = serializer.Deserialize<List<PhoneCall>>(json);
 
-            //foreach (PhoneCalls phoneCall in submittedPhoneCalls)
-            //{
-            //    //Assign the call to this user
-            //    phoneCall.UI_AssignedToUser = sipAccount;
+            foreach (PhoneCall phoneCall in submittedPhoneCalls)
+            {
+                //Assign the call to this user
+                phoneCall.UiAssignedToUser = sipAccount;
+                phoneCall.UiCallType = string.Empty;
 
-            //    //Update this phonecall in the database
-            //    PhoneCalls.UpdatePhoneCall(phoneCall, FORCE_RESET_UI_CallType: true);
+                //Update this phonecall in the database
+                Global.DATABASE.PhoneCalls.Update(phoneCall, phoneCall.PhoneCallsTableName);
 
-            //    //Commit the changes to the grid and it's store
-            //    ModelProxy model = DepartmentPhoneCallsStore.Find(Enums.GetDescription(Enums.PhoneCalls.SessionIdTime), phoneCall.SessionIdTime.ToString());
+                //Commit the changes to the grid and it's store
+                ModelProxy model = DepartmentPhoneCallsStore.Find("SessionIdTime", phoneCall.SessionIdTime.ToString());
 
-            //    //Remove from the Departments's phoneCalls Store
-            //    DepartmentPhoneCallsStore.Remove(model);
+                //Remove from the Departments's phoneCalls Store
+                DepartmentPhoneCallsStore.Remove(model);
 
-            //    //Add it to the phonecalls store
-            //    PhoneCallsStore.Add(phoneCall);
+                //Add it to the phonecalls store
+                PhoneCallsStore.Add(phoneCall);
 
-            //    //Add this new phonecall to the user session
-            //    userSessionPhoneCalls.Add(phoneCall);
-            //}
+                //Add this new phonecall to the user session
+                userSessionPhoneCalls.Add(phoneCall);
+            }
 
-            ////Reload the department phonecalls grid
-            //DepartmentPhoneCallsGrid.GetSelectionModel().DeselectAll();
+            //Reload the department phonecalls grid
+            DepartmentPhoneCallsGrid.GetSelectionModel().DeselectAll();
 
-            ////Reassign the user session data
-            ////Handle the normal user mode and user delegee mode
-            //session.AssignSessionPhonecallsAndAddressbookData(
-            //    userSessionPhoneCalls: userSessionPhoneCalls,
-            //    userSessionAddressBook: null);
+            //Reassign the user session data
+            //Handle the normal user mode and user delegee mode
+            CurrentSession.AssignSessionPhonecallsAndAddressbookData(userSessionPhoneCalls: userSessionPhoneCalls, userSessionAddressBook: null);
 
-            ////Rebind data to the grid store
-            //RebindDataToStore(userSessionPhoneCalls);
+            //Rebind data to the grid store
+            RebindDataToStore(userSessionPhoneCalls);
         }
     }
 }
