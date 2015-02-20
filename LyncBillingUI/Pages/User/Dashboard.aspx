@@ -20,14 +20,16 @@
                 </div>
                 
                 <div class="panel-body">
-                    <ext:Chart
+                    <ext:PolarChart
                         ID="TopDestinationCountriesChart"
                         runat="server"
                         Width="450"
                         Height="330"
                         Animate="true"
                         Shadow="true">
-                        <LegendConfig Position="Right" />
+                        
+                        <LegendConfig runat="server" Dock="Right" />
+
                         <Store>
                             <ext:Store ID="TopDestinationCountriesStore"
                                 OnLoad="TopDestinationCountriesStore_Load"
@@ -46,20 +48,20 @@
                         </Store>
                         <Series>
                             <ext:PieSeries
-                                AngleField="CallsCount"
+                                XField="CallsCount"
                                 ShowInLegend="true"
                                 Donut="30"
                                 Highlight="true"
-                                HighlightSegmentMargin="10">
-                                <Label Field="CountryName" Display="Rotate" Contrast="true" Font="16px Arial">
+                                HighlightMargin="10">
+                                <Label Field="CountryName" Display="Rotate" Font="16px Arial">
                                     <Renderer Fn="TopDestinationCountries_LableRenderer" />
                                 </Label>
-                                <Tips ID="TopDestinationCountriesChartTip" runat="server" TrackMouse="true" Width="260" Height="120">
+                                <Tooltip ID="TopDestinationCountriesChartTip" runat="server" TrackMouse="true" Width="260" Height="120">
                                     <Renderer Fn="TopDestinationCountries_TipRenderer" />
-                                </Tips>
+                                </Tooltip>
                             </ext:PieSeries>
                         </Series>
-                    </ext:Chart>
+                    </ext:PolarChart>
                 </div>
             </div>
         </div><!-- ./column-md-6 -->
@@ -71,7 +73,7 @@
                 </div>
                 
                 <div class="panel-body">
-                    <ext:Chart
+                    <ext:CartesianChart 
                         ID="CallsCostsChart"
                         runat="server"
                         Width="450"
@@ -108,8 +110,8 @@
                                 Title="Cost in Local Currency"
                                 Fields="PersonalCallsCost,BusinessCallsCost,UnallocatedCallsCost"
                                 Position="Left">
-                                <LabelTitle Fill="#115fa6" />
-                                <Label Fill="#115fa6" />
+                                <TitleConfig FillStyle="#115fa6" />
+                                <Label FillStyle="#115fa6" />
                             </ext:NumericAxis>
                         </Axes>
 
@@ -118,30 +120,39 @@
                                 Titles="Personal"
                                 XField="Date"
                                 YField="PersonalCallsCost"
-                                Axis="Left"
                                 Smooth="3">
-                                <HighlightConfig Size="7" Radius="7" />
-                                <MarkerConfig Size="4" Radius="4" StrokeWidth="0" />
+                                <HighlightConfig>
+                                    <ext:CircleSprite Radius="7" />
+                                </HighlightConfig>
+                                <Marker>
+                                    <ext:CircleSprite Radius="4" Width="0" />
+                                </Marker>
                             </ext:LineSeries>
                                  
                             <ext:LineSeries
                                 Titles="Business"
                                 XField="Date"
                                 YField="BusinessCallsCost"
-                                Axis="Left"
                                 Smooth="3">
-                                <HighlightConfig Size="7" Radius="7" />
-                                <MarkerConfig Size="4" Radius="4" StrokeWidth="0" />
+                                <HighlightConfig>
+                                    <ext:CircleSprite Radius="7" />
+                                </HighlightConfig>
+                                <Marker>
+                                    <ext:CircleSprite Radius="4" Width="0" />
+                                </Marker>
                             </ext:LineSeries>
                                 
                             <ext:LineSeries
                                 Titles="Unallocated"
                                 XField="Date"
                                 YField="UnallocatedCallsCost"
-                                Axis="Left"
                                 Smooth="3">
-                                <HighlightConfig Size="7" Radius="7" />
-                                <MarkerConfig Size="4" Radius="4" StrokeWidth="0" />
+                                <HighlightConfig>
+                                    <ext:CircleSprite Radius="7" />
+                                </HighlightConfig>
+                                <Marker>
+                                    <ext:CircleSprite Radius="4" Width="0" />
+                                </Marker>
                             </ext:LineSeries>
                         </Series>
 
@@ -151,8 +162,9 @@
                                 <YLabelRenderer FormatHandler="true"></YLabelRenderer>
                             </ext:VerticalMarker>
                         </Plugins>
-                        <LegendConfig Position="Bottom" />
-                    </ext:Chart>
+
+                        <LegendConfig Dock="Bottom" />
+                    </ext:CartesianChart>
                 </div>
             </div>
         </div><!-- ./column-md-6 -->

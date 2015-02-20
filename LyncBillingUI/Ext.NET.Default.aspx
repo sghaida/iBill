@@ -20,10 +20,10 @@
     <link type="text/css" rel="stylesheet" href="http://speed.ext.net/www/intro/css/main.css" />
 </head>
 <body>
-    <ext:ResourceManager runat="server" Theme="Gray" />
+    <ext:ResourceManager runat="server" Theme="Crisp" />
 
     <header>
-        <a href="http://www.ext.net/"><img src="http://speed.ext.net/identity/extnet-logo-white-large.png" class="logo"/></a>
+        <a href="http://ext.net/"><img src="http://speed.ext.net/identity/extnet-logo-white-large.png" class="logo"/></a>
     </header>
 
     <div class="wrapper">
@@ -68,8 +68,8 @@
     </form>
 
     <div class="wrapper wrapper-lower">
-        <h2><a href="http://www.ext.net/support/">Technical Support</a></h2>
-        <p>Need a little help? Visit our <a href="http://www.ext.net/support/">Support</a> page for links to documentation, examples and more. </p>
+        <h2><a href="http://ext.net/support/">Technical Support</a></h2>
+        <p>Need a little help? Visit our <a href="http://ext.net/support/">Support</a> page for links to documentation, examples and more. </p>
         <hr>
         <h2><a href="http://forums.ext.net/">Community Forums</a></h2>
         <p>Keep up to date with all things Ext.NET by joining the active community in our <a href="http://forums.ext.net/">Forums</a>.</p>
@@ -77,12 +77,12 @@
         <h2><a href="http://examples.ext.net/">Examples</a></h2>
         <p>Ext.NET features over 100 Components and 600 Samples for use in your ASP.NET apps. Check out the <a href="http://examples.ext.net/">Examples Explorer</a> to see what's possible.</p>
         <hr>
-        <h2><a href="http://www.ext.net/store/">Purchase</a></h2>
-        <p class="last">When you're ready, <a href="http://www.ext.net/store/">purchase</a> a license and start building web apps with ease!</p>
+        <h2><a href="http://ext.net/store/">Purchase</a></h2>
+        <p class="last">When you're ready, <a href="http://ext.net/store/">purchase</a> a license and start building web apps with ease!</p>
     </div>
 
     <footer>
-        <p class="last">&copy; 2008-<%= DateTime.Today.Year %> <a href="http://www.object.net/">Object.NET</a>, Inc. All Rights Reserved.</p>
+        <p class="last">&copy; 2008-<%= DateTime.Today.Year %> <a href="http://object.net/">Object.NET</a>, Inc. All Rights Reserved.</p>
     </footer>
 </body>
 </html>

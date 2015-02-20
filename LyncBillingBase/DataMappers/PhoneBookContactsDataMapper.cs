@@ -111,6 +111,51 @@ namespace LyncBillingBase.DataMappers
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="phoneBookContacts"></param>
+        public void UpdateMany(List<PhoneBookContact> phoneBookContacts)
+        {
+            if (phoneBookContacts != null && phoneBookContacts.Count > 0)
+            {
+                foreach (var contact in phoneBookContacts)
+                {
+                    base.Update(contact);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="phoneBookContacts"></param>
+        public void InsertMany(List<PhoneBookContact> phoneBookContacts)
+        {
+            if (phoneBookContacts != null && phoneBookContacts.Count > 0)
+            {
+                foreach (var contact in phoneBookContacts)
+                {
+                    base.Insert(contact);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="phoneBookContacts"></param>
+        public void DeleteMany(List<PhoneBookContact> phoneBookContacts)
+        {
+            if (phoneBookContacts != null && phoneBookContacts.Count > 0)
+            {
+                foreach(var contact in phoneBookContacts)
+                {
+                    base.Delete(contact);
+                }
+            }
+        }
     } //end-of-data-mapper-class
 
 
