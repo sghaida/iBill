@@ -18,7 +18,9 @@
 
     <body>
         <form runat="server">
+            <%--<ext:ResourceManager ID="ExtResourceManager" runat="server" Theme="Gray" />--%>
             <ext:ResourceManager ID="ExtResourceManager" runat="server" />
+
             <asp:HiddenField ID="ThisPageReferrer" runat="server" Value="" />
 
             <div class="ibill-masthead" id="top" role="banner">
@@ -108,7 +110,7 @@
         </form>
 
         <!-- SCRIPTS -->
-        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/modernizr-2.6.2.js"></script>
+        <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/modernizr-2.8.3.js"></script>
         <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/jquery-1.11.2.min.js"></script>
         <script type="text/javascript" src="<%= global_asax.APPLICATION_URL %>/Scripts/bootstrap.min.js"></script>
 

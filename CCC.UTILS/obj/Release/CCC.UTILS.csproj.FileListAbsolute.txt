@@ -2,4 +2,10 @@ D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Release\CCC.UTILS.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Release\CCC.UTILS.pdb
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\obj\Release\CCC.UTILS.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\obj\Release\CCC.UTILS.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Release\Microsoft.Exchange.WebServices.Auth.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Release\Microsoft.Exchange.WebServices.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Release\Microsoft.Exchange.WebServices.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Release\Microsoft.Exchange.WebServices.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Release\Microsoft.Exchange.WebServices.Auth.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Release\Microsoft.Exchange.WebServices.Auth.xml
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\obj\Release\CCC.UTILS.csprojResolveAssemblyReference.cache
