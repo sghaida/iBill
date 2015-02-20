@@ -1,7 +1,6 @@
-﻿Product          : Ext.NET.Pro
-Release Date     : 2014-10-30
-Current Version  : 2.5.3
-Previous Version : 2.5.2
+﻿Product          : Ext.NET
+Release Date     : 2014-12-17
+Current Version  : 3.0.0
 
 
 --------------------------------------------------------------------------
@@ -20,12 +19,11 @@ VI.  CREDITS
 I. SYSTEM REQUIREMENTS
 --------------------------------------------------------------------------
 
-1. Visual Studio 2008, 2010, 2012 or 2013, or
-2. Visual Studio Express 2008, 2010, 2012 or 2013
-3. .NET Framework 3.5, 4.0*, 4.5 or 4.5.1
+1. Visual Studio 2010, 2012 or 2013, or
+2. Visual Studio Express 2010, 2012 or 2013
+3. .NET Framework 3.5, 4.0*, 4.5 and 4.5.1
 
-*minimum required for Ext.NET MVC
-
+* minimum required for Ext.NET MVC
 
 --------------------------------------------------------------------------
 II. INSTALLATION INSTRUCTIONS
@@ -51,9 +49,9 @@ III. REVISIONS + BREAKING CHANGES
 
 See CHANGELOG.txt and BREAKING_CHANGES.txt files included in the download package, or view online:
 
-http://examples.ext.net/#/Getting_Started/Introduction/README/
+http://examples.ext.net/#/Getting_Started/Release_Documents/README/
 
-http://examples.ext.net/#/Getting_Started/Introduction/BREAKING_CHANGES/
+http://examples.ext.net/#/Getting_Started/Release_Documents/BREAKING_CHANGES/
 
 
 --------------------------------------------------------------------------
@@ -66,7 +64,7 @@ IV. SAMPLE WEB.CONFIG
         <section name="extnet" type="Ext.Net.GlobalConfig" requirePermission="false" />
       </configSections>
 
-      <extnet theme="Gray" />
+      <extnet theme="Crisp" licenseKey="** Ext.NET LICENSE KEY HERE **" initScriptMode="Linked" />
   
       <system.web>
         <httpHandlers>
@@ -100,7 +98,7 @@ IV. SAMPLE WEB.CONFIG
 		<assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
 		  <dependentAssembly>
 			<assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" />
-            <bindingRedirect oldVersion="0.0.0.0-6.0.0.0" newVersion="6.0.0.0" />
+			<bindingRedirect oldVersion="0.0.0.0-6.0.0.0" newVersion="6.0.0.0" />
 		  </dependentAssembly>
 		  <dependentAssembly>
 			<assemblyIdentity name="Ext.Net.Utilities" publicKeyToken="2c34ac34702a3c23" />
@@ -111,14 +109,6 @@ IV. SAMPLE WEB.CONFIG
 			<bindingRedirect oldVersion="0.0.0.0-2.1.0" newVersion="2.1.1" />
 		  </dependentAssembly>
       
-		  <!--MVC 3-->
-		  <!--
-		  <dependentAssembly>
-			<assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
-            <bindingRedirect oldVersion="3.0.0.0-3.0.0.1" newVersion="3.0.0.1" />
-		  </dependentAssembly>
-		  -->
-
 		  <!--MVC 4-->
 		  <!--
 		  <dependentAssembly>
@@ -138,16 +128,16 @@ IV. SAMPLE WEB.CONFIG
 		  <!--MVC 5-->
 		  <!--
 		  <dependentAssembly>
-			<assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
-			<bindingRedirect oldVersion="1.0.0.0-5.0.0.0" newVersion="5.0.0.0" />
+			<assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35"/>
+			<bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0"/>
 		  </dependentAssembly>
 		  <dependentAssembly>
-			<assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
-			<bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+			<assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35"/>
+			<bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0"/>
 		  </dependentAssembly>
 		  <dependentAssembly>
-			<assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
-			<bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+			<assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35"/>
+			<bindingRedirect oldVersion="1.0.0.0-5.2.2.0" newVersion="5.2.2.0"/>
 		  </dependentAssembly>
 		  -->
 		</assemblyBinding>

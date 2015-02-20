@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+
+using CCC.UTILS.Outlook;
 using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.Helpers;
@@ -19,10 +21,20 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
-            DataStorage DB = DataStorage.Instance;
+            var data = new ExchangeWebServices("aalhour", "!_aa_2015", "cccgr");
+            var contacts = data.OutlookContacts;
 
-            var startDate = new DateTime(2014, 1, 1);
-            var endDate = DateTime.Now;
+            string x;
+
+            if(contacts != null)
+                x = string.Empty;
+
+            //DataStorage DB = DataStorage.Instance;
+
+            //var startDate = new DateTime(2014, 1, 1);
+            //var endDate = DateTime.Now;
+
+
 
             //var users_summaries = DB.UsersCallsSummaries.GetBySipAccount("aalhour@ccc.gr", startDate, endDate);
             //users_summaries = DB.UsersCallsSummaries.GetBySite("MOA", startDate, endDate, Globals.CallsSummary.GroupBy.UserAndInvoiceFlag);
@@ -59,9 +71,7 @@ namespace LyncBillingTesting
             //var userChartReports = DB.ChartsReports.GetByUser("aalhour@ccc.gr");
             //var departmentChartReports = DB.ChartsReports.GetByDepartment("MOA", "ISD");
             //var siteChartsReports = DB.ChartsReports.GetBySite("MOA");
-            var gatewayChartsReports = DB.ChartsReports.GetByGateway("MOA", "10.1.0.12");
-
-            string x = string.Empty;
+            //var gatewayChartsReports = DB.ChartsReports.GetByGateway("MOA", "10.1.0.12");
         }
 
         public static void InsertUpdateDeleteTests()

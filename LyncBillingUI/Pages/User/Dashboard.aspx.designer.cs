@@ -19,7 +19,7 @@ namespace LyncBillingUI.Pages.User {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Chart TopDestinationCountriesChart;
+        protected global::Ext.Net.PolarChart TopDestinationCountriesChart;
         
         /// <summary>
         /// TopDestinationCountriesStore control.
@@ -46,7 +46,7 @@ namespace LyncBillingUI.Pages.User {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Chart CallsCostsChart;
+        protected global::Ext.Net.CartesianChart CallsCostsChart;
         
         /// <summary>
         /// CallsCostsChartStore control.
