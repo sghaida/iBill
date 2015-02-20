@@ -13,6 +13,33 @@ namespace LyncBillingUI.Pages.User {
     public partial class Addressbook {
         
         /// <summary>
+        /// EditAddressBookContactForm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.FormPanel EditAddressBookContactForm;
+        
+        /// <summary>
+        /// Toolbar1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.Toolbar Toolbar1;
+        
+        /// <summary>
+        /// AddNewAddressBookContact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.Button AddNewAddressBookContact;
+        
+        /// <summary>
         /// AddressBookGrid control.
         /// </summary>
         /// <remarks>
@@ -94,22 +121,58 @@ namespace LyncBillingUI.Pages.User {
         protected global::Ext.Net.Column Column4;
         
         /// <summary>
-        /// AddressBookToolbar control.
+        /// ContactDetails_ContactID control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Toolbar AddressBookToolbar;
+        protected global::Ext.Net.Hidden ContactDetails_ContactID;
         
         /// <summary>
-        /// AddNewAddressBookContact control.
+        /// ContactDetails_SipAccount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Button AddNewAddressBookContact;
+        protected global::Ext.Net.Hidden ContactDetails_SipAccount;
+        
+        /// <summary>
+        /// ContactDetails_ContactName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.TextField ContactDetails_ContactName;
+        
+        /// <summary>
+        /// ContactDetails_ContactType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.ComboBox ContactDetails_ContactType;
+        
+        /// <summary>
+        /// ContactDetails_Country control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.TextField ContactDetails_Country;
+        
+        /// <summary>
+        /// ContactDetails_Number control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.TextField ContactDetails_Number;
         
         /// <summary>
         /// AddNewContactWindowPanel control.
@@ -193,33 +256,6 @@ namespace LyncBillingUI.Pages.User {
         protected global::Ext.Net.ToolbarTextItem NewContact_StatusMessage;
         
         /// <summary>
-        /// PagingToolbar1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.PagingToolbar PagingToolbar1;
-        
-        /// <summary>
-        /// EditAddressBookContactForm control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.FormPanel EditAddressBookContactForm;
-        
-        /// <summary>
-        /// Toolbar1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.Toolbar Toolbar1;
-        
-        /// <summary>
         /// SaveChangesButton control.
         /// </summary>
         /// <remarks>
@@ -245,60 +281,6 @@ namespace LyncBillingUI.Pages.User {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Ext.Net.Button DeleteContactButton;
-        
-        /// <summary>
-        /// ContactDetails_ContactID control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.Hidden ContactDetails_ContactID;
-        
-        /// <summary>
-        /// ContactDetails_SipAccount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.Hidden ContactDetails_SipAccount;
-        
-        /// <summary>
-        /// ContactDetails_ContactName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.TextField ContactDetails_ContactName;
-        
-        /// <summary>
-        /// ContactDetails_ContactType control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.ComboBox ContactDetails_ContactType;
-        
-        /// <summary>
-        /// ContactDetails_Country control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.TextField ContactDetails_Country;
-        
-        /// <summary>
-        /// ContactDetails_Number control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.TextField ContactDetails_Number;
         
         /// <summary>
         /// ImportContactsGrid control.
