@@ -265,67 +265,58 @@ namespace LyncBillingUI.Pages.User {
         protected global::Ext.Net.Model Model1;
         
         /// <summary>
-        /// RowNumbererColumn1 control.
+        /// DepartmentPhoneCallsSessionIdTime control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.RowNumbererColumn RowNumbererColumn1;
+        protected global::Ext.Net.Column DepartmentPhoneCallsSessionIdTime;
         
         /// <summary>
-        /// Column1 control.
+        /// DepartmentPhoneCallsMarkerCallToCountry control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Column Column1;
+        protected global::Ext.Net.Column DepartmentPhoneCallsMarkerCallToCountry;
         
         /// <summary>
-        /// CountryColumns control.
+        /// DepartmentPhoneCallsDestinationNumberUri control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Column CountryColumns;
+        protected global::Ext.Net.Column DepartmentPhoneCallsDestinationNumberUri;
         
         /// <summary>
-        /// Column3 control.
+        /// DepartmentPhoneCallsUiAssignedByUser control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Column Column3;
+        protected global::Ext.Net.Column DepartmentPhoneCallsUiAssignedByUser;
         
         /// <summary>
-        /// Column4 control.
+        /// DepartmentPhoneCallsDuration control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Column Column4;
+        protected global::Ext.Net.Column DepartmentPhoneCallsDuration;
         
         /// <summary>
-        /// Column5 control.
+        /// DepartmentPhoneCallsUiAssignedOn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Column Column5;
-        
-        /// <summary>
-        /// Column7 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.Column Column7;
+        protected global::Ext.Net.Column DepartmentPhoneCallsUiAssignedOn;
         
         /// <summary>
         /// RowSelectionModel1 control.

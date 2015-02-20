@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Manage Phonecalls" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PhoneCalls.aspx.cs" Inherits="LyncBillingUI.Pages.User.PhoneCalls" %>
+﻿<%@ Page Title="My Phonecalls" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PhoneCalls.aspx.cs" Inherits="LyncBillingUI.Pages.User.PhoneCalls" %>
 
 <asp:Content ID="HeaderScripts" ContentPlaceHolderID="HeaderContent" runat="server">
     <ext:XScript ID="XScript1" runat="server">
@@ -65,15 +65,16 @@
 <asp:Content ID="BodyContents" ContentPlaceHolderID="MainContent" runat="server">
     <ext:Hidden ID="FormatType" runat="server" />
 
-    <div class="row mb-5">
+    <div class="row">
         <div class="col-md-12">
-            <ul id="phone-calls-tabs" class="nav nav-tabs info">
-              <li id="my-phone-calls-tab" role="presentation" class="active"><a id="my-phone-calls-tab-link" href="#">My Phone Calls</a></li>
-              <li id="my-department-phone-calls-tab" role="presentation"><a id="my-department-phone-calls-tab-link" href="#">My Department's Phone Calls</a></li>
+            <ul id="phone-calls-tabs" class="nav nav-pills">
+                <li id="my-phone-calls-tab" role="presentation" class="active"><a id="my-phone-calls-tab-link" href="#">My Phone Calls</a></li>
+                <li id="my-department-phone-calls-tab" role="presentation"><a id="my-department-phone-calls-tab-link" href="#">My Department's Phone Calls</a></li>
             </ul>
         </div>
     </div>
 
+    <hr />
 
     <%-- 
         MY PHONE CALLS TAB BODY
@@ -83,12 +84,13 @@
             <ext:GridPanel
                 ID="ManagePhoneCallsGrid"
                 runat="server"
-                Border="true"
+                Border="false"
+                Frame="true"
                 AutoScroll="true"
                 Scroll="Both"
                 Layout="TableLayout"
                 MaxWidth="970"
-                MinHeight="620"
+                MinHeight="630"
                 ContextMenuID="PhoneCallsAllocationToolsMenu">
 
                 <Store>
@@ -234,7 +236,7 @@
                                 FieldLabel="View Calls:"
                                 LabelWidth="60"
                                 Width="200"
-                                Margins="5 5 5 5">
+                                MarginSpec="5 5 5 5">
                                 <Items>
                                     <ext:ListItem Text="Unallocated" Value="Unallocated" />
                                     <ext:ListItem Text="Business" Value="Business" />
@@ -348,14 +350,13 @@
             <ext:GridPanel
                 ID="DepartmentPhoneCallsGrid"
                 runat="server"
-                Border="true"
+                Frame="true"
                 AutoScroll="true"
                 Scroll="Both"
                 Layout="TableLayout"
                 MaxWidth="970"
-                MinHeight="620"
+                MinHeight="630"
                 ContextMenuID="DepartmentPhonecallsAllocationMenu">
-                        
                 <Store>
                     <ext:Store 
                         ID="DepartmentPhoneCallsStore"
@@ -366,21 +367,22 @@
                         <Model>
                             <ext:Model ID="Model1" runat="server" IDProperty="SessionIdTime">
                                 <Fields>
-                                    <ext:ModelField Name="SessionIdTime" Type="String" />
+                                    <ext:ModelField Name="ChargingParty" Type="String" />
+                                    <ext:ModelField Name="SessionIdTime" Type="Date" />
                                     <ext:ModelField Name="SessionIdSeq" Type="Int" />
-                                    <ext:ModelField Name="ResponseTime" Type="String" />
-                                    <ext:ModelField Name="SessionEndTime" Type="String" />
-                                    <ext:ModelField Name="Marker_CallToCountry" Type="String" />
+                                    <ext:ModelField Name="ResponseTime" Type="Date" />
+                                    <ext:ModelField Name="SessionEndTime" Type="Date" />
+                                    <ext:ModelField Name="MarkerCallToCountry" Type="String" />
+                                    <ext:ModelField Name="MarkerCallType" Type="String" />
                                     <ext:ModelField Name="DestinationNumberUri" Type="String" />
                                     <ext:ModelField Name="Duration" Type="Float" />
-                                    <ext:ModelField Name="Marker_CallCost" Type="Float" />
-                                    <ext:ModelField Name="UI_CallType" Type="String" />
-                                    <ext:ModelField Name="UI_MarkedOn" Type="Date" />
-                                    <ext:ModelField Name="UI_AssignedByUser" Type="String" />
-                                    <ext:ModelField Name="UI_AssignedToUser" Type="String" />
-                                    <ext:ModelField Name="UI_AssignedOn" Type="Date" />
-                                    <ext:ModelField Name="PhoneBookName" Type="String" />
-                                    <ext:ModelField Name="PhoneCallTableName" Type="String" />
+                                    <ext:ModelField Name="MarkerCallCost" Type="Float" />
+                                    <ext:ModelField Name="UiAssignedByUser" Type="String" />
+                                    <ext:ModelField Name="UiAssignedToUser" Type="String" />
+                                    <ext:ModelField Name="UiAssignedOn" Type="Date" />
+                                    <ext:ModelField Name="UiCallType" Type="String" />
+                                    <ext:ModelField Name="UiMarkedOn" Type="Date" />
+                                    <ext:ModelField Name="PhoneCallsTableName" Type="String" />
                                 </Fields>
                             </ext:Model>
                         </Model>
@@ -393,12 +395,11 @@
                 <ColumnModel ID="ColumnModel2" runat="server" Flex="1">
                     <Columns>
                         <ext:RowNumbererColumn
-                            ID="RowNumbererColumn1"
                             runat="server"
                             Width="25" />
 
                         <ext:Column
-                            ID="Column1"
+                            ID="DepartmentPhoneCallsSessionIdTime"
                             runat="server"
                             Text="Date"
                             Width="140"
@@ -407,28 +408,29 @@
                         </ext:Column>
 
                         <ext:Column
-                            ID="CountryColumns"
+                            ID="DepartmentPhoneCallsMarkerCallToCountry"
                             runat="server"
                             Text="Country"
                             Width="70"
-                            DataIndex="Marker_CallToCountry" />
+                            DataIndex="MarkerCallToCountry" />
 
                         <ext:Column
-                            ID="Column3"
+                            ID="DepartmentPhoneCallsDestinationNumberUri"
                             runat="server"
                             Text="Destination"
                             Width="120"
                             DataIndex="DestinationNumberUri" />
 
-                        <ext:Column ID="Column4"
+                        <ext:Column
+                            ID="DepartmentPhoneCallsUiAssignedByUser"
                             runat="server"
                             Text="Assigned By"
                             Width="140"
-                            DataIndex="UI_AssignedByUser">
+                            DataIndex="UiAssignedByUser">
                         </ext:Column>
 
                         <ext:Column
-                            ID="Column5"
+                            ID="DepartmentPhoneCallsDuration"
                             runat="server"
                             Text="Duration"
                             Width="80"
@@ -436,11 +438,12 @@
                             <Renderer Fn="GetMinutes" />
                         </ext:Column>
                                 
-                        <ext:Column ID="Column7"
+                        <ext:Column
+                            ID="DepartmentPhoneCallsUiAssignedOn"
                             runat="server"
                             Text="Assigned On"
                             Width="160"
-                            DataIndex="UI_AssignedOn">
+                            DataIndex="UiAssignedOn">
                             <%--<Renderer Fn="DateRenderer" />--%>
                         </ext:Column>
                     </Columns>
@@ -466,7 +469,7 @@
                                 runat="server"
                                 Text="Help"
                                 Icon="Help"
-                                Margins="5">
+                                MarginSpec="5 5 5 5">
                                 <DirectEvents>
                                     <Click OnEvent="ShowUserHelpPanel" />
                                 </DirectEvents>

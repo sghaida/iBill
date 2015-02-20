@@ -1,8 +1,8 @@
-Ext.NET Pro Software License Agreement
+EXT.NET Software License Agreement
 
-Version 2.5.3
+Version 3.0.0
 
-THIS DOCUMENT IS A LEGAL AGREEMENT (the "License Agreement") BETWEEN EXT.NET, INC. ("We," "Us") AND
+THIS DOCUMENT IS A LEGAL AGREEMENT (the "License Agreement") BETWEEN OBJECT.NET, INC. ("We," "Us") AND
 YOU OR THE ORGANIZATION ON WHOSE BEHALF YOU ARE UNDERTAKING THE LICENSE DESCRIBED BELOW ("You", 
 "Your") IN RELATION TO THE EXT.NET SOFTWARE LIBRARY(IES) (THE "Software"), IN BOTH SOURCE AND 
 OBJECT CODE FORM, AND/OR ALL RELATED MATERIALS.
@@ -63,7 +63,7 @@ Your Trial License at any time in Our absolute and sole discretion.
 
 For any locations other than http://localhost or http://127.0.0.1 the Software will display the
 message, 'This Software is Unlicensed' with a 'Buy License' link. If you wish to remove this
-message you are required to purchase an Ext.NET Pro License; otherwise you must leave
+message you are required to purchase an EXT.NET License; otherwise you must leave
 this message intact and not attempt to modify it in any way.
 
 In addition to the other terms contained herein, in the event You have downloaded or received beta 
@@ -253,5 +253,5 @@ Agreement.
                   
                                        Object.NET, Inc.
                                        +1(888)775-5888
-                                       hello@object.net
+                                     licensing@object.net
                                           object.net
