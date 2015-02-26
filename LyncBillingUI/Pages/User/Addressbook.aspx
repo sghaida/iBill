@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-12">
             <ul id="addressbook-tabs" class="nav nav-pills">
-                <li id="my-addressbook-tab" class="active" role="presentation">
+                <li id="my-addressbook-tab" role="presentation">
                     <a id="my-addressbook-tab-link" href="#" role="button" aria-expanded="false">My Address Book</a>
                 </li>
 
@@ -17,7 +17,7 @@
                     <a id="import-from-history-tab-link" href="#" role="button" aria-expanded="false">Import from History</a>
                 </li>
 
-                <li id="import-from-outlook-tab" role="presentation">
+                <li id="import-from-outlook-tab" role="presentation" class="active">
                     <a id="import-from-outlook-tab-link" href="#" role="button" aria-expanded="false">Import from Outlook</a>
                 </li>
             </ul>
@@ -26,7 +26,7 @@
     
     <hr />
 
-    <div id="my-addressbook-tab-body" class="row">
+    <div id="my-addressbook-tab-body" class="row hidden">
         <div class="col-md-12">
             <ext:FormPanel 
                 ID="EditAddressBookContactForm" 
@@ -37,7 +37,7 @@
                 Border="true"
                 Title="Contacts" 
                 Width="970"
-                MinHeight="620"
+                MinHeight="500"
                 Icon="BookAddresses"
                 DefaultAnchor="100%" 
                 AutoScroll="True"
@@ -66,8 +66,9 @@
                     <ext:GridPanel
                         ID="AddressBookGrid"
                         runat="server"
-                        Layout="TableLayout"
-                        MinHeight="620"
+                        Layout="FitLayout"
+                        MinHeight="580"
+                        MaxHeight="580"
                         ColumnWidth="0.7"
                         Scroll="Vertical"
                         AutoScroll="true"
@@ -214,6 +215,16 @@
                                 FieldLabel="Name" 
                                 LabelWidth="60" />
 
+                            <ext:TextField 
+                                runat="server" 
+                                ID="ContactDetails_Number"
+                                Name="DestinationNumber" 
+                                FieldLabel="Number" 
+                                LabelWidth="60" 
+                                AllowBlank="false" 
+                                AllowOnlyWhitespace="false" 
+                                MarginSpec="10 0 0 0" />
+
                             <ext:ComboBox
                                 ID="ContactDetails_ContactType"
                                 Name="Type"
@@ -239,16 +250,6 @@
                                 Name="DestinationCountry" 
                                 FieldLabel="Country" 
                                 LabelWidth="60" 
-                                MarginSpec="10 0 0 0" />
-                    
-                            <ext:TextField 
-                                runat="server" 
-                                ID="ContactDetails_Number"
-                                Name="DestinationNumber" 
-                                FieldLabel="Number" 
-                                LabelWidth="60" 
-                                AllowBlank="false" 
-                                AllowOnlyWhitespace="false" 
                                 MarginSpec="10 0 0 0" />
                         </Items>
                     </ext:FieldSet>
@@ -369,8 +370,8 @@
                         runat="server"
                         Margins="0 5 0 5">
                         <DirectEvents>
-                            <Click OnEvent="SaveChangesButton_DirectEvent">
-                                <EventMask ShowMask="true" Target="CustomTarget" CustomTarget="#{EditAddressBookContactForm}" />
+                            <Click OnEvent="SaveChangesButton_DirectEvent" Timeout="500000">
+                                <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
                     </ext:Button>
@@ -383,7 +384,7 @@
                         Margins="0 5 0 5">
                         <DirectEvents>
                             <Click OnEvent="CancelChangesButton_DirectEvent">
-                                <EventMask ShowMask="true" Target="CustomTarget" CustomTarget="#{EditAddressBookContactForm}" />
+                                <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
                     </ext:Button>
@@ -395,8 +396,8 @@
                         runat="server"
                         Margins="0 5 0 5">
                         <DirectEvents>
-                            <Click OnEvent="DeleteContactButton_DirectEvent">
-                                <EventMask ShowMask="true" Target="CustomTarget" CustomTarget="#{EditAddressBookContactForm}" />
+                            <Click OnEvent="DeleteContactButton_DirectEvent" Timeout="500000">
+                                <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
                     </ext:Button>
@@ -406,19 +407,18 @@
     </div>
 
 
-
     <div id="import-from-history-tab-body" class="row hidden">
         <div class="col-md-12">
             <ext:GridPanel
                 ID="ImportContactsGrid"
                 runat="server"
                 Header="true"
-                Border="true"
-                Frame="true"
-                Layout="TableLayout"
                 Title="History of Destinations"
-                MinHeight="580"
-                Icon="BookEdit"
+                Border="true"
+                Width="970"
+                MinHeight="620"
+                Layout="FitLayout"
+                AutoScroll="false"
                 ComponentCls="fix-ui-vertical-align">
                 <Store>
                     <ext:Store
@@ -618,6 +618,152 @@
             </ext:GridPanel>
         </div>
     </div>
+
+
+    <div id="import-from-outlook-tab-body" class="row">
+        <div class="col-md-12">
+            <ext:GridPanel
+                ID="OutlookContactsGrid"
+                runat="server"
+                Layout="FitLayout"
+                Border="true"
+                Title="Contacts" 
+                MarginSpec="5 5 5 5"
+                Width="970"
+                MinHeight="620"
+                Icon="Mail">
+                <Store>
+                    <ext:Store
+                        ID="OutlookContactsStore"
+                        runat="server"
+                        IsPagingStore="true"
+                        PageSize="25"
+                        OnLoad="OutlookContactsStore_Load">
+                        <Model>
+                            <ext:Model ID="Model1" runat="server" IDProperty="DestinationNumber">
+                                <Fields>
+                                    <ext:ModelField Name="Id" Type="Int" />
+                                    <ext:ModelField Name="SipAccount" Type="String" />
+                                    <ext:ModelField Name="DestinationNumber" Type="String" />
+                                    <ext:ModelField Name="DestinationCountry" Type="String" />
+                                    <ext:ModelField Name="Name" Type="String" />
+                                    <ext:ModelField Name="Type" Type="String" />
+                                </Fields>
+                            </ext:Model>
+                        </Model>
+                    </ext:Store>
+                </Store>
+
+                <%--<Listeners>
+                    <SelectionChange Handler="if (selected[0]) { this.up('form').getForm().loadRecord(selected[0]); }" />
+                </Listeners>--%>
+
+                <ColumnModel ID="ColumnModel1" runat="server" Flex="1">
+                    <Columns>
+                        <ext:RowNumbererColumn ID="RowNumbererColumn3" runat="server" Width="25" />
+
+                        <ext:Column
+                            ID="Column5"
+                            runat="server"
+                            Text="Number"
+                            MinWidth="150"
+                            MaxWidth="200"
+                            DataIndex="DestinationNumber">
+                            <%--<HeaderItems>
+                                <ext:TextField ID="DestNumberFilter"
+                                    runat="server"
+                                    Icon="Magnifier">
+                                    <Listeners>
+                                        <Change Handler="applyFilter(this);" Buffer="250" />                                                
+                                    </Listeners>
+                                    <Plugins>
+                                        <ext:ClearButton ID="ClearDestNumFilterBtn" runat="server" />
+                                    </Plugins>
+                                </ext:TextField>
+                            </HeaderItems>--%>
+                        </ext:Column>
+
+                        <ext:Column
+                            ID="Column6" 
+                            runat="server"
+                            DataIndex="Name"
+                            MinWidth="150"
+                            Text="Contact Name"
+                            Selectable="true"
+                            Flex="1">
+                            <%--<HeaderItems>
+                                <ext:TextField ID="ContactNameFilter"
+                                    runat="server"
+                                    Icon="Magnifier">
+                                    <Listeners>
+                                        <Change Handler="applyFilter(this);" Buffer="250" />                                                
+                                    </Listeners>
+                                    <Plugins>
+                                        <ext:ClearButton ID="ClearContactNameFilterBtn" runat="server" />
+                                    </Plugins>
+                                </ext:TextField>
+                            </HeaderItems>--%>
+                        </ext:Column>
+
+                        <ext:Column ID="Column7"
+                            runat="server"
+                            Text="Contact Information"
+                            MenuDisabled="true"
+                            Sortable="false"
+                            Resizable="false"
+                            MinWidth="220"
+                            MaxHeight="300">
+                            <Columns>
+                                <ext:Column
+                                    ID="Column8"
+                                    runat="server"
+                                    Text="Country"
+                                    Width="120"
+                                    DataIndex="DestinationCountry"
+                                    Sortable="true"
+                                    Groupable="true"
+                                    Resizable="false"
+                                    MenuDisabled="true" />
+
+                                <ext:Column
+                                    ID="Column9"
+                                    runat="server"
+                                    DataIndex="Type"
+                                    Text="Type"
+                                    Width="100"
+                                    Flex="1"
+                                    Selectable="true"
+                                    Sortable="true"
+                                    Groupable="true"
+                                    Resizable="false"
+                                    MenuDisabled="true" />
+                            </Columns>
+                        </ext:Column>
+                    </Columns>
+                </ColumnModel>
+
+                <SelectionModel>
+                    <ext:RowSelectionModel ID="CheckboxSelectionModel1"
+                        runat="server"
+                        Mode="Multi"
+                        AllowDeselect="true"
+                        IgnoreRightMouseSelection="true"
+                        CheckOnly="true">
+                    </ext:RowSelectionModel>
+                </SelectionModel>
+
+                <BottomBar>
+                    <ext:PagingToolbar
+                        ID="OutlookContactsPaginBottomBar"
+                        runat="server"
+                        StoreID="PhoneCallStore"
+                        DisplayInfo="true"
+                        Weight="25"
+                        DisplayMsg="Outlook Contacts {0} - {1} of {2}" />
+                </BottomBar>
+            </ext:GridPanel>
+        </div>
+    </div>
 </asp:Content>
 
 
@@ -627,12 +773,13 @@
             //
             // my-phone-calls-tab-link
             $("#my-addressbook-tab-link").click(function () {
-
                 $("#addressbook-tabs li").each(function () {
                     $(this).removeClass("active");
                 });
 
                 $("#import-from-history-tab-body").addClass("hidden");
+                $("#import-from-outlook-tab-body").addClass("hidden");
+
                 $("#my-addressbook-tab").addClass("active");
                 $("#my-addressbook-tab-body").removeClass("hidden");
             });
@@ -641,14 +788,30 @@
             //
             // my-department-phone-calls-tab-link
             $("#import-from-history-tab-link").click(function () {
-
                 $("#addressbook-tabs li").each(function () {
                     $(this).removeClass("active");
                 });
 
                 $("#my-addressbook-tab-body").addClass("hidden");
+                $("#import-from-outlook-tab-body").addClass("hidden");
+
                 $("#import-from-history-tab").addClass("active");
                 $("#import-from-history-tab-body").removeClass("hidden");
+            });
+
+
+            //
+            // my-department-phone-calls-tab-link
+            $("#import-from-outlook-tab-link").click(function () {
+                $("#addressbook-tabs li").each(function () {
+                    $(this).removeClass("active");
+                });
+
+                $("#my-addressbook-tab-body").addClass("hidden");
+                $("#import-from-history-tab-body").addClass("hidden");
+
+                $("#import-from-outlook-tab").addClass("active");
+                $("#import-from-outlook-tab-body").removeClass("hidden");
             });
         });
     </script>
