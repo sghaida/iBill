@@ -1,5 +1,11 @@
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\bin\Debug\CCC.UTILS.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\bin\Debug\CCC.UTILS.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\bin\Debug\Microsoft.Exchange.WebServices.Auth.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\bin\Debug\Microsoft.Exchange.WebServices.dll
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\bin\Debug\Microsoft.Exchange.WebServices.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\bin\Debug\Microsoft.Exchange.WebServices.xml
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\bin\Debug\Microsoft.Exchange.WebServices.Auth.pdb
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\bin\Debug\Microsoft.Exchange.WebServices.Auth.xml
+C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\obj\Debug\CCC.UTILS.csprojResolveAssemblyReference.cache
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\obj\Debug\CCC.UTILS.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\obj\Debug\CCC.UTILS.pdb
-C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\CCC.UTILS\obj\Debug\CCC.UTILS.csprojResolveAssemblyReference.cache
