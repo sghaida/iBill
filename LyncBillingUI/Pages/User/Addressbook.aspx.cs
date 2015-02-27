@@ -21,6 +21,8 @@ namespace LyncBillingUI.Pages.User
 {
     public partial class Addressbook : System.Web.UI.Page
     {
+        private Encryption encryptionLib = new Encryption();
+
         private string sipAccount = string.Empty;
         private string normalUserRoleName { get; set; }
         private string userDelegeeRoleName { get; set; }
@@ -248,43 +250,64 @@ namespace LyncBillingUI.Pages.User
 
         protected void OutlookContactsStore_Load(object sender, EventArgs e)
         {
-            ExchangeWebServices exchange;
+            ExchangeWebServices exchangeWebService;
             List<PhoneBookContact> contacts;
             List<OutlookContact> outlookContacts;
 
             if (!X.IsAjaxRequest)
             {
-                exchange = new ExchangeWebServices("aalhour", "!_aa_2015", "cccgr");
-                outlookContacts = exchange.OutlookContacts;
-                contacts = new List<PhoneBookContact>();
-
-                foreach(var outlookContact in outlookContacts)
+                try
                 {
-                    //Add the business phone 1
-                    if(!string.IsNullOrEmpty(outlookContact.BusinessPhone1)) 
-                        contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.BusinessPhone1, "N/A")));
+                    var adlib = new CCC.UTILS.Libs.AdLib();
+                    var attr = adlib.GetUserAttributes(sipAccount);
+                    var upn = attr.Upn.Split('@').ToList();
+                    var username = sipAccount.Split('@').ToList().First().ToLower();
+                    //var password = encryptionLib.DecryptRijndael(CurrentSession.EncryptedPassword);
 
-                    //Add the business phone 2
-                    if (!string.IsNullOrEmpty(outlookContact.BusinessPhone2))
-                        contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.BusinessPhone2, "N/A")));
+                    if (upn.Count > 1)
+                    {
+                        exchangeWebService = new ExchangeWebServices(
+                            username, 
+                            encryptionLib.DecryptRijndael(CurrentSession.EncryptedPassword), 
+                            upn[1].ToLower()
+                        );
 
-                    //Add the home phone 1
-                    if (!string.IsNullOrEmpty(outlookContact.HomePhone1))
-                        contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.HomePhone1, "N/A")));
+                        outlookContacts = exchangeWebService.OutlookContacts;
+                        contacts = new List<PhoneBookContact>();
 
-                    //Add the home phone 2
-                    if (!string.IsNullOrEmpty(outlookContact.HomePhone2))
-                        contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.HomePhone2, "N/A")));
+                        foreach (var outlookContact in outlookContacts)
+                        {
+                            //Add the business phone 1
+                            if (!string.IsNullOrEmpty(outlookContact.BusinessPhone1))
+                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.BusinessPhone1, "N/A")));
 
-                    //Add the mobile phone
-                    if (!string.IsNullOrEmpty(outlookContact.MobilePhone))
-                        contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.MobilePhone, "N/A")));
-                }
+                            //Add the business phone 2
+                            if (!string.IsNullOrEmpty(outlookContact.BusinessPhone2))
+                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.BusinessPhone2, "N/A")));
 
-                if (contacts != null && contacts.Count > 0)
+                            //Add the home phone 1
+                            if (!string.IsNullOrEmpty(outlookContact.HomePhone1))
+                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.HomePhone1, "N/A")));
+
+                            //Add the home phone 2
+                            if (!string.IsNullOrEmpty(outlookContact.HomePhone2))
+                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.HomePhone2, "N/A")));
+
+                            //Add the mobile phone
+                            if (!string.IsNullOrEmpty(outlookContact.MobilePhone))
+                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.MobilePhone, "N/A")));
+                        }
+
+                        if (contacts != null && contacts.Count > 0)
+                        {
+                            this.OutlookContactsStore.DataSource = contacts;
+                            this.OutlookContactsStore.DataBind();
+                        }
+                    }//end-outer-if
+                }//end-try
+                catch(Exception)
                 {
-                    this.OutlookContactsStore.DataSource = contacts;
-                    this.OutlookContactsStore.DataBind();
+                    //do nothing
                 }
             }
         }
