@@ -29,6 +29,10 @@ namespace LyncBillingBase.DataModels
         [DbColumn("DestinationCountry")]
         public string DestinationCountry { get; set; }
 
+        //
+        // The type of service of the number: fixedline, gsm...etc
+        public string TypeOfService { get; set; }
+
 
         public PhoneBookContact() { }
 
