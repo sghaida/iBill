@@ -21,20 +21,18 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
-            var data = new ExchangeWebServices("aalhour", "!_aa_2015", "cccgr");
-            var contacts = data.OutlookContacts;
+            DataStorage DB = DataStorage.Instance;
 
-            string x;
+            bool status = false;
 
-            if(contacts != null)
-                x = string.Empty;
+            status = DB.PhoneBooks.FixBrokenContacts();
 
-            //DataStorage DB = DataStorage.Instance;
-
-            //var startDate = new DateTime(2014, 1, 1);
-            //var endDate = DateTime.Now;
+            status = status && true;
 
 
+            //string result = string.Empty;
+            //result = DB.NumberingPlans.GetTypeOfServiceByNumber("+962795797572");
+            //result = result + "";
 
             //var users_summaries = DB.UsersCallsSummaries.GetBySipAccount("aalhour@ccc.gr", startDate, endDate);
             //users_summaries = DB.UsersCallsSummaries.GetBySite("MOA", startDate, endDate, Globals.CallsSummary.GroupBy.UserAndInvoiceFlag);
