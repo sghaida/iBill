@@ -145,6 +145,15 @@ namespace LyncBillingBase.DataMappers
             List<NumberingPlan> countriesCodes;
             string countryCodeTypeOfService = "countrycode";
 
+            //
+            // Validation of telephone number;
+            if (string.IsNullOrEmpty(telephoneNumber))
+            {
+                return null;
+            }
+
+            //
+            // Make sure the local cache of data is available.
             if (_numberingPlan == null || _numberingPlan.Count == 0)
             {
                 GetAll();
@@ -154,12 +163,8 @@ namespace LyncBillingBase.DataMappers
             {
                 countriesCodes = _numberingPlan.Where(item => item.TypeOfService.ToLower() == countryCodeTypeOfService).ToList() ?? (new List<NumberingPlan>());
 
-                if (countriesCodes != null && countriesCodes.Count > 0)
+                if (countriesCodes.Any())
                 {
-                    if (string.IsNullOrEmpty(telephoneNumber))
-                    {
-                        return null;
-                    }
                     if (telephoneNumber.Contains(";"))
                     {
                         var parts = telephoneNumber.Split(';').ToList();
@@ -174,12 +179,12 @@ namespace LyncBillingBase.DataMappers
                         }
                     }
 
-
-                    //Begin by trimming the "+" symbol
+                    //
+                    // Begin by trimming the "+" symbol
                     telephoneNumber = telephoneNumber.Trim('+');
 
-
-                    //Try to parse the number and match it with the numbering plan
+                    //
+                    // Try to parse the number and match it with the numbering plan
                     if (telephoneNumber.Length >= 9)
                     {
                         long.TryParse(telephoneNumber, out numberToParse);
@@ -194,9 +199,12 @@ namespace LyncBillingBase.DataMappers
                                 iso3CountryCode = number.Iso3CountryCode;
                                 break;
                             }
+
                             numberToParse = numberToParse/10;
                         } //end-while
+
                     } //end-inner-if
+
                 } //end-outer-if
 
                 return iso3CountryCode;
@@ -205,6 +213,84 @@ namespace LyncBillingBase.DataMappers
             {
                 throw ex.InnerException;
             }
+        }
+
+        public string GetTypeOfServiceByNumber(string telephoneNumber)
+        {
+            long numberToParse = 0;
+            string typeOfService = string.Empty;
+            string iso3CountryCode = string.Empty;
+            List<NumberingPlan> countryCodes;
+
+            //
+            // Validation of telephone number;
+            if(string.IsNullOrEmpty(telephoneNumber))
+            {
+                return null;
+            }
+
+            //
+            // Make sure the local cache of data is available.
+            if (_numberingPlan == null || _numberingPlan.Count == 0)
+            {
+                GetAll();
+            }
+
+            try
+            {
+                iso3CountryCode = this.GetIso3CountryCodeByNumber(telephoneNumber);
+                countryCodes = _numberingPlan.Where(item => item.Iso3CountryCode == iso3CountryCode).ToList();
+
+                if(countryCodes.Any())
+                {
+                    if (telephoneNumber.Contains(";"))
+                    {
+                        var parts = telephoneNumber.Split(';').ToList();
+
+                        if (";" != parts.First())
+                        {
+                            telephoneNumber = parts.First();
+                        }
+                        else
+                        {
+                            telephoneNumber = parts[2];
+                        }
+                    }
+
+                    // 
+                    // Begin by trimming the "+" symbol
+                    telephoneNumber = telephoneNumber.Trim('+');
+
+                    //
+                    // Try to parse the number and match it with the numbering plan
+                    if (telephoneNumber.Length >= 9)
+                    {
+                        long.TryParse(telephoneNumber, out numberToParse);
+
+                        while (numberToParse > 0)
+                        {
+                            var number = countryCodes.Find(item => item.DialingPrefix == numberToParse);
+
+                            if (number != null)
+                            {
+                                // RETURN
+                                typeOfService = number.TypeOfService;
+                                break;
+                            }
+
+                            numberToParse = numberToParse / 10;
+                        } //end-while
+
+                    } //end-inner-if
+
+                }//end-outer-if
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
+
+            return typeOfService;
         }
 
         public override NumberingPlan GetById(long id, string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
