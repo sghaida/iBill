@@ -134,6 +134,7 @@
     <Content Include="Pages\User\Bills.aspx" />
     <Content Include="Pages\User\Dashboard.aspx" />
     <Content Include="Pages\User\PhoneCalls.aspx" />
+    <Content Include="Pages\User\PhoneCallsHistory.aspx" />
     <Content Include="Pages\User\TelephonyRates.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -282,6 +283,13 @@
     </Compile>
     <Compile Include="Pages\User\PhoneCalls.aspx.designer.cs">
       <DependentUpon>PhoneCalls.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User\PhoneCallsHistory.aspx.cs">
+      <DependentUpon>PhoneCallsHistory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\User\PhoneCallsHistory.aspx.designer.cs">
+      <DependentUpon>PhoneCallsHistory.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\User\TelephonyRates.aspx.cs">
       <DependentUpon>TelephonyRates.aspx</DependentUpon>

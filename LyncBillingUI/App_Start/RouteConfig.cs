@@ -31,6 +31,7 @@ namespace LyncBillingUI
             routes.MapPageRoute("", "User/Bills", "~/Pages/User/Bills.aspx");
             routes.MapPageRoute("", "User/Dashboard", "~/Pages/User/Dashboard.aspx");
             routes.MapPageRoute("", "User/Phonecalls", "~/Pages/User/PhoneCalls.aspx");
+            routes.MapPageRoute("", "User/History/PhoneCalls", "~/Pages/User/PhoneCallsHistory.aspx");
             routes.MapPageRoute("", "User/AddressBook", "~/Pages/User/Addressbook.aspx");
             routes.MapPageRoute("", "User/TelephonyRates", "~/Pages/User/TelephonyRates.aspx");
         }
