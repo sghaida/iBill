@@ -69,7 +69,7 @@
                                                 <li class="divider"></li>
                                                 <li class="dropdown-header">History</li>
                                                 <li><a href="<%= global_asax.APPLICATION_URL %>/User/Bills">Bills History</a></li>
-                                                <li><a href="#">Calls History</a></li>
+                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/History/PhoneCalls">Calls History</a></li>
                                                 <li class="divider"></li>
                                                 <li><a href="#">Statistics</a></li>
                                                 <li class="divider"></li>
