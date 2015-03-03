@@ -65,15 +65,15 @@
                                             <ul class="dropdown-menu" role="menu">
                                                 <li class="dropdown-header">Manage</li>
                                                 <li><a href="<%= global_asax.APPLICATION_URL %>/User/PhoneCalls">Phone Calls</a></li>
-                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/Addressbook">Address Book</a></li>
+                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/AddressBook">Address Book</a></li>
                                                 <li class="divider"></li>
                                                 <li class="dropdown-header">History</li>
-                                                <li><a href="#">Bills History</a></li>
+                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/Bills">Bills History</a></li>
                                                 <li><a href="#">Calls History</a></li>
                                                 <li class="divider"></li>
                                                 <li><a href="#">Statistics</a></li>
                                                 <li class="divider"></li>
-                                                <li><a href="#">Providers Rates</a></li>
+                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/TelephonyRates">Telephony Rates</a></li>
                                                 
                                                 <% if(CurrentSession.ActiveRoleName == normalUserRoleName) { %>
                                                     <li class="divider"></li>

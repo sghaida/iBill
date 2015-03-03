@@ -131,8 +131,10 @@
     <Content Include="Error\404.aspx" />
     <Content Include="Error\Oops.aspx" />
     <Content Include="Pages\User\Addressbook.aspx" />
+    <Content Include="Pages\User\Bills.aspx" />
     <Content Include="Pages\User\Dashboard.aspx" />
     <Content Include="Pages\User\PhoneCalls.aspx" />
+    <Content Include="Pages\User\TelephonyRates.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\extjs-helpers.js" />
@@ -260,6 +262,13 @@
     <Compile Include="Pages\User\Addressbook.aspx.designer.cs">
       <DependentUpon>Addressbook.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\User\Bills.aspx.cs">
+      <DependentUpon>Bills.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\User\Bills.aspx.designer.cs">
+      <DependentUpon>Bills.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\User\Dashboard.aspx.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -273,6 +282,13 @@
     </Compile>
     <Compile Include="Pages\User\PhoneCalls.aspx.designer.cs">
       <DependentUpon>PhoneCalls.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User\TelephonyRates.aspx.cs">
+      <DependentUpon>TelephonyRates.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\User\TelephonyRates.aspx.designer.cs">
+      <DependentUpon>TelephonyRates.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Foundation.Master.cs">

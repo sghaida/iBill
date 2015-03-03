@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using CCC.ORM.DataAccess;
 using LyncBillingBase.DataModels;
+using CCC.ORM.Helpers;
 
 namespace LyncBillingBase.DataMappers
 {
     public class UsersDataMapper : DataAccess<User>
     {
+        private static SitesDataMapper _sitesDataMapper = new SitesDataMapper();
+
         /// <summary>
         ///     Given a Site's ID, return all the Users that belong to that Site.
         /// </summary>
@@ -15,7 +18,16 @@ namespace LyncBillingBase.DataMappers
         /// <returns>List of User objects. Users that belong to that Site.</returns>
         public List<User> GetBySiteId(int siteId)
         {
-            throw new NotImplementedException();
+            var site = _sitesDataMapper.GetById(siteId);
+
+            try
+            {
+                return this.GetBySite(site);
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         /// <summary>
@@ -25,12 +37,20 @@ namespace LyncBillingBase.DataMappers
         /// <returns>List of User objects. Users that belong to that Site.</returns>
         public List<User> GetBySite(Site site)
         {
-            var condition = new Dictionary<string, object>();
-            condition.Add("AD_PhysicalDeliveryOfficeName", site.Name);
+            //var condition = new Dictionary<string, object>();
+            //condition.Add("AD_PhysicalDeliveryOfficeName", site.Name);
 
             try
             {
-                return Get(condition, 0).ToList();
+                //return Get(condition, 0).ToList();
+                var results = (new List<User>()).GetWithRelations(item => item.Site, item => item.Department).ToList() ?? (new List<User>());
+
+                if(site != null && results.Any())
+                {
+                    results = results.Where(item => item.Site.Id == site.Id || item.Site.Name == site.Name).ToList();
+                }
+
+                return results;
             }
             catch (Exception ex)
             {
@@ -82,15 +102,18 @@ namespace LyncBillingBase.DataMappers
         {
             User user = null;
 
-            var condition = new Dictionary<string, object>();
-            condition.Add("SipAccount", userSipAccount);
+            //var condition = new Dictionary<string, object>();
+            //condition.Add("SipAccount", userSipAccount);
 
             try
             {
-                var result = Get(condition, 1).ToList();
+                //var result = Get(condition, 1).ToList();
+                var result = (new List<User>()).GetWithRelations(item => item.Site, item => item.Department).ToList() ?? (new List<User>());
 
-                if (result != null && result.Count > 0)
-                    user = result.First();
+                if (result.Any())
+                {
+                    user = result.Find(item => item.SipAccount == userSipAccount);
+                }
 
                 return user;
             }
@@ -109,15 +132,18 @@ namespace LyncBillingBase.DataMappers
         {
             User user = null;
 
-            var condition = new Dictionary<string, object>();
-            condition.Add("AD_UserID", userId);
+            //var condition = new Dictionary<string, object>();
+            //condition.Add("AD_UserID", userId);
 
             try
             {
-                var result = Get(condition, 1).ToList();
+                //var result = Get(condition, 1).ToList();
+                var result = (new List<User>()).GetWithRelations(item => item.Site, item => item.Department).ToList() ?? (new List<User>());
 
-                if (result != null && result.Count > 0)
-                    user = result.First();
+                if (result.Any())
+                {
+                    user = result.Find(item => item.EmployeeId == userId);
+                }
 
                 return user;
             }

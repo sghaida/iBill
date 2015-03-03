@@ -32,11 +32,12 @@ namespace LyncBillingUI.Pages.User
         {
             SetRolesNames();
 
+            // 
             // If the user is not loggedin, redirect to Login page.
             if (HttpContext.Current.Session == null || HttpContext.Current.Session.Contents["UserData"] == null)
             {
-                string RedirectTo = @"/User/PhoneCalls";
-                string Url = @"/Login?RedirectTo=" + RedirectTo;
+                string RedirectTo = String.Format(@"{0}/User/PhoneCalls", Global.APPLICATION_URL);
+                string Url = String.Format(@"{0}/Login?RedirectTo={1}", Global.APPLICATION_URL, RedirectTo);
                 Response.Redirect(Url);
             }
             else
@@ -44,7 +45,7 @@ namespace LyncBillingUI.Pages.User
                 CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
                 if (CurrentSession.ActiveRoleName != normalUserRoleName && CurrentSession.ActiveRoleName != userDelegeeRoleName)
                 {
-                    string url = @"/Authenticate?access=" + CurrentSession.ActiveRoleName;
+                    string url = String.Format(@"{0}/Authenticate?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
                     Response.Redirect(url);
                 }
             }

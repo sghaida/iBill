@@ -36,7 +36,7 @@
                 BodyPadding="5"
                 Border="true"
                 Title="Contacts" 
-                Width="970"
+                MaxWidth="955"
                 MinHeight="500"
                 Icon="BookAddresses"
                 DefaultAnchor="100%" 
@@ -415,7 +415,7 @@
                 Header="true"
                 Title="History of Destinations"
                 Border="true"
-                Width="970"
+                MaxWidth="955"
                 MinHeight="620"
                 Layout="FitLayout"
                 AutoScroll="false"
@@ -629,7 +629,7 @@
                 Border="true"
                 Title="Contacts" 
                 MarginSpec="5 5 5 5"
-                Width="970"
+                MaxWidth="955"
                 MinHeight="620"
                 Icon="Mail">
                 <Store>
