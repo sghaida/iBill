@@ -1,4 +1,4 @@
-﻿<%@ Page Title="My Phonecalls" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PhoneCalls.aspx.cs" Inherits="LyncBillingUI.Pages.User.PhoneCalls" %>
+﻿<%@ Page Title="My Phone Calls" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PhoneCalls.aspx.cs" Inherits="LyncBillingUI.Pages.User.PhoneCalls" %>
 
 <asp:Content ID="HeaderScripts" ContentPlaceHolderID="HeaderContent" runat="server">
     <ext:XScript ID="XScript1" runat="server">
@@ -84,12 +84,12 @@
             <ext:GridPanel
                 ID="ManagePhoneCallsGrid"
                 runat="server"
-                Border="false"
+                Border="true"
                 Frame="true"
                 AutoScroll="true"
                 Scroll="Both"
-                Layout="TableLayout"
-                MaxWidth="970"
+                Layout="FitLayout"
+                MaxWidth="955"
                 MinHeight="630"
                 ContextMenuID="PhoneCallsAllocationToolsMenu">
 
@@ -350,11 +350,12 @@
             <ext:GridPanel
                 ID="DepartmentPhoneCallsGrid"
                 runat="server"
+                Border="true"
                 Frame="true"
                 AutoScroll="true"
                 Scroll="Both"
                 Layout="TableLayout"
-                MaxWidth="970"
+                MaxWidth="955"
                 MinHeight="630"
                 ContextMenuID="DepartmentPhonecallsAllocationMenu">
                 <Store>
