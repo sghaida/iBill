@@ -71,7 +71,7 @@
                                                 <li><a href="<%= global_asax.APPLICATION_URL %>/User/Bills">Bills History</a></li>
                                                 <li><a href="<%= global_asax.APPLICATION_URL %>/User/History/PhoneCalls">Calls History</a></li>
                                                 <li class="divider"></li>
-                                                <li><a href="#">Statistics</a></li>
+                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/Statistics">Statistics</a></li>
                                                 <li class="divider"></li>
                                                 <li><a href="<%= global_asax.APPLICATION_URL %>/User/TelephonyRates">Telephony Rates</a></li>
                                                 

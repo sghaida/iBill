@@ -2,16 +2,11 @@ D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.dll.
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.pdb
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Antlr3.Runtime.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\AspNet.ScriptManager.bootstrap.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\AspNet.ScriptManager.jQuery.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\CCC.ORM.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.Utilities.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingBase.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.AspNet.FriendlyUrls.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.ScriptManager.MSAjax.dll
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.ScriptManager.WebForms.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.Web.Infrastructure.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Newtonsoft.Json.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\System.Web.Optimization.dll
@@ -71,3 +66,5 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBilli
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.csprojResolveAssemblyReference.cache
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\CCC.ORM.dll.config
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingBase.dll.config
