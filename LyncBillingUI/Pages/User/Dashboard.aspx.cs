@@ -18,8 +18,9 @@ namespace LyncBillingUI.Pages.User
     public partial class Dashboard : System.Web.UI.Page
     {
         private string sipAccount = string.Empty;
-        private string normalUserRoleName { get; set; }
-        private string userDelegeeRoleName { get; set; }
+        
+        private static string normalUserRoleName { get; set; }
+        private static string userDelegeeRoleName { get; set; }
 
         //public variables made available for the view
         public int unmarkedCallsCount = 0;
@@ -86,14 +87,12 @@ namespace LyncBillingUI.Pages.User
         {
             if (string.IsNullOrEmpty(normalUserRoleName))
             {
-                var normalUserRole = Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserRoleID);
-                normalUserRoleName = (normalUserRole != null ? normalUserRole.RoleName : string.Empty);
+                normalUserRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserRoleID);
             }
 
             if (string.IsNullOrEmpty(userDelegeeRoleName))
             {
-                var delegeeUserRole = Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID);
-                userDelegeeRoleName = (delegeeUserRole != null ? delegeeUserRole.RoleName : string.Empty);
+                userDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserDelegeeRoleID);
             }
         }
 

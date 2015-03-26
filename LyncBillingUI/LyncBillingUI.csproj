@@ -121,11 +121,9 @@
     <Content Include="Content\Site.Foundation.css" />
     <Content Include="Ext.NET.Default.aspx" />
     <Content Include="Images\logo_48.png" />
-    <Content Include="Pages\About.aspx" />
     <Content Include="Pages\Account\Authorize.aspx" />
     <Content Include="Pages\Account\Login.aspx" />
     <Content Include="Pages\Account\Logout.aspx" />
-    <Content Include="Pages\Contact.aspx" />
     <Content Include="Content\Site.css" />
     <Content Include="packages.config" />
     <Content Include="Error\404.aspx" />
@@ -197,13 +195,6 @@
     <Compile Include="Account\Encryption.cs" />
     <Compile Include="Account\UserSession.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="Pages\About.aspx.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\About.aspx.designer.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Pages\Account\Authorize.aspx.cs">
       <DependentUpon>Authorize.aspx</DependentUpon>
@@ -225,13 +216,6 @@
     </Compile>
     <Compile Include="Pages\Account\Logout.aspx.designer.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Contact.aspx.cs">
-      <DependentUpon>Contact.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Contact.aspx.designer.cs">
-      <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
