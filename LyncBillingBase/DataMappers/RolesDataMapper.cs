@@ -86,14 +86,38 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<Role> GetAll(string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public string GetRoleNameById(int roleId)
+        {
+            string roleName = null;
+
+            try
+            {
+                var role = _roles.FirstOrDefault(item => item.RoleId == roleId);
+
+                if(role != null)
+                {
+                    roleName = role.RoleName;
+                }
+
+                return roleName;
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+        public override IEnumerable<Role> GetAll(string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             return _roles;
         }
 
-        public override int Insert(Role dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public override int Insert(Role dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var isContained = _roles.Contains(dataObject);
             var itExists =
@@ -109,8 +133,7 @@ namespace LyncBillingBase.DataMappers
             return dataObject.Id;
         }
 
-        public override bool Update(Role dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public override bool Update(Role dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var role = _roles.Find(item => item.Id == dataObject.Id);
 
@@ -124,8 +147,7 @@ namespace LyncBillingBase.DataMappers
             return false;
         }
 
-        public override bool Delete(Role dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public override bool Delete(Role dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var role = _roles.Find(item => item.Id == dataObject.Id);
 
