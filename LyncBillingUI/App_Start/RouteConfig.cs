@@ -13,11 +13,7 @@ namespace LyncBillingUI
             var settings = new FriendlyUrlSettings();
             settings.AutoRedirectMode = RedirectMode.Permanent;
             routes.EnableFriendlyUrls(settings);
-
-            // Default Pages
-            routes.MapPageRoute("", "About", "~/Pages/About.aspx");
-            routes.MapPageRoute("", "Contact", "~/Pages/Contact.aspx");
-
+            
             // Account Pages
             routes.MapPageRoute("", "Login", "~/Pages/Account/Login.aspx");
             routes.MapPageRoute("", "Logout", "~/Pages/Account/Logout.aspx");
