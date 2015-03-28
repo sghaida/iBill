@@ -155,7 +155,6 @@ namespace LyncBillingBase.DataModels
         public string PhoneCallsTableName { get; set; }
 
         public string PhoneBookName { set; get; }
-        public string PhoneCallsTable { set; get; }
 
         [DbColumn("Marker_CallCost")]
         public decimal MarkerCallCost

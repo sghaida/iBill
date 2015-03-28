@@ -114,6 +114,18 @@ h6, .h6 {
     margin-bottom: 5px;
 }
 
+.mr-20 {
+    margin-right: 20px;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+
 .extjs-menuitem-label, 
 .extjs-menuitem-label *,
 .extjs-menuitem-label:hover,
@@ -125,5 +137,44 @@ h6, .h6 {
     text-decoration: none;
     font-style: normal;
     cursor: default;
+    font-weight: bold;
+}
+
+
+/***
+    Statistics page TOP DOWN SLIDER styles
+*/
+
+.top-down-slider-container {
+    /*border-top: 1px solid #CECFCE;*/
+}
+
+.top-down-slider-container .top-down-slider-block {
+    width: inherit;
+    padding: 15px;
+    background: #f7f7f7;
+    border-top: 1px solid #CECFCE;
+    border-right: 1px solid #CECFCE;
+    border-bottom: 1px solid #CECFCE;
+    border-left: 1px solid #CECFCE;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.top-down-slider-container .top-down-slider-button {
+    padding: 5px;
+    width: auto;
+    height: auto;
+    border-left: 2px solid #CECFCE;
+    border-right: 2px solid #CECFCE;
+    border-bottom: 2px solid #CECFCE;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    text-align: center;
+}
+
+.top-down-slider-container .top-down-slider-button a {
+    color: #224252;
     font-weight: bold;
 }

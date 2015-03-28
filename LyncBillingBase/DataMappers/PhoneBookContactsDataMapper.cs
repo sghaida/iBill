@@ -11,6 +11,8 @@ namespace LyncBillingBase.DataMappers
 {
     public class PhoneBookContactsDataMapper : DataAccess<PhoneBookContact>
     {
+        private static NumberingPlansDataMapper _numberingPlanDataMapper = new NumberingPlansDataMapper();
+
         /// <summary>
         /// </summary>
         /// <param name="userSipAccount"></param>
@@ -32,6 +34,11 @@ namespace LyncBillingBase.DataMappers
                 {
                     userPhoneBookContacts = userPhoneBookContacts.Distinct(linqDistinctComparer).ToList();
                 }
+
+                Parallel.ForEach(userPhoneBookContacts, (contact) =>
+                {
+                    contact.TypeOfService = _numberingPlanDataMapper.GetTypeOfServiceByNumber(contact.DestinationNumber);
+                });
 
                 return userPhoneBookContacts;
             }
@@ -69,6 +76,8 @@ namespace LyncBillingBase.DataMappers
                                 {
                                     if (false == userAddressBook.Keys.Contains(contact.DestinationNumber))
                                     {
+                                        contact.TypeOfService = _numberingPlanDataMapper.GetTypeOfServiceByNumber(contact.DestinationNumber);
+
                                         userAddressBook.Add(contact.DestinationNumber, contact);
                                     }
                                 }
@@ -97,13 +106,21 @@ namespace LyncBillingBase.DataMappers
             {
                 try
                 {
-                    phoneBookEntry.DestinationNumber = HelperFunctions.FormatUserTelephoneNumber(phoneBookEntry.DestinationNumber);
+                    if (!string.IsNullOrEmpty(phoneBookEntry.DestinationNumber))
+                    {
+                        phoneBookEntry.DestinationNumber = HelperFunctions.FormatUserTelephoneNumber(phoneBookEntry.DestinationNumber);
 
-                    //Either update or insert to the database
-                    if (existingContacts.ContainsKey(phoneBookEntry.DestinationNumber))
-                        this.Update(phoneBookEntry);
-                    else
-                        this.Insert(phoneBookEntry);
+                        if (string.IsNullOrEmpty(phoneBookEntry.DestinationCountry) || phoneBookEntry.DestinationCountry == "N/A")
+                        {
+                            phoneBookEntry.DestinationCountry = _numberingPlanDataMapper.GetIso3CountryCodeByNumber(phoneBookEntry.DestinationNumber);
+                        }
+
+                        //Either update or insert to the database
+                        if (existingContacts.ContainsKey(phoneBookEntry.DestinationNumber))
+                            this.Update(phoneBookEntry);
+                        else
+                            this.Insert(phoneBookEntry);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -122,7 +139,17 @@ namespace LyncBillingBase.DataMappers
             {
                 foreach (var contact in phoneBookContacts)
                 {
-                    base.Update(contact);
+                    if(!string.IsNullOrEmpty(contact.DestinationNumber))
+                    {
+                        contact.DestinationNumber = HelperFunctions.FormatUserTelephoneNumber(contact.DestinationNumber);
+
+                        if(string.IsNullOrEmpty(contact.DestinationCountry) || contact.DestinationCountry == "N/A")
+                        {
+                            contact.DestinationCountry = _numberingPlanDataMapper.GetIso3CountryCodeByNumber(contact.DestinationNumber);
+                        }
+                    
+                        base.Update(contact);
+                    }
                 }
             }
         }
@@ -133,11 +160,21 @@ namespace LyncBillingBase.DataMappers
         /// <param name="phoneBookContacts"></param>
         public void InsertMany(List<PhoneBookContact> phoneBookContacts)
         {
-            if (phoneBookContacts != null && phoneBookContacts.Count > 0)
+            if (phoneBookContacts != null && phoneBookContacts.Any())
             {
                 foreach (var contact in phoneBookContacts)
                 {
-                    base.Insert(contact);
+                    if (!string.IsNullOrEmpty(contact.DestinationNumber))
+                    {
+                        contact.DestinationNumber = HelperFunctions.FormatUserTelephoneNumber(contact.DestinationNumber);
+
+                        if (string.IsNullOrEmpty(contact.DestinationCountry) || contact.DestinationCountry == "N/A")
+                        {
+                            contact.DestinationCountry = _numberingPlanDataMapper.GetIso3CountryCodeByNumber(contact.DestinationNumber);
+                        }
+
+                        base.Insert(contact);
+                    }
                 }
             }
         }
@@ -156,6 +193,60 @@ namespace LyncBillingBase.DataMappers
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool FixBrokenContacts()
+        {
+            bool status = false;
+
+            try
+            {
+                var brokenPhoneBookContacts = (base.GetAll() ?? (new List<PhoneBookContact>()))
+                    //.Where(item => 
+                    //    string.IsNullOrEmpty(item.DestinationNumber) ||
+                    //    string.IsNullOrEmpty(item.DestinationCountry))
+                    .ToList<PhoneBookContact>();
+
+                if(brokenPhoneBookContacts.Any())
+                {
+                    foreach(var contact in brokenPhoneBookContacts)
+                    {
+                        //
+                        // First check the destination number
+                        if(string.IsNullOrEmpty(contact.DestinationNumber))
+                        {
+                            // Delete the contact object
+                            this.Delete(contact);
+                            
+                            // SKIP THE REST OF THE LOOP!
+                            continue;
+                        }
+
+                        if(string.IsNullOrEmpty(contact.DestinationCountry))
+                        {
+                            // Determine the destination country based on the destination number
+                            contact.DestinationNumber = HelperFunctions.FormatUserTelephoneNumber(contact.DestinationNumber);
+                            contact.DestinationCountry = _numberingPlanDataMapper.GetIso3CountryCodeByNumber(contact.DestinationNumber) ?? "N/A";
+                            
+                            // Update the contact object
+                            this.Update(contact);
+                        }
+                    }
+
+                    status = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
+
+            return status;
+        }
+
     } //end-of-data-mapper-class
 
 

@@ -23,7 +23,7 @@ namespace LyncBillingUI.Pages.Account
             //If the user is not loggedin, redirect to Login page.
             if (HttpContext.Current.Session != null && HttpContext.Current.Session.Contents["UserData"] != null)
             {
-                Response.Redirect("~/User/Dashboard");
+                Response.Redirect(String.Format(@"{0}/User/Dashboard", Global.APPLICATION_URL));
             }
 
             //Check if a RedirectTo value has been passed and validate it's link
@@ -166,7 +166,7 @@ namespace LyncBillingUI.Pages.Account
                         }
                         else
                         {
-                            Response.Redirect("~/User/Dashboard");
+                            Response.Redirect(String.Format(@"{0}/User/Dashboard", Global.APPLICATION_URL));
                         }
                     }//end-if-userInfo-noteq-null
 
