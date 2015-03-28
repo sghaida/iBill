@@ -13,11 +13,7 @@ namespace LyncBillingUI
             var settings = new FriendlyUrlSettings();
             settings.AutoRedirectMode = RedirectMode.Permanent;
             routes.EnableFriendlyUrls(settings);
-
-            // Default Pages
-            routes.MapPageRoute("", "About", "~/Pages/About.aspx");
-            routes.MapPageRoute("", "Contact", "~/Pages/Contact.aspx");
-
+            
             // Account Pages
             routes.MapPageRoute("", "Login", "~/Pages/Account/Login.aspx");
             routes.MapPageRoute("", "Logout", "~/Pages/Account/Logout.aspx");
@@ -28,9 +24,13 @@ namespace LyncBillingUI
             routes.MapPageRoute("Error", "Oops", "~/Error/Oops.aspx");
 
             // User Pages
+            routes.MapPageRoute("", "User/Bills", "~/Pages/User/Bills.aspx");
             routes.MapPageRoute("", "User/Dashboard", "~/Pages/User/Dashboard.aspx");
+            routes.MapPageRoute("", "User/Statistics", "~/Pages/User/Statistics.aspx");
             routes.MapPageRoute("", "User/Phonecalls", "~/Pages/User/PhoneCalls.aspx");
-            routes.MapPageRoute("", "User/Addressbook", "~/Pages/User/Addressbook.aspx");
+            routes.MapPageRoute("", "User/AddressBook", "~/Pages/User/Addressbook.aspx");
+            routes.MapPageRoute("", "User/TelephonyRates", "~/Pages/User/TelephonyRates.aspx");
+            routes.MapPageRoute("", "User/History/PhoneCalls", "~/Pages/User/PhoneCallsHistory.aspx");
         }
     }
 }

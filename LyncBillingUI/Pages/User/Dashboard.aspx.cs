@@ -18,8 +18,9 @@ namespace LyncBillingUI.Pages.User
     public partial class Dashboard : System.Web.UI.Page
     {
         private string sipAccount = string.Empty;
-        private string normalUserRoleName { get; set; }
-        private string userDelegeeRoleName { get; set; }
+        
+        private static string normalUserRoleName { get; set; }
+        private static string userDelegeeRoleName { get; set; }
 
         //public variables made available for the view
         public int unmarkedCallsCount = 0;
@@ -44,11 +45,12 @@ namespace LyncBillingUI.Pages.User
             // Set the roles names
             SetRolesNames();
 
+            // 
             // If the user is not loggedin, redirect to Login page.
             if (HttpContext.Current.Session == null || HttpContext.Current.Session.Contents["UserData"] == null)
             {
-                string RedirectTo = @"/User/Dashboard";
-                string Url = @"/Login?RedirectTo=" + RedirectTo;
+                string RedirectTo = String.Format(@"{0}/User/Dashboard", Global.APPLICATION_URL);
+                string Url = String.Format(@"{0}/Login?RedirectTo={1}", Global.APPLICATION_URL, RedirectTo);
                 Response.Redirect(Url);
             }
             else
@@ -56,7 +58,7 @@ namespace LyncBillingUI.Pages.User
                 CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
                 if (CurrentSession.ActiveRoleName != normalUserRoleName && CurrentSession.ActiveRoleName != userDelegeeRoleName)
                 {
-                    string url = @"/Authenticate?access=" + CurrentSession.ActiveRoleName;
+                    string url = String.Format(@"{0}/Authenticate?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
                     Response.Redirect(url);
                 }
             }
@@ -85,14 +87,12 @@ namespace LyncBillingUI.Pages.User
         {
             if (string.IsNullOrEmpty(normalUserRoleName))
             {
-                var normalUserRole = Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserRoleID);
-                normalUserRoleName = (normalUserRole != null ? normalUserRole.RoleName : string.Empty);
+                normalUserRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserRoleID);
             }
 
             if (string.IsNullOrEmpty(userDelegeeRoleName))
             {
-                var delegeeUserRole = Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID);
-                userDelegeeRoleName = (delegeeUserRole != null ? delegeeUserRole.RoleName : string.Empty);
+                userDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserDelegeeRoleID);
             }
         }
 

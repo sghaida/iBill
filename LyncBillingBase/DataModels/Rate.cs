@@ -20,8 +20,7 @@ namespace LyncBillingBase.DataModels
 
         //
         // Relations
-        [DataRelation(WithDataModel = typeof (NumberingPlan), OnDataModelKey = "DialingPrefix", ThisKey = "DialingCode")
-        ]
+        [DataRelation(WithDataModel = typeof (NumberingPlan), OnDataModelKey = "DialingPrefix", ThisKey = "DialingCode")]
         public NumberingPlan NumberingPlan { get; set; }
     }
 }

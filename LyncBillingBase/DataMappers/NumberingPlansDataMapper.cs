@@ -16,6 +16,8 @@ namespace LyncBillingBase.DataMappers
          */
         private readonly CountriesDataMapper _countriesDataMapper = new CountriesDataMapper();
 
+        private static List<NumberingPlan> _numberingPlan = new List<NumberingPlan>();
+
         /// <summary>
         ///     Given a list of Numbering Plan objects, fill their Countries objects with the Country's Data Relations.
         ///     We are doing this here, because there is no feature for executing nested data relations.
@@ -55,6 +57,14 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
+        public NumberingPlansDataMapper()
+        {
+            if (_numberingPlan == null || _numberingPlan.Count == 0)
+            {
+                GetAll();
+            }
+        }
+
         /// <summary>
         ///     Given a Dialing Prefix, return all the Numbering Plan records associated with it.
         /// </summary>
@@ -62,12 +72,14 @@ namespace LyncBillingBase.DataMappers
         /// <returns>A list of NumberingPlan objects</returns>
         public List<NumberingPlan> GetByPrefix(Int64 dialingPrefix)
         {
-            var condition = new Dictionary<string, object>();
-            condition.Add("DialingPrefix", dialingPrefix);
+            if(_numberingPlan == null || _numberingPlan.Count == 0)
+            {
+                GetAll();
+            }
 
             try
             {
-                return Get(condition, 0).ToList();
+                return _numberingPlan.Where(item => item.DialingPrefix == dialingPrefix).ToList();
             }
             catch (Exception ex)
             {
@@ -82,12 +94,15 @@ namespace LyncBillingBase.DataMappers
         /// <returns>A list of NumberingPlan objects</returns>
         public List<NumberingPlan> GetByIso2CountryCode(string iso2Code)
         {
-            var condition = new Dictionary<string, object>();
-            condition.Add("Two_Digits_country_code", iso2Code);
+            if (_numberingPlan == null || _numberingPlan.Count == 0)
+            {
+                GetAll();
+            }
 
             try
             {
-                return Get(condition, 0).ToList();
+                iso2Code = iso2Code.ToLower();
+                return _numberingPlan.Where(item => item.Iso2CountryCode.ToLower() == iso2Code).ToList();
             }
             catch (Exception ex)
             {
@@ -102,12 +117,15 @@ namespace LyncBillingBase.DataMappers
         /// <returns>A list of NumberingPlan objects</returns>
         public List<NumberingPlan> GetByIso3CountryCode(string iso3Code)
         {
-            var condition = new Dictionary<string, object>();
-            condition.Add("Three_Digits_Country_Code", iso3Code);
+            if (_numberingPlan == null || _numberingPlan.Count == 0)
+            {
+                GetAll();
+            }
 
             try
             {
-                return Get(condition, 0).ToList();
+                iso3Code = iso3Code.ToLower();
+                return _numberingPlan.Where(item => item.Iso3CountryCode.ToLower() == iso3Code).ToList();
             }
             catch (Exception ex)
             {
@@ -124,21 +142,29 @@ namespace LyncBillingBase.DataMappers
         {
             long numberToParse = 0;
             string iso3CountryCode = null;
-            List<NumberingPlan> countriesCodes = null;
+            List<NumberingPlan> countriesCodes;
+            string countryCodeTypeOfService = "countrycode";
 
-            var condition = new Dictionary<string, object>();
-            condition.Add("Type_Of_Service", "countrycode");
+            //
+            // Validation of telephone number;
+            if (string.IsNullOrEmpty(telephoneNumber))
+            {
+                return null;
+            }
+
+            //
+            // Make sure the local cache of data is available.
+            if (_numberingPlan == null || _numberingPlan.Count == 0)
+            {
+                GetAll();
+            }
 
             try
             {
-                countriesCodes = Get(condition, 0).ToList();
+                countriesCodes = _numberingPlan.Where(item => item.TypeOfService.ToLower() == countryCodeTypeOfService).ToList() ?? (new List<NumberingPlan>());
 
-                if (countriesCodes != null && countriesCodes.Count > 0)
+                if (countriesCodes.Any())
                 {
-                    if (string.IsNullOrEmpty(telephoneNumber))
-                    {
-                        return null;
-                    }
                     if (telephoneNumber.Contains(";"))
                     {
                         var parts = telephoneNumber.Split(';').ToList();
@@ -153,12 +179,12 @@ namespace LyncBillingBase.DataMappers
                         }
                     }
 
-
-                    //Begin by trimming the "+" symbol
+                    //
+                    // Begin by trimming the "+" symbol
                     telephoneNumber = telephoneNumber.Trim('+');
 
-
-                    //Try to parse the number and match it with the numbering plan
+                    //
+                    // Try to parse the number and match it with the numbering plan
                     if (telephoneNumber.Length >= 9)
                     {
                         long.TryParse(telephoneNumber, out numberToParse);
@@ -173,9 +199,12 @@ namespace LyncBillingBase.DataMappers
                                 iso3CountryCode = number.Iso3CountryCode;
                                 break;
                             }
+
                             numberToParse = numberToParse/10;
                         } //end-while
+
                     } //end-inner-if
+
                 } //end-outer-if
 
                 return iso3CountryCode;
@@ -186,8 +215,85 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override NumberingPlan GetById(long id, string dataSourceName = null,
-            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
+        public string GetTypeOfServiceByNumber(string telephoneNumber)
+        {
+            long numberToParse = 0;
+            string typeOfService = string.Empty;
+            string iso3CountryCode = string.Empty;
+            List<NumberingPlan> countryCodes;
+
+            //
+            // Validation of telephone number;
+            if(string.IsNullOrEmpty(telephoneNumber))
+            {
+                return null;
+            }
+
+            //
+            // Make sure the local cache of data is available.
+            if (_numberingPlan == null || _numberingPlan.Count == 0)
+            {
+                GetAll();
+            }
+
+            try
+            {
+                iso3CountryCode = this.GetIso3CountryCodeByNumber(telephoneNumber);
+                countryCodes = _numberingPlan.Where(item => item.Iso3CountryCode == iso3CountryCode).ToList();
+
+                if(countryCodes.Any())
+                {
+                    if (telephoneNumber.Contains(";"))
+                    {
+                        var parts = telephoneNumber.Split(';').ToList();
+
+                        if (";" != parts.First())
+                        {
+                            telephoneNumber = parts.First();
+                        }
+                        else
+                        {
+                            telephoneNumber = parts[2];
+                        }
+                    }
+
+                    // 
+                    // Begin by trimming the "+" symbol
+                    telephoneNumber = telephoneNumber.Trim('+');
+
+                    //
+                    // Try to parse the number and match it with the numbering plan
+                    if (telephoneNumber.Length >= 9)
+                    {
+                        long.TryParse(telephoneNumber, out numberToParse);
+
+                        while (numberToParse > 0)
+                        {
+                            var number = countryCodes.Find(item => item.DialingPrefix == numberToParse);
+
+                            if (number != null)
+                            {
+                                // RETURN
+                                typeOfService = number.TypeOfService;
+                                break;
+                            }
+
+                            numberToParse = numberToParse / 10;
+                        } //end-while
+
+                    } //end-inner-if
+
+                }//end-outer-if
+            }
+            catch(Exception ex)
+            {
+                throw ex.InnerException;
+            }
+
+            return typeOfService;
+        }
+
+        public override NumberingPlan GetById(long id, string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             NumberingPlan dialingRecord = null;
 
@@ -210,65 +316,29 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<NumberingPlan> Get(Dictionary<string, object> whereConditions, int limit = 25,
-            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
+        public override IEnumerable<NumberingPlan> Get(Dictionary<string, object> whereConditions, int limit = 25, string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
-            IEnumerable<NumberingPlan> numberingPlan = null;
-
-            try
-            {
-                numberingPlan = base.Get(whereConditions, limit, dataSourceName, dataSource);
-
-                if (null != numberingPlan && numberingPlan.Count() > 0)
-                {
-                    FillCountriesAndCurrenciesData(ref numberingPlan);
-                }
-
-                return numberingPlan;
-            }
-            catch (Exception ex)
-            {
-                throw ex.InnerException;
-            }
+            throw new NotImplementedException();
         }
 
-        public override IEnumerable<NumberingPlan> Get(Expression<Func<NumberingPlan, bool>> predicate,
-            string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
+        public override IEnumerable<NumberingPlan> Get(Expression<Func<NumberingPlan, bool>> predicate, string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
-            IEnumerable<NumberingPlan> numberingPlan = null;
-
-            try
-            {
-                numberingPlan = base.Get(predicate, dataSourceName, dataSource);
-
-                if (null != numberingPlan && numberingPlan.Count() > 0)
-                {
-                    FillCountriesAndCurrenciesData(ref numberingPlan);
-                }
-
-                return numberingPlan;
-            }
-            catch (Exception ex)
-            {
-                throw ex.InnerException;
-            }
+            throw new NotImplementedException();
         }
 
-        public override IEnumerable<NumberingPlan> GetAll(string dataSourceName = null,
-            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
+        public override IEnumerable<NumberingPlan> GetAll(string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
-            IEnumerable<NumberingPlan> numberingPlan = new List<NumberingPlan>();
-
             try
             {
-                numberingPlan = numberingPlan.GetWithRelations(item => item.Country);
+                if (_numberingPlan == null || _numberingPlan.Count == 0)
+                {
+                    lock (_numberingPlan)
+                    {
+                        _numberingPlan = _numberingPlan.GetWithRelations(item => item.Country).ToList() ?? (new List<NumberingPlan>());
+                    }
+                }
 
-                //if (null != numberingPlan && numberingPlan.Count() > 0)
-                //{
-                //    this.FillCountriesAndCurrenciesData(ref numberingPlan);
-                //}
-
-                return numberingPlan;
+                return _numberingPlan as IEnumerable<NumberingPlan>;
             }
             catch (Exception ex)
             {
@@ -278,23 +348,127 @@ namespace LyncBillingBase.DataMappers
 
         public override IEnumerable<NumberingPlan> GetAll(string sqlQuery)
         {
-            IEnumerable<NumberingPlan> numberingPlan = null;
+            throw new NotImplementedException();
+        }
 
-            try
+        public override int Insert(NumberingPlan dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        {
+            int rowNumber = -1;
+            bool exists = false;
+
+            //
+            // Make sure the local cache is initialized and has data.
+            if(_numberingPlan == null || _numberingPlan.Count == 0)
             {
-                numberingPlan = base.GetAll(sqlQuery);
+                GetAll();
+            }
 
-                if (null != numberingPlan && numberingPlan.Count() > 0)
+            //
+            // Does the data object exist?
+            exists = _numberingPlan.Exists(item => item.DialingPrefix == dataObject.DialingPrefix);
+
+            //
+            // In case it doesn't exist, insert it to the database and then to the local cache.
+            if(exists != true)
+            {
+                try
                 {
-                    FillCountriesAndCurrenciesData(ref numberingPlan);
+                    rowNumber = base.Insert(dataObject, dataSourceName, dataSourceType);
+                    _numberingPlan.Add(dataObject);
                 }
+                catch(Exception ex)
+                {
+                    throw ex.InnerException;
+                }
+            }
 
-                return numberingPlan;
-            }
-            catch (Exception ex)
+            //
+            // Return the rowNumber variable.
+            return rowNumber;
+        }
+
+        public override bool Update(NumberingPlan dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        {
+            bool updateStatus = false;
+
+            //
+            // Make sure the local cache is initialized and has data.
+            if(_numberingPlan == null || _numberingPlan.Count == 0)
             {
-                throw ex.InnerException;
+                GetAll();
             }
+
+            //
+            // Does the data object exist?
+            var existingItem = _numberingPlan.Find(item => item.DialingPrefix == dataObject.DialingPrefix);
+
+            //
+            // In case it does exist, update it in the database and in the local cache.
+            if(existingItem != null)
+            {
+                try
+                {
+                    updateStatus = base.Update(dataObject, dataSourceName, dataSourceType);
+
+                    _numberingPlan.Remove(existingItem);
+                    _numberingPlan.Add(dataObject);
+                }
+                catch(Exception ex)
+                {
+                    throw ex.InnerException;
+                }
+            }
+
+            return updateStatus;
+        }
+
+        public override bool Delete(NumberingPlan dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        {
+            bool deleteStatus = false;
+
+            //
+            // Make sure the local cache is initialized and has data.
+            if (_numberingPlan == null || _numberingPlan.Count == 0)
+            {
+                GetAll();
+            }
+
+            //
+            // Does the data object exist?
+            var existingItem = _numberingPlan.Find(item => item.DialingPrefix == dataObject.DialingPrefix);
+
+            //
+            // In case it does exist, update it in the database and in the local cache.
+            if (existingItem != null)
+            {
+                try
+                {
+                    deleteStatus = base.Delete(dataObject, dataSourceName, dataSourceType);
+
+                    _numberingPlan.Remove(existingItem);
+                }
+                catch (Exception ex)
+                {
+                    throw ex.InnerException;
+                }
+            }
+
+            return deleteStatus;
+        }
+
+        public override int Insert(string sql)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Update(string sql)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Delete(string sql)
+        {
+            throw new NotImplementedException();
         }
     } //end-class
 }

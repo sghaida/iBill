@@ -7,72 +7,90 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LyncBillingUI.Pages.Account {
+namespace LyncBillingUI.Pages.User {
     
     
-    public partial class Authorize {
+    public partial class Bills {
         
         /// <summary>
-        /// Email_Label control.
+        /// BillsHistoryGrid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Email_Label;
+        protected global::Ext.Net.GridPanel BillsHistoryGrid;
         
         /// <summary>
-        /// Label2 control.
+        /// BillsStore control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label2;
+        protected global::Ext.Net.Store BillsStore;
         
         /// <summary>
-        /// password control.
+        /// Model1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox password;
+        protected global::Ext.Net.Model Model1;
         
         /// <summary>
-        /// signin_submit control.
+        /// GroupingFeatures control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button signin_submit;
+        protected global::Ext.Net.Grouping GroupingFeatures;
         
         /// <summary>
-        /// redirect_to_url control.
+        /// BillMonthColumn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField redirect_to_url;
+        protected global::Ext.Net.Column BillMonthColumn;
         
         /// <summary>
-        /// DELEGEE_IDENTITY control.
+        /// TotalCalls control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField DELEGEE_IDENTITY;
+        protected global::Ext.Net.Column TotalCalls;
         
         /// <summary>
-        /// ACCESS_LEVEL_FIELD control.
+        /// TotalDuration control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField ACCESS_LEVEL_FIELD;
+        protected global::Ext.Net.Column TotalDuration;
+        
+        /// <summary>
+        /// TotalCost control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.Column TotalCost;
+        
+        /// <summary>
+        /// PhoneCallsPagingToolbar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.PagingToolbar PhoneCallsPagingToolbar;
     }
 }

@@ -15,14 +15,18 @@ using LyncBillingBase.DataMappers;
 using LyncBillingUI;
 using LyncBillingUI.Account;
 using System.Web.Script.Serialization;
+using CCC.UTILS.Outlook;
 
 namespace LyncBillingUI.Pages.User
 {
     public partial class Addressbook : System.Web.UI.Page
     {
+        private Encryption encryptionLib = new Encryption();
+
         private string sipAccount = string.Empty;
-        private string normalUserRoleName { get; set; }
-        private string userDelegeeRoleName { get; set; }
+
+        private static string normalUserRoleName { get; set; }
+        private static string userDelegeeRoleName { get; set; }
 
         private static List<PhoneBookContact> AddressBookData = new List<PhoneBookContact>();
         private static List<PhoneBookContact> HistoryDestinationNumbers = new List<PhoneBookContact>();
@@ -37,11 +41,12 @@ namespace LyncBillingUI.Pages.User
             // Set the role names of User and Delegee
             SetRolesNames();
 
-            //If the user is not loggedin, redirect to Login page.
+            // 
+            // If the user is not loggedin, redirect to Login page.
             if (HttpContext.Current.Session == null || HttpContext.Current.Session.Contents["UserData"] == null)
             {
-                string RedirectTo = @"/User/Addressbook";
-                string Url = @"/Login?RedirectTo=" + RedirectTo;
+                string RedirectTo = String.Format(@"{0}/User/AddressBook", Global.APPLICATION_URL);
+                string Url = String.Format(@"{0}/Login?RedirectTo={1}", Global.APPLICATION_URL, RedirectTo);
                 Response.Redirect(Url);
             }
             else
@@ -49,7 +54,7 @@ namespace LyncBillingUI.Pages.User
                 CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
                 if (CurrentSession.ActiveRoleName != normalUserRoleName && CurrentSession.ActiveRoleName != userDelegeeRoleName)
                 {
-                    string url = @"/Authenticate?access=" + CurrentSession.ActiveRoleName;
+                    string url = String.Format(@"{0}/Authenticate?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
                     Response.Redirect(url);
                 }
             }
@@ -64,14 +69,12 @@ namespace LyncBillingUI.Pages.User
         {
             if (string.IsNullOrEmpty(normalUserRoleName))
             {
-                var normalUserRole = Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserRoleID);
-                normalUserRoleName = (normalUserRole != null ? normalUserRole.RoleName : string.Empty);
+                normalUserRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserRoleID);
             }
 
             if (string.IsNullOrEmpty(userDelegeeRoleName))
             {
-                var delegeeUserRole = Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID);
-                userDelegeeRoleName = (delegeeUserRole != null ? delegeeUserRole.RoleName : string.Empty);
+                userDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserDelegeeRoleID);
             }
         }
 
@@ -207,6 +210,23 @@ namespace LyncBillingUI.Pages.User
             this.ContactDetails_SipAccount.Value = contact.SipAccount;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="contact"></param>
+        private void GetFormFieldsValues(out PhoneBookContact contact)
+        {
+            contact = new PhoneBookContact()
+            {
+                Id = Convert.ToInt32(HelperFunctions.ReturnZeroIfNull(this.ContactDetails_ContactID.Value)),
+                Name = Convert.ToString(HelperFunctions.ReturnEmptyIfNull(this.ContactDetails_ContactName.Value)),
+                Type = Convert.ToString(HelperFunctions.ReturnEmptyIfNull(this.ContactDetails_ContactType.Value)),
+                DestinationCountry = Convert.ToString(HelperFunctions.ReturnEmptyIfNull(this.ContactDetails_Country.Value)),
+                DestinationNumber = Convert.ToString(HelperFunctions.ReturnEmptyIfNull(this.ContactDetails_Number.Value)),
+                SipAccount = Convert.ToString(HelperFunctions.ReturnEmptyIfNull(this.ContactDetails_SipAccount.Value))
+            };
+        }
+
         /*
          * AddressBook Data Binding
          */
@@ -226,6 +246,75 @@ namespace LyncBillingUI.Pages.User
         protected void AddressBookStore_Refresh(object sender, StoreReadDataEventArgs e)
         {
             this.AddressBookStore.DataBind();
+        }
+
+        protected void OutlookContactsStore_Load(object sender, EventArgs e)
+        {
+            ExchangeWebServices exchangeWebService;
+            List<PhoneBookContact> contacts;
+            List<OutlookContact> outlookContacts;
+
+            if (!X.IsAjaxRequest)
+            {
+                try
+                {
+                    var adlib = new CCC.UTILS.Libs.AdLib();
+                    var attr = adlib.GetUserAttributes(sipAccount);
+                    var upn = attr.Upn.Split('@').ToList();
+                    var username = sipAccount.Split('@').ToList().First().ToLower();
+                    //var password = encryptionLib.DecryptRijndael(CurrentSession.EncryptedPassword);
+
+                    if (upn.Count > 1)
+                    {
+                        exchangeWebService = new ExchangeWebServices(
+                            username, 
+                            encryptionLib.DecryptRijndael(CurrentSession.EncryptedPassword), 
+                            upn[1].ToLower()
+                        );
+
+                        outlookContacts = exchangeWebService.OutlookContacts;
+                        contacts = new List<PhoneBookContact>();
+
+                        foreach (var outlookContact in outlookContacts)
+                        {
+                            //Add the business phone 1
+                            if (!string.IsNullOrEmpty(outlookContact.BusinessPhone1))
+                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.BusinessPhone1, "N/A")));
+
+                            //Add the business phone 2
+                            if (!string.IsNullOrEmpty(outlookContact.BusinessPhone2))
+                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.BusinessPhone2, "N/A")));
+
+                            //Add the home phone 1
+                            if (!string.IsNullOrEmpty(outlookContact.HomePhone1))
+                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.HomePhone1, "N/A")));
+
+                            //Add the home phone 2
+                            if (!string.IsNullOrEmpty(outlookContact.HomePhone2))
+                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.HomePhone2, "N/A")));
+
+                            //Add the mobile phone
+                            if (!string.IsNullOrEmpty(outlookContact.MobilePhone))
+                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.MobilePhone, "N/A")));
+                        }
+
+                        if (contacts != null && contacts.Count > 0)
+                        {
+                            this.OutlookContactsStore.DataSource = contacts;
+                            this.OutlookContactsStore.DataBind();
+                        }
+                    }//end-outer-if
+                }//end-try
+                catch(Exception)
+                {
+                    //do nothing
+                }
+            }
+        }
+
+        protected void OutlookContactsStore_Refresh(object sender, StoreReadDataEventArgs e)
+        {
+            this.OutlookContactsGrid.GetStore().DataBind();
         }
 
         /*
@@ -359,27 +448,39 @@ namespace LyncBillingUI.Pages.User
         [DirectMethod]
         protected void SaveChangesButton_DirectEvent(object sender, DirectEventArgs e)
         {
-            int contactId = Convert.ToInt32(this.ContactDetails_ContactID.Value);
+            int contactId;
+            string contactIdString;
+            bool doesExist;
+            PhoneBookContact contact;
 
-            var contact = AddressBookData.Find(item => item.Id == contactId);
+            contactIdString = Convert.ToString(HelperFunctions.ReturnEmptyIfNull(this.ContactDetails_ContactID.Value));
 
-            if (contact != null)
+            if (!string.IsNullOrEmpty(contactIdString))
             {
-                Global.DATABASE.PhoneBooks.Delete(contact);
-                GridsDataManager(true);
+                contactId = Convert.ToInt32(contactIdString);
 
-                AddressBookGrid.GetStore().Reload();
-                ImportContactsGrid.GetStore().Reload();
+                doesExist = AddressBookData.Exists(item => item.Id == contactId);
+
+                if (doesExist == true)
+                {
+                    GetFormFieldsValues(out contact);
+
+                    if (!string.IsNullOrEmpty(contact.SipAccount) && !string.IsNullOrEmpty(contact.Type) && !string.IsNullOrEmpty(contact.DestinationNumber))
+                    {
+                        Global.DATABASE.PhoneBooks.Update(contact);
+                        GridsDataManager(true);
+
+                        AddressBookGrid.GetStore().Reload();
+                        ImportContactsGrid.GetStore().Reload();
+                    }
+                }
+
+                //Reset the form fields.
+                ResetFormFields();
+
+                //Update the session's phonebook dictionary and phonecalls list.
+                UpdateSessionRelatedInformation();
             }
-
-            //Reset the form fields.
-            ResetFormFields();
-
-            //Update the session's phonebook dictionary and phonecalls list.
-            UpdateSessionRelatedInformation();
-
-            //Update the session's phonebook dictionary and phonecalls list.
-            UpdateSessionRelatedInformation();
         }
 
         [DirectMethod]
@@ -398,24 +499,33 @@ namespace LyncBillingUI.Pages.User
         [DirectMethod]
         protected void DeleteContactButton_DirectEvent(object sender, DirectEventArgs e)
         {
-            int contactId = Convert.ToInt32(this.ContactDetails_ContactID.Value);
+            int contactId;
+            string contactIdString;
+            PhoneBookContact contact;
 
-            var contact = AddressBookData.Find(item => item.Id == contactId);
+             contactIdString = Convert.ToString(HelperFunctions.ReturnEmptyIfNull(this.ContactDetails_ContactID.Value));
 
-            if(contact != null)
-            {
-                Global.DATABASE.PhoneBooks.Delete(contact);
-                GridsDataManager(true);
+             if (!string.IsNullOrEmpty(contactIdString))
+             {
+                 contactId = Convert.ToInt32(contactIdString);
 
-                AddressBookGrid.GetStore().Reload();
-                ImportContactsGrid.GetStore().Reload();
-            }
+                 contact = AddressBookData.Find(item => item.Id == contactId);
 
-            //Reset the form fields.
-            ResetFormFields();
+                 if (contact != null)
+                 {
+                     Global.DATABASE.PhoneBooks.Delete(contact);
+                     GridsDataManager(true);
 
-            //Update the session's phonebook dictionary and phonecalls list.
-            UpdateSessionRelatedInformation();
+                     AddressBookGrid.GetStore().Reload();
+                     ImportContactsGrid.GetStore().Reload();
+                 }
+
+                 //Reset the form fields.
+                 ResetFormFields();
+
+                 //Update the session's phonebook dictionary and phonecalls list.
+                 UpdateSessionRelatedInformation();
+             }
         }
 
 

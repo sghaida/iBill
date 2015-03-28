@@ -1,6 +1,8 @@
 ﻿using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.DataAttributes;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace LyncBillingBase.DataModels
 {
@@ -26,5 +28,43 @@ namespace LyncBillingBase.DataModels
 
         [DbColumn("DestinationCountry")]
         public string DestinationCountry { get; set; }
+
+        //
+        // The type of service of the number: fixedline, gsm...etc
+        public string TypeOfService { get; set; }
+
+
+        public PhoneBookContact() { }
+
+        public PhoneBookContact(int Id, string SipAccount, string Type, string Name, string DestinationNumber, string DestinationCountry)
+        {
+            this.Id = Id;
+            this.SipAccount = SipAccount;
+            this.Type = Type;
+            this.Name = Name;
+            this.DestinationNumber = DestinationNumber;
+            this.DestinationCountry = DestinationCountry;
+        }
+    }
+
+
+    public class PhoneBookContactComparer : IEqualityComparer<PhoneBookContact>
+    {
+        public bool Equals(PhoneBookContact firstContact, PhoneBookContact secondContact)
+        {
+            try
+            {
+                return (firstContact.DestinationNumber == secondContact.DestinationNumber);
+            }
+            catch(System.Exception)
+            {
+                return false;
+            }
+        }
+
+        public int GetHashCode(PhoneBookContact contact)
+        {
+            return contact.DestinationNumber.GetHashCode();
+        }
     }
 }
