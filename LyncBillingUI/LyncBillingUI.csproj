@@ -97,6 +97,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Pages\DepartmentHead\" />
+    <Folder Include="Pages\SiteAccounting\" />
+    <Folder Include="Pages\SiteAdministration\" />
+    <Folder Include="Pages\SystemAdministration\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Readme\Ext.NET.Utilities\BREAKING_CHANGES.txt" />
