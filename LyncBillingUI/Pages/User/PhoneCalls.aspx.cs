@@ -31,6 +31,8 @@ namespace LyncBillingUI.Pages.User
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            //
+            // Set the role names of User and Delegee
             SetRolesNames();
 
             // 
