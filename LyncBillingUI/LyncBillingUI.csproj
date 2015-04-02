@@ -98,7 +98,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Pages\DepartmentHead\" />
-    <Folder Include="Pages\SiteAccounting\" />
     <Folder Include="Pages\SiteAdministration\" />
     <Folder Include="Pages\SystemAdministration\" />
   </ItemGroup>
@@ -132,6 +131,8 @@
     <Content Include="packages.config" />
     <Content Include="Error\404.aspx" />
     <Content Include="Error\Oops.aspx" />
+    <Content Include="Pages\SiteAccounting\Dashboard.aspx" />
+    <Content Include="Pages\SiteAccounting\DisputedCalls.aspx" />
     <Content Include="Pages\User\Addressbook.aspx" />
     <Content Include="Pages\User\Bills.aspx" />
     <Content Include="Pages\User\Dashboard.aspx" />
@@ -244,6 +245,20 @@
     </Compile>
     <Compile Include="Error\Oops.aspx.designer.cs">
       <DependentUpon>Oops.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAccounting\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAccounting\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAccounting\DisputedCalls.aspx.cs">
+      <DependentUpon>DisputedCalls.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAccounting\DisputedCalls.aspx.designer.cs">
+      <DependentUpon>DisputedCalls.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\User\Addressbook.aspx.cs">
       <DependentUpon>Addressbook.aspx</DependentUpon>
