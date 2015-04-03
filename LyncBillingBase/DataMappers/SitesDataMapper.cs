@@ -25,7 +25,7 @@ namespace LyncBillingBase.DataMappers
         /// <summary>
         /// INITIALIZES THE INTERNAL SITES CACHE
         /// </summary>
-        public void LoadSites()
+        private void LoadSites()
         {
             if (_sites == null || _sites.Count == 0)
             {
@@ -33,6 +33,21 @@ namespace LyncBillingBase.DataMappers
                 {
                     _sites = base.GetAll().ToList() ?? (new List<Site>());
                 }
+            }
+        }
+
+
+        public string GetNameById(long siteId)
+        {
+            var site = _sites.Find(item => item.Id == siteId);
+
+            if(site != null)
+            {
+                return site.Name;
+            }
+            else
+            {
+                return null;
             }
         }
 
