@@ -106,7 +106,7 @@ namespace LyncBillingBase.DataMappers
         /// <param name="sipAccount">This is the user's SipAccount, taken from the session.</param>
         /// <param name="allowedRoleName">This is parameter of the type Backend.Enum.ValidRoles.</param>
         /// <returns>The list of AllSites on which the user was granted an elevated-access, such as: SiteAdmin, SiteAccountant. Developer is a universal access-role.</returns>
-        public static List<Site> GetSitesByRoles(List<SystemRole> userRoles, string allowedRoleName)
+        public List<Site> GetSitesByRoles(List<SystemRole> userRoles, string allowedRoleName)
         {
             List<Site> sites = new List<Site>();
             List<int> tmpUserSites = new List<int>();

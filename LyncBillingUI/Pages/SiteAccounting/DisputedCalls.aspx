@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DisputedCalls.aspx.cs" Inherits="LyncBillingUI.Pages.SiteAccounting.DisputedCalls" %>
+﻿<%@ Page Title="Disputed Calls | iBill" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DisputedCalls.aspx.cs" Inherits="LyncBillingUI.Pages.SiteAccounting.DisputedCalls" %>
 
 <asp:Content ID="Header" ContentPlaceHolderID="HeaderContent" runat="server">
 
@@ -11,8 +11,8 @@
                 ID="ManageDisputedCallsGrid"
                 runat="server"
                 Title="Manage Disputed Calls"
-                Width="740"
-                Height="775"
+                MaxWidth="955"
+                MinHeight="620"
                 AutoScroll="true"
                 Header="true"
                 Scroll="Both"
@@ -136,28 +136,27 @@
                                 Icon="Find"
                                 TriggerAction="Query"
                                 QueryMode="Local"
-                                DisplayField="SiteName"
-                                RawText="SiteName"
-                                ValueField="SiteID"
+                                DisplayField="Name"
+                                RawText="Name"
+                                ValueField="Id"
                                 FieldLabel="Site:"
                                 LabelWidth="25"
                                 Width="200"
-                                Margins="0 0 0 5"
-                                ComponentCls="fix-ui-vertical-align float-left mr10">
+                                MarginSpec="0 0 0 5">
                                 <Store>
                                     <ext:Store ID="FilterDisputedCallsBySiteStore" runat="server" OnLoad="FilterDisputedCallsBySiteStore_Load">
                                         <Model>
                                             <ext:Model ID="SitesModel" runat="server">
                                                 <Fields>
-                                                    <ext:ModelField Name="SiteID" Type="Int" />
-                                                    <ext:ModelField Name="SiteName" Type="String" />
+                                                    <ext:ModelField Name="Id" Type="Int" />
+                                                    <ext:ModelField Name="Name" Type="String" />
                                                     <ext:ModelField Name="CountryCode" Type="String" />
                                                 </Fields>
                                             </ext:Model>
                                         </Model>
 
                                         <Sorters>
-                                            <ext:DataSorter Property="SiteName" Direction="ASC" />
+                                            <ext:DataSorter Property="Name" Direction="ASC" />
                                         </Sorters>
                                     </ext:Store>
                                 </Store>
@@ -165,8 +164,8 @@
                                 <ListConfig MinWidth="200">
                                     <ItemTpl ID="SitesItemTpl" runat="server">
                                         <Html>
-                                            <div data-qtip="{SiteName}. {CountryCode}">
-                                                {SiteName} ({CountryCode})
+                                            <div data-qtip="{Name}. {CountryCode}">
+                                                {Name} ({CountryCode})
                                             </div>
                                         </Html>
                                     </ItemTpl>

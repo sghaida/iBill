@@ -58,7 +58,7 @@ namespace LyncBillingUI.Pages.User
                 CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
                 if (CurrentSession.ActiveRoleName != normalUserRoleName && CurrentSession.ActiveRoleName != userDelegeeRoleName)
                 {
-                    string url = String.Format(@"{0}/Authenticate?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
+                    string url = String.Format(@"{0}/Authorize?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
                     Response.Redirect(url);
                 }
             }

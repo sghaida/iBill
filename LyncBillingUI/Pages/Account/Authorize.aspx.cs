@@ -422,7 +422,7 @@ namespace LyncBillingUI.Pages.Account
                         else if (requestedAccessLevel == siteAccountantRoleName)
                         {
                             CurrentSession.ActiveRoleName = siteAccountantRoleName;
-                            Response.Redirect(GetHomepageLink(siteAdminRoleName));
+                            Response.Redirect(GetHomepageLink(siteAccountantRoleName));
                         }
 
                         //Departments Head
