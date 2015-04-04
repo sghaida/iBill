@@ -10,7 +10,8 @@ using System.Web.Script.Serialization;
 using Ext.Net;
 
 using LyncBillingBase.DataModels;
-using LyncBillingUI.Account;
+using LyncBillingUI.Helpers;
+using LyncBillingUI.Helpers.Account;
 
 
 namespace LyncBillingUI.Pages.SiteAccounting
@@ -19,9 +20,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
     {
         private string sipAccount = string.Empty;
 
-        private static string normalUserRoleName { get; set; }
-        private static string userDelegeeRoleName { get; set; }
-        private static string allowedRoleName { get; set; }
+        private static string allowedRoleName = Functions.SiteAccountantRoleName;
 
         // This actually takes a copy of the current session for some uses on the frontend.
         public UserSession CurrentSession { get; set; }
@@ -31,10 +30,6 @@ namespace LyncBillingUI.Pages.SiteAccounting
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //
-            // Set the role names of User and Delegee
-            SetRolesNames();
-
             // 
             // If the user is not loggedin, redirect to Login page.
             if (HttpContext.Current.Session == null || HttpContext.Current.Session.Contents["UserData"] == null)
@@ -46,7 +41,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
             else
             {
                 CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
-                if (CurrentSession.ActiveRoleName != allowedRoleName)
+                if (CurrentSession.ActiveRoleName != Functions.SiteAccountantRoleName)
                 {
                     string url = String.Format(@"{0}/Authorize?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
                     Response.Redirect(url);
@@ -56,27 +51,6 @@ namespace LyncBillingUI.Pages.SiteAccounting
             sipAccount = CurrentSession.GetEffectiveSipAccount();
 
             GetUserSitesData();
-        }
-
-
-        //
-        // Set the role names of User and Delegee
-        private void SetRolesNames()
-        {
-            if (string.IsNullOrEmpty(normalUserRoleName))
-            {
-                normalUserRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserRoleID);
-            }
-
-            if (string.IsNullOrEmpty(userDelegeeRoleName))
-            {
-                userDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserDelegeeRoleID);
-            }
-
-            if (string.IsNullOrEmpty(allowedRoleName))
-            {
-                allowedRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.SiteAccountantRoleID);
-            }
         }
 
 

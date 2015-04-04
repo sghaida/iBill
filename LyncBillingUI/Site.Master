@@ -60,27 +60,55 @@
 
 
                                         <%-- THE USER MENU --%>
-                                        <li id="user-menu-tab" class="dropdown">
-                                            <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false"><%= DisplayName %>&nbsp;<span class="caret"></span></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li class="dropdown-header">Manage</li>
-                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/PhoneCalls">Phone Calls</a></li>
-                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/AddressBook">Address Book</a></li>
-                                                <li class="divider"></li>
-                                                <li class="dropdown-header">History</li>
-                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/Bills">Bills History</a></li>
-                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/History/PhoneCalls">Calls History</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/Statistics">Statistics</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="<%= global_asax.APPLICATION_URL %>/User/TelephonyRates">Telephony Rates</a></li>
-                                                
-                                                <% if(CurrentSession.ActiveRoleName == normalUserRoleName) { %>
+                                        <% if (CurrentSession.ActiveRoleName == normalUserRoleName)
+                                           { %>
+                                            <li id="user-menu-tab" class="dropdown">
+                                                <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false"><%= DisplayName %>&nbsp;<span class="caret"></span></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li class="dropdown-header">Manage</li>
+                                                    <li><a href="<%= global_asax.APPLICATION_URL %>/User/PhoneCalls">Phone Calls</a></li>
+                                                    <li><a href="<%= global_asax.APPLICATION_URL %>/User/AddressBook">Address Book</a></li>
                                                     <li class="divider"></li>
-                                                    <li><a href="<%= global_asax.APPLICATION_URL %>/Logout">Logout</a></li>
-                                                <% } %>
-                                            </ul>
-                                        </li>
+                                                    <li class="dropdown-header">History</li>
+                                                    <li><a href="<%= global_asax.APPLICATION_URL %>/User/Bills">Bills History</a></li>
+                                                    <li><a href="<%= global_asax.APPLICATION_URL %>/User/History/PhoneCalls">Calls History</a></li>
+                                                    <li class="divider"></li>
+                                                    <li><a href="<%= global_asax.APPLICATION_URL %>/User/Statistics">Statistics</a></li>
+                                                    <li class="divider"></li>
+                                                    <li><a href="<%= global_asax.APPLICATION_URL %>/User/TelephonyRates">Telephony Rates</a></li>
+                                                
+                                                    <% if(CurrentSession.ActiveRoleName == normalUserRoleName) { %>
+                                                        <li class="divider"></li>
+                                                        <li><a href="<%= global_asax.APPLICATION_URL %>/Logout">Logout</a></li>
+                                                    <% } %>
+                                                </ul>
+                                            </li>
+                                        <% } %>
+
+                                        <% else if (CurrentSession.ActiveRoleName != normalUserRoleName && CurrentSession.ActiveRoleName != userDelegeeRoleName) 
+                                           { %>
+                                            <%= GetUiElevatedAccessDropDownMenu(CurrentSession.ActiveRoleName) %>
+                                            
+                                            <li><a class="ibill-nav-item" href="<%= global_asax.APPLICATION_URL %>/Authorize?action=drop"><span class="shutdown"></span>&nbsp;Drop Access</a></li>    
+
+                                            <% if (CurrentSession.ActiveRoleName == siteAccountantRoleName) 
+                                               {%>
+                                                <li id="site-accountant-menu-tab" class="dropdown">
+                                                    <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false">Navigation&nbsp;<span class="caret"></span></a>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li class="dropdown-header">Manage</li>
+                                                        <li><a href="<%= global_asax.APPLICATION_URL %>/Site/Accounting/DisputedCalls">Disputed Phone Calls</a></li>
+                                                        <li class="divider"></li>
+                                                        <li class="dropdown-header">Notifications</li>
+                                                        <li><a href="#">Billing Cycles</a></li>
+                                                        <li class="divider"></li>
+                                                        <li class="dropdown-header">Reports</li>
+                                                        <li><a href="#">Monthly Reports</a></li>
+                                                        <li><a href="#">Periodical Reports</a></li>
+                                                    </ul>
+                                                </li>
+                                            <% } %>
+                                        <% } %>
                                     </ul>
                                 <% } else { %>
                                     <ul class="nav navbar-nav navbar-right">

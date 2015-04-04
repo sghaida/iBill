@@ -164,7 +164,7 @@
                                 <ListConfig MinWidth="200">
                                     <ItemTpl ID="SitesItemTpl" runat="server">
                                         <Html>
-                                            <div data-qtip="{Name}. {CountryCode}">
+                                            <div data-qtip="{Name} ({CountryCode})">
                                                 {Name} ({CountryCode})
                                             </div>
                                         </Html>
@@ -179,7 +179,7 @@
                             </ext:ComboBox>
 
 
-                            <ext:ToolbarSeparator runat="server" Margins="5 15 5 15" />
+                            <ext:ToolbarSeparator runat="server" MarginSpec="5 10 5 10" />
 
 
                             <ext:ComboBox
@@ -213,14 +213,14 @@
                             </ext:ComboBox>
 
 
-                            <ext:ToolbarSeparator runat="server" Margins="5 15 5 15" />
+                            <ext:ToolbarSeparator runat="server" MarginSpec="5 10 5 10" />
 
 
                             <ext:Label
                                runat="server"
                                ID="button_group_lable"
-                               Margins=""
-                               Width="90">
+                               MarginSpec=""
+                               Width="120">
                                <Content>Mark Selected As:</Content>
                             </ext:Label>
 
@@ -255,7 +255,7 @@
                                 </Buttons>
                             </ext:ButtonGroup>
 
-                            <ext:Button ID="ExportToExcel" runat="server" Text="To Excel" Icon="PageExcel" Margins="0 0 0 290">
+                            <ext:Button ID="ExportToExcel" runat="server" Text="To Excel" Icon="PageExcel" MarginSpec="0 0 0 60">
                                  <Listeners>
                                     <Click Handler="submitValue(#{ManageDisputedCallsGrid}, 'xls');" />
                                 </Listeners>
