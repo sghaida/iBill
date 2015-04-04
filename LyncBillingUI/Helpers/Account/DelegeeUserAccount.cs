@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using LyncBillingBase.DataModels;
 
-namespace LyncBillingUI.Account
+namespace LyncBillingUI.Helpers.Account
 {
     public class DelegeeUserAccount
     {

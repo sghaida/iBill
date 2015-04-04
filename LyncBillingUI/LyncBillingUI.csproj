@@ -124,6 +124,7 @@
     <Content Include="Content\Site.Foundation.css" />
     <Content Include="Ext.NET.Default.aspx" />
     <Content Include="Images\logo_48.png" />
+    <Content Include="Images\shutdown.png" />
     <Content Include="Pages\Account\Authorize.aspx" />
     <Content Include="Pages\Account\Login.aspx" />
     <Content Include="Pages\Account\Logout.aspx" />
@@ -196,11 +197,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account\DelegeeUserAccount.cs" />
-    <Compile Include="Account\Encryption.cs" />
-    <Compile Include="Account\UserSession.cs" />
+    <Compile Include="Helpers\Account\DelegeeUserAccount.cs" />
+    <Compile Include="Helpers\Account\Encryption.cs" />
+    <Compile Include="Helpers\Account\UserSession.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Helpers\Functions.cs" />
     <Compile Include="Pages\Account\Authorize.aspx.cs">
       <DependentUpon>Authorize.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

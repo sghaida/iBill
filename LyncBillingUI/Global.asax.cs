@@ -8,7 +8,7 @@ using System.Web.Security;
 using System.Web.SessionState;
 
 using LyncBillingBase.Repository;
-using LyncBillingUI.Account;
+using LyncBillingUI.Helpers.Account;
 
 namespace LyncBillingUI
 {

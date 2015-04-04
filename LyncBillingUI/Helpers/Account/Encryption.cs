@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace LyncBillingUI.Account
+namespace LyncBillingUI.Helpers.Account
 {
     /// <summary>
     /// AES Rijndael Managed Encryption
