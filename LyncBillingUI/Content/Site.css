@@ -48,24 +48,35 @@ h6, .h6 {
   font-size: 15px;
   font-weight: 700;
   color: #cdddeb;
+  height: 54px;
 }
 
 .ibill-nav-item:hover,
 .ibill-nav-item:focus {
-  color: #fff;
+  color: #000;
   text-decoration: none;
 }
 
 .ibill-nav-dropdown:hover,
 .ibill-nav-dropdown:focus
 {
-    color: #000000;
+    color: #000;
     text-decoration: none;
 }
 
 .ibill-nav-dropdown .caret {
     border-top-color: #cdddeb;
     border-bottom-color: #cdddeb;
+}
+
+li .shutdown {
+  background: url(../Images/shutdown.png) no-repeat;
+  display: inline-block;
+  background-size: contain;
+  vertical-align: middle;
+  width: 24px;
+  height: 24px;
+  margin: 0 5px 0 0;
 }
 
 .open .ibill-nav-dropdown .caret,

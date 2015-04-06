@@ -15,18 +15,17 @@ namespace LyncBillingBase.DataMappers
          * Singleton implementation with an attempted thread-safety using double-check locking
          */
         // internal datastorage singleton container
+
         private static SitesDepartmentsDataMapper _instance;
 
         // lock for thread-safety laziness
         private static readonly object Mutex = new object();
-        /***
-         * The local cache store of all sites departments
-         */
+        
+        //The local cache store of all sites departments
         private List<SiteDepartment> _cachedData = new List<SiteDepartment>();
+
         // Empty private constuctor
-        private SitesDepartmentsDataMapper()
-        {
-        }
+        private SitesDepartmentsDataMapper() { }
 
         //The only public method, used to obtain an instance of DataStorage
         public static SitesDepartmentsDataMapper Instance
@@ -49,13 +48,15 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
+
         /// <summary>
         ///     This function is called upon the initialization of a singleton instance
         /// </summary>
         private void InitializeCacheStore()
         {
-            _cachedData = base.GetAll().GetWithRelations(item => item.Site, item => item.Department).ToList();
+            _cachedData = base.GetAll().GetWithRelations(item => item.Site, item => item.Department).ToList() ?? (new List<SiteDepartment>());
         }
+
 
         /***
          * The following are custom functionalities. Found to be needed by the UI project.
@@ -115,19 +116,20 @@ namespace LyncBillingBase.DataMappers
          * Overriden implementations of DataAccess. These implementations read from the _cachedData list, and write to the DB and the list.
          */
 
-        public override int Insert(SiteDepartment dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public override int Insert(SiteDepartment dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var rowId = 0;
 
             try
             {
                 rowId = base.Insert(dataObject, dataSourceName, dataSourceType);
-
                 dataObject.Id = rowId;
                 dataObject = dataObject.GetWithRelations(item => item.Site, item => item.Department);
 
-                _cachedData.Add(dataObject);
+                lock(_cachedData)
+                {
+                    _cachedData.Add(dataObject);
+                }
 
                 return rowId;
             }
@@ -153,12 +155,19 @@ namespace LyncBillingBase.DataMappers
 
                     if (oldSiteDepartment != null)
                     {
-                        _cachedData.Remove(oldSiteDepartment);
+                        lock (_cachedData)
+                        {
+                            _cachedData.Remove(oldSiteDepartment);
+                        }
                     }
 
                     // Get the Site and Department relations of the new site department
                     dataObject = dataObject.GetWithRelations(item => item.Site, item => item.Department);
-                    _cachedData.Add(dataObject);
+
+                    lock (_cachedData)
+                    {
+                        _cachedData.Add(dataObject);
+                    }
                 }
 
                 return status;
@@ -169,8 +178,7 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override bool Delete(SiteDepartment dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public override bool Delete(SiteDepartment dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var status = false;
 
@@ -184,7 +192,10 @@ namespace LyncBillingBase.DataMappers
 
                     if (oldSiteDepartment != null)
                     {
-                        _cachedData.Remove(oldSiteDepartment);
+                        lock (_cachedData)
+                        {
+                            _cachedData.Remove(oldSiteDepartment);
+                        }
                     }
                 }
 
@@ -196,8 +207,7 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override SiteDepartment GetById(long id, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public override SiteDepartment GetById(long id, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             try
             {
@@ -209,8 +219,7 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<SiteDepartment> GetAll(string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        public override IEnumerable<SiteDepartment> GetAll(string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             return _cachedData;
         }
