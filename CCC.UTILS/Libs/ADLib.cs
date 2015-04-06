@@ -183,6 +183,14 @@ namespace CCC.UTILS.Libs
                     else if (resourceForestResult.Properties.Contains("userprincipalname"))
                         userInfo.Upn = (string) resourceForestResult.Properties["userprincipalname"][0];
 
+                    //Get the IP Dialing Code and extensionfor projects
+                    if ( resourceForestResult.Properties.Contains( "extensionAttribute1" ) &&
+                        resourceForestResult.Properties.Contains("extensionAttribute2"))
+                    {
+                        userInfo.OtherTelphone = (string)resourceForestResult.Properties[ "extensionAttribute2" ][ 0 ] +
+                                                 resourceForestResult.Properties[ "extensionAttribute1" ][ 0 ];
+                    }
+
                     return userInfo;
                 }
                 return null;
@@ -409,5 +417,6 @@ namespace CCC.UTILS.Libs
         public string PrimaryHomeServerDn { get; set; }
         public string PoolName { set; get; }
         public string PhysicalDeliveryOfficeName { set; get; }
+        public string OtherTelphone { get; set; }
     }
 }
