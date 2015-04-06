@@ -42,13 +42,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Ext.Net, Version=3.0.0.37796, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
+    <Reference Include="Ext.Net, Version=3.1.0.29122, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ext.NET.3.0.0\lib\net45\Ext.Net.dll</HintPath>
+      <HintPath>..\packages\Ext.NET.3.1.0\lib\net45\Ext.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net.Utilities, Version=2.5.0.0, Culture=neutral, PublicKeyToken=2c34ac34702a3c23, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ext.NET.Utilities.2.5.0\lib\Ext.Net.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="iTextSharp">
+      <Private>True</Private>
+      <HintPath>..\packages\iTextSharp-LGPL.4.1.6\lib\iTextSharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -107,6 +111,7 @@
     <Content Include="App_Readme\Ext.NET.Utilities\README.txt" />
     <Content Include="App_Readme\Ext.NET\BREAKING_CHANGES.txt" />
     <Content Include="App_Readme\Ext.NET\CHANGELOG.txt" />
+    <Content Include="App_Readme\Ext.NET\Ext.NET.Default.aspx" />
     <Content Include="App_Readme\Ext.NET\LICENSE.txt" />
     <Content Include="App_Readme\Ext.NET\README.txt" />
     <Content Include="App_Readme\Transformer.NET\LICENSE.txt" />
@@ -132,6 +137,7 @@
     <Content Include="packages.config" />
     <Content Include="Error\404.aspx" />
     <Content Include="Error\Oops.aspx" />
+    <Content Include="Pages\SiteAccounting\BillingCycleNotifications.aspx" />
     <Content Include="Pages\SiteAccounting\Dashboard.aspx" />
     <Content Include="Pages\SiteAccounting\DisputedCalls.aspx" />
     <Content Include="Pages\SiteAccounting\MonthlyReport.aspx" />
@@ -249,6 +255,13 @@
     </Compile>
     <Compile Include="Error\Oops.aspx.designer.cs">
       <DependentUpon>Oops.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAccounting\BillingCycleNotifications.aspx.cs">
+      <DependentUpon>BillingCycleNotifications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAccounting\BillingCycleNotifications.aspx.designer.cs">
+      <DependentUpon>BillingCycleNotifications.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\SiteAccounting\Dashboard.aspx.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
