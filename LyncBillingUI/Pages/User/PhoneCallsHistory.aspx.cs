@@ -14,16 +14,14 @@ using LyncBillingBase;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;
 using LyncBillingUI;
-using LyncBillingUI.Account;
+using LyncBillingUI.Helpers;
+using LyncBillingUI.Helpers.Account;
 
 namespace LyncBillingUI.Pages.User
 {
     public partial class PhoneCallsHistory : System.Web.UI.Page
     {
         private string sipAccount = string.Empty;
-
-        private static string normalUserRoleName { get; set; }
-        private static string userDelegeeRoleName { get; set; }
 
         private List<PhoneCalls> AutoMarkedPhoneCalls = new List<PhoneCalls>();
 
@@ -33,10 +31,6 @@ namespace LyncBillingUI.Pages.User
         
         protected void Page_Load(object sender, EventArgs e)
         {
-            //
-            // Set the role names of User and Delegee
-            SetRolesNames();
-
             // 
             // If the user is not loggedin, redirect to Login page.
             if (HttpContext.Current.Session == null || HttpContext.Current.Session.Contents["UserData"] == null)
@@ -48,9 +42,9 @@ namespace LyncBillingUI.Pages.User
             else
             {
                 CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
-                if (CurrentSession.ActiveRoleName != normalUserRoleName && CurrentSession.ActiveRoleName != userDelegeeRoleName)
+                if (CurrentSession.ActiveRoleName != Functions.NormalUserRoleName && CurrentSession.ActiveRoleName != Functions.UserDelegeeRoleName)
                 {
-                    string url = String.Format(@"{0}/Authenticate?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
+                    string url = String.Format(@"{0}/Authorize?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
                     Response.Redirect(url);
                 }
             }
@@ -58,23 +52,7 @@ namespace LyncBillingUI.Pages.User
             sipAccount = CurrentSession.GetEffectiveSipAccount();
         }
 
-
-        //
-        // Set the role names of User and Delegee
-        private void SetRolesNames()
-        {
-            if (string.IsNullOrEmpty(normalUserRoleName))
-            {
-                normalUserRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserRoleID);
-            }
-
-            if (string.IsNullOrEmpty(userDelegeeRoleName))
-            {
-                userDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserDelegeeRoleID);
-            }
-        }
-
-
+        
         protected void PhoneCallStore_Load(object sender, EventArgs e)
         {
             if (!X.IsAjaxRequest)

@@ -5,20 +5,33 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-using LyncBillingUI.Account;
+using LyncBillingUI.Helpers.Account;
+
 
 namespace LyncBillingUI
 {
     public partial class SiteMaster : MasterPage
     {
+        //System Roles Names - Lookup variables
+        protected static string systemAdminRoleName { get; set; }
+        protected static string siteAdminRoleName { get; set; }
+        protected static string siteAccountantRoleName { get; set; }
+        protected static string departmentHeadRoleName { get; set; }
+
+        //Delegee Roles Names - Lookup variables
+        protected static string userDelegeeRoleName { get; set; }
+        protected static string departmentDelegeeRoleName { get; set; }
+        protected static string siteDelegeeRoleName { get; set; }
+
+        //Normal User Role - Lookup variable
+        protected static string normalUserRoleName { get; set; }
+
+
+        //public variable made available for the view
         public UserSession CurrentSession { get; set; }
         public string HTML_SELECTED = string.Empty;
         public string PAGE_NAME = string.Empty;
 
-        public static string normalUserRoleName {get; set; }
-        public static string userDelegeeRoleName { get; set; }
-
-        //public variable made available for the view
         public string DisplayName = string.Empty;
 
         public string UiElevateAccessDropdown = string.Empty;
@@ -296,16 +309,52 @@ namespace LyncBillingUI
         // Set the role names of User and Delegee
         private void SetRolesNames()
         {
+            // Normal User Role
             if (string.IsNullOrEmpty(normalUserRoleName))
             {
-                var normalUserRole = Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserRoleID);
-                normalUserRoleName = (normalUserRole != null ? normalUserRole.RoleName : string.Empty);
+                normalUserRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserRoleID);
             }
 
-            if(string.IsNullOrEmpty(userDelegeeRoleName))
+            // User Delegee Role
+            if (string.IsNullOrEmpty(userDelegeeRoleName))
             {
-                var delegeeUserRole = Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID);
-                userDelegeeRoleName = (delegeeUserRole != null ? delegeeUserRole.RoleName : string.Empty);
+                userDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserDelegeeRoleID);
+            }
+
+            // Department Delegee Role
+            if (string.IsNullOrEmpty(departmentDelegeeRoleName))
+            {
+                departmentDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.DepartmentDelegeeRoleID);
+            }
+
+            // Site Delegee Role
+            if (string.IsNullOrEmpty(siteDelegeeRoleName))
+            {
+                siteDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.SiteDelegeeRoleID);
+            }
+
+            // System Admin Role
+            if (string.IsNullOrEmpty(systemAdminRoleName))
+            {
+                systemAdminRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.SystemAdminRoleID);
+            }
+
+            // Site Admin Role
+            if (string.IsNullOrEmpty(siteAdminRoleName))
+            {
+                siteAdminRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.SiteAdminRoleID);
+            }
+
+            // Site Accountant Role
+            if (string.IsNullOrEmpty(siteAccountantRoleName))
+            {
+                siteAccountantRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.SiteAccountantRoleID);
+            }
+
+            // Department Head Role
+            if (string.IsNullOrEmpty(departmentHeadRoleName))
+            {
+                departmentHeadRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.DepartmentHeadRoleID);
             }
         }
 
@@ -347,5 +396,22 @@ namespace LyncBillingUI
 
             return userDisplayName;
         }
+
+
+        //
+        //
+        protected string GetUiElevatedAccessDropDownMenu(string activeRoleName)
+        {
+            string uiElevatedAccessDropdownMenu = string.Empty;
+
+            if(activeRoleName == siteAccountantRoleName)
+            {
+
+            }
+
+            return uiElevatedAccessDropdownMenu;
+        }
+    
     }
+
 }

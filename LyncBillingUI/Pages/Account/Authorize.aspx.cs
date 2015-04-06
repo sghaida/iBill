@@ -1,13 +1,15 @@
-﻿using CCC.UTILS.Helpers;
-using CCC.UTILS.Libs;
-using LyncBillingBase.DataModels;
-using LyncBillingUI.Account;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+
+using CCC.UTILS.Helpers;
+using CCC.UTILS.Libs;
+using LyncBillingBase.DataModels;
+using LyncBillingUI.Helpers;
+using LyncBillingUI.Helpers.Account;
 
 namespace LyncBillingUI.Pages.Account
 {
@@ -25,29 +27,11 @@ namespace LyncBillingUI.Pages.Account
         private bool redirectionFlag = true;
         private static List<string> AccessLevels { get; set; }
 
-        //System Roles Names - Lookup variables
-        private static string systemAdminRoleName { get; set; }
-        private static string siteAdminRoleName { get; set; }
-        private static string siteAccountantRoleName { get; set; }
-        private static string departmentHeadRoleName { get; set; }
-
-        //Delegee Roles Names - Lookup variables
-        private static string userDelegeeRoleName { get; set; }
-        private static string departmentDelegeeRoleName { get; set; }
-        private static string siteDelegeeRoleName { get; set; }
-
-        //Normal User Role - Lookup variable
-        private static string normalUserRoleName { get; set; }
-
         public UserSession CurrentSession { get; set; }
 
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //
-            // Set the roles' names
-            SetRolesNames();
-
             HeaderAuthBoxMessage = string.Empty;
             ParagraphAuthBoxMessage = string.Empty;
             AuthenticationMessage = string.Empty;
@@ -93,17 +77,17 @@ namespace LyncBillingUI.Pages.Account
                             ParagraphAuthBoxMessage = "Please note that you must authenticate your information before proceeding any further.";
 
                             //if the user was authenticated already
-                            if (CurrentSession.ActiveRoleName != normalUserRoleName && (CurrentSession.IsSiteAdmin || CurrentSession.IsSiteAccountant || CurrentSession.IsDeveloper || CurrentSession.IsDepartmentHead))
+                            if (CurrentSession.ActiveRoleName != Functions.NormalUserRoleName && (CurrentSession.IsSiteAdmin || CurrentSession.IsSiteAccountant || CurrentSession.IsDeveloper || CurrentSession.IsDepartmentHead))
                             {
                                 Response.Redirect(GetHomepageLink(CurrentSession.ActiveRoleName));
                             }
 
                             //if the user has the elevated-access-permission s/he is asking for, we fill the access text value in a hidden field in this page's form
                             else if (
-                                (accessParam == siteAdminRoleName && CurrentSession.IsSiteAdmin) ||
-                                (accessParam == siteAccountantRoleName && CurrentSession.IsSiteAccountant) ||
-                                (accessParam == systemAdminRoleName && CurrentSession.IsSystemAdmin) ||
-                                (accessParam == departmentHeadRoleName && CurrentSession.IsDepartmentHead) ||
+                                (accessParam == Functions.SiteAdminRoleName && CurrentSession.IsSiteAdmin) ||
+                                (accessParam == Functions.SiteAccountantRoleName && CurrentSession.IsSiteAccountant) ||
+                                (accessParam == Functions.SystemAdminRoleName && CurrentSession.IsSystemAdmin) ||
+                                (accessParam == Functions.DepartmentHeadRoleName && CurrentSession.IsDepartmentHead) ||
                                 CurrentSession.IsDeveloper)
                             {
                                 //set the value of hidden field in this page to the value of passed access variable.
@@ -122,9 +106,9 @@ namespace LyncBillingUI.Pages.Account
                             HeaderAuthBoxMessage = "You have requested to manage a delegee account";
                             ParagraphAuthBoxMessage = "Please note that you must authenticate your information before proceeding any further.";
 
-                            bool userDelegeeCaseMatch = (CurrentSession.IsUserDelegate && accessParam == userDelegeeRoleName && CurrentSession.UserDelegateRoles.Find(role => role.ManagedUserSipAccount == identityParam) != null);
-                            bool departmentDelegeeCaseMatch = (CurrentSession.IsDepartmentDelegate && accessParam == departmentDelegeeRoleName && CurrentSession.DepartmentDelegateRoles.Find(role => role.ManagedUserSipAccount == identityParam) != null);
-                            bool siteDelegeeCaseMatch = (CurrentSession.IsSiteDelegate && accessParam == siteDelegeeRoleName && CurrentSession.SiteDelegateRoles.Find(role => role.ManagedUserSipAccount == identityParam) != null);
+                            bool userDelegeeCaseMatch = (CurrentSession.IsUserDelegate && accessParam == Functions.UserDelegeeRoleName && CurrentSession.UserDelegateRoles.Find(role => role.ManagedUserSipAccount == identityParam) != null);
+                            bool departmentDelegeeCaseMatch = (CurrentSession.IsDepartmentDelegate && accessParam == Functions.DepartmentDelegeeRoleName && CurrentSession.DepartmentDelegateRoles.Find(role => role.ManagedUserSipAccount == identityParam) != null);
+                            bool siteDelegeeCaseMatch = (CurrentSession.IsSiteDelegate && accessParam == Functions.SiteDelegeeRoleName && CurrentSession.SiteDelegateRoles.Find(role => role.ManagedUserSipAccount == identityParam) != null);
 
                             //if the user has the elevated-access-permission s/he is asking for, we fill the access text value in a hidden field in this page's form
                             if (userDelegeeCaseMatch || departmentDelegeeCaseMatch || siteDelegeeCaseMatch || CurrentSession.IsDeveloper)
@@ -163,66 +147,12 @@ namespace LyncBillingUI.Pages.Account
                 //Or if the redirection_flag was not set to FALSE so far, we redurect the user to the USER DASHBOARD
                 if (redirectionFlag == true)
                 {
-                    Response.Redirect(GetHomepageLink(normalUserRoleName));
+                    Response.Redirect(GetHomepageLink(Functions.NormalUserRoleName));
                 }
             }
 
             sipAccount = ((UserSession)HttpContext.Current.Session.Contents["UserData"]).User.SipAccount;
         }//END OF PAGE_LOAD
-
-
-        //
-        // Set the role names of User and Delegee
-        private void SetRolesNames()
-        {
-            // Normal User Role
-            if (string.IsNullOrEmpty(normalUserRoleName)) 
-            {
-                normalUserRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserRoleID);
-            }
-
-            // User Delegee Role
-            if (string.IsNullOrEmpty(userDelegeeRoleName))
-            {
-                userDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserDelegeeRoleID);
-            }
-
-            // Department Delegee Role
-            if(string.IsNullOrEmpty(departmentDelegeeRoleName))
-            {
-                departmentDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.DepartmentDelegeeRoleID);
-            }
-
-            // Site Delegee Role
-            if (string.IsNullOrEmpty(siteDelegeeRoleName))
-            {
-                siteDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.SiteDelegeeRoleID);
-            }
-
-            // System Admin Role
-            if (string.IsNullOrEmpty(systemAdminRoleName))
-            {
-                systemAdminRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.SystemAdminRoleID);
-            }
-
-            // Site Admin Role
-            if (string.IsNullOrEmpty(siteAdminRoleName))
-            {
-                siteAdminRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.SiteAdminRoleID);
-            }
-            
-            // Site Accountant Role
-            if (string.IsNullOrEmpty(siteAccountantRoleName))
-            {
-                siteAccountantRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.SiteAccountantRoleID);
-            }
-
-            // Department Head Role
-            if (string.IsNullOrEmpty(departmentHeadRoleName))
-            {
-                departmentHeadRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.DepartmentHeadRoleID);
-            }
-        }
 
 
         //
@@ -234,25 +164,25 @@ namespace LyncBillingUI.Pages.Account
                 AccessLevels = new List<string>()
                 { 
                     //role_id=20; system-admin
-                    systemAdminRoleName,
+                    Functions.SystemAdminRoleName,
 
                     //role_id=30; site-admin
-                    siteAdminRoleName,
+                    Functions.SiteAdminRoleName,
 
                     //role_id=40; site-accountant
-                    siteAccountantRoleName,
+                    Functions.SiteAccountantRoleName,
 
                     //role_id=50; department-head
-                    departmentHeadRoleName,
+                    Functions.DepartmentHeadRoleName,
 
                     //delegee_type=1; user-delegates
-                    userDelegeeRoleName,
+                    Functions.UserDelegeeRoleName,
 
                     //delegee_type=2; department-delegates
-                    departmentDelegeeRoleName,
+                    Functions.DepartmentDelegeeRoleName,
 
                     //delegee_type=3; site-delegates
-                    siteDelegeeRoleName
+                    Functions.SiteDelegeeRoleName
                 };
             }
         }
@@ -286,10 +216,10 @@ namespace LyncBillingUI.Pages.Account
                 CurrentSession.DelegeeUserAccount.DelegeeUserAddressbook = new Dictionary<string, PhoneBookContact>();
 
                 //Set the ActiveRoleName to "userdelegee"
-                CurrentSession.ActiveRoleName = userDelegeeRoleName;
+                CurrentSession.ActiveRoleName = Functions.UserDelegeeRoleName;
 
                 //Redirect to Uer Dashboard
-                Response.Redirect(GetHomepageLink(userDelegeeRoleName));
+                Response.Redirect(GetHomepageLink(Functions.UserDelegeeRoleName));
             }
 
             else if (delegee is SiteDepartment && delegeeType == Global.DATABASE.Roles.DepartmentDelegeeRoleID)
@@ -306,9 +236,9 @@ namespace LyncBillingUI.Pages.Account
                     returnAddressPartIfExists: true);
 
                 //Switch ActiveRoleName to Departments Delegee
-                CurrentSession.ActiveRoleName = departmentDelegeeRoleName;
+                CurrentSession.ActiveRoleName = Functions.DepartmentDelegeeRoleName;
 
-                Response.Redirect(GetHomepageLink(departmentDelegeeRoleName));
+                Response.Redirect(GetHomepageLink(Functions.DepartmentDelegeeRoleName));
             }
 
             else if (delegee is LyncBillingBase.DataModels.Site && delegeeType == Global.DATABASE.Roles.SiteDelegeeRoleID)
@@ -325,9 +255,9 @@ namespace LyncBillingUI.Pages.Account
                     returnAddressPartIfExists: true);
 
                 //Switch ActiveRoleName to Sites Delegee
-                CurrentSession.ActiveRoleName = siteDelegeeRoleName;
+                CurrentSession.ActiveRoleName = Functions.SiteDelegeeRoleName;
 
-                Response.Redirect(GetHomepageLink(siteDelegeeRoleName));
+                Response.Redirect(GetHomepageLink(Functions.SiteDelegeeRoleName));
             }
         }
 
@@ -343,10 +273,10 @@ namespace LyncBillingUI.Pages.Account
             CurrentSession.DelegeeUserAccount = null;
 
             //Always set the ActiveRoleName to "user"
-            CurrentSession.ActiveRoleName = normalUserRoleName;
+            CurrentSession.ActiveRoleName = Functions.NormalUserRoleName;
 
             //Redirect to the Users Dashboard
-            Response.Redirect(GetHomepageLink(normalUserRoleName));
+            Response.Redirect(GetHomepageLink(Functions.NormalUserRoleName));
         }
 
 
@@ -354,17 +284,17 @@ namespace LyncBillingUI.Pages.Account
         // This function returns the homepage link of a specific role, if given, otherwise it returns the login link.
         private string GetHomepageLink(string roleName = "")
         {
-            if (roleName == systemAdminRoleName) return "/System/Admin/Dashboard";
+            if (roleName == Functions.SystemAdminRoleName) return "/System/Admin/Dashboard";
 
-            else if (roleName == siteAdminRoleName) return "/Site/Admin/Dashboard";
-            else if (roleName == siteAccountantRoleName) return "/Site/Accounting/Dashboard/";
-            else if (roleName == departmentHeadRoleName) return "/Department/Head/Dashboard/";
+            else if (roleName == Functions.SiteAdminRoleName) return "/Site/Admin/Dashboard";
+            else if (roleName == Functions.SiteAccountantRoleName) return "/Site/Accounting/Dashboard/";
+            else if (roleName == Functions.DepartmentHeadRoleName) return "/Department/Head/Dashboard/";
 
-            else if (roleName == departmentDelegeeRoleName) return "/Delegee/Department/PhoneCalls";
-            else if (roleName == siteDelegeeRoleName) return "/Delegee/Site/PhoneCalls";
-            else if (roleName == userDelegeeRoleName) return "/User/Dashboard";
+            else if (roleName == Functions.DepartmentDelegeeRoleName) return "/Delegee/Department/PhoneCalls";
+            else if (roleName == Functions.SiteDelegeeRoleName) return "/Delegee/Site/PhoneCalls";
+            else if (roleName == Functions.UserDelegeeRoleName) return "/User/Dashboard";
 
-            else if (roleName == normalUserRoleName) return "/User/Dashboard";
+            else if (roleName == Functions.NormalUserRoleName) return "/User/Dashboard";
 
             //default case
             else return "/Login";
@@ -405,35 +335,35 @@ namespace LyncBillingUI.Pages.Account
                     if (status == true)
                     {
                         //System Admin
-                        if (requestedAccessLevel == systemAdminRoleName)
+                        if (requestedAccessLevel == Functions.SystemAdminRoleName)
                         {
-                            CurrentSession.ActiveRoleName = systemAdminRoleName;
-                            Response.Redirect(GetHomepageLink(systemAdminRoleName));
+                            CurrentSession.ActiveRoleName = Functions.SystemAdminRoleName;
+                            Response.Redirect(GetHomepageLink(Functions.SystemAdminRoleName));
                         }
 
                         //Sites Admin
-                        else if (requestedAccessLevel == siteAdminRoleName)
+                        else if (requestedAccessLevel == Functions.SiteAdminRoleName)
                         {
-                            CurrentSession.ActiveRoleName = siteAdminRoleName;
-                            Response.Redirect(GetHomepageLink(siteAdminRoleName));
+                            CurrentSession.ActiveRoleName = Functions.SiteAdminRoleName;
+                            Response.Redirect(GetHomepageLink(Functions.SiteAdminRoleName));
                         }
 
                         //Sites Accountant
-                        else if (requestedAccessLevel == siteAccountantRoleName)
+                        else if (requestedAccessLevel == Functions.SiteAccountantRoleName)
                         {
-                            CurrentSession.ActiveRoleName = siteAccountantRoleName;
-                            Response.Redirect(GetHomepageLink(siteAdminRoleName));
+                            CurrentSession.ActiveRoleName = Functions.SiteAccountantRoleName;
+                            Response.Redirect(GetHomepageLink(Functions.SiteAccountantRoleName));
                         }
 
                         //Departments Head
-                        else if (requestedAccessLevel == departmentHeadRoleName)
+                        else if (requestedAccessLevel == Functions.DepartmentHeadRoleName)
                         {
-                            CurrentSession.ActiveRoleName = departmentHeadRoleName;
-                            Response.Redirect(GetHomepageLink(departmentHeadRoleName));
+                            CurrentSession.ActiveRoleName = Functions.DepartmentHeadRoleName;
+                            Response.Redirect(GetHomepageLink(Functions.DepartmentHeadRoleName));
                         }
 
                         //Sites Delegee
-                        else if (requestedAccessLevel == siteDelegeeRoleName)
+                        else if (requestedAccessLevel == Functions.SiteDelegeeRoleName)
                         {
                             var role = CurrentSession.SiteDelegateRoles.Find(someRole => someRole.ManagedSite != null && someRole.ManagedUserSipAccount == requestedDelegeeIdentity);
 
@@ -444,7 +374,7 @@ namespace LyncBillingUI.Pages.Account
                         }
 
                         //Departments Delegee
-                        else if (requestedAccessLevel == departmentDelegeeRoleName)
+                        else if (requestedAccessLevel == Functions.DepartmentDelegeeRoleName)
                         {
                             var role = CurrentSession.DepartmentDelegateRoles.Find(someRole => someRole.ManagedSiteDepartment != null && someRole.ManagedUserSipAccount == requestedDelegeeIdentity);
 
@@ -455,7 +385,7 @@ namespace LyncBillingUI.Pages.Account
                         }
 
                         //Users Delegee
-                        else if (requestedAccessLevel == userDelegeeRoleName && this.DELEGEE_IDENTITY != null)
+                        else if (requestedAccessLevel == Functions.UserDelegeeRoleName && this.DELEGEE_IDENTITY != null)
                         {
                             var role = CurrentSession.UserDelegateRoles.Find(someRole => someRole.ManagedUser != null && someRole.ManagedUserSipAccount == requestedDelegeeIdentity);
 
@@ -466,15 +396,15 @@ namespace LyncBillingUI.Pages.Account
                         }
 
                         //the value of the access_level hidden field has changed - fraud value!
-                        CurrentSession.ActiveRoleName = normalUserRoleName;
-                        Response.Redirect(GetHomepageLink(normalUserRoleName));
+                        CurrentSession.ActiveRoleName = Functions.NormalUserRoleName;
+                        Response.Redirect(GetHomepageLink(Functions.NormalUserRoleName));
                     }
                 }
                 else
                 {
                     //the value of the access_level hidden field has changed - fraud value!
-                    CurrentSession.ActiveRoleName = normalUserRoleName;
-                    Response.Redirect(GetHomepageLink(normalUserRoleName));
+                    CurrentSession.ActiveRoleName = Functions.NormalUserRoleName;
+                    Response.Redirect(GetHomepageLink(Functions.NormalUserRoleName));
                 }
 
                 //Setup the authentication message.

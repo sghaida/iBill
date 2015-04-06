@@ -13,9 +13,7 @@ namespace LyncBillingBase.DataMappers
         /***
          * Get the phone calls tables list from the MonitoringServersInfo table
          */
-
-        private readonly DataAccess<MonitoringServerInfo> _monitoringServersInfoDataMapper =
-            new DataAccess<MonitoringServerInfo>();
+        private readonly DataAccess<MonitoringServerInfo> _monitoringServersInfoDataMapper = new DataAccess<MonitoringServerInfo>();
 
         /***
          * The list of phone calls tables
@@ -27,13 +25,116 @@ namespace LyncBillingBase.DataMappers
          */
         private readonly PhoneCallsSql _phonecallsSqlQueries = new PhoneCallsSql();
 
+        
         public PhoneCallsDataMapper()
         {
             _dbTables = _monitoringServersInfoDataMapper.GetAll().Select(item => item.PhoneCallsTable).ToList();
         }
 
-        public override int Insert(PhoneCall phoneCallObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sipAccount"></param>
+        /// <returns></returns>
+        public IEnumerable<PhoneCall> GetChargeableCallsBySipAccount(string sipAccount)
+        {
+            var sqlStatemnet = _phonecallsSqlQueries.ChargableCallsBySipAccount(_dbTables, sipAccount);
+
+            return base.GetAll(sqlStatemnet);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="siteName"></param>
+        /// <returns></returns>
+        public IEnumerable<PhoneCall> GetChargeableCallsBySiteDepartment(string departmentName)
+        {
+            //string sqlStatemnet = _phonecallsSqlQueries.ChargeableCallsBySiteDepartment(_dbTables, siteName);
+            //return base.GetAll(sqlStatemnet);
+
+            throw new NotImplementedException();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="siteName"></param>
+        /// <returns></returns>
+        public IEnumerable<PhoneCall> GetChargeableCallsBySiteName(string siteName)
+        {
+            var sqlStatemnet = _phonecallsSqlQueries.ChargeableCallsBySiteName(_dbTables, siteName);
+
+            return base.GetAll(sqlStatemnet);
+        }
+
+
+        /// <summary>
+        /// GetPendingDisputedPhoneCalls
+        /// This is used to return the list of disputed calls per user that weren't evaluated by the accountants yet.
+        /// Used in the Disputed page.
+        /// </summary>
+        /// <param name="siteName"></param>
+        /// <returns></returns>
+        public IEnumerable<PhoneCall> GetPendingDisputedCallsBySite(string siteName)
+        {
+            try
+            {
+                string sqlStatemnet = _phonecallsSqlQueries.GetDisputedCallsForSite(_dbTables, siteName);
+
+                return base.GetAll(sqlStatemnet).Where(call => call.UiCallType == "Disputed");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        
+        
+        /// <summary>
+        /// GetEvalutedDisputedPhoneCalls
+        /// This is used to return the list of disputed calls per user that weren't evaluated by the accountants yet.
+        /// Used in the Disputed page.
+        /// </summary>
+        /// <param name="siteName"></param>
+        /// <param name="wherePart"></param>
+        /// <param name="limits"></param>
+        /// <returns></returns>
+        public IEnumerable<PhoneCall> GetEvaluatedDisputedCallsBySite(string siteName)
+        {
+            try
+            {
+                string sqlStatemnet = _phonecallsSqlQueries.GetDisputedCallsForSite(_dbTables, siteName);
+
+                return base.GetAll(sqlStatemnet).Where(call => !string.IsNullOrEmpty(call.UiCallType) && call.UiCallType == "Accepted" && call.UiCallType == "Rejected");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+        public override PhoneCall GetById(long id, string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public override IEnumerable<PhoneCall> GetAll(string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+        {
+            //string sqlStatement = sqlAccessor.GetAllPhoneCalls(dbTables);
+            //return base.GetAll(SQL_QUERY: sqlStatement);
+
+            throw new NotImplementedException();
+        }
+
+
+        public override int Insert(PhoneCall phoneCallObject, string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             var finalDataSourceName = string.Empty;
 
@@ -64,8 +165,8 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override bool Update(PhoneCall phoneCallObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
+
+        public override bool Update(PhoneCall phoneCallObject, string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             var finalDataSourceName = string.Empty;
 
@@ -101,8 +202,8 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override bool Delete(PhoneCall phoneCallObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
+
+        public override bool Delete(PhoneCall phoneCallObject, string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
         {
             var finalDataSourceName = string.Empty;
 
@@ -137,57 +238,6 @@ namespace LyncBillingBase.DataMappers
                 throw ex.InnerException;
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sipAccount"></param>
-        /// <returns></returns>
-        public IEnumerable<PhoneCall> GetChargeableCallsBySipAccount(string sipAccount)
-        {
-            var sqlStatemnet = _phonecallsSqlQueries.ChargableCallsBySipAccount(_dbTables, sipAccount);
-
-            return base.GetAll(sqlStatemnet);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="siteName"></param>
-        /// <returns></returns>
-        public IEnumerable<PhoneCall> GetChargeableCallsBySiteDepartment(string departmentName)
-        {
-            //string sqlStatemnet = _phonecallsSqlQueries.ChargeableCallsBySiteDepartment(_dbTables, siteName);
-            //return base.GetAll(sqlStatemnet);
-
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="siteName"></param>
-        /// <returns></returns>
-        public IEnumerable<PhoneCall> GetChargeableCallsBySiteName(string siteName)
-        {
-            var sqlStatemnet = _phonecallsSqlQueries.ChargeableCallsBySiteName(_dbTables, siteName);
-
-            return base.GetAll(sqlStatemnet);
-        }
-
-        public override PhoneCall GetById(long id, string dataSourceName = null,
-            Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override IEnumerable<PhoneCall> GetAll(string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
-        {
-            //string sqlStatement = sqlAccessor.GetAllPhoneCalls(dbTables);
-            //return base.GetAll(SQL_QUERY: sqlStatement);
-
-            throw new NotImplementedException();
-        }
     }
+
 }

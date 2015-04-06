@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 using CCC.UTILS.Libs;
 using CCC.UTILS.Helpers;
 using LyncBillingBase.DataModels;
-using LyncBillingUI.Account;
+using LyncBillingUI.Helpers.Account;
 
 namespace LyncBillingUI.Pages.Account
 {

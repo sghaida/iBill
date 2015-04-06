@@ -5,8 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using LyncBillingUI.Helpers.Account;
 
-using LyncBillingUI.Account;
 
 namespace LyncBillingUI.Pages.Account
 {

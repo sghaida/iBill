@@ -7,20 +7,19 @@ using System.Web.UI.WebControls;
 using Ext;
 using Ext.Net;
 
+using CCC.UTILS.Libs;
 using CCC.ORM.Helpers;
 using LyncBillingBase;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.DataMappers;
-using LyncBillingUI.Account;
-using CCC.UTILS.Libs;
+using LyncBillingUI.Helpers;
+using LyncBillingUI.Helpers.Account;
 
 namespace LyncBillingUI.Pages.User
 {
     public partial class Statistics : System.Web.UI.Page
     {
         private string sipAccount = string.Empty;
-        private static string normalUserRoleName { get; set; }
-        private static string userDelegeeRoleName { get; set; }
 
         // This actually takes a copy of the current session for some uses on the frontend.
         public UserSession CurrentSession { get; set; }
@@ -28,10 +27,6 @@ namespace LyncBillingUI.Pages.User
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //
-            // Set the roles names
-            SetRolesNames();
-
             // 
             // If the user is not loggedin, redirect to Login page.
             if (HttpContext.Current.Session == null || HttpContext.Current.Session.Contents["UserData"] == null)
@@ -43,9 +38,9 @@ namespace LyncBillingUI.Pages.User
             else
             {
                 CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
-                if (CurrentSession.ActiveRoleName != normalUserRoleName && CurrentSession.ActiveRoleName != userDelegeeRoleName)
+                if (CurrentSession.ActiveRoleName != Functions.NormalUserRoleName && CurrentSession.ActiveRoleName != Functions.UserDelegeeRoleName)
                 {
-                    string url = String.Format(@"{0}/Authenticate?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
+                    string url = String.Format(@"{0}/Authorize?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
                     Response.Redirect(url);
                 }
             }
@@ -54,21 +49,6 @@ namespace LyncBillingUI.Pages.User
             sipAccount = CurrentSession.GetEffectiveSipAccount();
         }
 
-
-        //
-        // Set the role names of User and Delegee
-        private void SetRolesNames()
-        {
-            if (string.IsNullOrEmpty(normalUserRoleName))
-            {
-                normalUserRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserRoleID);
-            }
-
-            if (string.IsNullOrEmpty(userDelegeeRoleName))
-            {
-                userDelegeeRoleName = Global.DATABASE.Roles.GetRoleNameById(Global.DATABASE.Roles.UserDelegeeRoleID);
-            }
-        }
 
         private List<ChartReport> GetChartData()
         {

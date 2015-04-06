@@ -346,11 +346,6 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
-        public override IEnumerable<NumberingPlan> GetAll(string sqlQuery)
-        {
-            throw new NotImplementedException();
-        }
-
         public override int Insert(NumberingPlan dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             int rowNumber = -1;
@@ -358,7 +353,7 @@ namespace LyncBillingBase.DataMappers
 
             //
             // Make sure the local cache is initialized and has data.
-            if(_numberingPlan == null || _numberingPlan.Count == 0)
+            if (_numberingPlan == null || _numberingPlan.Count == 0)
             {
                 GetAll();
             }
@@ -369,14 +364,18 @@ namespace LyncBillingBase.DataMappers
 
             //
             // In case it doesn't exist, insert it to the database and then to the local cache.
-            if(exists != true)
+            if (exists != true)
             {
                 try
                 {
                     rowNumber = base.Insert(dataObject, dataSourceName, dataSourceType);
-                    _numberingPlan.Add(dataObject);
+
+                    lock (dataObject)
+                    {
+                        _numberingPlan.Add(dataObject);
+                    }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw ex.InnerException;
                 }
@@ -393,7 +392,7 @@ namespace LyncBillingBase.DataMappers
 
             //
             // Make sure the local cache is initialized and has data.
-            if(_numberingPlan == null || _numberingPlan.Count == 0)
+            if (_numberingPlan == null || _numberingPlan.Count == 0)
             {
                 GetAll();
             }
@@ -404,16 +403,22 @@ namespace LyncBillingBase.DataMappers
 
             //
             // In case it does exist, update it in the database and in the local cache.
-            if(existingItem != null)
+            if (existingItem != null)
             {
                 try
                 {
                     updateStatus = base.Update(dataObject, dataSourceName, dataSourceType);
 
-                    _numberingPlan.Remove(existingItem);
-                    _numberingPlan.Add(dataObject);
+                    if(updateStatus == true)
+                    {
+                        lock(_numberingPlan)
+                        {
+                            _numberingPlan.Remove(existingItem);
+                            _numberingPlan.Add(dataObject);
+                        }
+                    }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw ex.InnerException;
                 }
@@ -445,7 +450,13 @@ namespace LyncBillingBase.DataMappers
                 {
                     deleteStatus = base.Delete(dataObject, dataSourceName, dataSourceType);
 
-                    _numberingPlan.Remove(existingItem);
+                    if(deleteStatus == true)
+                    {
+                        lock(_numberingPlan)
+                        {
+                            _numberingPlan.Remove(existingItem);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -456,19 +467,34 @@ namespace LyncBillingBase.DataMappers
             return deleteStatus;
         }
 
+
+        /***
+         * DISABLED FUNCTIONS
+         */
+        [Obsolete]
+        public override IEnumerable<NumberingPlan> GetAll(string sqlQuery)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Obsolete]
         public override int Insert(string sql)
         {
             throw new NotImplementedException();
         }
 
+        [Obsolete]
         public override bool Update(string sql)
         {
             throw new NotImplementedException();
         }
 
+        [Obsolete]
         public override bool Delete(string sql)
         {
             throw new NotImplementedException();
         }
+
     } //end-class
+
 }

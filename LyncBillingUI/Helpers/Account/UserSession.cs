@@ -11,7 +11,7 @@ using LyncBillingBase.DataMappers;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.Helpers;
 
-namespace LyncBillingUI.Account
+namespace LyncBillingUI.Helpers.Account
 {
     public class UserSession
     {
