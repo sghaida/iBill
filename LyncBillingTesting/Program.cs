@@ -6,6 +6,7 @@ using CCC.UTILS.Outlook;
 using CCC.ORM;
 using CCC.ORM.DataAccess;
 using CCC.ORM.Helpers;
+using CCC.UTILS.Libs;
 using LyncBillingBase.DataMappers;
 using LyncBillingBase.DataModels;
 using LyncBillingBase.Repository;
@@ -21,13 +22,17 @@ namespace LyncBillingTesting
 
         public static void Main(string[] args)
         {
-            DataStorage DB = DataStorage.Instance;
+            //DataStorage DB = DataStorage.Instance;
 
-            bool status = false;
+            //bool status = false;
 
-            status = DB.PhoneBooks.FixBrokenContacts();
+            //status = DB.PhoneBooks.FixBrokenContacts();
 
-            status = status && true;
+            //status = status && true;
+
+            AdLib ad = new AdLib();
+
+            AdUserInfo userInfo = ad.GetUserAttributes("sghaida@ccc.gr");
 
 
             //string result = string.Empty;
