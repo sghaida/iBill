@@ -134,6 +134,8 @@
     <Content Include="Error\Oops.aspx" />
     <Content Include="Pages\SiteAccounting\Dashboard.aspx" />
     <Content Include="Pages\SiteAccounting\DisputedCalls.aspx" />
+    <Content Include="Pages\SiteAccounting\MonthlyReport.aspx" />
+    <Content Include="Pages\SiteAccounting\PeriodicalReport.aspx" />
     <Content Include="Pages\User\Addressbook.aspx" />
     <Content Include="Pages\User\Bills.aspx" />
     <Content Include="Pages\User\Dashboard.aspx" />
@@ -261,6 +263,20 @@
     </Compile>
     <Compile Include="Pages\SiteAccounting\DisputedCalls.aspx.designer.cs">
       <DependentUpon>DisputedCalls.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAccounting\MonthlyReport.aspx.cs">
+      <DependentUpon>MonthlyReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAccounting\MonthlyReport.aspx.designer.cs">
+      <DependentUpon>MonthlyReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAccounting\PeriodicalReport.aspx.cs">
+      <DependentUpon>PeriodicalReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAccounting\PeriodicalReport.aspx.designer.cs">
+      <DependentUpon>PeriodicalReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\User\Addressbook.aspx.cs">
       <DependentUpon>Addressbook.aspx</DependentUpon>

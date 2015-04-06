@@ -1,4 +1,154 @@
 ﻿**************************************************************************
+*                   Version 3.1.0 CHANGELOG                              *
+**************************************************************************
+
+Release Date     : 2015-02-17
+Current Version  : 3.1.0
+Previous Release : 3.0.0
+
+FIX
+	[r6224]	[#612] RenderScripts="CDN" and RenderStyles="CDN" doesn't work for CrispTouch and NeptuneTouch themes.																							
+	[r6225]	[#613] TreeView's LoadMask="false" has to be rendered to client.																							
+	[r6227]	[#614] TabStrip's setTabHidden didn't work.																							
+	[r6228]	[#615] StoreForModel: now there is a possibility to avoid creating of Model and just refer it by its name.																							
+	[r6231]	[#616] ResourceManager's WindowUnload didn't work.																							
+	[r6232]	[#617] Window unload destroys a container with iframe, even if the unload action is being canceled in a beforeunload listener.																							
+	[r6234]	Fixed a minor issue in the Action example.																							
+	[r6238]	[#625] Collapsed="true" doesn't work with AccordionLayout Multi="true".																							
+	[r6239]	NET35 is not compilable																							
+	[r6241]	[#628] ComponentLoader's .ToConfig() didn't register custom markup properties for INoneContentable controls.																							
+	[r6242]	[#631] GridPanel: pressing Tab when some header is focused threw a JavaScript error.																							
+	[r6243]	[#632] Ext.net.getEl() required a change to avoid throwing too many exceptions (even caught).																							
+	[r6246]	[#634] IP Vtype didn't work with ScriptMode="Debug".																							
+	[r6248]	HtmlEditor: removed some outdated fix for IE11.																							
+	[r6249]	[#636] DirectEvent and DirectMethod: implemented an option to avoid auto encoding of parameters - Encode="false".																							
+	[r6250]	SelectBox threw a JavaScript error.																							
+	[r6251]	[#637] TabPanel in FireFox: click on tab might not active that tab.																							
+	[r6252]	FormPanel with a ResponsiveConfig throws errors, because of none setters for url and waitMsgTarget properties.																							
+	[r6254]	[#639] TextField Disabled="true" and RightButtons or LeftButtons threw a JavaScript error.																							
+	[r6263]	[#645] Window in Bin was rendered as a lazy item, but it has to be rendered as an instance.																							
+	[r6265]	[#646] ResourceManager's RegisterClientScriptInclude used a wrong cache buster for third-party resources.																							
+	[r6266]	[#647] RTL was broken.																							
+	[r6267]	TabStrip's UI didn't affect on Tabs. Also added UI and UIName properties for a Tab.																							
+	[r6268]	[#648] Fixed ComboBox issues in IE regarding checkChangeEvents.																							
+	[r6269]	MultiCombo was broken after update to ExtJS 5.1.0.																							
+	[r6270]	MultiCombo: setValue required a check of applying value on emptiness.																							
+	[r6276]	[#651] BoxLayoutConfig's Animate and AnimateDuration properties has been removed as not supported. Noted in the breaking changes document.																							
+	[r6277]	[#652] GridView's StripeRows="true" didn't work with Crisp themes.																							
+	[r6280]	GridPanel groped headers functionality was broken.																							
+	[r6281]	[#656] GridPanel: could not select a new added record.																							
+	[r6282]	[#659] MultiUpload in IE: a JavaScript error occurred if move a mouse over the Browse button.																							
+	[r6284]	[#660] ComboBox's selected item didn't look selected on expand with QueryMode="Remote".																							
+	[r6287]	[#661] ResourceHandler's HasHandler() method didn't check a Web.config's <system.webServer> <handlers> section.																							
+	[r6288]	[#665] Spotlight's show and hide method callback wasn't used.																							
+	[r6289]	[#666] PartialViewResult didn't register custom resources.																							
+	[r6290]	TablePanel's insertColumn, removeColumn and removeAllColumns methods threw a JavaScript error.																							
+	[r6291]	[#667] TagField in Toolbar items threw "Unable to get property 'dataSource' of undefined or null reference".																							
+	[r6292]	[#668] A DateField with Type="Month" collapsed on click inside a picker in Chrome.																							
+	[r6293]	[#496] Ext.supports.RightMargin test could fail in Firefox.																							
+	[r6294]	TablePanel's insertColumn and removeColumn could add an additional checkbox column of CheckboxSelectionModel.																							
+	[r6295]	[#665] Spotlight show and hide method callback isn't used. Improved the initial fix committed in the revision 6288.																							
+	[r6298]	[#670] MultiUpload error when aborting uploads.																							
+	[r6299]	[#671] ToolTip's Target might be not determined in some scenarios.																							
+	[r6300]	Small refactoring of the Ext.net.getEl method.																							
+	[r6303]	[#675] Loader's with Mode="Component" and Url: support of registering custom resources.																							
+	[r6306]	[#677] TextField with InputMask was not being marked as invalid on .isValid() call.																							
+	[r6308]	[#678] Hyperlink's Disabled property didn't work.																							
+	[r6314]	[#680] GridPanel in Firefox: cell right click fired a CellClick event instead of CellContextMenu.																							
+	[r6316]	[#685] CheckboxSelectionModel's header was auto sized incorrectly on double click on its adjacent column on right.																							
+	[r6318]	[#687] A Label didn't appear in a Callout's BodyWidget.																							
+	[r6319]	[#688] MultiCombo's SortByDisplayField and SortByValueField didn't work.																							
+	[r6320]	[#689] GridPanel with ListFilter with store caused error when grid is destroyed.																							
+	[r6321]	[#117] iPad iframe scrolling didn't work. Fixed only for a case when an iframe is being loaded using a Loader with Mode="Frame". If you use an iframe without a Loader, you are supposed to apply a CSS fix manually.																							
+	[r6322]	[#693] TreeView had no StripeRows setting. Added a breaking change item that the StripeRows property has been moved from GridView to TableView (the subclass of GridView and TreeView).																							
+	[r6323]	[#692] <ext:Summary /> was not accounting correctly columns with SummaryType="Count".																							
+	[r6328]	[#679] Removed the mysterious Listeners.cs and Listeners.tt files.																							
+	[r6330]	[#695] A List of generic Dictionaries could not be bound to a Store's DataSource.																							
+	[r6337]	Run BuildMeta.bat script to update files related to the changes for cases #696 and #697.																							
+	[r6341]	[#698] FilterHeader didn't catch adding a column by a GridHeaderContainer's Add method.																							
+	[r6342]	[#700] If a LiveSearchToolbar is inside a GridPanel, the ID for GridPanel should not be required.																							
+	[r6343]	[#701] Inexistent reference to WebResource.axd when using LiveSearchGridPanel plugin.																							
+	[r6344]	[#706] Toolbar's OverflowChange event: incorrect arguments.																							
+	[r6345]	[#707] Example 'DataView/Advanced/MultiSort'. Removes unnecessary constructor from SortButton custom component. Items container did not fit the items.																							
+	[r6346]	[#708] MVC Example 'Draw/Basic/Action' have a button that says to rotate -45 degrees, while it rotates something else. This commit provides the rotation directly in degrees to fix the issue.																							
+	[r6347]	[#709] 404 error loading MVC examples Draw/Basic: Analytics, Pie Chart and Punch Chart.																							
+	[r6352]	[#710] On example 'Chart/Dashboard', clicking on the bar chart was not selecting back items on the grid. Fixes both MVC and WebForms examples.																							
+	[r6353]	[#713] The MVC and WebForms example 'Draw/Basic/Reflection' did not conform with ExtJS 5.x syntax.																							
+	[r6354]	[#714] MVC and WebForms examples 'Draw/Basic/Rotate_Image' had outdated (ExtJS4) syntax, and did not have some needed overrides to fix issues on the new ExtJS5 draw engine.																							
+	[r6356]	[#716] ComboBox: Select's "records" parameter is not an array now in ExtJS 5.1 if no multiSelect="true". Decided to force it to be an array to avoid a breaking change.																							
+	[r6357]	[#682] Various bug fixes regarding WebForms Examples Explorer issues.																							
+	[r6358]	[#682] WebForms Examples Explorer issues: fixed the History example (item 71).																							
+	[r6359]	[#718] Ext.NET specific 'reload()' method to 'Ext.data.TreeStore' was not resetting internal ID mapping for nodes.																							
+	[r6361]	[#718] There were still some issues with the reloading of TreeStores. The fix was also applied to a 'reload()' call directly on the 'Ext.data.TreeStore'.																							
+	[r6362]	[#719] Ext.Net.vs2010.sln was broken. It is now corrected, but with limited support. Please find the details in the forum thread.																							
+	[r6363]	[#722] Column Renderer's Format and FormatArgs have been removed. The functionality has been replaced with a Column's Formatter and FormatterFn properties. Added a breaking change item.																							
+	[r6364]	[#709] PartialViewResult didn't register resources correctly.																							
+	[r6365]	[#722] Reverted back the initial change. The Renderer's Format and FormatArgs properties are back. It was an issue with Format="Percent" specifically. Needs to add FormatArgs="'0'" or use a Column's FormatterFn="Percent".																							
+	[r6368]	[#724] DurationMessages could freeze a page if there is a PageProxy.																							
+	[r6369]	[#722] Column's FormatterFn: wrong serialization mode. The property has been serialized all lowercase, but only the first letter should be lowercase.																							
+	[r6370]	[#726] ComponentView's Component could not be focused.																							
+	[r6371]	[#692] Various fixes in the examples.																							
+	[r6372]	[#727] PagingToolbar could be broken if there is a few instances of PagingToolbar on page.																							
+	[r6373]	[#728] Ext.dom.Element.is() broke in IE8.																							
+	[r6374]	[#729] Second rendering of a control containing a Model with a specified Name threw a JavaScript error because of Ext.define() of already defined class.																							
+	[r6375]	[#731] Ext.grid.property.Grid.onPropertyChangeHandler() was querying editor from 'DateField' fields incorrectly.																							
+
+NEW
+	[r6219]	[#611] DirectResult: there should be the Success property + a new .Direct(success, errorMessage) extension method for Controller.																							
+	[r6233]	Added DateField overview example.																							
+	[r6253]	[#638] ComponentView: enhanced MVC Razor support.																							
+	[r6255]	[#636] DirectEvents and DirectMethods: added a Boolean recursive option.																							
+	[r6257]	[#642] ConfigItem and Parameter: added a constructor overload that takes an object.																							
+	[r6258]	[#642] StoreParameter: added a constructor overload that takes an object.																							
+	[r6262]	Examples Explorer: added the Kitchen_Sink/TabPanels/Header_Tabs example demonstrating the use of TabBarHeaderPosition.																							
+	[r6274]	Added the Center layout to enums and a new example.																							
+	[r6296]	[#583] Added the ChartItemEvents plugin and related events for Charts and Series.																							
+	[r6301]	Added new .RemoveShowPasswordTrigger property on TextFieldBase.cs. Removes the show password trigger that appears by default for password fields in Internet Explorer 10+																							
+	[r6315]	[#683] Added option to call X.Msg.Info(string msg) with a Message only. No Title is required.																							
+
+UPDATE
+	[r6208]	Revised App_Readme documents with new release number and timestamp																							
+	[r6209]	Formatting of samples and update of App_Readme documents																							
+	[r6210]	Update of App_Readme documents for MVC Examples Explorer																							
+	[r6211]	Version update to Ext.NET 3.0.0. Timestamp update.																							
+	[r6217]	Moved /branches/3 to /trunk																							
+	[r6218]	Added a new item to the BREAKING_CHANGES.txt document.																							
+	[r6229]	[#615] StoreForModel: now the createModel parameter goes first rather than the modelOnly parameter.																							
+	[r6237]	Grouping of dropdown menu items and add link to Web Forms Examples v1.7 site																							
+	[r6247]	Initial ExtJS 5.1.0 update.																							
+	[r6256]	[#640] Removed all embedded resources that are not required to be embedded. Please see the Issue of GitHub for more details.																							
+	[r6259]	Fixed a broken image location in the /Form/Hyperlink/Basic/Default.aspx example																							
+	[r6271]	The EnableKeyNav option has been removed in ExtJS 5.1.0. Removed the server side properties and noted in the breaking changes document.																							
+	[r6273]	Revised server side API according to the ExtJS 5.1.0 vs 5.0.1 difference.																							
+	[r6278]	[#653] Increased Assembly build number to 3.1.0.*																							
+	[r6279]	[#650] Commented out httpHandlers and httpModules sections from sample Web.config inside README.txt																							
+	[r6302]	Revised timestamp and copyright to Ext.NET release version 3.1.0																							
+	[r6304]	Revised Meta Factory templates with 3.1.0 version and time stamp details																							
+	[r6309]	Revised to add note regarding passing "XPL" parameter for updating file copyright information based on Copyright-XPL.txt template.																							
+	[r6310]	Fixed a build problem that was preventing the extnet-all-css files from being generated properly.																							
+	[r6311]	Revised .jsb files for proper copyright, time stamp, and version numbers																							
+	[r6312]	Sync of Embedded resources in AssemblyInfo.cs																							
+	[r6313]	Temporarily syncing Listeners.cs, but this file should be removed. See Issue #679.																							
+	[r6324]	There was a line in BuildJsUX.bat pointing to inexistent .jsb file, and added reference of github issue fixed on r6323.																							
+	[r6325]	[#674] Updated to Json.NET 6.0.8 (from 6.0.6).																							
+	[r6331]	[#696] TreeStore did not have the 'ClearOnPageLoad' and 'ClearRemoveOnLoad' properties like the Store. Now these props are inherited from 'AbstractStore', common to both.																							
+	[r6332]	[#697] Deprecates 'Ext.Net.SetFiler(filter)' in spite to 'Ext.Net.SetFilter(filter)'.																							
+	[r6333]	[#697] For razor interface, deprectates 'Store.Builder.SetFiler(filter)' in spite to 'Store.Builder.SetFilter(filter)'.																							
+	[r6334]	Factory/Builder/AbstractStoreBuilder.cs had different indentation (tabspaces and whitespaces). Converted all to whitespaces.																							
+	[r6335]	[#696] TreeStore did not have the 'ClearOnPageLoad' and 'ClearRemovedOnLoad' properties like the Store. Applied review to razor code structure, Store and TreeStore inherits them from AbstractStore.																							
+	[r6338]	Refresh comment lines spacing on auto generated AbstractStoreBuilder.																							
+	[r6348]	[#682-88] Revised Panel to use MinHeight property instead of Height. Allows Panel to grow vertically when new Items are dynamically added.																							
+	[r6349]	New location for Silk Companion Icon set http://damieng.com/creative/icons/silk-companion-1-icons																							
+	[r6350]	[#682-4] Revised Panels to use MinWidth="500" instead of Width="500"																							
+	[r6351]	[#682-31] Swapped 'To' and 'From' labels																							
+	[r6355]	[#714] Reindent changed files.																							
+	[r6360]	[#714] Review line endings on Examples/Draw/Rotate_Image. Opted in conservative approach, keeping windows CR+LF, which seems to major the file.																							
+	[r6366]	Revised all /App_Readme/ documents in preparation for 3.1.0 release																							
+	[r6367]	Updated version number to 3.1.0 within AssemblyInfo.cs and extnet-all.js																							
+	[r6376]	Revised version number on Examples Explorer and MVC Examples Explorer
+
+
+**************************************************************************
 *                   Version 3.0.0 CHANGELOG                              *
 **************************************************************************
 
