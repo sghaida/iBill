@@ -87,7 +87,7 @@ namespace LyncBillingUI.Pages.Account
                     userInfo = ADConnector.GetUserAttributes(Email.Text);
 
                     // Users Information was found in active directory
-                    if (userInfo != null)
+                    if (userInfo != null && !string.IsNullOrEmpty(userInfo.SipAccount))
                     {
                         //Try to get user from the database
                         existingiBillUser = Global.DATABASE.Users.GetBySipAccount(userInfo.SipAccount.Replace("sip:", ""));
@@ -169,6 +169,10 @@ namespace LyncBillingUI.Pages.Account
                             Response.Redirect(String.Format(@"{0}/User/Dashboard", Global.APPLICATION_URL));
                         }
                     }//end-if-userInfo-noteq-null
+                    else
+                    {
+                        AuthenticationMessage = "Invalid ActiveDirectory Account.";
+                    }
 
                 }//end-if-status-is-true
 
