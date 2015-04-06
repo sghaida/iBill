@@ -20,8 +20,6 @@ namespace LyncBillingUI.Pages.SiteAccounting
     {
         private string sipAccount = string.Empty;
 
-        private static string allowedRoleName = Functions.SiteAccountantRoleName;
-
         // This actually takes a copy of the current session for some uses on the frontend.
         public UserSession CurrentSession { get; set; }
 
@@ -60,7 +58,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
         {
             if (!Ext.Net.X.IsAjaxRequest)
             {
-                userSites = Global.DATABASE.SystemRoles.GetSitesByRoles(CurrentSession.SystemRoles, allowedRoleName);
+                userSites = Global.DATABASE.SystemRoles.GetSitesByRoles(CurrentSession.SystemRoles, Functions.SiteAccountantRoleName);
             }
         }
 
