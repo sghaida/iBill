@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
+using System.Xml.Xsl;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Script.Serialization;
+using Ext.Net;
+using iTextSharp.text;
 
-using LyncBillingBase.DataModels;
+using CCC.UTILS.Libs;
 using LyncBillingUI.Helpers;
 using LyncBillingUI.Helpers.Account;
-using System.Web.Script.Serialization;
-using iTextSharp.text;
-using System.Xml.Xsl;
-using System.Xml;
-using Ext.Net;
-using System.Threading;
-using CCC.UTILS.Libs;
+using LyncBillingBase.DataModels;
 
 namespace LyncBillingUI.Pages.SiteAccounting
 {
@@ -176,7 +176,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
                         "iBill Invoicing Operation",
                         String.Format("Notification:<br /><br />Kindly note the invoicing operation of \"{0}\" Phone Calls of {1} Site for the period: \"{2} - {3}\" has finished successfully.",
                             callTypeDesc,
-                            site.SiteName,
+                            site.Name,
                             startingDate.ToString(),
                             endingDate.ToString()));
                 }
@@ -190,7 +190,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
                         "iBill Invoicing Operation",
                         String.Format("<b>ERROR Notification:</b><br /><br />An error occured while performing the invoicing operation of \"{0}\" Phone Calls of {1} Site for the period: \"{2} - {3}\".<br /><br />The operation was not completed successfully.<br /><br /><hr /><b>Error Information:</b><br /><br />{4}",
                             callTypeDesc,
-                            site.SiteName,
+                            site.Name,
                             startingDate.ToString(),
                             endingDate.ToString(),
                             errorMessage));
@@ -203,7 +203,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
                         "iBill Invoicing Operation",
                         String.Format("<b>ERROR Notification:</b><br /><br />An error occured while performing the invoicing operation of \"{0}\" Phone Calls of {1} Site for the period: \"{2} - {3}\".<br /><br />The operation was not completed successfully.<br /><br />Kindly contact the HelpDesk.",
                             callTypeDesc,
-                            site.SiteName,
+                            site.Name,
                             startingDate.ToString(),
                             endingDate.ToString()));
                 }
@@ -407,9 +407,9 @@ namespace LyncBillingUI.Pages.SiteAccounting
                     foreach (var user in usersData)
                     {
                         tempUserDataContainer = new Dictionary<string, object>();
-                        tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.DisplayName), user.FullName);
-                        tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.EmployeeID), user.EmployeeID);
-                        tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.ChargingParty), user.SipAccount);
+                        //tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.DisplayName), user.FullName);
+                        //tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.EmployeeID), user.EmployeeID);
+                        //tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.ChargingParty), user.SipAccount);
 
                         if (!UsersCollection.Keys.Contains(user.SipAccount))
                             UsersCollection.Add(user.SipAccount, tempUserDataContainer);
@@ -421,24 +421,24 @@ namespace LyncBillingUI.Pages.SiteAccounting
                     //Initialize the response.
                     pdfReportFileName = string.Format(
                         "{0}_Monthly_Summary_Report_{1}_{2}.pdf",
-                        SelectedSite.SiteName.ToUpper(), beginningOfTheMonth.Month + "-" + beginningOfTheMonth.Year, callsTypeString.Replace(' ', '_')
+                        SelectedSite.Name.ToUpper(), beginningOfTheMonth.Month + "-" + beginningOfTheMonth.Year, callsTypeString.Replace(' ', '_')
                     );
 
                     pdfDocumentHeaders = new Dictionary<string, string>()
                     {
-                        {"siteName", SelectedSite.SiteName},
+                        {"siteName", SelectedSite.Name},
                         {"title", "Accounting Monthly Report [Summary]"},
                         {"subTitle", String.Format("As Per: {0}; {1}", beginningOfTheMonth.Month + "-" + beginningOfTheMonth.Year, callsTypeString)}
                     };
 
                     pdfDocument = new Document();
 
-                    if (callsType == 1)
-                        Global.DATABASE.UsersCallsSummaries.ExportUsersCallsSummaryToPDF(SelectedSite.SiteName, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, notChargedCalls: true);
-                    else if (callsType == 2)
-                        Global.DATABASE.UsersCallsSummaries.ExportUsersCallsSummaryToPDF(SelectedSite.SiteName, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, pendingChargesCalls: true);
-                    else if (callsType == 3)
-                        Global.DATABASE.UsersCallsSummaries.ExportUsersCallsSummaryToPDF(SelectedSite.SiteName, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, chargedCalls: true);
+                    //if (callsType == 1)
+                    //    Global.DATABASE.UsersCallsSummaries.ExportUsersCallsSummaryToPDF(SelectedSite.Name, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, notChargedCalls: true);
+                    //else if (callsType == 2)
+                    //    Global.DATABASE.UsersCallsSummaries.ExportUsersCallsSummaryToPDF(SelectedSite.Name, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, pendingChargesCalls: true);
+                    //else if (callsType == 3)
+                    //    Global.DATABASE.UsersCallsSummaries.ExportUsersCallsSummaryToPDF(SelectedSite.Name, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, chargedCalls: true);
 
                     Response.ContentType = "application/pdf";
                     Response.AddHeader("content-disposition", "attachment;filename=" + pdfReportFileName);
@@ -458,9 +458,9 @@ namespace LyncBillingUI.Pages.SiteAccounting
                     foreach (var user in usersData)
                     {
                         tempUserDataContainer = new Dictionary<string, object>();
-                        tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.DisplayName), user.FullName);
-                        tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.EmployeeID), user.EmployeeID);
-                        tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.ChargingParty), user.SipAccount);
+                        //tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.DisplayName), user.FullName);
+                        //tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.EmployeeID), user.EmployeeID);
+                        //tempUserDataContainer.Add(Enums.GetDescription(Enums.PhoneCallSummary.ChargingParty), user.SipAccount);
 
                         if (!UsersCollection.Keys.Contains(user.SipAccount))
                             UsersCollection.Add(user.SipAccount, tempUserDataContainer);
@@ -472,24 +472,24 @@ namespace LyncBillingUI.Pages.SiteAccounting
                     //Initialize the response.
                     pdfReportFileName = string.Format(
                         "{0}_Monthly_Detailed_Report_{1}_{2}.pdf",
-                        SelectedSite.SiteName.ToUpper(), beginningOfTheMonth.Month + "-" + beginningOfTheMonth.Year, callsTypeString.Replace(' ', '_')
+                        SelectedSite.Name.ToUpper(), beginningOfTheMonth.Month + "-" + beginningOfTheMonth.Year, callsTypeString.Replace(' ', '_')
                     );
 
                     pdfDocumentHeaders = new Dictionary<string, string>()
                     {
-                        {"siteName", SelectedSite.SiteName},
+                        {"siteName", SelectedSite.Name},
                         {"title", "Accounting Monthly Report [Detailed]"},
                         {"subTitle", String.Format("As Per: {0}; {1}", beginningOfTheMonth.Month + "-" + beginningOfTheMonth.Year, callsTypeString)}
                     };
 
                     pdfDocument = new Document();
 
-                    if (callsType == 1)
-                        Global.DATABASE.UsersCallsSummaries.ExportUsersCallsDetailedToPDF(SelectedSite.SiteName, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, notChargedCalls: true);
-                    else if (callsType == 2)
-                        Global.DATABASE.UsersCallsSummaries.ExportUsersCallsDetailedToPDF(SelectedSite.SiteName, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, pendingChargesCalls: true);
-                    else if (callsType == 3)
-                        Global.DATABASE.UsersCallsSummaries.ExportUsersCallsDetailedToPDF(SelectedSite.SiteName, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, chargedCalls: true);
+                    //if (callsType == 1)
+                    //    Global.DATABASE.UsersCallsSummaries.ExportUsersCallsDetailedToPDF(SelectedSite.Name, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, notChargedCalls: true);
+                    //else if (callsType == 2)
+                    //    Global.DATABASE.UsersCallsSummaries.ExportUsersCallsDetailedToPDF(SelectedSite.Name, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, pendingChargesCalls: true);
+                    //else if (callsType == 3)
+                    //    Global.DATABASE.UsersCallsSummaries.ExportUsersCallsDetailedToPDF(SelectedSite.Name, beginningOfTheMonth, endOfTheMonth, UsersCollection, Response, out pdfDocument, pdfDocumentHeaders, chargedCalls: true);
 
                     Response.ContentType = "application/pdf";
                     Response.AddHeader("content-disposition", "attachment;filename=" + pdfReportFileName);
