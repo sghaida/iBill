@@ -202,33 +202,6 @@ namespace LyncBillingUI.Pages.SiteAccounting {
         protected global::Ext.Net.Model MonthlyReportsModel;
         
         /// <summary>
-        /// EmployeeIDCol control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.Column EmployeeIDCol;
-        
-        /// <summary>
-        /// EmployeeIDFilter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.TextField EmployeeIDFilter;
-        
-        /// <summary>
-        /// ClearEmployeeIDFilterButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.ClearButton ClearEmployeeIDFilterButton;
-        
-        /// <summary>
         /// SipAccountCol control.
         /// </summary>
         /// <remarks>
@@ -236,51 +209,6 @@ namespace LyncBillingUI.Pages.SiteAccounting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Ext.Net.Column SipAccountCol;
-        
-        /// <summary>
-        /// SipAccountFilter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.TextField SipAccountFilter;
-        
-        /// <summary>
-        /// ClearSipAccountFilterButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.ClearButton ClearSipAccountFilterButton;
-        
-        /// <summary>
-        /// FullNameCol control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.Column FullNameCol;
-        
-        /// <summary>
-        /// FullNameFilter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.TextField FullNameFilter;
-        
-        /// <summary>
-        /// ClearFullNameFilterButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.ClearButton ClearFullNameFilterButton;
         
         /// <summary>
         /// GrouopedCostsColumnsCol control.

@@ -1,7 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MonthlyReport.aspx.cs" Inherits="LyncBillingUI.Pages.SiteAccounting.MonthlyReport" %>
+﻿<%@ Page Title="Monthly Reports" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MonthlyReport.aspx.cs" Inherits="LyncBillingUI.Pages.SiteAccounting.MonthlyReport" %>
 
 <asp:Content ID="Header" ContentPlaceHolderID="HeaderContent" runat="server">
 </asp:Content>
+
 
 <asp:Content ID="Body" ContentPlaceHolderID="MainContent" runat="server">
     <div class="row">
@@ -13,10 +14,8 @@
                 runat="server"
                 Header="true"
                 Title="Generate Monthly Reports"
-                Width="740"
-                Height="56"
-                Layout="AnchorLayout"
-                ComponentCls="fix-ui-vertical-align">
+                MaxWidth="955"
+                Layout="AnchorLayout">
                 
                 <TopBar>
                     <ext:Toolbar
@@ -29,12 +28,12 @@
                                 Icon="Find"
                                 TriggerAction="All"
                                 QueryMode="Local"
-                                DisplayField="SiteName"
-                                ValueField="SiteID"
+                                DisplayField="Name"
+                                ValueField="Id"
                                 FieldLabel="Site:"
                                 LabelWidth="25"
                                 Width="160"
-                                Margins="5 15 0 5">
+                                MarginSpec="5 15 0 5">
                                 <Store>
                                     <ext:Store
                                         ID="SitesStore"
@@ -43,15 +42,15 @@
                                         <Model>
                                             <ext:Model ID="SitesModel" runat="server">
                                                 <Fields>
-                                                    <ext:ModelField Name="SiteID" />
-                                                    <ext:ModelField Name="SiteName" />
+                                                    <ext:ModelField Name="Id" />
+                                                    <ext:ModelField Name="Name" />
                                                     <ext:ModelField Name="CountryCode" />
                                                 </Fields>
                                             </ext:Model>
                                         </Model>
 
                                         <Sorters>
-                                            <ext:DataSorter Property="SiteName" Direction="ASC" />
+                                            <ext:DataSorter Property="Name" Direction="ASC" />
                                         </Sorters>
                                     </ext:Store>
                                 </Store>
@@ -59,8 +58,8 @@
                                 <ListConfig MinWidth="200">
                                     <ItemTpl ID="SitesItemTpl" runat="server">
                                         <Html>
-                                            <div data-qtip="{SiteName}. {CountryCode}">
-                                                {SiteName} ({CountryCode})
+                                            <div data-qtip="{Name} ({CountryCode})">
+                                                {Name} ({CountryCode})
                                             </div>
                                         </Html>
                                     </ItemTpl>
@@ -72,9 +71,9 @@
                                     </Select>
                                 </DirectEvents>
 
-                                <Listeners>
+                                <%--<Listeners>
                                     <BeforeSelect Fn="clearFilter" />
-                                </Listeners>
+                                </Listeners>--%>
                             </ext:ComboBox>
 
                             <ext:DateField
@@ -84,7 +83,7 @@
                                 LabelWidth="30"
                                 EmptyText="Empty Date"
                                 Width="150"
-                                Margins="5 15 0 5"
+                                MarginSpec="5 15 0 5"
                                 Disabled="true">
 
                                 <DirectEvents>
@@ -93,9 +92,9 @@
                                     </Select>
                                 </DirectEvents>
 
-                                <Listeners>
+                                <%--<Listeners>
                                     <Select Fn="clearFilter" />
-                                </Listeners>
+                                </Listeners>--%>
                             </ext:DateField>
 
                             <ext:ComboBox
@@ -108,7 +107,7 @@
                                 LabelSeparator=":"
                                 LabelWidth="40"
                                 Width="200"
-                                Margins="5 105 0 5"
+                                MarginSpec="5 325 0 5"
                                 Disabled="true"
                                 Editable="false">
                                 <Items>
@@ -127,9 +126,9 @@
                                     </Select>
                                 </DirectEvents>
 
-                                <Listeners>
+                                <%--<Listeners>
                                     <BeforeSelect Fn="clearFilter" />
-                                </Listeners>
+                                </Listeners>--%>
                             </ext:ComboBox>
 
                             <ext:Button
@@ -197,8 +196,8 @@
             <ext:GridPanel
                 ID="MonthlyReportsGrids"
                 runat="server"
-                Width="740"
-                Height="710"
+                MaxWidth="955"
+                MinHeight="500"
                 AutoScroll="true"
                 Scroll="Both"
                 Layout="FitLayout">
@@ -211,43 +210,27 @@
                         PageSize="25"
                         OnSubmitData="MonthlyReportsStore_SubmitData">
                         <Model>
-                            <ext:Model ID="MonthlyReportsModel" runat="server" IDProperty="SipAccount">
+                            <ext:Model ID="MonthlyReportsModel" runat="server" IDProperty="ChargingParty">
                                 <Fields>
-                                    <ext:ModelField Name="EmployeeID" Type="String" SortType="AsText" />
-                                    <ext:ModelField Name="FullName" Type="String" SortType="AsText" />
+                                    <%--<ext:ModelField Name="User.Id" Type="Object" SortType="AsText" />
+                                    <ext:ModelField Name="User.DisplayName" Type="Object" SortType="AsText" />--%>
                                     <ext:ModelField Name="SipAccount" Type="String" SortType="AsText" />
-                                    <ext:ModelField Name="PersonalCallsCost" Type="String" />
-                                    <ext:ModelField Name="BusinessCallsCost" Type="String" />
-                                    <ext:ModelField Name="UnmarkedCallsCost" Type="String" />
+                                    <ext:ModelField Name="PersonalCallsCost" Type="Float" />
+                                    <ext:ModelField Name="BusinessCallsCost" Type="Float" />
+                                    <ext:ModelField Name="UnmarkedCallsCost" Type="Float" />
                                 </Fields>
                             </ext:Model>
                         </Model>
+
                         <Sorters>
-                            <ext:DataSorter Property="SipAccount" Direction="ASC" />
+                            <ext:DataSorter Property="ChargingParty" Direction="ASC" />
                         </Sorters>
                     </ext:Store>
                 </Store>
 
                 <ColumnModel ID="MonthlyReportsColumnModel" runat="server" Flex="1">
                     <Columns>
-                        <ext:Column
-                            ID="EmployeeIDCol"
-                            runat="server"
-                            Text="Employee ID"
-                            Width="100"
-                            DataIndex="EmployeeID"
-                            Sortable="true">
-                            <HeaderItems>
-                                <ext:TextField ID="EmployeeIDFilter" runat="server" Icon="Magnifier">
-                                    <Listeners>
-                                        <Change Handler="applyFilter(this);" Buffer="250" />
-                                    </Listeners>
-                                    <Plugins>
-                                        <ext:ClearButton ID="ClearEmployeeIDFilterButton" runat="server" />
-                                    </Plugins>
-                                </ext:TextField>
-                            </HeaderItems>
-                        </ext:Column>
+                        
 
                         <ext:Column
                             ID="SipAccountCol"
@@ -256,7 +239,7 @@
                             Width="160"
                             DataIndex="SipAccount"
                             Sortable="true">
-                            <HeaderItems>
+                            <%--<HeaderItems>
                                 <ext:TextField ID="SipAccountFilter" runat="server" Icon="Magnifier">
                                     <Listeners>
                                         <Change Handler="applyFilter(this);" Buffer="250" />
@@ -265,27 +248,9 @@
                                         <ext:ClearButton ID="ClearSipAccountFilterButton" runat="server" />
                                     </Plugins>
                                 </ext:TextField>
-                            </HeaderItems>
+                            </HeaderItems>--%>
                         </ext:Column>
 
-                        <ext:Column
-                            ID="FullNameCol"
-                            runat="server"
-                            Text="Full Name"
-                            Width="190"
-                            DataIndex="FullName"
-                            Sortable="true">
-                            <HeaderItems>
-                                <ext:TextField ID="FullNameFilter" runat="server" Icon="Magnifier">
-                                    <Listeners>
-                                        <Change Handler="applyFilter(this);" Buffer="250" />
-                                    </Listeners>
-                                    <Plugins>
-                                        <ext:ClearButton ID="ClearFullNameFilterButton" runat="server" />
-                                    </Plugins>
-                                </ext:TextField>
-                            </HeaderItems>
-                        </ext:Column>
 
                         <ext:Column
                             ID="GrouopedCostsColumnsCol"
@@ -303,7 +268,6 @@
                                     Width="85"
                                     DataIndex="PersonalCallsCost"
                                     MenuDisabled="true">
-                                    <Renderer Fn="RoundCostsToTwoDecimalDigits" />
                                 </ext:Column>
 
                                 <ext:Column
@@ -313,7 +277,6 @@
                                     Width="85"
                                     DataIndex="BusinessCallsCost"
                                     MenuDisabled="true">
-                                    <Renderer Fn="RoundCostsToTwoDecimalDigits" />
                                 </ext:Column>
 
                                 <ext:Column
@@ -323,7 +286,6 @@
                                     Width="85"
                                     DataIndex="UnmarkedCallsCost"
                                     MenuDisabled="true">
-                                    <Renderer Fn="RoundCostsToTwoDecimalDigits" />
                                 </ext:Column>
                             </Columns>
                         </ext:Column>
@@ -344,7 +306,7 @@
                     <ext:PagingToolbar
                         ID="MonthlyReportsPagingToolbar"
                         runat="server"
-                        StoreID="PhoneCallStore"
+                        StoreID="MonthlyReportsStore"
                         DisplayInfo="true"
                         Weight="25"
                         DisplayMsg="Users {0} - {1} of {2}" />
@@ -354,6 +316,7 @@
         </div>
     </div>
 </asp:Content>
+
 
 <asp:Content ID="EndOfBodyScripts" ContentPlaceHolderID="EndOfBodyScripts" runat="server">
 </asp:Content>

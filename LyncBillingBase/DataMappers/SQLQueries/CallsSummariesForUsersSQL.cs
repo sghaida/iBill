@@ -13,8 +13,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
         /// <param name="endingDate"></param>
         /// <param name="dbTables"></param>
         /// <returns></returns>
-        public string GetCallsSummariesForUser(string userSipAccount, string startingDate, string endingDate,
-            List<string> dbTables)
+        public string GetCallsSummariesForUser(string userSipAccount, string startingDate, string endingDate, List<string> dbTables)
         {
             var sqlQuery = string.Empty;
             var selectPart = string.Empty;
@@ -38,7 +37,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                     "CAST(SUM(CASE WHEN [UI_CallType] IS NULL THEN [Duration] END) AS BIGINT) AS [UnmarkedCallsDuration], " +
                     "CAST(COUNT (CASE WHEN [UI_CallType] IS NULL THEN 1 END) AS BIGINT) AS [UnmarkedCallsCount], " +
                     "SUM(CASE WHEN [UI_CallType] IS NULL THEN [Marker_CallCost] END) AS [UnmarkedCallsCost], " +
-                    "NULL as [AC_IsInvoiced]");
+                    "[AC_IsInvoiced] as [AC_IsInvoiced]");
 
                 //
                 // Start the FROM_PART
@@ -108,20 +107,20 @@ namespace LyncBillingBase.DataMappers.SQLQueries
             {
                 selectPart = String.Format(
                     "SELECT TOP 100 PERCENT " +
-                    "YEAR(ResponseTime) AS [Year], " +
-                    "MONTH(ResponseTime) AS [Month], " +
-                    "(CAST(CAST(YEAR(ResponseTime) AS varchar) + '/' + CAST(MONTH(ResponseTime) AS varchar) + '/' +CAST(1 AS VARCHAR) AS DATETIME)) AS Date, " +
-                    "[ChargingParty] AS [ChargingParty], " +
-                    "NULL as [AC_IsInvoiced], " +
-                    "CAST(SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Duration] END) AS BIGINT) AS [BusinessCallsDuration], " +
-                    "CAST(COUNT(CASE WHEN [UI_CallType] = 'Business' THEN 1 END) AS BIGINT) AS [BusinessCallsCount], " +
-                    "SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Marker_CallCost] END) AS [BusinessCallsCost], " +
-                    "CAST(SUM(CASE WHEN [UI_CallType] = 'Personal' THEN [Duration] END) AS BIGINT) AS [PersonalCallsDuration], " +
-                    "CAST(COUNT(CASE WHEN [UI_CallType] = 'Personal' THEN 1 END) AS BIGINT) AS [PersonalCallsCount], " +
-                    "SUM(CASE WHEN [UI_CallType] = 'Personal' THEN [Marker_CallCost] END) AS [PersonalCallsCost], " +
-                    "CAST(SUM(CASE WHEN [UI_CallType] IS NULL THEN [Duration] END) AS BIGINT) AS [UnmarkedCallsDuration], " +
-                    "CAST(COUNT (CASE WHEN [UI_CallType] IS NULL THEN 1 END) AS BIGINT) AS [UnmarkedCallsCount], " +
-                    "SUM(CASE WHEN [UI_CallType] IS NULL THEN [Marker_CallCost] END) AS [UnmarkedCallsCost] ");
+                        "YEAR(ResponseTime) AS [Year], " +
+                        "MONTH(ResponseTime) AS [Month], " +
+                        "(CAST(CAST(YEAR(ResponseTime) AS varchar) + '/' + CAST(MONTH(ResponseTime) AS varchar) + '/' +CAST(1 AS VARCHAR) AS DATETIME)) AS Date, " +
+                        "[ChargingParty] AS [ChargingParty], " +
+                        "[AC_IsInvoiced] as [AC_IsInvoiced], " +
+                        "CAST(SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Duration] END) AS BIGINT) AS [BusinessCallsDuration], " +
+                        "CAST(COUNT(CASE WHEN [UI_CallType] = 'Business' THEN 1 END) AS BIGINT) AS [BusinessCallsCount], " +
+                        "SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Marker_CallCost] END) AS [BusinessCallsCost], " +
+                        "CAST(SUM(CASE WHEN [UI_CallType] = 'Personal' THEN [Duration] END) AS BIGINT) AS [PersonalCallsDuration], " +
+                        "CAST(COUNT(CASE WHEN [UI_CallType] = 'Personal' THEN 1 END) AS BIGINT) AS [PersonalCallsCount], " +
+                        "SUM(CASE WHEN [UI_CallType] = 'Personal' THEN [Marker_CallCost] END) AS [PersonalCallsCost], " +
+                        "CAST(SUM(CASE WHEN [UI_CallType] IS NULL THEN [Duration] END) AS BIGINT) AS [UnmarkedCallsDuration], " +
+                        "CAST(COUNT (CASE WHEN [UI_CallType] IS NULL THEN 1 END) AS BIGINT) AS [UnmarkedCallsCount], " +
+                        "SUM(CASE WHEN [UI_CallType] IS NULL THEN [Marker_CallCost] END) AS [UnmarkedCallsCost] ");
 
                 //
                 // Start the FROM_PART
@@ -144,10 +143,10 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                             "( " +
                                 "SELECT [Gateway] " +
                                 "FROM [GatewaysDetails] " +
-                                "LEFT JOIN [Gateways] ON [Gateways].[GatewayId] = [GatewaysDetails].[GatewayID] " +
-                                "LEFT JOIN [Sites] ON [Sites].[SiteID] = [GatewaysDetails].[SiteID] " +
+                                    "LEFT JOIN [Gateways] ON [Gateways].[GatewayId] = [GatewaysDetails].[GatewayID] " +
+                                    "LEFT JOIN [Sites] ON [Sites].[SiteID] = [GatewaysDetails].[SiteID] " +
                                 "WHERE " +
-                                "[SiteName]='{4}' " +
+                                    "[SiteName]='{4}' " +
                             ") "
                         , fromPart
                         , tableName
