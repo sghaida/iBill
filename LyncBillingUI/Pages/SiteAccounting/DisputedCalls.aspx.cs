@@ -39,9 +39,10 @@ namespace LyncBillingUI.Pages.SiteAccounting
             else
             {
                 CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
+
                 if (CurrentSession.ActiveRoleName != Functions.SiteAccountantRoleName)
                 {
-                    string url = String.Format(@"{0}/Authorize?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
+                    string url = String.Format(@"{0}/Authorize?access={1}", Global.APPLICATION_URL, Functions.SiteAccountantRoleName);
                     Response.Redirect(url);
                 }
             }

@@ -42,9 +42,10 @@ namespace LyncBillingUI.Pages.SiteAccounting
             else
             {
                 CurrentSession = ((UserSession)HttpContext.Current.Session.Contents["UserData"]);
+
                 if (CurrentSession.ActiveRoleName != Functions.SiteAccountantRoleName)
                 {
-                    string url = String.Format(@"{0}/Authorize?access={1}", Global.APPLICATION_URL, CurrentSession.ActiveRoleName);
+                    string url = String.Format(@"{0}/Authorize?access={1}", Global.APPLICATION_URL, Functions.SiteAccountantRoleName);
                     Response.Redirect(url);
                 }
             }
@@ -74,9 +75,13 @@ namespace LyncBillingUI.Pages.SiteAccounting
             DateTime beginningOfTheMonth = new DateTime(date.Year, date.Month, 1);
             DateTime endOfTheMonth = beginningOfTheMonth.AddMonths(1).AddDays(-1);
 
-            listOfUsersCallsSummary = Global.DATABASE.UsersCallsSummaries.GetBySite(site.Name, beginningOfTheMonth, endOfTheMonth, CCC.ORM.Globals.CallsSummaryForUser.GroupBy.UserOnly)
-                                        .Where(e => e.PersonalCallsCost > 0 || e.BusinessCallsCost > 0 || e.UnallocatedCallsCost > 0)
-                                        .ToList();
+            listOfUsersCallsSummary = Global.DATABASE.UsersCallsSummaries.GetBySite(
+                    site.Name, 
+                    beginningOfTheMonth, 
+                    endOfTheMonth, 
+                    CCC.ORM.Globals.CallsSummaryForUser.GroupBy.UserAndInvoiceFlag)
+                .Where(e => e.PersonalCallsCost > 0 || e.BusinessCallsCost > 0 || e.UnallocatedCallsCost > 0)
+                .ToList();
 
             return listOfUsersCallsSummary;
         }
@@ -98,7 +103,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
             callsType = Convert.ToInt32(CallsTypesComboBox.SelectedItem.Value);
 
             if (callsType == 1)
-                gridData = listOfUsersCallsSummary.Where(summary => summary.IsInvoiced == "NO").ToList();
+                gridData = listOfUsersCallsSummary.Where(summary => string.IsNullOrEmpty(summary.IsInvoiced) || summary.IsInvoiced == "NO").ToList();
             else if (callsType == 2)
                 gridData = listOfUsersCallsSummary.Where(summary => summary.IsInvoiced == "N/A").ToList();
             else if (callsType == 3)

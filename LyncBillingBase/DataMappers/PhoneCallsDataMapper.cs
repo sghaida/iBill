@@ -13,8 +13,9 @@ namespace LyncBillingBase.DataMappers
 {
     public class PhoneCallsDataMapper : DataAccess<PhoneCall>
     {
-        private readonly SitesDataMapper _sitesDataMapper = new SitesDataMapper();
-        private readonly MonitoringServersDataMapper _monitoringServersInfoDataMapper = new MonitoringServersDataMapper();
+        private static readonly SitesDataMapper _sitesDataMapper = new SitesDataMapper();
+        private static readonly DataSourceSchema<PhoneCall> _tableSchema = new DataSourceSchema<PhoneCall>();
+        private static readonly MonitoringServersDataMapper _monitoringServersInfoDataMapper = new MonitoringServersDataMapper();
 
         //
         // The list of phone calls tables
