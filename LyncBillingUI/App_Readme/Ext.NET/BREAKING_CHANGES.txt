@@ -1,4 +1,67 @@
 ﻿**************************************************************************
+*                      3.1.0 BREAKING CHANGES                            *
+**************************************************************************
+
+Release Date     : 2015-02-17
+Current Version  : 3.1.0
+Previous Release : 3.0.0
+
+If you find any new breaking changes, please report in the Ext.NET Community
+forums: http://forums.ext.net.
+
+The [EXTJS] or [EXTNET] tag indicates origin framework of the Breaking Change.
+
+For [EXTJS] related changes, Ext JS 5 Upgrade Guide and Docs should be reviewed:
+http://docs-origin.sencha.com/extjs/5.1/whats_new/5.1.0/extjs_upgrade_guide.html
+http://docs.sencha.com/extjs/5.1/5.1.0-apidocs/#!/api
+
+1.  [EXTJS] The AbstractDataView's LoadMask property bool type has been
+    changed to bool?. The TreeView's LoadMask property override has been
+    removed.
+
+2.  [EXTNET] The RowExpander's "rowexpander" PType (the plugin alias in 
+    Javascript)  has been renamed to "netrowexpander". The "Ext.ux.RowExpander" 
+    InstaceOf (the name of JavaScript class) has been renamed to 
+    "Ext.net.RowExpander". This breaking change is only relevant if you use 
+    a RowExpander in JavaScript directly. If you use the server RowExpander 
+    class, you don't need to change anything.
+
+3.  [EXTJS] The DesktopStartMenu inherits the Menu class now, not Panel.
+
+4.  [EXTJS] The EnableKeyNav property of CellSelectionModel, RowSelectionModel,
+    DataView classes has been removed. Keyboard navigation is a function of the 
+    view's navigation model, and is enabled for accessibilty purposes. There is
+    a related discussion in the forums with a possible solution.
+    http://forums.ext.net/showthread.php?51901
+
+5.  [EXTJS] The MenuBase's EnableKeyNav property has been removed. Intra-menu 
+    key navigation is always enabled.
+
+6.  [EXTNET] The BoxLayoutConfig's Animate and AnimateDuration properties 
+    have been removed. These properties are not supported even in Ext.NET 
+    v2.x and have been somehow left by mistake. So, they didn't produce any 
+    effect anyways and should removed earlier.
+
+7.  [EXTNET] The type of a GridView's StripeRows property has been changed
+    to bool? from bool. It should be always rendered to client, because Crisp
+    themes change the default value to true.
+
+8.  [EXTNET] The Column's "grid" client side reference has been renamed to
+    "gridRef".
+
+9.  [EXTJS] Selecting a GridPanel's row programmatically doesn't focus that
+    row and doesn't scroll to that row automatically. Previously, it did. 
+    Here is a related discussion in the Ext.NET Community forums.
+    http://forums.ext.net/showthread.php?53111
+
+10. [EXTNET] The GridView's StripeRows property has been moved to the 
+    TableView class.
+
+11. [EXTNET] The Toolbar's OverFlowChange event has been renamed to
+    OverflowChange (lowercase "f").
+
+
+**************************************************************************
 *                      3.0.0 BREAKING CHANGES                            *
 **************************************************************************
 
@@ -239,7 +302,9 @@ http://docs.sencha.com/extjs/5.0/whats_new/5.0/extjs_upgrade_guide.html
 33. [EXTJS] The Draw package has been heavily reworked in ExtJS 5, 
     which has led to breaking changes. 
     
-    For example, the DrawComponent has been renamed to DrawContainer.
+    For example, the DrawComponent has been renamed to DrawContainer. 
+    The DrawText class has been removed. A possilbe alternative could be 
+    using a DrawContainer with a TextSprite inside.
 
     Unfortunately, we don't have a thorough guide demonstrating how to upgrade
     to the new Draw API. We suggest to review the ExtJS Draw guide and review 
@@ -261,3 +326,8 @@ http://docs.sencha.com/extjs/5.0/whats_new/5.0/extjs_upgrade_guide.html
 35. [EXTJS] Now a TreeStore's .getById() call returns null if pass a root's id 
     and RootVisible is false. It is better to use .getNodeById() to retrieve 
     nodes.
+
+36. [EXTJS] The ModelField's UseNull property has been renamed to AllowNull.
+
+37. [EXTJS] THe GroupTabPanel doesn't work currently. It should be fixed in
+    one of the next releases.

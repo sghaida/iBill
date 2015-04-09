@@ -197,6 +197,212 @@ namespace LyncBillingBase.DataMappers.SQLQueries
             return sqlStatment;
         }
 
+
+        public string SP_InvoiceAllocatedChargeableCallsForSite(List<string> _dbTables, string siteName, string startingDate, string endingDate, string invoicingDate)
+        {
+            string sqlStatment = string.Empty;
+
+            //
+            // BEGIN TRANSACTION
+            sqlStatment += "BEGIN TRANSACTION; ";
+
+            var index = 0;
+            foreach (var tableName in _dbTables)
+            {
+                sqlStatment += String.Format
+                    (
+                        "UPDATE {0} " +
+                        "SET " + 
+		                    "ac_IsInvoiced='YES', " +
+		                    "ac_InvoiceDate='{1}' " +
+                        "WHERE " + 
+                            "[ac_IsInvoiced] = 'NO' AND " + 
+		                    "[ui_CallType] IS NOT NULL AND " + 
+		                    "[SessionIdTime] BETWEEN '{2}' AND '{3}' AND " + 
+		                    "[marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
+		                    "[Exclude] = 0 AND " + 
+		                    "([ac_DisputeStatus] = 'Rejected' OR [ac_DisputeStatus] IS NULL) AND " + 
+		                    "[ToGateway] IS NOT NULL AND " + 
+                            "[ChargingParty] IN " + 
+		                    "( " + 
+			                    "SELECT " + 
+				                    "[ADUsers].[SipAccount] " +
+			                    "FROM " + 
+				                    "[ActiveDirectoryUsers] as [ADUsers], " + 
+				                    "Gateways as [Gw] " + 
+			                    "WHERE " + 
+				                    "[ADUsers].[AD_PhysicalDeliveryOfficeName] = '{4}' AND  " + 
+				                    "[Gw].[GatewayId] in " + 
+				                    "( " + 
+					                    "SELECT " + 
+						                    "[Gw].[GatewayId] " + 
+					                    "FROM " + 
+						                    "Gateways " + 
+						                    "INNER JOIN Sites on Sites.SiteName = [ADUsers].[AD_PhysicalDeliveryOfficeName] " + 
+						                    "INNER JOIN GatewaysDetails on [GatewaysDetails].[GatewayID] = [Gateways].[GatewayId] " + 
+					                    "WHERE " + 
+						                    "Sites.SiteName = '{4}' " + 
+				                    ") " + 
+		                    "); "
+
+                        , tableName
+                        , invoicingDate
+                        , startingDate
+                        , endingDate
+                        , siteName
+                    );
+
+                if (index < (_dbTables.Count() - 1))
+                {
+                    index++;
+                }
+            }
+
+            //
+            // COMMIT TRANSACTION
+            sqlStatment += "COMMIT TRANSACTION;";
+
+            return sqlStatment;
+        }
+
+
+        public string SP_InvoiceUnallocatedChargeableCallsForSite(List<string> _dbTables, string siteName, string startingDate, string endingDate, string invoicingDate)
+        {
+            string sqlStatment = string.Empty;
+
+            //
+            // BEGIN TRANSACTION
+            sqlStatment += "BEGIN TRANSACTION; ";
+
+            var index = 0;
+            foreach (var tableName in _dbTables)
+            {
+                sqlStatment += String.Format
+                    (
+                        "UPDATE {0} " +
+                        "SET " +
+                            "ac_IsInvoiced='YES', " +
+                            "ac_InvoiceDate='{1}' " +
+		                    "ui_CallType='Personal', " + 
+		                    "ui_MarkedOn='{1}', " + 
+		                    "ui_UpdatedByUser='LogParser@ccc.gr' " + 
+                        "WHERE " +
+                            "[ac_IsInvoiced] = 'N/A' AND " +
+                            "[SessionIdTime] BETWEEN '{2}' AND '{3}' AND " +
+                            "[marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
+                            "[Exclude] = 0 AND " +
+                            "([ac_DisputeStatus] = 'Rejected' OR [ac_DisputeStatus] IS NULL) AND " +
+                            "[ToGateway] IS NOT NULL AND " +
+                            "[ChargingParty] IN " +
+                            "( " +
+                                "SELECT " +
+                                    "[ADUsers].[SipAccount] " +
+                                "FROM " +
+                                    "[ActiveDirectoryUsers] as [ADUsers], " +
+                                    "Gateways as [Gw] " +
+                                "WHERE " +
+                                    "[ADUsers].[AD_PhysicalDeliveryOfficeName] = '{4}' AND  " +
+                                    "[Gw].[GatewayId] in " +
+                                    "( " +
+                                        "SELECT " +
+                                            "[Gw].[GatewayId] " +
+                                        "FROM " +
+                                            "Gateways " +
+                                            "INNER JOIN Sites on Sites.SiteName = [ADUsers].[AD_PhysicalDeliveryOfficeName] " +
+                                            "INNER JOIN GatewaysDetails on [GatewaysDetails].[GatewayID] = [Gateways].[GatewayId] " +
+                                        "WHERE " +
+                                            "Sites.SiteName = '{4}' " +
+                                    ") " +
+                            "); "
+
+                        , tableName
+                        , invoicingDate
+                        , startingDate
+                        , endingDate
+                        , siteName
+                    );
+
+                if (index < (_dbTables.Count() - 1))
+                {
+                    index++;
+                }
+            }
+
+            //
+            // COMMIT TRANSACTION
+            sqlStatment += "COMMIT TRANSACTION;";
+
+            return sqlStatment;
+        }
+
+
+        public string SP_MarkUnallocatedCallsAsPendingForSite(List<string> _dbTables, string siteName, string startingDate, string endingDate, string invoicingDate)
+        {
+            string sqlStatment = string.Empty;
+
+            //
+            // BEGIN TRANSACTION
+            sqlStatment += "BEGIN TRANSACTION; ";
+
+            var index = 0;
+            foreach (var tableName in _dbTables)
+            {
+                sqlStatment += String.Format
+                    (
+                        "UPDATE {0} " +
+                        "SET " +
+                            "ac_IsInvoiced='N/A', " + 
+                            "ac_InvoiceDate='{1}' " +
+                        "WHERE " +
+                            "[ac_IsInvoiced] = 'NO' AND " + 
+		                    "[ui_CallType] IS NULL AND " +
+                            "[SessionIdTime] BETWEEN '{2}' AND '{3}' AND " +
+                            "[marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
+                            "[Exclude] = 0 AND " +
+                            "([ac_DisputeStatus] = 'Rejected' OR [ac_DisputeStatus] IS NULL) AND " +
+                            "[ToGateway] IS NOT NULL AND " +
+                            "[ChargingParty] IN " +
+                            "( " +
+                                "SELECT " +
+                                    "[ADUsers].[SipAccount] " +
+                                "FROM " +
+                                    "[ActiveDirectoryUsers] as [ADUsers], " +
+                                    "Gateways as [Gw] " +
+                                "WHERE " +
+                                    "[ADUsers].[AD_PhysicalDeliveryOfficeName] = '{4}' AND  " +
+                                    "[Gw].[GatewayId] in " +
+                                    "( " +
+                                        "SELECT " +
+                                            "[Gw].[GatewayId] " +
+                                        "FROM " +
+                                            "Gateways " +
+                                            "INNER JOIN Sites on Sites.SiteName = [ADUsers].[AD_PhysicalDeliveryOfficeName] " +
+                                            "INNER JOIN GatewaysDetails on [GatewaysDetails].[GatewayID] = [Gateways].[GatewayId] " +
+                                        "WHERE " +
+                                            "Sites.SiteName = '{4}' " +
+                                    ") " +
+                            "); "
+
+                        , tableName
+                        , invoicingDate
+                        , startingDate
+                        , endingDate
+                        , siteName
+                    );
+
+                if (index < (_dbTables.Count() - 1))
+                {
+                    index++;
+                }
+            }
+
+            //
+            // COMMIT TRANSACTION
+            sqlStatment += "COMMIT TRANSACTION;";
+
+            return sqlStatment;
+        }
+
     }
 
 }

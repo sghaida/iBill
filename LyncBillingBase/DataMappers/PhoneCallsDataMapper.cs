@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using CCC.ORM;
 using CCC.ORM.DataAccess;
+using CCC.UTILS.Helpers;
+
 using LyncBillingBase.DataMappers.SQLQueries;
 using LyncBillingBase.DataModels;
 
@@ -10,22 +13,22 @@ namespace LyncBillingBase.DataMappers
 {
     public class PhoneCallsDataMapper : DataAccess<PhoneCall>
     {
-        /***
-         * Get the phone calls tables list from the MonitoringServersInfo table
-         */
-        private readonly DataAccess<MonitoringServerInfo> _monitoringServersInfoDataMapper = new DataAccess<MonitoringServerInfo>();
+        private static readonly SitesDataMapper _sitesDataMapper = new SitesDataMapper();
+        private static readonly DataSourceSchema<PhoneCall> _tableSchema = new DataSourceSchema<PhoneCall>();
+        private static readonly MonitoringServersDataMapper _monitoringServersInfoDataMapper = new MonitoringServersDataMapper();
 
-        /***
-         * The list of phone calls tables
-         */
+        //
+        // The list of phone calls tables
         private readonly List<string> _dbTables = new List<string>();
 
-        /**
-         * The SQL Queries Generator
-         */
+        //
+        // The SQL Queries Generator
         private readonly PhoneCallsSql _phonecallsSqlQueries = new PhoneCallsSql();
 
-        
+
+        /// <summary>
+        /// CONSTRUCTOR
+        /// </summary>
         public PhoneCallsDataMapper()
         {
             _dbTables = _monitoringServersInfoDataMapper.GetAll().Select(item => item.PhoneCallsTable).ToList();
@@ -117,6 +120,92 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
+
+        /// <summary>
+        /// Charge the phone calls that were allocated by users as "Business/Personal" for a specific site in a specific period of time
+        /// </summary>
+        /// <param name="siteID"></param>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        public void ChargeAllocatedPhoneCallsOfSite(int siteID, DateTime fromDate, DateTime toDate)
+        {
+            Site selectedSite = _sitesDataMapper.GetById(siteID);
+            DateTime invoiceDate = DateTime.Now;
+
+            string sqlStatement = _phonecallsSqlQueries.SP_InvoiceAllocatedChargeableCallsForSite(
+                _dbTables,
+                selectedSite.Name,
+                fromDate.ConvertDate(excludeHoursAndMinutes: true),
+                toDate.ConvertDate(excludeHoursAndMinutes: true),
+                invoiceDate.ConvertDate(excludeHoursAndMinutes: true));
+
+            try
+            {
+                base.Update(sqlStatement);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        /// <summary>
+        /// Charge the suers' unallocated phone calls for a specific site in a specific period of time
+        /// </summary>
+        /// <param name="siteID"></param>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        public void ChargeUnallocatedPhoneCallsOfSite(int siteID, DateTime fromDate, DateTime toDate)
+        {
+            Site selectedSite = _sitesDataMapper.GetById(siteID);
+            DateTime invoiceDate = DateTime.Now;
+
+            string sqlStatement = _phonecallsSqlQueries.SP_InvoiceUnallocatedChargeableCallsForSite(
+                _dbTables,
+                selectedSite.Name,
+                fromDate.ConvertDate(excludeHoursAndMinutes: true),
+                toDate.ConvertDate(excludeHoursAndMinutes: true),
+                invoiceDate.ConvertDate(excludeHoursAndMinutes: true));
+
+            try
+            {
+                base.Update(sqlStatement);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        /// <summary>
+        /// Mark the unallocated users phone calls as pending charges.
+        /// </summary>
+        /// <param name="siteID"></param>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        public void MarkUnallocatedPhoneCallsAsPending(int siteID, DateTime fromDate, DateTime toDate)
+        {
+            Site selectedSite = _sitesDataMapper.GetById(siteID);
+            DateTime invoiceDate = DateTime.Now;
+
+            string sqlStatement = _phonecallsSqlQueries.SP_MarkUnallocatedCallsAsPendingForSite(
+                _dbTables,
+                selectedSite.Name,
+                fromDate.ConvertDate(excludeHoursAndMinutes: true),
+                toDate.ConvertDate(excludeHoursAndMinutes: true),
+                invoiceDate.ConvertDate(excludeHoursAndMinutes: true));
+
+            try
+            {
+                base.Update(sqlStatement);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
         public override PhoneCall GetById(long id, string dataSourceName = null, Globals.DataSource.Type dataSource = Globals.DataSource.Type.Default)

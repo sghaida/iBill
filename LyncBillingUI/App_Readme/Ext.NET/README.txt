@@ -1,6 +1,6 @@
 ﻿Product          : Ext.NET
-Release Date     : 2014-12-17
-Current Version  : 3.0.0
+Release Date     : 2015-02-17
+Current Version  : 3.1.0
 
 
 --------------------------------------------------------------------------
@@ -12,18 +12,19 @@ II.  INSTALLATION INSTRUCTIONS
 III. REVISIONS + BREAKING CHANGES
 IV.  SAMPLE WEB.CONFIG
 V.   <extnet> WEB.CONFIG GLOBAL CONFIGURATION PROPERTIES
-VI.  CREDITS
+VI.  MVC Installation Tips
+VII. CREDITS
 
 
 --------------------------------------------------------------------------
 I. SYSTEM REQUIREMENTS
 --------------------------------------------------------------------------
 
-1. Visual Studio 2010, 2012 or 2013, or
-2. Visual Studio Express 2010, 2012 or 2013
-3. .NET Framework 3.5, 4.0*, 4.5 and 4.5.1
+1. Visual Studio 2010*, 2012 or 2013, or
+2. Visual Studio Express 2010*, 2012 or 2013
+3. .NET Framework 4.0, 4.5 and 4.5.1
 
-* minimum required for Ext.NET MVC
+* Visual Studio 2012 (or higher) required for Examples Explorer projects
 
 --------------------------------------------------------------------------
 II. INSTALLATION INSTRUCTIONS
@@ -67,18 +68,28 @@ IV. SAMPLE WEB.CONFIG
       <extnet theme="Crisp" licenseKey="** Ext.NET LICENSE KEY HERE **" initScriptMode="Linked" />
   
       <system.web>
-        <httpHandlers>
+		<!-- This httpHandlers config only required if using IIS6 (or lower) -->
+        <!--
+		<httpHandlers>
           <add path="*/ext.axd" verb="*" type="Ext.Net.ResourceHandler" validate="false" />
         </httpHandlers>
+		-->
 
-        <httpModules>
+		<!-- This httpModules config only required if using IIS6 (or lower) -->
+        <!--
+		<httpModules>
           <add name="DirectRequestModule" type="Ext.Net.DirectRequestModule, Ext.Net" />
         </httpModules>
+		-->
 
         <pages>
           <controls>
             <add assembly="Ext.Net" namespace="Ext.Net" tagPrefix="ext" />
           </controls>
+          <namespaces>
+            <add namespace="Ext.Net"/>
+			<!--<add namespace="Ext.Net.MVC"/>-->
+          </namespaces>          
         </pages>
       </system.web>
 
@@ -106,15 +117,11 @@ IV. SAMPLE WEB.CONFIG
 		  </dependentAssembly>
 		  <dependentAssembly>
 			<assemblyIdentity name="Transformer.NET" publicKeyToken="e274d618e7c603a7" />
-			<bindingRedirect oldVersion="0.0.0.0-2.1.0" newVersion="2.1.1" />
+			<bindingRedirect oldVersion="0.0.0.0-2.1.1" newVersion="2.1.1" />
 		  </dependentAssembly>
-      
+
 		  <!--MVC 4-->
 		  <!--
-		  <dependentAssembly>
-			<assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
-			<bindingRedirect oldVersion="1.0.0.0-5.0.0.0" newVersion="4.0.0.0" />
-		  </dependentAssembly>
 		  <dependentAssembly>
 			<assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
 			<bindingRedirect oldVersion="1.0.0.0-2.0.0.0" newVersion="2.0.0.0" />
@@ -122,6 +129,10 @@ IV. SAMPLE WEB.CONFIG
 		  <dependentAssembly>
 			<assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
 			<bindingRedirect oldVersion="1.0.0.0-2.0.0.0" newVersion="2.0.0.0" />
+		  </dependentAssembly>
+		  <dependentAssembly>
+			<assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+			<bindingRedirect oldVersion="0.0.0.0-5.0.0.1" newVersion="4.0.0.1" />
 		  </dependentAssembly>
 		  -->
 
@@ -142,7 +153,7 @@ IV. SAMPLE WEB.CONFIG
 		  -->
 		</assemblyBinding>
 	  </runtime>
-    </configuration>
+      </configuration>
 
 
 --------------------------------------------------------------------------
@@ -200,7 +211,7 @@ V. <extnet> WEB.CONFIG GLOBAL CONFIGURATION PROPERTIES
         Default is 'Inline'. Options include [Inline|Linked]
 
     licenseKey : string
-        The Ext.NET Pro License key.
+        The Ext.NET License key.
 
     locale : string
         Specifies the language of the Ext.NET localization resources to use. For example, "en-GB", "fr-CA", "ru". 
@@ -282,7 +293,23 @@ V. <extnet> WEB.CONFIG GLOBAL CONFIGURATION PROPERTIES
 
 
 --------------------------------------------------------------------------
-VI. CREDITS
+VI. MVC Installation Tips
+--------------------------------------------------------------------------
+
+If manually installing Ext.NET MVC into your project, the following IgnoreRoute
+config is required.
+
+	public static void RegisterRoutes(RouteCollection routes)
+	{
+		// Ignore all ext.axd embedded resource paths
+		routes.IgnoreRoute("{extnet-root}/{extnet-file}/ext.axd");
+	}
+
+This IgnoreRoute is automatically inserted if using the NuGet package installer. 
+
+
+--------------------------------------------------------------------------
+VII. CREDITS
 --------------------------------------------------------------------------
 
 1.  FamFamFam Icons provided by Mark James 
@@ -299,7 +326,7 @@ VI. CREDITS
     See \Build\Resources\Ext\Licenses\FlagIcons.txt for more information.
 
 2.  Silk companion icon set #1 - "More Silk!" provided by Damien Guard
-    http://www.damieng.com/icons/silkcompanion
+    http://damieng.com/creative/icons/silk-companion-1-icons
 
     See \Build\Ext.Net\Licenses\SilkCompanionIcon.txt for more information.
 
@@ -308,7 +335,7 @@ VI. CREDITS
 
     See \Build\Ext.Net\Licenses\Newtonsoft.Json.txt
 
-4.  Ext JS JavaScript Library provided by Sencha, Inc.
+4.  Ext JS JavaScript Library with Commercial License provided by Sencha, Inc.
     http://www.sencha.com/products/js/   
 
     See \Build\Ext.Net\Licenses\ExtJS.txt
@@ -316,7 +343,7 @@ VI. CREDITS
 
 --------------------------------------------------------------------------
 
-        Copyright 2008-2014 Object.NET, Inc., All rights reserved.
+        Copyright 2008-2015 Object.NET, Inc., All rights reserved.
                   
                         Object.NET, Inc.
                         +1(888)775-5888
