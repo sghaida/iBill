@@ -393,9 +393,9 @@ namespace LyncBillingUI.Pages.SiteAccounting
                 case "xls":
                     this.Response.Clear();
                     this.Response.ContentType = "application/vnd.ms-excel";
-                    this.Response.AddHeader("Content-Disposition", "attachment; filename=submittedData.xls");
+                    this.Response.AddHeader("Content-Disposition", "attachment; filename=MonthlyReport_Summary.xls");
                     XslCompiledTransform xtExcel = new XslCompiledTransform();
-                    xtExcel.Load(Server.MapPath("~/Resources/Excel.xsl"));
+                    xtExcel.Load(Server.MapPath("~/Resources/excel.xsl"));
                     xtExcel.Transform(xml, null, Response.OutputStream);
 
                     break;
