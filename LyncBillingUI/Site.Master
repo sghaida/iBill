@@ -19,7 +19,7 @@
     <body>
         <form runat="server">
             <%--<ext:ResourceManager ID="ExtResourceManager" runat="server" Theme="Gray" />--%>
-            <ext:ResourceManager ID="ExtResourceManager" runat="server" />
+            <ext:ResourceManager ID="ExtResourceManager" runat="server" DirectMethodNamespace="ExtOperationsNamespace" />
 
             <asp:HiddenField ID="ThisPageReferrer" runat="server" Value="" />
 
@@ -106,7 +106,7 @@
                                                         <li class="divider"></li>
                                                         <li class="dropdown-header">Reports</li>
                                                         <li><a href="<%= global_asax.APPLICATION_URL %>/Site/Accounting/MonthlyReports">Monthly Reports</a></li>
-                                                        <li><a href="#">Periodical Reports</a></li>
+                                                        <li><a href="<%= global_asax.APPLICATION_URL %>/Site/Accounting/PeriodicalReports">Periodical Reports</a></li>
                                                     </ul>
                                                 </li>
                                             <% } %>

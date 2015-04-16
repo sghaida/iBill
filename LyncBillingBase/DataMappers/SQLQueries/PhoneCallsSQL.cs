@@ -213,15 +213,15 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                     (
                         "UPDATE {0} " +
                         "SET " + 
-		                    "ac_IsInvoiced='YES', " +
-		                    "ac_InvoiceDate='{1}' " +
+		                    "AC_IsInvoiced='YES', " +
+		                    "AC_InvoiceDate='{1}' " +
                         "WHERE " + 
-                            "[ac_IsInvoiced] = 'NO' AND " + 
-		                    "[ui_CallType] IS NOT NULL AND " + 
+                            "[AC_IsInvoiced] = 'NO' AND " + 
+		                    "[UI_CallType] IS NOT NULL AND " + 
 		                    "[SessionIdTime] BETWEEN '{2}' AND '{3}' AND " + 
-		                    "[marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
+		                    "[Marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
 		                    "[Exclude] = 0 AND " + 
-		                    "([ac_DisputeStatus] = 'Rejected' OR [ac_DisputeStatus] IS NULL) AND " + 
+		                    "([AC_DisputeStatus] = 'Rejected' OR [AC_DisputeStatus] IS NULL) AND " + 
 		                    "[ToGateway] IS NOT NULL AND " + 
                             "[ChargingParty] IN " + 
 		                    "( " + 
@@ -281,17 +281,17 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                     (
                         "UPDATE {0} " +
                         "SET " +
-                            "ac_IsInvoiced='YES', " +
-                            "ac_InvoiceDate='{1}' " +
-		                    "ui_CallType='Personal', " + 
-		                    "ui_MarkedOn='{1}', " + 
-		                    "ui_UpdatedByUser='LogParser@ccc.gr' " + 
+                            "AC_IsInvoiced='YES', " +
+                            "AC_InvoiceDate='{1}', " +
+		                    "UI_CallType='Personal', " + 
+		                    "UI_MarkedOn='{1}', " + 
+		                    "UI_UpdatedByUser='LogParser@ccc.gr' " + 
                         "WHERE " +
-                            "[ac_IsInvoiced] = 'N/A' AND " +
+                            "[AC_IsInvoiced] = 'N/A' AND " +
                             "[SessionIdTime] BETWEEN '{2}' AND '{3}' AND " +
-                            "[marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
+                            "[Marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
                             "[Exclude] = 0 AND " +
-                            "([ac_DisputeStatus] = 'Rejected' OR [ac_DisputeStatus] IS NULL) AND " +
+                            "([AC_DisputeStatus] = 'Rejected' OR [AC_DisputeStatus] IS NULL) AND " +
                             "[ToGateway] IS NOT NULL AND " +
                             "[ChargingParty] IN " +
                             "( " +
@@ -351,15 +351,15 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                     (
                         "UPDATE {0} " +
                         "SET " +
-                            "ac_IsInvoiced='N/A', " + 
-                            "ac_InvoiceDate='{1}' " +
+                            "AC_IsInvoiced='N/A', " + 
+                            "AC_InvoiceDate='{1}' " +
                         "WHERE " +
-                            "[ac_IsInvoiced] = 'NO' AND " + 
-		                    "[ui_CallType] IS NULL AND " +
+                            "[AC_IsInvoiced] = 'NO' AND " + 
+		                    "[UI_CallType] IS NULL AND " +
                             "[SessionIdTime] BETWEEN '{2}' AND '{3}' AND " +
-                            "[marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
+                            "[Marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
                             "[Exclude] = 0 AND " +
-                            "([ac_DisputeStatus] = 'Rejected' OR [ac_DisputeStatus] IS NULL) AND " +
+                            "([AC_DisputeStatus] = 'Rejected' OR [AC_DisputeStatus] IS NULL) AND " +
                             "[ToGateway] IS NOT NULL AND " +
                             "[ChargingParty] IN " +
                             "( " +
