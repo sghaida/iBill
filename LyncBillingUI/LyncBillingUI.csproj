@@ -152,6 +152,8 @@
     <Content Include="Pages\User\PhoneCallsHistory.aspx" />
     <Content Include="Pages\User\Statistics.aspx" />
     <Content Include="Pages\User\TelephonyRates.aspx" />
+    <Content Include="Resources\csv.xsl" />
+    <Content Include="Resources\excel.xsl" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\extjs-helpers.js" />
