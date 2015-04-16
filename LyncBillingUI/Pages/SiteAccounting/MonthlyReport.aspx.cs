@@ -21,7 +21,6 @@ namespace LyncBillingUI.Pages.SiteAccounting
     public partial class MonthlyReport : System.Web.UI.Page
     {
         private string sipAccount = string.Empty;
-
         private static List<Site> userSites;
         private List<CallsSummaryForUser> listOfUsersCallsSummary = new List<CallsSummaryForUser>();
 
@@ -213,7 +212,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
                             endingDate.ToString()));
                 }
             }
-        }
+        }//end-do-invoice
 
 
         protected void SitesStore_Load(object sender, EventArgs e)
@@ -290,7 +289,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
             {
                 Ok = new MessageBoxButtonConfig
                 {
-                    Handler = "InvoiceOperation.ConfirmDoInvoice()",
+                    Handler = "ExtOperationsNamespace.ConfirmDoInvoice()",
                     Text = "Yes!"
                 },
                 Cancel = new MessageBoxButtonConfig
@@ -318,7 +317,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
             startingDate = new DateTime(ReportDateField.SelectedDate.Year, ReportDateField.SelectedDate.Month, 1);
             endingDate = startingDate.AddMonths(1).AddDays(-1);
 
-            Site site = Global.DATABASE.Sites.GetById(siteID);
+            var site = Global.DATABASE.Sites.GetById(siteID);
 
             if (callTypeId == 1 || callTypeId == 2)
             {
@@ -507,6 +506,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
             this.Response.End();
 
         }//End-function
+
     }
 
 }

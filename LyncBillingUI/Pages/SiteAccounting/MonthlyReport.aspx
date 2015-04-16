@@ -13,7 +13,7 @@
                 ID="MonthlyReportsTools"
                 runat="server"
                 Header="true"
-                Title="Monthly Report"
+                Title="Monthly Reports"
                 MaxWidth="955"
                 Layout="AnchorLayout">
                 
@@ -33,7 +33,7 @@
                                 FieldLabel="Site:"
                                 LabelWidth="25"
                                 Width="160"
-                                MarginSpec="5 15 0 5">
+                                MarginSpec="5 0 5 5">
                                 <Store>
                                     <ext:Store
                                         ID="SitesStore"
@@ -76,6 +76,8 @@
                                 </Listeners>--%>
                             </ext:ComboBox>
 
+                            <ext:ToolbarSeparator MarginSpec="5 10 5 10" />
+
                             <ext:DateField
                                 ID="ReportDateField"
                                 runat="server"
@@ -83,7 +85,7 @@
                                 LabelWidth="30"
                                 EmptyText="Empty Date"
                                 Width="150"
-                                MarginSpec="5 15 0 5"
+                                MarginSpec="5 0 5 0"
                                 Disabled="true">
 
                                 <DirectEvents>
@@ -97,6 +99,8 @@
                                 </Listeners>--%>
                             </ext:DateField>
 
+                            <ext:ToolbarSeparator MarginSpec="5 10 5 10" />
+
                             <ext:ComboBox
                                 ID="CallsTypesComboBox"
                                 runat="server"
@@ -107,7 +111,7 @@
                                 LabelSeparator=":"
                                 LabelWidth="40"
                                 Width="200"
-                                MarginSpec="5 325 0 5"
+                                MarginSpec="5 0 5 0"
                                 Disabled="true"
                                 Editable="false">
                                 <Items>
@@ -136,7 +140,8 @@
                                 runat="server"
                                 Text="Tools"
                                 Icon="ApplicationOsxGo"
-                                Disabled="true">
+                                Disabled="true"
+                                MarginSpec="5 0 5 320">
                                 <Menu>
                                     <ext:Menu ID="ExportReportMenu" runat="server">
                                         <Items>
@@ -191,13 +196,13 @@
                 </TopBar>
             </ext:Panel>
 
-            <div class="h5 clear"></div>
+            <br />
 
             <ext:GridPanel
                 ID="MonthlyReportsGrids"
                 runat="server"
                 MaxWidth="955"
-                MinHeight="500"
+                MinHeight="600"
                 AutoScroll="true"
                 Scroll="Both"
                 Layout="FitLayout">
