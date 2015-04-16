@@ -102,7 +102,7 @@
                                                         <li><a href="<%= global_asax.APPLICATION_URL %>/Site/Accounting/DisputedCalls">Disputed Phone Calls</a></li>
                                                         <li class="divider"></li>
                                                         <li class="dropdown-header">Notifications</li>
-                                                        <li><a href="#">Billing Cycles</a></li>
+                                                        <li><a href="<%= global_asax.APPLICATION_URL %>/Site/Accounting/BillingCycle">Billing Cycles</a></li>
                                                         <li class="divider"></li>
                                                         <li class="dropdown-header">Reports</li>
                                                         <li><a href="<%= global_asax.APPLICATION_URL %>/Site/Accounting/MonthlyReports">Monthly Reports</a></li>

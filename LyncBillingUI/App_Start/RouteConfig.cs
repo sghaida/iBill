@@ -41,6 +41,7 @@ namespace LyncBillingUI
             routes.MapPageRoute("", "Site/Accounting/DisputedCalls", "~/Pages/SiteAccounting/DisputedCalls.aspx");
             routes.MapPageRoute("", "Site/Accounting/MonthlyReports", "~/Pages/SiteAccounting/MonthlyReport.aspx");
             routes.MapPageRoute("", "Site/Accounting/PeriodicalReports", "~/Pages/SiteAccounting/PeriodicalReport.aspx");
+            routes.MapPageRoute("", "Site/Accounting/BillingCycle", "~/Pages/SiteAccounting/BillingCycleNotifications.aspx");
         }
     }
 }
