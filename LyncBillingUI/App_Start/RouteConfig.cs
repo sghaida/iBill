@@ -42,6 +42,10 @@ namespace LyncBillingUI
             routes.MapPageRoute("", "Site/Accounting/MonthlyReports", "~/Pages/SiteAccounting/MonthlyReport.aspx");
             routes.MapPageRoute("", "Site/Accounting/PeriodicalReports", "~/Pages/SiteAccounting/PeriodicalReport.aspx");
             routes.MapPageRoute("", "Site/Accounting/BillingCycle", "~/Pages/SiteAccounting/BillingCycleNotifications.aspx");
+
+            //
+            // Site Administrator Pages
+            routes.MapPageRoute("", "Site/Administration/Dashboard", "~/Pages/SiteAdministration/Dashboard.aspx");
         }
     }
 }

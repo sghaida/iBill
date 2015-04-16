@@ -105,7 +105,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Pages\DepartmentHead\" />
-    <Folder Include="Pages\SiteAdministration\" />
     <Folder Include="Pages\SystemAdministration\" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +144,7 @@
     <Content Include="Pages\SiteAccounting\DisputedCalls.aspx" />
     <Content Include="Pages\SiteAccounting\MonthlyReport.aspx" />
     <Content Include="Pages\SiteAccounting\PeriodicalReport.aspx" />
+    <Content Include="Pages\SiteAdministration\Dashboard.aspx" />
     <Content Include="Pages\User\Addressbook.aspx" />
     <Content Include="Pages\User\Bills.aspx" />
     <Content Include="Pages\User\Dashboard.aspx" />
@@ -295,6 +295,13 @@
     </Compile>
     <Compile Include="Pages\SiteAccounting\PeriodicalReport.aspx.designer.cs">
       <DependentUpon>PeriodicalReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\User\Addressbook.aspx.cs">
       <DependentUpon>Addressbook.aspx</DependentUpon>
