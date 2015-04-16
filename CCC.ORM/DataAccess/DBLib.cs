@@ -65,6 +65,7 @@ namespace CCC.ORM.DataAccess
             try
             {
                 conn.Open();
+                comm.CommandTimeout = (30 * 60); //30 minutes
                 dr = comm.ExecuteReader();
                 dt.Load(dr);
             }

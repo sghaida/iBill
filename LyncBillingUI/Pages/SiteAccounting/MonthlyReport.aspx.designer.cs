@@ -202,13 +202,40 @@ namespace LyncBillingUI.Pages.SiteAccounting {
         protected global::Ext.Net.Model MonthlyReportsModel;
         
         /// <summary>
-        /// SipAccountCol control.
+        /// UserIdCol control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Column SipAccountCol;
+        protected global::Ext.Net.Column UserIdCol;
+        
+        /// <summary>
+        /// UserSipAccountCol control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.Column UserSipAccountCol;
+        
+        /// <summary>
+        /// UserNameCol control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.Column UserNameCol;
+        
+        /// <summary>
+        /// UserDepartmentCol control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.Column UserDepartmentCol;
         
         /// <summary>
         /// GrouopedCostsColumnsCol control.
@@ -238,13 +265,13 @@ namespace LyncBillingUI.Pages.SiteAccounting {
         protected global::Ext.Net.Column BusinessCallsCostCol;
         
         /// <summary>
-        /// UnmarkedCallsCostCol control.
+        /// UnallocatedCallsCostCol control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Column UnmarkedCallsCostCol;
+        protected global::Ext.Net.Column UnallocatedCallsCostCol;
         
         /// <summary>
         /// CheckboxSelectionModel1 control.

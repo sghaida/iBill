@@ -7,10 +7,20 @@ namespace LyncBillingBase.DataModels
         AccessMethod = Globals.DataSource.AccessMethod.DistributedSource)]
     public class CallsSummaryForUser : CallsSummary
     {
-        [DbColumn("ChargingParty")]
-        public string SipAccount { get; set; }
+        [DbColumn("UserId")]
+        public int UserId { get; set; }
 
-        [DbColumn("AC_IsInvoiced")]
+        [DbColumn("ChargingParty")]
+        public string UserSipAccount { get; set; }
+
+        [DbColumn("UserName")]
+        public string UserName { get; set; }
+
+        [DbColumn("UserDepartment")]
+        public string UserDepartment { get; set; }
+
+        [DbColumn("IsInvoiced")]
         public string IsInvoiced { get; set; }
     }
+
 }

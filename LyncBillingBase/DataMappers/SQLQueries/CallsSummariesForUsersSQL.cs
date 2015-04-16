@@ -27,7 +27,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                     "YEAR(ResponseTime) AS [Year], " +
                     "MONTH(ResponseTime) AS [Month], " +
                     "(CAST(CAST(YEAR(ResponseTime) AS varchar) + '/' + CAST(MONTH(ResponseTime) AS varchar) + '/' +CAST(1 AS VARCHAR) AS DATETIME)) AS Date, " +
-                    "[ChargingParty] AS [ChargingParty], " +
+                    "[ChargingParty] AS [ChargingParty], " + 
                     "CAST(SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Duration] END) AS BIGINT) AS [BusinessCallsDuration], " +
                     "CAST(COUNT(CASE WHEN [UI_CallType] = 'Business' THEN 1 END) AS BIGINT) AS [BusinessCallsCount], " +
                     "SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Marker_CallCost] END) AS [BusinessCallsCost], " +
@@ -36,12 +36,11 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                     "SUM(CASE WHEN [UI_CallType] = 'Personal' THEN [Marker_CallCost] END) AS [PersonalCallsCost], " +
                     "CAST(SUM(CASE WHEN [UI_CallType] IS NULL THEN [Duration] END) AS BIGINT) AS [UnmarkedCallsDuration], " +
                     "CAST(COUNT (CASE WHEN [UI_CallType] IS NULL THEN 1 END) AS BIGINT) AS [UnmarkedCallsCount], " +
-                    "SUM(CASE WHEN [UI_CallType] IS NULL THEN [Marker_CallCost] END) AS [UnmarkedCallsCost], " +
-                    "[AC_IsInvoiced] as [AC_IsInvoiced]");
+                    "SUM(CASE WHEN [UI_CallType] IS NULL THEN [Marker_CallCost] END) AS [UnmarkedCallsCost] ");
 
                 //
                 // Start the FROM_PART
-                fromPart = String.Format("FROM  (");
+                fromPart = String.Format(" FROM  (");
 
                 var index = 0;
                 foreach (var tableName in dbTables)
@@ -111,7 +110,10 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                         "MONTH(ResponseTime) AS [Month], " +
                         "(CAST(CAST(YEAR(ResponseTime) AS varchar) + '/' + CAST(MONTH(ResponseTime) AS varchar) + '/' +CAST(1 AS VARCHAR) AS DATETIME)) AS Date, " +
                         "[ChargingParty] AS [ChargingParty], " +
-                        "[AC_IsInvoiced] as [AC_IsInvoiced], " +
+                        "[AC_IsInvoiced] as [IsInvoiced], " +
+                        "[AD_UserID] AS [UserId], " +
+                        "[AD_DisplayName] AS [UserName], " +
+                        "[AD_Department] AS [UserDepartment], " + 
                         "CAST(SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Duration] END) AS BIGINT) AS [BusinessCallsDuration], " +
                         "CAST(COUNT(CASE WHEN [UI_CallType] = 'Business' THEN 1 END) AS BIGINT) AS [BusinessCallsCount], " +
                         "SUM(CASE WHEN [UI_CallType] = 'Business' THEN [Marker_CallCost] END) AS [BusinessCallsCost], " +
@@ -133,6 +135,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
                     fromPart = String.Format(
                         "{0} " +
                         "SELECT * FROM [{1}] " +
+                            "LEFT OUTER JOIN [ActiveDirectoryUsers] ON [{1}].[ChargingParty] = [ActiveDirectoryUsers].[SipAccount] " + 
                         "WHERE " +
                             "[Marker_CallTypeID] in (1,2,3,4,5,6,21,19,22,24) AND " +
                             "[Exclude]=0 AND " +
@@ -169,11 +172,15 @@ namespace LyncBillingBase.DataMappers.SQLQueries
 
                 groupByOrderByPart = String.Format(
                     "GROUP BY " +
-                    "YEAR(ResponseTime), " +
-                    "MONTH(ResponseTime), " +
-                    "[ChargingParty], " +
-                    "[AC_IsInvoiced] " +
-                    "ORDER BY [ChargingParty] ASC");
+                        "YEAR(ResponseTime), " + 
+                        "MONTH(ResponseTime), " + 
+                        "[ChargingParty], " + 
+                        "[AD_UserID], " + 
+		                "[AD_DisplayName], " + 
+		                "[AD_Department], " + 
+                        "[AC_IsInvoiced] " +
+                    "ORDER BY " + 
+                        "[ChargingParty] ASC ");
 
                 sqlQuery = String.Format("{0} {1} {2}", selectPart, fromPart, groupByOrderByPart);
             }
@@ -265,6 +272,7 @@ namespace LyncBillingBase.DataMappers.SQLQueries
 
             return sqlQuery;
         }
+
     }
 
 }

@@ -103,7 +103,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
             callsType = Convert.ToInt32(CallsTypesComboBox.SelectedItem.Value);
 
             if (callsType == 1)
-                gridData = listOfUsersCallsSummary.Where(summary => string.IsNullOrEmpty(summary.IsInvoiced) || summary.IsInvoiced == "NO").ToList();
+                gridData = listOfUsersCallsSummary.Where(summary => summary.IsInvoiced == "NO").ToList();
             else if (callsType == 2)
                 gridData = listOfUsersCallsSummary.Where(summary => summary.IsInvoiced == "N/A").ToList();
             else if (callsType == 3)

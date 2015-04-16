@@ -49,11 +49,15 @@ namespace LyncBillingBase.DataMappers
 
             summaries = (
                 from summary in summaries
-                group summary by new {summary.SipAccount}
+                group summary by new { summary.UserSipAccount, summary.UserName, summary.UserId, summary.UserDepartment }
                 into result
                 select new CallsSummaryForUser
                 {
-                    SipAccount = result.Key.SipAccount,
+                    UserId = result.Key.UserId,
+                    UserName = result.Key.UserName,
+                    UserSipAccount = result.Key.UserSipAccount,
+                    UserDepartment = result.Key.UserDepartment,
+                    IsInvoiced = string.Empty,
                     BusinessCallsCost = result.Sum(item => item.BusinessCallsCost),
                     BusinessCallsDuration = result.Sum(item => item.BusinessCallsDuration),
                     BusinessCallsCount = result.Sum(item => item.BusinessCallsCount),
@@ -77,11 +81,14 @@ namespace LyncBillingBase.DataMappers
 
             summaries = (
                 from summary in summaries
-                group summary by new {summary.SipAccount, summary.IsInvoiced}
+                group summary by new { summary.UserSipAccount, summary.UserName, summary.UserId, summary.UserDepartment, summary.IsInvoiced }
                 into result
                 select new CallsSummaryForUser
                 {
-                    SipAccount = result.Key.SipAccount,
+                    UserId = result.Key.UserId,
+                    UserName = result.Key.UserName,
+                    UserSipAccount = result.Key.UserSipAccount,
+                    UserDepartment = result.Key.UserDepartment,
                     IsInvoiced = result.Key.IsInvoiced,
                     BusinessCallsCost = result.Sum(item => item.BusinessCallsCost),
                     BusinessCallsDuration = result.Sum(item => item.BusinessCallsDuration),
@@ -253,8 +260,8 @@ namespace LyncBillingBase.DataMappers
                 .ToList();
 
             Dictionary<string, CallsSummaryForUser> usersSummaryList = listOfUsersSummaries
-                .Where(summary => sipAccountsList.Contains(summary.SipAccount))
-                .ToDictionary(summary => summary.SipAccount);
+                .Where(summary => sipAccountsList.Contains(summary.UserSipAccount))
+                .ToDictionary(summary => summary.UserSipAccount);
 
             return usersSummaryList;
         }
