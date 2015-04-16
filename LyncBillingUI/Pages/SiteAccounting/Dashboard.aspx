@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Accounting Dashboard | iBill" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="LyncBillingUI.Pages.SiteAccounting.Dashboard" %>
+﻿<%@ Page Title="Site Accounting Dashboard | iBill" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="LyncBillingUI.Pages.SiteAccounting.Dashboard" %>
 
 
 <asp:Content ID="Header" ContentPlaceHolderID="HeaderContent" runat="server">

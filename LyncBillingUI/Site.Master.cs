@@ -406,7 +406,67 @@ namespace LyncBillingUI
 
             if(activeRoleName == siteAccountantRoleName)
             {
+                uiElevatedAccessDropdownMenu = String.Format(
+                    "<li id='site-accountant-menu-tab' class='dropdown'>" + 
+                        "<a href='#' class='dropdown-toggle ibill-nav-dropdown' data-toggle='dropdown' role='button' aria-expanded='false'>Navigation&nbsp;<span class='caret'></span></a> " + 
+                        "<ul class='dropdown-menu' role='menu'> " + 
+                            "<li><a href='{0}/Site/Accounting/Dashboard'>Dashboard</a></li> " + 
+                            "<li class='divider'></li> " +
+                            "<li class='dropdown-header'>Manage</li> " + 
+                            "<li><a href='{0}/Site/Accounting/DisputedCalls'>Disputed Phone Calls</a></li> " + 
+                            "<li class='divider'></li> " + 
+                            "<li class='dropdown-header'>Notifications</li> " + 
+                            "<li><a href='{0}/Site/Accounting/BillingCycle'>Billing Cycles</a></li> " + 
+                            "<li class='divider'></li> " + 
+                            "<li class='dropdown-header'>Reports</li> " + 
+                            "<li><a href='{0}/Site/Accounting/MonthlyReports'>Monthly Reports</a></li> " + 
+                            "<li><a href='{0}/Site/Accounting/PeriodicalReports'>Periodical Reports</a></li> " + 
+                        "</ul> " + 
+                    "</li>"
+                    , Global.APPLICATION_URL
+                );
+            }
 
+            else if(activeRoleName == siteAdminRoleName)
+            {
+                uiElevatedAccessDropdownMenu = String.Format(
+                    "<li id='site-admin-menu-tab' class='dropdown'>" +
+                        "<a href='#' class='dropdown-toggle ibill-nav-dropdown' data-toggle='dropdown' role='button' aria-expanded='false'>Navigation&nbsp;<span class='caret'></span></a> " +
+                        "<ul class='dropdown-menu' role='menu'> " +
+                            "<li><a href='{0}/Site/Administration/Dashboard'>Dashboard</a></li> " +
+                            "<li class='divider'></li> " +
+                            "<li class='dropdown-header'>User Roles</li> " +
+                            "<li><a href='{0}/Site/Administration/DelegeeRoles'>User Delegee</a></li> " +
+                            "<li><a href='{0}/Site/Administration/DepartmentHeadRoles'>Department Heads</a></li> " +
+                            "<li class='divider'></li> " +
+                            "<li class='dropdown-header'>Telephony Rates</li> " +
+                            "<li><a href='{0}/Site/Administration/GatewaysRates'>Gateways Rates</a></li> " +
+                            "<li><a href='{0}/Site/Administration/NGNRates'>NGNs Rates</a></li> " +
+                            "<li class='divider'></li> " +
+                            "<li class='dropdown-header'>Email Notifications</li> " +
+                            "<li><a href='{0}/Site/Administration/UsersBills'>User Bills</a></li> " +
+                            "<li><a href='{0}/Site/Administration/UnallocatedCalls'>Unallocated Calls</a></li> " +
+                            "<li class='divider'></li> " +
+                            "<li class='dropdown-header'>Statistics</li> " +
+                            "<li><a href='{0}/Site/Administration/Statistics/GeneralUsage'>General Usage</a></li> " +
+                            "<li class='divider'></li> " +
+                            "<li class='dropdown-header'>Reports</li> " +
+                            "<li><a href='{0}/Site/Administration/Reports/GeneralUsage'>General Usage</a></li> " +
+                            "<li><a href='{0}/Site/Administration/Reports/UsersUsage'>Users Usage</a></li> " +
+                            "<li><a href='{0}/Site/Administration/Reports/DepartmentsUsage'>Departments Usage</a></li> " +
+                            "<li class='divider'></li> " +
+                            "<li><a href='{0}/Site/Administration/DIDS'>DIDs</a></li> " +
+                            "<li><a href='{0}/Site/Administration/Exclusions'>Exclusions List</a></li> " +
+                            "<li><a href='{0}/Site/Administration/NGNNumberingPlan'>NGN Numbering Plan</a></li> " +
+                        "</ul> " +
+                    "</li>"
+                    , Global.APPLICATION_URL
+                );
+            }
+
+            else if (activeRoleName == systemAdminRoleName)
+            {
+                uiElevatedAccessDropdownMenu = String.Format("");
             }
 
             return uiElevatedAccessDropdownMenu;
