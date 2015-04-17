@@ -20,13 +20,13 @@ namespace LyncBillingUI.Pages.User
     public partial class Dashboard : System.Web.UI.Page
     {
         private string sipAccount = string.Empty;
+        private static List<PhoneCall> userSessionPhoneCalls;
+        private static Dictionary<string, PhoneBookContact> userSessionAddressbook;
 
         //public variables made available for the view
         public int unmarkedCallsCount = 0;
         public string DisplayName = string.Empty;
 
-        public List<PhoneCall> phoneCalls;
-        public Dictionary<string, PhoneBookContact> phoneBookEntries;
         public MailReport userMailStatistics;
         public List<CallsSummaryForDestinationNumbers> TopDestinationNumbersList;
         public List<CallsSummaryForDestinationCountries> TopDestinationCountriesList;
@@ -65,7 +65,7 @@ namespace LyncBillingUI.Pages.User
             DisplayName = CurrentSession.GetEffectiveDisplayName();
 
             //Initialize the Address Book data.
-            phoneBookEntries = Global.DATABASE.PhoneBooks.GetAddressBook(sipAccount);
+            CurrentSession.FetchSessionPhonecallsAndAddressbookData(out userSessionPhoneCalls, out userSessionAddressbook);
 
             //Get this user's mail statistics
             userMailStatistics = Global.DATABASE.MailReports.GetTotalByUser(sipAccount, DateTime.Now.AddMonths(-1));
@@ -81,8 +81,6 @@ namespace LyncBillingUI.Pages.User
         // Return #no of still unmarked phone calls
         private int TryAutoMarkPhoneCalls()
         {
-            List<PhoneCall> userSessionPhoneCalls;
-            Dictionary<string, PhoneBookContact> userSessionAddressbook;
             PhoneBookContact addressBookEntry;
             int numberOfRemainingUnmarked = 0;
 
@@ -156,9 +154,9 @@ namespace LyncBillingUI.Pages.User
                 //    continue;
                 //}
 
-                if (phoneBookEntries.ContainsKey(destination.PhoneNumber))
+                if (userSessionAddressbook.ContainsKey(destination.PhoneNumber))
                 {
-                    string temporaryName = phoneBookEntries[destination.PhoneNumber].Name;
+                    string temporaryName = userSessionAddressbook[destination.PhoneNumber].Name;
                     destination.DestinationContactName = (!string.IsNullOrEmpty(temporaryName)) ? temporaryName : "N/A";
                 }
                 else

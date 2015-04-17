@@ -46,6 +46,7 @@ namespace LyncBillingUI
             //
             // Site Administrator Pages
             routes.MapPageRoute("", "Site/Administration/Dashboard", "~/Pages/SiteAdministration/Dashboard.aspx");
+            routes.MapPageRoute("", "Site/Administration/DelegeeRoles", "~/Pages/SiteAdministration/DelegeeRoles.aspx");
         }
     }
 }

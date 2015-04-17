@@ -8,7 +8,7 @@
 <asp:Content ID="Body" ContentPlaceHolderID="MainContent" runat="server">
     <% if(unmarkedCallsCount > 0) { %>
     <div class="alert alert-warning" role="alert">
-        <strong>Warning!</strong>&nbsp;You have a total of&nbsp;<strong><%= unmarkedCallsCount.ToString() %>&nbsp;unmarked</strong>&nbsp;calls, please click&nbsp;<a class='link bold' href='<%= global_asax.APPLICATION_URL %>/User/Manage/Phonecalls'><strong>here</strong></a>&nbsp;to mark them.
+        <strong>Warning!</strong>&nbsp;You have a total of&nbsp;<strong><%= unmarkedCallsCount.ToString() %>&nbsp;unmarked</strong>&nbsp;calls, please click&nbsp;<a class='link bold' href='<%= global_asax.APPLICATION_URL %>/User/Phonecalls'><strong>here</strong></a>&nbsp;to mark them.
     </div>
 
     <br />

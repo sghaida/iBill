@@ -222,7 +222,7 @@ namespace LyncBillingUI.Pages.Account
                 Response.Redirect(GetHomepageLink(Functions.UserDelegeeRoleName));
             }
 
-            else if (delegee is SiteDepartment && delegeeType == Global.DATABASE.Roles.DepartmentDelegeeRoleID)
+            else if (delegee is LyncBillingBase.DataModels.SiteDepartment && delegeeType == Global.DATABASE.Roles.DepartmentDelegeeRoleID)
             {
                 //Get delegated department
                 CurrentSession.DelegeeUserAccount = new DelegeeUserAccount();
