@@ -128,6 +128,13 @@ namespace LyncBillingUI
                             "<li class='divider'></li>"
                         , UiSwtichToDelegeeDropdown);
                 }
+                else if (CurrentSession.UserDelegateRoles.Any() && CurrentSession.SiteDelegateRoles.Any())
+                {
+                    UiSwtichToDelegeeDropdown = String.Format(
+                            "{0}" + 
+                            "<li class='divider'></li>"
+                        , UiSwtichToDelegeeDropdown);
+                }
                 
                 //
                 // Department Delegees
