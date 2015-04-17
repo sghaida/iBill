@@ -4,48 +4,50 @@
 </asp:Content>
 
 <asp:Content ID="Body" ContentPlaceHolderID="MainContent" runat="server">
+    <br />
+    <br />
 
     <div class="row">
-        <div class="col-md-12">
-            <div class="placeholding-input username">
-                <asp:label ID="Email_Label" 
-                    Text="Email"  
-                    CssClass="placeholder" 
-                    runat="server"
-                    Width="70">
-                </asp:label>
+        <div class="col-md-8">
+            <h3>You have requested to elevate your access.</h3>
+            <h3>Kindly provide your credentials for access-role authorization.</h3>
+        </div>
 
-				<label id="email" class="bold">
-                    <%= sipAccount %>
-				</label>
-			</div>
+        <div class="col-md-4">
+            <div class="well">
+                <div class="input-group">
+                    <span class="input-group-addon">Email</span>
 
-			<div class="placeholding-input password">
-            	<asp:label ID="Label2" 
-                    Text="Password"  
-                    CssClass="placeholder" 
-                    runat="server"
-                    Width="70">
-                </asp:label>
+				    <label id="email" class="form-control bold">
+                        <%= sipAccount %>
+				    </label>
+			    </div>
 
-                <asp:TextBox 
-                    id="password" 
-                    runat="server" 
-                    TextMode="Password" 
-                    Width="180"
-                    tabindex="2">
-                </asp:TextBox>
-            </div>
+                <br />
 
-            <div class="placeholding-input">
+			    <div class="input-group">
+            	    <span class="input-group-addon">Password</span>
+
+                    <asp:TextBox 
+                        ID="password" 
+                        runat="server" 
+                        TextMode="Password" 
+                        TabIndex="0"
+                        CssClass="form-control">
+                    </asp:TextBox>
+                </div>
+
+                <br />
+
                 <asp:Button 
                     ID="signin_submit" 
                     runat="server" 
                     Text="Log In" 
+                    CssClass="btn btn-default"
                     OnClick="AuthenticateUser" />
-			</div>
 
-            <div class="auth-msg red-color"><%= AuthenticationMessage.ToString() %></div>
+                <div class="auth-msg red-color"><%= AuthenticationMessage.ToString() %></div>
+            </div>
         </div>
     </div>
 
