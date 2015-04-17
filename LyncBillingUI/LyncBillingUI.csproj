@@ -145,6 +145,7 @@
     <Content Include="Pages\SiteAccounting\MonthlyReport.aspx" />
     <Content Include="Pages\SiteAccounting\PeriodicalReport.aspx" />
     <Content Include="Pages\SiteAdministration\Dashboard.aspx" />
+    <Content Include="Pages\SiteAdministration\DelegeeRoles.aspx" />
     <Content Include="Pages\User\Addressbook.aspx" />
     <Content Include="Pages\User\Bills.aspx" />
     <Content Include="Pages\User\Dashboard.aspx" />
@@ -302,6 +303,13 @@
     </Compile>
     <Compile Include="Pages\SiteAdministration\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\DelegeeRoles.aspx.cs">
+      <DependentUpon>DelegeeRoles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\DelegeeRoles.aspx.designer.cs">
+      <DependentUpon>DelegeeRoles.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\User\Addressbook.aspx.cs">
       <DependentUpon>Addressbook.aspx</DependentUpon>
