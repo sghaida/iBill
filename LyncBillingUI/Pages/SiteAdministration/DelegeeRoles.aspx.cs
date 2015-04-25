@@ -60,11 +60,8 @@ namespace LyncBillingUI.Pages.SiteAdministration
         {
             if (!Ext.Net.X.IsAjaxRequest)
             {
-                //if(sitesList == null || sitesList.Count < 1)
-                usersSites = Global.DATABASE.SystemRoles.GetSitesByRoles(CurrentSession.SystemRoles, Functions.SiteAdminRoleName);
-
-                //if(delegeesList == null || delegeesList.Count < 1)
                 delegeesList = Global.DATABASE.DelegateRoles.GetAll().ToList();
+                usersSites = Global.DATABASE.SystemRoles.GetSitesByRoles(CurrentSession.SystemRoles, Functions.SiteAdminRoleName);
             }
 
             if (forceRefreshDelegees == true)
@@ -244,11 +241,10 @@ namespace LyncBillingUI.Pages.SiteAdministration
 
         protected void DelegatesSitesStore_Load(object sender, EventArgs e)
         {
-            if (!Ext.Net.X.IsAjaxRequest)
-            {
-                FilterDelegatesBySite.GetStore().DataSource = usersSites;
-                FilterDelegatesBySite.GetStore().LoadData(usersSites);
-            }
+            FilterDelegatesBySite.GetStore().RemoveAll();
+            FilterDelegatesBySite.GetStore().DataSource = usersSites;
+            //FilterDelegatesBySite.GetStore().LoadData(usersSites);
+            FilterDelegatesBySite.GetStore().DataBind();
         }
 
 
