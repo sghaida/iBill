@@ -443,6 +443,7 @@ namespace LyncBillingUI
                             "<li><a href='{0}/Site/Administration/Dashboard'>Dashboard</a></li> " +
                             "<li class='divider'></li> " +
                             "<li class='dropdown-header'>User Roles</li> " +
+                            "<li><a href='{0}/Site/Administration/SystemRoles'>System Roles</a></li> " +
                             "<li><a href='{0}/Site/Administration/DelegeeRoles'>User Delegee</a></li> " +
                             "<li><a href='{0}/Site/Administration/DepartmentHeadRoles'>Department Heads</a></li> " +
                             "<li class='divider'></li> " +

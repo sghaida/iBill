@@ -157,6 +157,15 @@ namespace LyncBillingUI.Pages.SiteAdministration {
         protected global::Ext.Net.Button SaveChangesButton;
         
         /// <summary>
+        /// ManageSystemRolesPagingToolbar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Ext.Net.PagingToolbar ManageSystemRolesPagingToolbar;
+        
+        /// <summary>
         /// AddNewSystemRoleWindowPanel control.
         /// </summary>
         /// <remarks>
@@ -272,14 +281,5 @@ namespace LyncBillingUI.Pages.SiteAdministration {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Ext.Net.ToolbarTextItem NewSystemRole_StatusMessage;
-        
-        /// <summary>
-        /// ManageSystemRolesPagingToolbar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.PagingToolbar ManageSystemRolesPagingToolbar;
     }
 }
