@@ -1,6 +1,43 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SystemRoles.aspx.cs" Inherits="LyncBillingUI.Pages.SiteAdministration.SystemRoles" %>
+﻿<%@ Page Title="System Roles" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SystemRoles.aspx.cs" Inherits="LyncBillingUI.Pages.SiteAdministration.SystemRoles" %>
 
 <asp:Content ID="Header" ContentPlaceHolderID="HeaderContent" runat="server">
+    <style>
+        /* start manage-phone-calls grid styling */
+        .x-grid-with-row-lines .x-grid-cell { height: 25px !important; }
+        /* end manage-phone-calls grid styling */
+
+        /* start users search query result styling */
+        .search-item {
+            font          : normal 11px tahoma, arial, helvetica, sans-serif;
+            padding       : 3px 10px 3px 10px;
+            border        : 1px solid #fff;
+            border-bottom : 1px solid #eeeeee;
+            white-space   : normal;
+            color         : #555;
+        }
+        
+        .search-item h3 {
+            display     : block;
+            font        : inherit;
+            font-weight : bold;
+            color       : #222;
+            margin      : 0px;
+        }
+
+        .search-item h3 span {
+            float       : right;
+            font-weight : normal;
+            margin      : 0 0 5px 5px;
+            width       : 185px;
+            display     : block;
+            clear       : none;
+        } 
+        
+        p { width: 650px; }
+        
+        .ext-ie .x-form-text { position : static !important; }
+        /* end users search query result styling */
+    </style>
 </asp:Content>
 
 
@@ -10,14 +47,13 @@
             <ext:GridPanel
                 ID="ManageSystemRolesGrid"
                 runat="server"
-                Width="740"
-                Height="765"
+                MaxWidth="955"
+                MinHeight="620"
                 AutoScroll="true"
                 Scroll="Both"
                 Layout="FitLayout"
                 Header="true"
-                Title="Manage Users Roles"
-                ComponentCls="fix-ui-vertical-align">
+                Title="Manage Users Roles">
 
                 <Store>
                     <ext:Store
@@ -47,13 +83,12 @@
                         <ext:Column ID="RoleOwnerCol"
                             runat="server"
                             Text="Role Owner"
-                            DataIndex="SipAccount"
                             Sortable="false"
                             Groupable="false">
                             <Columns>
                                 <ext:Column ID="SipAccountCol"
                                     runat="server"
-                                    Text="Role Owner"
+                                    Text="Email"
                                     Width="200"
                                     DataIndex="SipAccount"
                                     Sortable="false"
@@ -72,8 +107,8 @@
 
                                 <ext:Column ID="Column1"
                                     runat="server"
-                                    Text="Role Owner"
-                                    Width="150"
+                                    Text="Name"
+                                    Width="200"
                                     DataIndex="RoleOwnerName"
                                     Sortable="false"
                                     Groupable="false">
@@ -160,14 +195,14 @@
                                 ID="FilterSystemRolesBySite"
                                 runat="server"
                                 Icon="Find"
-                                TriggerAction="Query"
+                                TriggerAction="All"
                                 QueryMode="Local"
                                 Editable="true"
                                 DisplayField="Name"
                                 ValueField="Id"
                                 FieldLabel="Site"
                                 LabelWidth="25"
-                                Margins="5 5 0 5"
+                                MarginSpec="5 5 0 5"
                                 Width="250">
                                 <Store>
                                     <ext:Store
@@ -210,9 +245,9 @@
                             <ext:Button
                                 ID="AddRecordButton"
                                 runat="server"
-                                Text="New System Role"
+                                Text="Add New"
                                 Icon="Add"
-                                Margins="5 5 0 240">
+                                MarginSpec="5 5 5 500">
                                 <DirectEvents>
                                     <Click OnEvent="ShowAddSystemRoleWindowPanel" />
                                 </DirectEvents>
@@ -225,7 +260,7 @@
                                 runat="server"
                                 Text="Save Changes"
                                 Icon="DatabaseSave"
-                                Margins="5 5 0 5">
+                                MarginSpec="5 5 5 5">
                                 <DirectEvents>
                                     <Click OnEvent="SaveChanges_DirectEvent" before="return #{ManageSystemRolesStore}.isDirty();">
                                         <EventMask ShowMask="true" />
@@ -235,180 +270,6 @@
                                     </Click>
                                 </DirectEvents>
                             </ext:Button>
-
-                            <ext:Window 
-                                ID="AddNewSystemRoleWindowPanel" 
-                                runat="server" 
-                                Frame="true"
-                                Resizable="false"
-                                Title="New System Role" 
-                                Hidden="true"
-                                Width="410"
-                                Icon="Add" 
-                                X="100"
-                                Y="100"
-                                BodyStyle="background-color: #f9f9f9;">
-                                
-                                <Defaults>
-                                    <ext:Parameter Name="Padding" Value="10" Mode="Raw" />
-                                </Defaults>
-
-                                <Items>
-                                    <ext:ComboBox
-                                        ID="NewSystemRole_RoleTypeCombobox"
-                                        runat="server"
-                                        DisplayField="TypeName"
-                                        ValueField="TypeValue"
-                                        Width="380"
-                                        FieldLabel="Role Type"
-                                        LabelWidth="70">
-                                        <Items>
-                                            <ext:ListItem Text="Site Administrator" Value="30" />
-                                            <ext:ListItem Text="Site Accountant" Value="40" />
-                                        </Items>
-
-                                        <SelectedItems>
-                                            <ext:ListItem Text="Site Administrator" Value="30" />
-                                        </SelectedItems>
-                                    </ext:ComboBox>
-
-                                    <ext:ComboBox
-                                        ID="NewSystemRole_UserSipAccount"
-                                        runat="server"
-                                        Icon="Find"
-                                        TriggerAction="Query"
-                                        QueryMode="Remote"
-                                        Editable="true"
-                                        DisplayField="SipAccount"
-                                        ValueField="SipAccount"
-                                        FieldLabel="User Email:"
-                                        EmptyText="Please Select a User"
-                                        LabelWidth="70"
-                                        Width="380">
-                                        <Store>
-                                            <ext:Store 
-                                                ID="Store1"
-                                                runat="server">
-                                                <Model>
-                                                    <ext:Model 
-                                                        ID="Model2"
-                                                        runat="server">
-                                                        <Fields>
-                                                            <ext:ModelField Name="EmployeeId" />
-                                                            <ext:ModelField Name="SipAccount" />
-                                                            <ext:ModelField Name="SiteName" />
-                                                            <ext:ModelField Name="FullName" />
-                                                            <ext:ModelField Name="DisplayName" />
-                                                            <ext:ModelField Name="DepartmentName" />
-                                                        </Fields>
-                                                    </ext:Model>
-                                                </Model>
-                                            </ext:Store>
-                                        </Store>
-                                        
-                                        <DirectEvents>
-                                            <BeforeQuery OnEvent="NewSystemRole_UserSipAccount_BeforeQuery" />
-                                        </DirectEvents>
-
-                                        <ListConfig
-                                            Border="true"
-                                            MinWidth="400"
-                                            MaxHeight="300"
-                                            EmptyText="Type User Name or Email...">
-                                            <ItemTpl ID="ItemTpl1" runat="server">
-                                                <Html>
-                                                    <div class="search-item">
-                                                        <h3><span>{DisplayName}</span>{SipAccount}</h3>
-                                                    </div>
-                                                </Html>
-                                            </ItemTpl>
-                                        </ListConfig>
-                                    </ext:ComboBox>
-
-                                    <ext:ComboBox
-                                        ID="NewSystemRole_SitesList"
-                                        runat="server"
-                                        QueryMode="Local"
-                                        TriggerAction="Query"
-                                        ValueField="Id"
-                                        DisplayField="Name"
-                                        Editable="true"
-                                        EmptyText="Please Select Site"
-                                        FieldLabel="Site:"
-                                        LabelWidth="70"
-                                        Width="380">
-                                        <Store>
-                                            <ext:Store ID="SitesListStore" runat="server" OnLoad="SitesListStore_Load">
-                                                <Model>
-                                                    <ext:Model ID="SitesListStoreModel" runat="server">
-                                                        <Fields>
-                                                            <ext:ModelField Name="Id" />
-                                                            <ext:ModelField Name="Name" />
-                                                            <ext:ModelField Name="CountryCode" />
-                                                        </Fields>
-                                                    </ext:Model>
-                                                </Model>
-                                            </ext:Store>
-                                        </Store>
-
-                                        <ListConfig>
-                                            <ItemTpl ID="NewSystemRoleSitesListTpl" runat="server">
-                                                <Html>
-                                                    <div>{Name}&nbsp;({CountryCode})</div>
-                                                </Html>
-                                            </ItemTpl>
-                                        </ListConfig>
-                                    </ext:ComboBox>
-                                </Items>
-
-                                <BottomBar>
-                                    <ext:StatusBar
-                                        ID="NewSystemRoleWindowBottomBar"
-                                        runat="server"
-                                        StatusAlign="Right"
-                                        DefaultText=""
-                                        Height="30">
-                                        <Items>
-                                            <ext:Button
-                                                ID="AddNewSystemRoleButton"
-                                                runat="server"
-                                                Text="Add"
-                                                Icon="ApplicationFormAdd"
-                                                Height="25">
-                                                <DirectEvents>
-                                                    <Click OnEvent="AddNewSystemRoleButton_Click" />
-                                                </DirectEvents>
-                                            </ext:Button>
-
-                                            <ext:Button
-                                                ID="CancelNewSystemRoleButton"
-                                                runat="server"
-                                                Text="Cancel"
-                                                Icon="Cancel"
-                                                Height="25">
-                                                <DirectEvents>
-                                                    <Click OnEvent="CancelNewSystemRoleButton_Click" />
-                                                </DirectEvents>
-                                            </ext:Button>
-
-                                            <ext:ToolbarSeparator
-                                                ID="AddNewSystemRoleWindow_BottomBarSeparator"
-                                                runat="server" />
-
-                                            <ext:ToolbarTextItem
-                                                ID="NewSystemRole_StatusMessage"
-                                                runat="server"
-                                                Height="15"
-                                                Text=""
-                                                Margins="0 0 0 5" />
-                                        </Items>
-                                    </ext:StatusBar>
-                                </BottomBar>
-
-                                <DirectEvents>
-                                    <BeforeHide OnEvent="AddNewSystemRoleWindowPanel_BeforeHide" />
-                                </DirectEvents>
-                            </ext:Window>
                         </Items>
                     </ext:Toolbar>
                 </TopBar>
@@ -423,6 +284,181 @@
                         DisplayMsg="System Roles {0} - {1} of {2}" />
                 </BottomBar>
             </ext:GridPanel>
+
+
+            <ext:Window 
+                ID="AddNewSystemRoleWindowPanel" 
+                runat="server" 
+                Frame="true"
+                Resizable="false"
+                Title="New System Role" 
+                Hidden="true"
+                Width="410"
+                Icon="Add" 
+                X="600"
+                Y="250"
+                BodyStyle="background-color: #f9f9f9;">
+                                
+                <Defaults>
+                    <ext:Parameter Name="Padding" Value="10" Mode="Raw" />
+                </Defaults>
+
+                <Items>
+                    <ext:ComboBox
+                        ID="NewSystemRole_RoleTypeCombobox"
+                        runat="server"
+                        DisplayField="TypeName"
+                        ValueField="TypeValue"
+                        Width="380"
+                        FieldLabel="Role Type"
+                        LabelWidth="70">
+                        <Items>
+                            <ext:ListItem Text="Site Administrator" Value="30" />
+                            <ext:ListItem Text="Site Accountant" Value="40" />
+                        </Items>
+
+                        <SelectedItems>
+                            <ext:ListItem Text="Site Administrator" Value="30" />
+                        </SelectedItems>
+                    </ext:ComboBox>
+
+                    <ext:ComboBox
+                        ID="NewSystemRole_UserSipAccount"
+                        runat="server"
+                        Icon="Find"
+                        TriggerAction="Query"
+                        QueryMode="Remote"
+                        Editable="true"
+                        DisplayField="SipAccount"
+                        ValueField="SipAccount"
+                        FieldLabel="User Email:"
+                        EmptyText="Please Select a User"
+                        LabelWidth="70"
+                        Width="380">
+                        <Store>
+                            <ext:Store 
+                                ID="Store1"
+                                runat="server">
+                                <Model>
+                                    <ext:Model 
+                                        ID="Model2"
+                                        runat="server">
+                                        <Fields>
+                                            <ext:ModelField Name="EmployeeId" />
+                                            <ext:ModelField Name="SipAccount" />
+                                            <ext:ModelField Name="SiteName" />
+                                            <ext:ModelField Name="FullName" />
+                                            <ext:ModelField Name="DisplayName" />
+                                            <ext:ModelField Name="DepartmentName" />
+                                        </Fields>
+                                    </ext:Model>
+                                </Model>
+                            </ext:Store>
+                        </Store>
+                                        
+                        <DirectEvents>
+                            <BeforeQuery OnEvent="NewSystemRole_UserSipAccount_BeforeQuery" />
+                        </DirectEvents>
+
+                        <ListConfig
+                            Border="true"
+                            MinWidth="400"
+                            MaxHeight="300"
+                            EmptyText="Type User Name or Email...">
+                            <ItemTpl ID="ItemTpl1" runat="server">
+                                <Html>
+                                    <div class="search-item">
+                                        <h3><span>{DisplayName}</span>{SipAccount}</h3>
+                                    </div>
+                                </Html>
+                            </ItemTpl>
+                        </ListConfig>
+                    </ext:ComboBox>
+
+                    <ext:ComboBox
+                        ID="NewSystemRole_SitesList"
+                        runat="server"
+                        QueryMode="Local"
+                        TriggerAction="Query"
+                        ValueField="Id"
+                        DisplayField="Name"
+                        Editable="true"
+                        EmptyText="Please Select Site"
+                        FieldLabel="Site:"
+                        LabelWidth="70"
+                        Width="380">
+                        <Store>
+                            <ext:Store ID="SitesListStore" runat="server" OnLoad="SitesListStore_Load">
+                                <Model>
+                                    <ext:Model ID="SitesListStoreModel" runat="server">
+                                        <Fields>
+                                            <ext:ModelField Name="Id" />
+                                            <ext:ModelField Name="Name" />
+                                            <ext:ModelField Name="CountryCode" />
+                                        </Fields>
+                                    </ext:Model>
+                                </Model>
+                            </ext:Store>
+                        </Store>
+
+                        <ListConfig>
+                            <ItemTpl ID="NewSystemRoleSitesListTpl" runat="server">
+                                <Html>
+                                    <div>{Name}&nbsp;({CountryCode})</div>
+                                </Html>
+                            </ItemTpl>
+                        </ListConfig>
+                    </ext:ComboBox>
+                </Items>
+
+                <BottomBar>
+                    <ext:StatusBar
+                        ID="NewSystemRoleWindowBottomBar"
+                        runat="server"
+                        StatusAlign="Right"
+                        DefaultText=""
+                        Height="30">
+                        <Items>
+                            <ext:Button
+                                ID="AddNewSystemRoleButton"
+                                runat="server"
+                                Text="Add"
+                                Icon="ApplicationFormAdd"
+                                Height="25">
+                                <DirectEvents>
+                                    <Click OnEvent="AddNewSystemRoleButton_Click" />
+                                </DirectEvents>
+                            </ext:Button>
+
+                            <ext:Button
+                                ID="CancelNewSystemRoleButton"
+                                runat="server"
+                                Text="Cancel"
+                                Icon="Cancel"
+                                Height="25">
+                                <DirectEvents>
+                                    <Click OnEvent="CancelNewSystemRoleButton_Click" />
+                                </DirectEvents>
+                            </ext:Button>
+
+                            <ext:ToolbarSeparator
+                                ID="AddNewSystemRoleWindow_BottomBarSeparator"
+                                runat="server" />
+
+                            <ext:ToolbarTextItem
+                                ID="NewSystemRole_StatusMessage"
+                                runat="server"
+                                Height="15"
+                                Text=""
+                                Margins="0 0 0 5" />
+                        </Items>
+                    </ext:StatusBar>
+                </BottomBar>
+
+                <DirectEvents>
+                    <BeforeHide OnEvent="AddNewSystemRoleWindowPanel_BeforeHide" />
+                </DirectEvents>
+            </ext:Window>
         </div>
     </div>
 </asp:Content>

@@ -69,6 +69,21 @@ namespace LyncBillingUI.Pages.SiteAdministration
             }
         }
 
+        private IEnumerable<object> GetUIFormattedSystemRoles(int siteId)
+        {
+            return assignedSystemRoles
+                .Where(item => item.SiteId == siteId)
+                .Select(item => new {
+                    Id = item.Id,
+                    RoleId = item.RoleId,
+                    Description = item.Description,
+                    SipAccount = item.SipAccount,
+                    SiteId = item.SiteId,
+                    RoleOwnerName = item.User.DisplayName,
+                    SiteName = item.Site.Name
+                });
+        }
+
 
         [DirectMethod]
         protected void GetSystemRolesPerSite(object sender, DirectEventArgs e)
@@ -77,7 +92,7 @@ namespace LyncBillingUI.Pages.SiteAdministration
             {
                 int siteID = Convert.ToInt32(FilterSystemRolesBySite.SelectedItem.Value);
 
-                ManageSystemRolesGrid.GetStore().DataSource = assignedSystemRoles.Where(role => role.SiteId == siteID);
+                ManageSystemRolesGrid.GetStore().DataSource = GetUIFormattedSystemRoles(siteID);
                 ManageSystemRolesGrid.GetStore().DataBind();
             }
         }
@@ -159,6 +174,13 @@ namespace LyncBillingUI.Pages.SiteAdministration
                     foreach (SystemRole systemRole in storeShangedData.Deleted)
                     {
                         statusFlag = Global.DATABASE.SystemRoles.Delete(systemRole);
+
+                        assignedSystemRoles.RemoveAll(
+                            item => 
+                                item.Id == systemRole.Id 
+                                && item.RoleId == systemRole.RoleId 
+                                && item.SipAccount == systemRole.SipAccount 
+                                && item.SiteId == systemRole.SiteId);
                     }
 
                     if (statusFlag == true)
@@ -215,7 +237,7 @@ namespace LyncBillingUI.Pages.SiteAdministration
                     NewSystemRole.Site = ((Site)usersSites.Find(site => site.Id == siteId));
                     //NewSystemRole.SiteName = ((Site)usersSites.Find(site => site.SiteID == siteId)).SiteName;
                     var roleDescription = Global.DATABASE.Roles.GetByRoleId(roleId);
-                    NewSystemRole.Description = String.Format("{0} - {1}", NewSystemRole.Site.Name, roleDescription);
+                    NewSystemRole.Description = String.Format("{0} - {1}", NewSystemRole.Site.Name, roleDescription.RoleDescription);
 
                     //Insert the delegee to the database
                     Global.DATABASE.SystemRoles.Insert(NewSystemRole);
