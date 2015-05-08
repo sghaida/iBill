@@ -48,6 +48,7 @@ namespace LyncBillingUI
             routes.MapPageRoute("", "Site/Administration/Dashboard", "~/Pages/SiteAdministration/Dashboard.aspx");
             routes.MapPageRoute("", "Site/Administration/DelegeeRoles", "~/Pages/SiteAdministration/DelegeeRoles.aspx");
             routes.MapPageRoute("", "Site/Administration/SystemRoles", "~/Pages/SiteAdministration/SystemRoles.aspx");
+            routes.MapPageRoute("", "Site/Administration/TelephonyRates", "~/Pages/SiteAdministration/TelephonyRates.aspx");
         }
     }
 }

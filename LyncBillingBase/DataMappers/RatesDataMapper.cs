@@ -78,7 +78,7 @@ namespace LyncBillingBase.DataMappers
 
                 if (gatewayRatesInfo != null && gatewayRatesInfo.Count > 0)
                 {
-                    var currentRates = gatewayRatesInfo.Find(info => info.EndingDate == DateTime.MinValue);
+                    var currentRates = gatewayRatesInfo.First(info => info.EndingDate == DateTime.MinValue);
 
                     if (currentRates != null && !string.IsNullOrEmpty(currentRates.RatesTableName))
                     {
@@ -104,6 +104,11 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
+                if (string.IsNullOrEmpty(tableName))
+                {
+                    return null;
+                }
+
                 return base.GetAll(tableName, Globals.DataSource.Type.DbTable).ToList();
             }
             catch (Exception ex)
@@ -125,9 +130,12 @@ namespace LyncBillingBase.DataMappers
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
-                return
-                    base.Get(condition, dataSourceName: tableName, dataSourceType: Globals.DataSource.Type.DbTable)
-                        .ToList();
+                if (string.IsNullOrEmpty(tableName))
+                {
+                    return null;
+                }
+
+                return base.Get(condition, dataSourceName: tableName, dataSourceType: Globals.DataSource.Type.DbTable).ToList();
             }
             catch (Exception ex)
             {
@@ -145,8 +153,14 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
-                var sql = _ratesSqlQueries.GetNationalRatesForCountry(tableName, iso3CountryCode);
 
+                //Check if there is a rates table to get the rates from
+                if (string.IsNullOrEmpty(tableName))
+                {
+                    return null;
+                }
+
+                var sql = _ratesSqlQueries.GetNationalRatesForCountry(tableName, iso3CountryCode);
                 return _nationalRatesDataMapper.GetAll(sql).ToList();
             }
             catch (Exception ex)
@@ -165,14 +179,14 @@ namespace LyncBillingBase.DataMappers
             try
             {
                 var tableName = GetTableNameByGatewayId(gatewayId);
-                var sql = _ratesSqlQueries.GetInternationalRates(tableName);
-
+                
                 //Check if there is a rates table to get the rates from
                 if (string.IsNullOrEmpty(tableName))
                 {
                     return null;
                 }
 
+                var sql = _ratesSqlQueries.GetInternationalRates(tableName);
                 return _interRatesDataMapper.GetAll(sql).ToList();
             }
             catch (Exception ex)
@@ -241,6 +255,33 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
+
+        /// <summary>
+        ///     Insert Rate object into the Gateway's rates table.
+        /// </summary>
+        /// <param name="rateObject">The Rate object to insert.</param>
+        /// <param name="gatewayId">The Gateway's ID to insert the Rate object into it's Rates table.</param>
+        /// <returns>Database Row ID</returns>
+        public int Insert(RatesNational rateObject, int gatewayId)
+        {
+            try
+            {
+                var tableName = GetTableNameByGatewayId(gatewayId);
+                var tempRate = new Rate()
+                {
+                    DialingCode = rateObject.DialingCode,
+                    Price = rateObject.Rate
+                };
+
+                return base.Insert(tempRate, tableName, Globals.DataSource.Type.DbTable);
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+
         /// <summary>
         ///     Update a Rate object in a Gateway's rates table.
         /// </summary>
@@ -254,6 +295,32 @@ namespace LyncBillingBase.DataMappers
                 var tableName = GetTableNameByGatewayId(gatewayId);
 
                 return base.Update(rateObject, tableName, Globals.DataSource.Type.DbTable);
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+
+        /// <summary>
+        ///     Update a Rate object in a Gateway's rates table.
+        /// </summary>
+        /// <param name="rateObject">The Rate object to insert.</param>
+        /// <param name="gatewayId">The Gateway's ID to update the Rate object from it's Rates table.</param>
+        /// <returns>Update boolean</returns>
+        public bool Update(RatesNational rateObject, int gatewayId)
+        {
+            try
+            {
+                var tableName = GetTableNameByGatewayId(gatewayId);
+                var tempRate = new Rate()
+                {
+                    Price = rateObject.Rate,
+                    DialingCode = rateObject.DialingCode
+                };
+
+                return base.Update(tempRate, tableName, Globals.DataSource.Type.DbTable);
             }
             catch (Exception ex)
             {

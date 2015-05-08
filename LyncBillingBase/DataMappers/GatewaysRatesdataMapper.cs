@@ -14,10 +14,12 @@ namespace LyncBillingBase.DataMappers
         //This will always be filled and return to whomever he wants to consume
         private static List<GatewayRate> _gatewaysRates = new List<GatewayRate>();
 
+
         public GatewaysRatesDataMapper()
         {
             LoadGatewayRates();
         }
+
 
         private void LoadGatewayRates()
         {
@@ -26,6 +28,7 @@ namespace LyncBillingBase.DataMappers
                 _gatewaysRates = base.GetAll().GetWithRelations(item => item.Gateway).ToList();
             }
         }
+
 
         /// <summary>
         ///     Given a Gateway's name, and a DateTime object, construct a Rates TableName for it.
@@ -49,6 +52,7 @@ namespace LyncBillingBase.DataMappers
             }
         }
 
+
         /// <summary>
         ///     Given a Gateway.ID, return all of it's GatewayRates records.
         /// </summary>
@@ -59,19 +63,18 @@ namespace LyncBillingBase.DataMappers
             return _gatewaysRates.Where(item => item.GatewayId == gatewayId).ToList();
         }
 
-        public override IEnumerable<GatewayRate> GetAll(string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+
+        public override IEnumerable<GatewayRate> GetAll(string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             return _gatewaysRates;
         }
 
-        public override int Insert(GatewayRate dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+
+        public override int Insert(GatewayRate dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var isContained = _gatewaysRates.Contains(dataObject);
             var itExists = _gatewaysRates.Exists(
-                item =>
-                    (
+                item => (
                         (item.GatewayId == dataObject.GatewayId && item.RatesTableName == dataObject.RatesTableName &&
                          item.StartingDate == dataObject.StartingDate) &&
                         (item.EndingDate == DateTime.MinValue || item.EndingDate == dataObject.EndingDate)
@@ -79,19 +82,19 @@ namespace LyncBillingBase.DataMappers
                     (item.GatewayId == dataObject.GatewayId && item.NgnRatesTableName == dataObject.NgnRatesTableName)
                 );
 
-
             if (isContained || itExists)
             {
                 return -1;
             }
+
             dataObject.Id = base.Insert(dataObject, dataSourceName, dataSourceType);
             _gatewaysRates.Add(dataObject);
 
             return dataObject.Id;
         }
 
-        public override bool Update(GatewayRate dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+
+        public override bool Update(GatewayRate dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var gatewayRate = _gatewaysRates.Find(item => item.Id == dataObject.Id);
 
@@ -105,8 +108,8 @@ namespace LyncBillingBase.DataMappers
             return false;
         }
 
-        public override bool Delete(GatewayRate dataObject, string dataSourceName = null,
-            Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
+
+        public override bool Delete(GatewayRate dataObject, string dataSourceName = null, Globals.DataSource.Type dataSourceType = Globals.DataSource.Type.Default)
         {
             var gatewayRate = _gatewaysRates.Find(item => item.Id == dataObject.Id);
 
@@ -118,5 +121,7 @@ namespace LyncBillingBase.DataMappers
             }
             return false;
         }
+
     }
+
 }
