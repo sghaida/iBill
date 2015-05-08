@@ -445,10 +445,10 @@ namespace LyncBillingUI
                             "<li class='dropdown-header'>User Roles</li> " +
                             "<li><a href='{0}/Site/Administration/SystemRoles'>System Roles</a></li> " +
                             "<li><a href='{0}/Site/Administration/DelegeeRoles'>User Delegee</a></li> " +
-                            "<li><a href='{0}/Site/Administration/DepartmentHeadRoles'>Department Heads</a></li> " +
+                            //"<li><a href='{0}/Site/Administration/DepartmentHeadRoles'>Department Heads</a></li> " +
                             "<li class='divider'></li> " +
                             "<li class='dropdown-header'>Telephony Rates</li> " +
-                            "<li><a href='{0}/Site/Administration/GatewaysRates'>Gateways Rates</a></li> " +
+                            "<li><a href='{0}/Site/Administration/TelephonyRates'>Telephony Rates</a></li> " +
                             "<li><a href='{0}/Site/Administration/NGNRates'>NGNs Rates</a></li> " +
                             "<li class='divider'></li> " +
                             "<li class='dropdown-header'>Email Notifications</li> " +
