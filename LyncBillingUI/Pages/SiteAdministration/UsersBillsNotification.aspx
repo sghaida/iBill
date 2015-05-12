@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="UsersBillsNotification.aspx.cs" Inherits="LyncBillingUI.Pages.SiteAdministration.UsersBillsNotification" %>
+﻿<%@ Page Title="Users Bills Notification" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="UsersBillsNotification.aspx.cs" Inherits="LyncBillingUI.Pages.SiteAdministration.UsersBillsNotification" %>
 
 <asp:Content ID="Header" ContentPlaceHolderID="HeaderContent" runat="server">
 </asp:Content>
