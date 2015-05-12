@@ -352,7 +352,7 @@
                         Scroll="Both"
                         Layout="TableLayout"
                         MaxWidth="955"
-                        MinHeight="580"
+                        Height="620"
                         Header="true"
                         Title="My Department's Calls"
                         ContextMenuID="DepartmentPhonecallsAllocationMenu">

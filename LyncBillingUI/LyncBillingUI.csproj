@@ -146,6 +146,7 @@
     <Content Include="Pages\SiteAccounting\PeriodicalReport.aspx" />
     <Content Include="Pages\SiteAdministration\Dashboard.aspx" />
     <Content Include="Pages\SiteAdministration\DelegeeRoles.aspx" />
+    <Content Include="Pages\SiteAdministration\NgnRates.aspx" />
     <Content Include="Pages\SiteAdministration\SystemRoles.aspx" />
     <Content Include="Pages\SiteAdministration\TelephonyRates.aspx" />
     <Content Include="Pages\User\Addressbook.aspx" />
@@ -312,6 +313,13 @@
     </Compile>
     <Compile Include="Pages\SiteAdministration\DelegeeRoles.aspx.designer.cs">
       <DependentUpon>DelegeeRoles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\NgnRates.aspx.cs">
+      <DependentUpon>NgnRates.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\NgnRates.aspx.designer.cs">
+      <DependentUpon>NgnRates.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\SiteAdministration\SystemRoles.aspx.cs">
       <DependentUpon>SystemRoles.aspx</DependentUpon>
