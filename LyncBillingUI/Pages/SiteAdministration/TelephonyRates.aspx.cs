@@ -67,9 +67,6 @@ namespace LyncBillingUI.Pages.SiteAdministration
         {
             gateways = Global.DATABASE.Gateways.GetAll().ToList();
 
-            //GetSite ID
-            //int siteID = GetAdminSites().First(item => item.SiteName == session.SiteName).SiteID;
-
             //Get Related Gateways for that specific site
             List<GatewayInfo> gatewaysDetails = Global.DATABASE.GatewaysInfo.GetAll().Where(item => item.SiteId == siteID).ToList();
 
