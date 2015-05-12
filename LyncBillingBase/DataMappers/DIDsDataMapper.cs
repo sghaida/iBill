@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Collections.Generic;
 using CCC.ORM;
+using CCC.ORM.Helpers;
 using CCC.ORM.DataAccess;
 using LyncBillingBase.DataModels;
 
@@ -19,7 +20,10 @@ namespace LyncBillingBase.DataMappers
         {
             if (_diDs == null || _diDs.Count == 0)
             {
-                _diDs = base.GetAll().ToList();
+                lock (_diDs)
+                {
+                    _diDs = (new List<Did>()).GetWithRelations(item => item.Site).ToList();
+                }
             }
         }
 
