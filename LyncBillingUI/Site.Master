@@ -23,7 +23,7 @@
 
             <asp:HiddenField ID="ThisPageReferrer" runat="server" Value="" />
 
-            <div class="ibill-masthead" id="top" role="banner">
+            <div class="ibill-masthead" id="top" role="banner" style="display:none !important">
                 <div class="container">
                     <nav class="ibill-nav">
                         <div class="container-fluid">
@@ -138,6 +138,7 @@
         <script type="text/javascript">
             $(window).load(function () {
                 $('head').prepend("<link rel='stylesheet' href='<%= global_asax.APPLICATION_URL %>/Content/bootstrap.noconflict.css' />");
+                $('#top').removeAttr('style');
             });
 
             //$(document).ready(function () {
