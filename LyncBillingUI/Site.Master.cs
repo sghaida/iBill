@@ -452,8 +452,8 @@ namespace LyncBillingUI
                             "<li><a href='{0}/Site/Administration/NGNRates'>NGNs Rates</a></li> " +
                             "<li class='divider'></li> " +
                             "<li class='dropdown-header'>Email Notifications</li> " +
-                            "<li><a href='{0}/Site/Administration/UsersBills'>User Bills</a></li> " +
-                            "<li><a href='{0}/Site/Administration/UnallocatedCalls'>Unallocated Calls</a></li> " +
+                            "<li><a href='{0}/Site/Administration/Notify/UsersBills'>User Bills</a></li> " +
+                            "<li><a href='{0}/Site/Administration/Notify/UnallocatedCalls'>Unallocated Calls</a></li> " +
                             "<li class='divider'></li> " +
                             "<li class='dropdown-header'>Statistics</li> " +
                             "<li><a href='{0}/Site/Administration/Statistics/GeneralUsage'>General Usage</a></li> " +
