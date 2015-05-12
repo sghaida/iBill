@@ -150,6 +150,7 @@
     <Content Include="Pages\SiteAdministration\SystemRoles.aspx" />
     <Content Include="Pages\SiteAdministration\TelephonyRates.aspx" />
     <Content Include="Pages\SiteAdministration\UnallocatedCallsNotification.aspx" />
+    <Content Include="Pages\SiteAdministration\UsersBillsNotification.aspx" />
     <Content Include="Pages\User\Addressbook.aspx" />
     <Content Include="Pages\User\Bills.aspx" />
     <Content Include="Pages\User\Dashboard.aspx" />
@@ -342,6 +343,13 @@
     </Compile>
     <Compile Include="Pages\SiteAdministration\UnallocatedCallsNotification.aspx.designer.cs">
       <DependentUpon>UnallocatedCallsNotification.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\UsersBillsNotification.aspx.cs">
+      <DependentUpon>UsersBillsNotification.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\UsersBillsNotification.aspx.designer.cs">
+      <DependentUpon>UsersBillsNotification.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\User\Addressbook.aspx.cs">
       <DependentUpon>Addressbook.aspx</DependentUpon>

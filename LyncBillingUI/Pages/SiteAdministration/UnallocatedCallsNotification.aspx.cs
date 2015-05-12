@@ -99,9 +99,7 @@ namespace LyncBillingUI.Pages.SiteAdministration
         {
             string Body = string.Empty;
             string subject = string.Empty;
-
             string sipAccount = string.Empty;
-
             string json = e.ExtraParams["Values"];
 
             List<CallsSummaryForUser> usersSummary = JSON.Deserialize<List<CallsSummaryForUser>>(json);
