@@ -19,4 +19,3 @@ D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Debug\Microsoft.Exchan
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\bin\Debug\Microsoft.Exchange.WebServices.Auth.xml
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\obj\Debug\CCC.UTILS.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\obj\Debug\CCC.UTILS.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\CCC.UTILS\obj\Debug\CCC.UTILS.csprojResolveAssemblyReference.cache

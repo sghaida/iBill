@@ -40,6 +40,19 @@ namespace LyncBillingUI
             routes.MapPageRoute("", "Site/Accounting/Dashboard", "~/Pages/SiteAccounting/Dashboard.aspx");
             routes.MapPageRoute("", "Site/Accounting/DisputedCalls", "~/Pages/SiteAccounting/DisputedCalls.aspx");
             routes.MapPageRoute("", "Site/Accounting/MonthlyReports", "~/Pages/SiteAccounting/MonthlyReport.aspx");
+            routes.MapPageRoute("", "Site/Accounting/PeriodicalReports", "~/Pages/SiteAccounting/PeriodicalReport.aspx");
+            routes.MapPageRoute("", "Site/Accounting/BillingCycle", "~/Pages/SiteAccounting/BillingCycleNotifications.aspx");
+
+            //
+            // Site Administrator Pages
+            routes.MapPageRoute("", "Site/Administration/Dashboard", "~/Pages/SiteAdministration/Dashboard.aspx");
+            routes.MapPageRoute("", "Site/Administration/DelegeeRoles", "~/Pages/SiteAdministration/DelegeeRoles.aspx");
+            routes.MapPageRoute("", "Site/Administration/SystemRoles", "~/Pages/SiteAdministration/SystemRoles.aspx");
+            routes.MapPageRoute("", "Site/Administration/TelephonyRates", "~/Pages/SiteAdministration/TelephonyRates.aspx");
+            routes.MapPageRoute("", "Site/Administration/NgnRates", "~/Pages/SiteAdministration/NgnRates.aspx");
+            routes.MapPageRoute("", "Site/Administration/Notify/UsersBills", "~/Pages/SiteAdministration/UsersBillsNotification.aspx");
+            routes.MapPageRoute("", "Site/Administration/Notify/UnallocatedCalls", "~/Pages/SiteAdministration/UnallocatedCallsNotification.aspx");
+            routes.MapPageRoute("", "Site/Administration/DIDs", "~/Pages/SiteAdministration/DIDs.aspx");
         }
     }
 }

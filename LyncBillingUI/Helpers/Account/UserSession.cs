@@ -130,21 +130,20 @@ namespace LyncBillingUI.Helpers.Account
             delegees = Global.DATABASE.DelegateRoles.GetByDelegeeSipAccount(userSipAccount);
 
             if(delegees != null && delegees.Any())
-            { 
-                this.IsUserDelegate = delegees.Exists(item => item.DelegationType == 1);
-                this.IsDepartmentDelegate = delegees.Exists(item => item.DelegationType == 2);
-                this.IsSiteDelegate = delegees.Exists(item => item.DelegationType == 3);
+            {
+                //
+                // Initialize the Delegees Information Lists
+                this.SiteDelegateRoles = delegees.Where(item => item.DelegationType == Global.DATABASE.Roles.SiteDelegeeRoleID).ToList();
+                this.DepartmentDelegateRoles = delegees.Where(item => item.DelegationType == Global.DATABASE.Roles.DepartmentDelegeeRoleID).ToList();
+                this.UserDelegateRoles = delegees.Where(item => item.DelegationType == Global.DATABASE.Roles.UserDelegeeRoleID).ToList();
 
-                //Initialize the Delegees Information Lists
-                if (IsSiteDelegate)
-                    this.SiteDelegateRoles = delegees.Where(item => item.DelegationType == 1).ToList();
+                //
+                // Update the boolean flags
+                IsSiteDelegate = this.SiteDelegateRoles.Any();
+                IsDepartmentDelegate = this.DepartmentDelegateRoles.Any();
+                IsUserDelegate = this.UserDelegateRoles.Any();
 
-                if (IsDepartmentDelegate)
-                    this.DepartmentDelegateRoles = delegees.Where(item => item.DelegationType == 2).ToList();
-
-                if (IsUserDelegate)
-                    this.UserDelegateRoles = delegees.Where(item => item.DelegationType == 3).ToList();
-
+                //
                 // Decide the general IsDelegee flag value
                 IsDelegee = IsUserDelegate || IsDepartmentDelegate || IsSiteDelegate;
             }
@@ -229,7 +228,12 @@ namespace LyncBillingUI.Helpers.Account
         // Get the user sipaccount.
         public string GetEffectiveSipAccount()
         {
-            var delegeesRoleNames = new List<string>();
+            var delegeesRoleNames = new List<string>()
+            {
+                Functions.UserDelegeeRoleName,
+                Functions.DepartmentDelegeeRoleName,
+                Functions.SiteDelegeeRoleName
+            };
 
             //if the user is a user-delegee return the delegate sipaccount.
             if (delegeesRoleNames.Contains(ActiveRoleName) && DelegeeUserAccount != null)
@@ -245,7 +249,12 @@ namespace LyncBillingUI.Helpers.Account
         // Get the user displayname.
         public string GetEffectiveDisplayName()
         {
-            var delegeesRoleNames = new List<string>();
+            var delegeesRoleNames = new List<string>()
+            {
+                Functions.UserDelegeeRoleName,
+                Functions.DepartmentDelegeeRoleName,
+                Functions.SiteDelegeeRoleName
+            };
 
             //if the user is a user-delegee return the delegate sipaccount.
             if (delegeesRoleNames.Contains(ActiveRoleName) && DelegeeUserAccount != null)
@@ -267,9 +276,9 @@ namespace LyncBillingUI.Helpers.Account
 
             List<string> DelegeesRoleNames = new List<string>()
             {
-                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID).RoleName,
-                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.DepartmentDelegeeRoleID).RoleName,
-                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.SiteDelegeeRoleID).RoleName,
+                Functions.UserDelegeeRoleName,
+                Functions.DepartmentDelegeeRoleName,
+                Functions.SiteDelegeeRoleName
             };
 
             //
@@ -357,9 +366,9 @@ namespace LyncBillingUI.Helpers.Account
 
             List<string> DelegeesRoleNames = new List<string>()
             {
-                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID).RoleName,
-                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.DepartmentDelegeeRoleID).RoleName,
-                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.SiteDelegeeRoleID).RoleName,
+                Functions.UserDelegeeRoleName,
+                Functions.DepartmentDelegeeRoleName,
+                Functions.SiteDelegeeRoleName
             };
 
             //This part is off-loaded to another procedure due to size of code
@@ -384,9 +393,9 @@ namespace LyncBillingUI.Helpers.Account
         {
             List<string> DelegeesRoleNames = new List<string>()
             {
-                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.UserDelegeeRoleID).RoleName,
-                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.DepartmentDelegeeRoleID).RoleName,
-                Global.DATABASE.Roles.GetById(Global.DATABASE.Roles.SiteDelegeeRoleID).RoleName,
+                Functions.UserDelegeeRoleName,
+                Functions.DepartmentDelegeeRoleName,
+                Functions.SiteDelegeeRoleName
             };
 
             if (DelegeesRoleNames.Contains(this.ActiveRoleName))

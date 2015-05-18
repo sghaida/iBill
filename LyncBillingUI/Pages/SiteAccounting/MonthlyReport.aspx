@@ -13,7 +13,7 @@
                 ID="MonthlyReportsTools"
                 runat="server"
                 Header="true"
-                Title="Generate Monthly Reports"
+                Title="Monthly Reports"
                 MaxWidth="955"
                 Layout="AnchorLayout">
                 
@@ -33,7 +33,7 @@
                                 FieldLabel="Site:"
                                 LabelWidth="25"
                                 Width="160"
-                                MarginSpec="5 15 0 5">
+                                MarginSpec="5 0 5 5">
                                 <Store>
                                     <ext:Store
                                         ID="SitesStore"
@@ -76,6 +76,8 @@
                                 </Listeners>--%>
                             </ext:ComboBox>
 
+                            <ext:ToolbarSeparator MarginSpec="5 10 5 10" />
+
                             <ext:DateField
                                 ID="ReportDateField"
                                 runat="server"
@@ -83,7 +85,7 @@
                                 LabelWidth="30"
                                 EmptyText="Empty Date"
                                 Width="150"
-                                MarginSpec="5 15 0 5"
+                                MarginSpec="5 0 5 0"
                                 Disabled="true">
 
                                 <DirectEvents>
@@ -97,6 +99,8 @@
                                 </Listeners>--%>
                             </ext:DateField>
 
+                            <ext:ToolbarSeparator MarginSpec="5 10 5 10" />
+
                             <ext:ComboBox
                                 ID="CallsTypesComboBox"
                                 runat="server"
@@ -107,7 +111,7 @@
                                 LabelSeparator=":"
                                 LabelWidth="40"
                                 Width="200"
-                                MarginSpec="5 325 0 5"
+                                MarginSpec="5 0 5 0"
                                 Disabled="true"
                                 Editable="false">
                                 <Items>
@@ -136,7 +140,8 @@
                                 runat="server"
                                 Text="Tools"
                                 Icon="ApplicationOsxGo"
-                                Disabled="true">
+                                Disabled="true"
+                                MarginSpec="5 0 5 320">
                                 <Menu>
                                     <ext:Menu ID="ExportReportMenu" runat="server">
                                         <Items>
@@ -191,13 +196,13 @@
                 </TopBar>
             </ext:Panel>
 
-            <div class="h5 clear"></div>
+            <br />
 
             <ext:GridPanel
                 ID="MonthlyReportsGrids"
                 runat="server"
                 MaxWidth="955"
-                MinHeight="500"
+                MinHeight="600"
                 AutoScroll="true"
                 Scroll="Both"
                 Layout="FitLayout">
@@ -210,34 +215,52 @@
                         PageSize="25"
                         OnSubmitData="MonthlyReportsStore_SubmitData">
                         <Model>
-                            <ext:Model ID="MonthlyReportsModel" runat="server" IDProperty="ChargingParty">
+                            <ext:Model ID="MonthlyReportsModel" runat="server" IDProperty="UserSipAccount">
                                 <Fields>
-                                    <%--<ext:ModelField Name="User.Id" Type="Object" SortType="AsText" />
-                                    <ext:ModelField Name="User.DisplayName" Type="Object" SortType="AsText" />--%>
-                                    <ext:ModelField Name="SipAccount" Type="String" SortType="AsText" />
+                                    <ext:ModelField Name="UserId" Type="Int" SortType="AsText" />
+                                    <ext:ModelField Name="UserSipAccount" Type="String" SortType="AsText" />
+                                    <ext:ModelField Name="UserName" Type="String" SortType="AsText" />
+                                    <ext:ModelField Name="UserDepartment" Type="String" SortType="AsText" />
                                     <ext:ModelField Name="PersonalCallsCost" Type="Float" />
                                     <ext:ModelField Name="BusinessCallsCost" Type="Float" />
-                                    <ext:ModelField Name="UnmarkedCallsCost" Type="Float" />
+                                    <ext:ModelField Name="UnallocatedCallsCost" Type="Float" />
                                 </Fields>
                             </ext:Model>
                         </Model>
 
                         <Sorters>
-                            <ext:DataSorter Property="ChargingParty" Direction="ASC" />
+                            <ext:DataSorter Property="UserSipAccount" Direction="ASC" />
                         </Sorters>
                     </ext:Store>
                 </Store>
 
                 <ColumnModel ID="MonthlyReportsColumnModel" runat="server" Flex="1">
                     <Columns>
-                        
+                        <ext:Column
+                            ID="UserIdCol"
+                            runat="server"
+                            Text="Employee ID"
+                            Width="100"
+                            DataIndex="UserId"
+                            Sortable="true">
+                            <%--<HeaderItems>
+                                <ext:TextField ID="EmployeeIDFilter" runat="server" Icon="Magnifier">
+                                    <Listeners>
+                                        <Change Handler="applyFilter(this);" Buffer="250" />
+                                    </Listeners>
+                                    <Plugins>
+                                        <ext:ClearButton ID="ClearEmployeeIDFilterButton" runat="server" />
+                                    </Plugins>
+                                </ext:TextField>
+                            </HeaderItems>--%>
+                        </ext:Column>
 
                         <ext:Column
-                            ID="SipAccountCol"
+                            ID="UserSipAccountCol"
                             runat="server"
                             Text="Sip Account"
-                            Width="160"
-                            DataIndex="SipAccount"
+                            Width="200"
+                            DataIndex="UserSipAccount"
                             Sortable="true">
                             <%--<HeaderItems>
                                 <ext:TextField ID="SipAccountFilter" runat="server" Icon="Magnifier">
@@ -251,6 +274,43 @@
                             </HeaderItems>--%>
                         </ext:Column>
 
+                        <ext:Column
+                            ID="UserNameCol"
+                            runat="server"
+                            Text="Full Name"
+                            Width="200"
+                            DataIndex="UserName"
+                            Sortable="true">
+                            <%--<HeaderItems>
+                                <ext:TextField ID="FullNameFilter" runat="server" Icon="Magnifier">
+                                    <Listeners>
+                                        <Change Handler="applyFilter(this);" Buffer="250" />
+                                    </Listeners>
+                                    <Plugins>
+                                        <ext:ClearButton ID="ClearFullNameFilterButton" runat="server" />
+                                    </Plugins>
+                                </ext:TextField>
+                            </HeaderItems>--%>
+                        </ext:Column>
+
+                        <ext:Column
+                            ID="UserDepartmentCol"
+                            runat="server"
+                            Text="Department"
+                            Width="100"
+                            DataIndex="UserDepartment"
+                            Sortable="true">
+                            <%--<HeaderItems>
+                                <ext:TextField ID="FullNameFilter" runat="server" Icon="Magnifier">
+                                    <Listeners>
+                                        <Change Handler="applyFilter(this);" Buffer="250" />
+                                    </Listeners>
+                                    <Plugins>
+                                        <ext:ClearButton ID="ClearFullNameFilterButton" runat="server" />
+                                    </Plugins>
+                                </ext:TextField>
+                            </HeaderItems>--%>
+                        </ext:Column>
 
                         <ext:Column
                             ID="GrouopedCostsColumnsCol"
@@ -265,7 +325,7 @@
                                     ID="PersonalCallsCostCol"
                                     runat="server"
                                     Text="Personal"
-                                    Width="85"
+                                    Width="90"
                                     DataIndex="PersonalCallsCost"
                                     MenuDisabled="true">
                                 </ext:Column>
@@ -274,17 +334,17 @@
                                     ID="BusinessCallsCostCol"
                                     runat="server"
                                     Text="Business"
-                                    Width="85"
+                                    Width="90"
                                     DataIndex="BusinessCallsCost"
                                     MenuDisabled="true">
                                 </ext:Column>
 
                                 <ext:Column
-                                    ID="UnmarkedCallsCostCol"
+                                    ID="UnallocatedCallsCostCol"
                                     runat="server"
                                     Text="Unallocated"
-                                    Width="85"
-                                    DataIndex="UnmarkedCallsCost"
+                                    Width="90"
+                                    DataIndex="UnallocatedCallsCost"
                                     MenuDisabled="true">
                                 </ext:Column>
                             </Columns>

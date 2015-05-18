@@ -19,11 +19,11 @@
     <body>
         <form runat="server">
             <%--<ext:ResourceManager ID="ExtResourceManager" runat="server" Theme="Gray" />--%>
-            <ext:ResourceManager ID="ExtResourceManager" runat="server" />
+            <ext:ResourceManager ID="ExtResourceManager" runat="server" DirectMethodNamespace="ExtOperationsNamespace" />
 
             <asp:HiddenField ID="ThisPageReferrer" runat="server" Value="" />
 
-            <div class="ibill-masthead" id="top" role="banner">
+            <div class="ibill-masthead" id="top" role="banner" style="display:none !important">
                 <div class="container">
                     <nav class="ibill-nav">
                         <div class="container-fluid">
@@ -60,8 +60,13 @@
 
 
                                         <%-- THE USER MENU --%>
-                                        <% if (CurrentSession.ActiveRoleName == normalUserRoleName)
+                                        <% if (CurrentSession.ActiveRoleName == normalUserRoleName || CurrentSession.ActiveRoleName == userDelegeeRoleName)
                                            { %>
+                                            
+                                            <% if(CurrentSession.ActiveRoleName == userDelegeeRoleName) { %>
+                                                <li><a class="ibill-nav-item" href="<%= global_asax.APPLICATION_URL %>/Authorize?action=drop"><span class="shutdown"></span>&nbsp;Drop Delegee Access</a></li>
+                                            <% } %>
+                                            
                                             <li id="user-menu-tab" class="dropdown">
                                                 <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false"><%= DisplayName %>&nbsp;<span class="caret"></span></a>
                                                 <ul class="dropdown-menu" role="menu">
@@ -87,29 +92,11 @@
 
                                         <% else if (CurrentSession.ActiveRoleName != normalUserRoleName && CurrentSession.ActiveRoleName != userDelegeeRoleName) 
                                            { %>
-                                            <%= GetUiElevatedAccessDropDownMenu(CurrentSession.ActiveRoleName) %>
                                             
-                                            <li><a class="ibill-nav-item" href="<%= global_asax.APPLICATION_URL %>/Authorize?action=drop"><span class="shutdown"></span>&nbsp;Drop Access</a></li>    
+                                            <li><a class="ibill-nav-item" href="<%= global_asax.APPLICATION_URL %>/Authorize?action=drop"><span class="shutdown"></span>&nbsp;Drop Access</a></li>
 
-                                            <% if (CurrentSession.ActiveRoleName == siteAccountantRoleName) 
-                                               {%>
-                                                <li id="site-accountant-menu-tab" class="dropdown">
-                                                    <a href="#" class="dropdown-toggle ibill-nav-dropdown" data-toggle="dropdown" role="button" aria-expanded="false">Navigation&nbsp;<span class="caret"></span></a>
-                                                    <ul class="dropdown-menu" role="menu">
-                                                        <li><a href="<%= global_asax.APPLICATION_URL %>/Site/Accounting/Dashboard">Dashboard</a></li>
-                                                        <li class="divider"></li>
-                                                        <li class="dropdown-header">Manage</li>
-                                                        <li><a href="<%= global_asax.APPLICATION_URL %>/Site/Accounting/DisputedCalls">Disputed Phone Calls</a></li>
-                                                        <li class="divider"></li>
-                                                        <li class="dropdown-header">Notifications</li>
-                                                        <li><a href="#">Billing Cycles</a></li>
-                                                        <li class="divider"></li>
-                                                        <li class="dropdown-header">Reports</li>
-                                                        <li><a href="<%= global_asax.APPLICATION_URL %>/Site/Accounting/MonthlyReports">Monthly Reports</a></li>
-                                                        <li><a href="#">Periodical Reports</a></li>
-                                                    </ul>
-                                                </li>
-                                            <% } %>
+                                            <%= GetUiElevatedAccessDropDownMenu(CurrentSession.ActiveRoleName) %>
+
                                         <% } %>
                                     </ul>
                                 <% } else { %>
@@ -151,6 +138,7 @@
         <script type="text/javascript">
             $(window).load(function () {
                 $('head').prepend("<link rel='stylesheet' href='<%= global_asax.APPLICATION_URL %>/Content/bootstrap.noconflict.css' />");
+                $('#top').removeAttr('style');
             });
 
             //$(document).ready(function () {

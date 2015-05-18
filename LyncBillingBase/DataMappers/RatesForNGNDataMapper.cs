@@ -18,8 +18,7 @@ namespace LyncBillingBase.DataMappers
          */
         private readonly GatewaysRatesDataMapper _gatewaysRatesDataMapper = new GatewaysRatesDataMapper();
 
-        private readonly NumberingPlansForNgnDataMapper _ngnNumberingPlanDataMapper =
-            new NumberingPlansForNgnDataMapper();
+        private readonly NumberingPlansForNgnDataMapper _ngnNumberingPlanDataMapper = new NumberingPlansForNgnDataMapper();
 
         /***
          * The SQL Queries Repository
@@ -36,16 +35,16 @@ namespace LyncBillingBase.DataMappers
         {
             try
             {
-                var allNumberingPlan = _ngnNumberingPlanDataMapper.GetAll();
+                IEnumerable<NumberingPlanForNgn> allNgnNumberingPlan = (new List<NumberingPlanForNgn>()).GetWithRelations(item => item.Country, item => item.TypeOfService);
 
                 // Enable parallelization on the enumerable collection
-                allNumberingPlan = allNumberingPlan.AsParallel();
+                allNgnNumberingPlan = allNgnNumberingPlan.AsParallel();
                 rates = rates.AsParallel();
 
                 rates =
                     (from rate in rates
                         where (rate.NumberingPlanForNgn != null && rate.NumberingPlanForNgn.Id > 0)
-                        join numPlan in allNumberingPlan on rate.NumberingPlanForNgn.Id equals numPlan.Id
+                        join numPlan in allNgnNumberingPlan on rate.NumberingPlanForNgn.Id equals numPlan.Id
                         select new RateForNgn
                         {
                             Id = rate.Id,
@@ -98,7 +97,7 @@ namespace LyncBillingBase.DataMappers
         /// <returns></returns>
         public List<RateForNgn> GetByGatewayId(int gatewayId)
         {
-            var gatewayNgnRates = new List<RateForNgn>();
+            IEnumerable<RateForNgn> gatewayNgnRates = new List<RateForNgn>();
 
             try
             {
@@ -106,11 +105,13 @@ namespace LyncBillingBase.DataMappers
 
                 if (string.IsNullOrEmpty(tableName))
                 {
-                    return null;
+                    return gatewayNgnRates.ToList();
                 }
 
-                //var SQL = RATES_SQL_QUERIES.GetNGNRates(tableName);
-                return gatewayNgnRates.GetWithRelations(tableName, item => item.NumberingPlanForNgn).ToList();
+                gatewayNgnRates = gatewayNgnRates.GetWithRelations(tableName, item => item.NumberingPlanForNgn).AsEnumerable();
+                FillNumberingPlanData(ref gatewayNgnRates);
+
+                return gatewayNgnRates.ToList();
             }
             catch (Exception ex)
             {

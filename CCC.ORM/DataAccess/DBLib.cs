@@ -65,6 +65,7 @@ namespace CCC.ORM.DataAccess
             try
             {
                 conn.Open();
+                comm.CommandTimeout = (30 * 60); //30 minutes
                 dr = comm.ExecuteReader();
                 dt.Load(dr);
             }
@@ -1202,7 +1203,7 @@ namespace CCC.ORM.DataAccess
         {
             var conn = DbInitializeConnection(ConnectionString);
             var comm = new OleDbCommand(sql, conn);
-            comm.CommandTimeout = 360;
+            comm.CommandTimeout = (30 * 60); //30 minutes
 
             try
             {
