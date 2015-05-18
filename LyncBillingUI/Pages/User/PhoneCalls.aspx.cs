@@ -48,13 +48,6 @@ namespace LyncBillingUI.Pages.User
             }
 
             sipAccount = CurrentSession.GetEffectiveSipAccount();
-
-            //
-            // Handle user delegee mode and normal user mode
-            if (CurrentSession.ActiveRoleName == Functions.UserDelegeeRoleName)
-                CurrentSession.DelegeeUserAccount.DelegeeUserAddressbook = Global.DATABASE.PhoneBooks.GetAddressBook(sipAccount);
-            else
-                CurrentSession.Addressbook = Global.DATABASE.PhoneBooks.GetAddressBook(sipAccount);
         }
 
 

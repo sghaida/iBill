@@ -69,12 +69,9 @@ namespace LyncBillingBase.DataMappers
         /// <returns>List of SiteDepartment objects</returns>
         public List<SiteDepartment> GetBySiteId(long siteId)
         {
-            var condition = new Dictionary<string, object>();
-            condition.Add("SiteID", siteId);
-
             try
             {
-                return Get(condition, 0).ToList();
+                return _cachedData.Where(item => item.SiteId == siteId).ToList();
             }
             catch (Exception ex)
             {
@@ -92,14 +89,11 @@ namespace LyncBillingBase.DataMappers
             List<Department> departments = null;
             List<SiteDepartment> siteDepartments = null;
 
-            var condition = new Dictionary<string, object>();
-            condition.Add("SiteID", siteId);
-
             try
             {
-                siteDepartments = Get(condition, 0).ToList();
+                siteDepartments = this.GetBySiteId(siteId) ?? (new List<SiteDepartment>());
 
-                if (siteDepartments != null && siteDepartments.Count > 0)
+                if (siteDepartments.Count > 0)
                 {
                     departments = siteDepartments.Select(siteDep => siteDep.Department).ToList();
                 }

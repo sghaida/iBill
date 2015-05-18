@@ -105,7 +105,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Pages\DepartmentHead\" />
-    <Folder Include="Pages\SiteAdministration\" />
     <Folder Include="Pages\SystemAdministration\" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +144,14 @@
     <Content Include="Pages\SiteAccounting\DisputedCalls.aspx" />
     <Content Include="Pages\SiteAccounting\MonthlyReport.aspx" />
     <Content Include="Pages\SiteAccounting\PeriodicalReport.aspx" />
+    <Content Include="Pages\SiteAdministration\Dashboard.aspx" />
+    <Content Include="Pages\SiteAdministration\DelegeeRoles.aspx" />
+    <Content Include="Pages\SiteAdministration\DIDs.aspx" />
+    <Content Include="Pages\SiteAdministration\NgnRates.aspx" />
+    <Content Include="Pages\SiteAdministration\SystemRoles.aspx" />
+    <Content Include="Pages\SiteAdministration\TelephonyRates.aspx" />
+    <Content Include="Pages\SiteAdministration\UnallocatedCallsNotification.aspx" />
+    <Content Include="Pages\SiteAdministration\UsersBillsNotification.aspx" />
     <Content Include="Pages\User\Addressbook.aspx" />
     <Content Include="Pages\User\Bills.aspx" />
     <Content Include="Pages\User\Dashboard.aspx" />
@@ -152,6 +159,8 @@
     <Content Include="Pages\User\PhoneCallsHistory.aspx" />
     <Content Include="Pages\User\Statistics.aspx" />
     <Content Include="Pages\User\TelephonyRates.aspx" />
+    <Content Include="Resources\csv.xsl" />
+    <Content Include="Resources\excel.xsl" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\extjs-helpers.js" />
@@ -293,6 +302,62 @@
     </Compile>
     <Compile Include="Pages\SiteAccounting\PeriodicalReport.aspx.designer.cs">
       <DependentUpon>PeriodicalReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\DelegeeRoles.aspx.cs">
+      <DependentUpon>DelegeeRoles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\DelegeeRoles.aspx.designer.cs">
+      <DependentUpon>DelegeeRoles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\DIDs.aspx.cs">
+      <DependentUpon>DIDs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\DIDs.aspx.designer.cs">
+      <DependentUpon>DIDs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\NgnRates.aspx.cs">
+      <DependentUpon>NgnRates.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\NgnRates.aspx.designer.cs">
+      <DependentUpon>NgnRates.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\SystemRoles.aspx.cs">
+      <DependentUpon>SystemRoles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\SystemRoles.aspx.designer.cs">
+      <DependentUpon>SystemRoles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\TelephonyRates.aspx.cs">
+      <DependentUpon>TelephonyRates.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\TelephonyRates.aspx.designer.cs">
+      <DependentUpon>TelephonyRates.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\UnallocatedCallsNotification.aspx.cs">
+      <DependentUpon>UnallocatedCallsNotification.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\UnallocatedCallsNotification.aspx.designer.cs">
+      <DependentUpon>UnallocatedCallsNotification.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\UsersBillsNotification.aspx.cs">
+      <DependentUpon>UsersBillsNotification.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\UsersBillsNotification.aspx.designer.cs">
+      <DependentUpon>UsersBillsNotification.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\User\Addressbook.aspx.cs">
       <DependentUpon>Addressbook.aspx</DependentUpon>

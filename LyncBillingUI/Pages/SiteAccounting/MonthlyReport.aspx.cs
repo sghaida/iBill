@@ -21,7 +21,6 @@ namespace LyncBillingUI.Pages.SiteAccounting
     public partial class MonthlyReport : System.Web.UI.Page
     {
         private string sipAccount = string.Empty;
-
         private static List<Site> userSites;
         private List<CallsSummaryForUser> listOfUsersCallsSummary = new List<CallsSummaryForUser>();
 
@@ -103,7 +102,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
             callsType = Convert.ToInt32(CallsTypesComboBox.SelectedItem.Value);
 
             if (callsType == 1)
-                gridData = listOfUsersCallsSummary.Where(summary => string.IsNullOrEmpty(summary.IsInvoiced) || summary.IsInvoiced == "NO").ToList();
+                gridData = listOfUsersCallsSummary.Where(summary => summary.IsInvoiced == "NO").ToList();
             else if (callsType == 2)
                 gridData = listOfUsersCallsSummary.Where(summary => summary.IsInvoiced == "N/A").ToList();
             else if (callsType == 3)
@@ -213,7 +212,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
                             endingDate.ToString()));
                 }
             }
-        }
+        }//end-do-invoice
 
 
         protected void SitesStore_Load(object sender, EventArgs e)
@@ -290,7 +289,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
             {
                 Ok = new MessageBoxButtonConfig
                 {
-                    Handler = "InvoiceOperation.ConfirmDoInvoice()",
+                    Handler = "ExtOperationsNamespace.ConfirmDoInvoice()",
                     Text = "Yes!"
                 },
                 Cancel = new MessageBoxButtonConfig
@@ -318,7 +317,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
             startingDate = new DateTime(ReportDateField.SelectedDate.Year, ReportDateField.SelectedDate.Month, 1);
             endingDate = startingDate.AddMonths(1).AddDays(-1);
 
-            Site site = Global.DATABASE.Sites.GetById(siteID);
+            var site = Global.DATABASE.Sites.GetById(siteID);
 
             if (callTypeId == 1 || callTypeId == 2)
             {
@@ -394,9 +393,9 @@ namespace LyncBillingUI.Pages.SiteAccounting
                 case "xls":
                     this.Response.Clear();
                     this.Response.ContentType = "application/vnd.ms-excel";
-                    this.Response.AddHeader("Content-Disposition", "attachment; filename=submittedData.xls");
+                    this.Response.AddHeader("Content-Disposition", "attachment; filename=MonthlyReport_Summary.xls");
                     XslCompiledTransform xtExcel = new XslCompiledTransform();
-                    xtExcel.Load(Server.MapPath("~/Resources/Excel.xsl"));
+                    xtExcel.Load(Server.MapPath("~/Resources/excel.xsl"));
                     xtExcel.Transform(xml, null, Response.OutputStream);
 
                     break;
@@ -507,6 +506,7 @@ namespace LyncBillingUI.Pages.SiteAccounting
             this.Response.End();
 
         }//End-function
+
     }
 
 }

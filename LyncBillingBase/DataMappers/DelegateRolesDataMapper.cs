@@ -18,18 +18,10 @@ namespace LyncBillingBase.DataMappers
         /// <returns>List of DelegateRole</returns>
         public List<DelegateRole> GetByDelegeeSipAccount(string delegeeSipAccount)
         {
-            var conditions = new Dictionary<string, object>();
-            conditions.Add("DelegeeSipAccount", delegeeSipAccount);
-
             try
             {
-                return Get(conditions, 0)
-                    .GetWithRelations(
-                        item => item.DelegeeAccount, 
-                        item => item.ManagedUser, 
-                        item => item.ManagedSite, 
-                        item => item.ManagedSiteDepartment)
-                    .IncludeSiteDepartments()
+                return this.GetAll()
+                    .Where(delegee => delegee.DelegeeSipAccount.ToLower() == delegeeSipAccount.ToLower())
                     .ToList();
             }
             catch (Exception ex)
@@ -47,40 +39,31 @@ namespace LyncBillingBase.DataMappers
         /// <param name="delegationType">The Delegation TypeID</param>
         public List<DelegateRole> GetByDelegeeSipAccount(string delegeeSipAccount, int delegationType)
         {
-            var conditions = new Dictionary<string, object>();
-            conditions.Add("DelegeeSipAccount", delegeeSipAccount);
-            conditions.Add("DelegationType", delegationType);
-
             try
             {
-                var delegees = Get(conditions, 0);
-
-                if(delegees != null)
-                {
-                    if(delegationType == 1)
-                    {
-                        delegees = delegees.GetWithRelations(
-                                item => item.DelegeeAccount,
-                                item => item.ManagedSite);
-                    }
-                    else if(delegationType == 2)
-                    {
-                        delegees = delegees.GetWithRelations(
-                                item => item.DelegeeAccount,
-                                item => item.ManagedSiteDepartment)
-                            .IncludeSiteDepartments();
-                    }
-                    else if(delegationType == 3)
-                    {
-                        delegees = delegees.GetWithRelations(
-                            item => item.DelegeeAccount,
-                            item => item.ManagedUser);
-                    }
-                }
-
-                return delegees.ToList();
+                return GetByDelegeeSipAccount(delegeeSipAccount)
+                    .Where(delegee => delegee.DelegationType == delegationType)
+                    .ToList();
             }
             catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+        public override IEnumerable<DelegateRole> GetAll(string dataSourceName = null, CCC.ORM.Globals.DataSource.Type dataSourceType = CCC.ORM.Globals.DataSource.Type.Default)
+        {
+            try
+            {
+                return (new List<DelegateRole>())
+                    .GetWithRelations(
+                        item => item.DelegeeAccount,
+                        item => item.ManagedUser,
+                        item => item.ManagedSiteDepartment,
+                        item => item.ManagedSite)
+                    .IncludeSiteDepartments();
+            }
+            catch(Exception ex)
             {
                 throw ex.InnerException;
             }

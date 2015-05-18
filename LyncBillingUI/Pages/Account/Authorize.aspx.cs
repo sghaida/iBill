@@ -222,7 +222,7 @@ namespace LyncBillingUI.Pages.Account
                 Response.Redirect(GetHomepageLink(Functions.UserDelegeeRoleName));
             }
 
-            else if (delegee is SiteDepartment && delegeeType == Global.DATABASE.Roles.DepartmentDelegeeRoleID)
+            else if (delegee is LyncBillingBase.DataModels.SiteDepartment && delegeeType == Global.DATABASE.Roles.DepartmentDelegeeRoleID)
             {
                 //Get delegated department
                 CurrentSession.DelegeeUserAccount = new DelegeeUserAccount();
@@ -286,7 +286,7 @@ namespace LyncBillingUI.Pages.Account
         {
             if (roleName == Functions.SystemAdminRoleName) return "/System/Admin/Dashboard";
 
-            else if (roleName == Functions.SiteAdminRoleName) return "/Site/Admin/Dashboard";
+            else if (roleName == Functions.SiteAdminRoleName) return "/Site/Administration/Dashboard";
             else if (roleName == Functions.SiteAccountantRoleName) return "/Site/Accounting/Dashboard/";
             else if (roleName == Functions.DepartmentHeadRoleName) return "/Department/Head/Dashboard/";
 

@@ -27,5 +27,9 @@ namespace LyncBillingBase.DataModels
         // Relations
         [DataRelation(WithDataModel = typeof (Site), OnDataModelKey = "Id", ThisKey = "SiteId")]
         public Site Site { get; set; }
+
+        //
+        // UI Mandatory Field
+        public string SiteName { get; set; }
     }
 }
