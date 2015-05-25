@@ -53,6 +53,7 @@ namespace LyncBillingUI
             routes.MapPageRoute("", "Site/Administration/Notify/UsersBills", "~/Pages/SiteAdministration/UsersBillsNotification.aspx");
             routes.MapPageRoute("", "Site/Administration/Notify/UnallocatedCalls", "~/Pages/SiteAdministration/UnallocatedCallsNotification.aspx");
             routes.MapPageRoute("", "Site/Administration/DIDs", "~/Pages/SiteAdministration/DIDs.aspx");
+            routes.MapPageRoute("", "Site/Administration/DIDs", "~/Pages/SiteAdministration/ExclusionsList.aspx");
         }
     }
 }

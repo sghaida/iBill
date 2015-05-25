@@ -17,13 +17,13 @@
     </head>
 
     <body>
-        <form runat="server">
+        <form runat="server" id="main_asp_form" style="visibility: hidden;">
             <%--<ext:ResourceManager ID="ExtResourceManager" runat="server" Theme="Gray" />--%>
             <ext:ResourceManager ID="ExtResourceManager" runat="server" DirectMethodNamespace="ExtOperationsNamespace" />
 
             <asp:HiddenField ID="ThisPageReferrer" runat="server" Value="" />
 
-            <div class="ibill-masthead" id="top" role="banner" style="display:none !important">
+            <div class="ibill-masthead" id="top" role="banner">
                 <div class="container">
                     <nav class="ibill-nav">
                         <div class="container-fluid">
@@ -121,7 +121,7 @@
                 <hr />
 
                 <footer role="contentinfo">
-                    <p>&copy; <%: DateTime.Now.Year %> - CCC iBill</p>
+                    <p>&copy;&nbsp;<%: DateTime.Now.Year %> CCC iBill. Powered by MOA R&D. For any issues or inquiries kindly contact the <a href="helpdesk@ccc.gr">HelpDesk</a></p>
                 </footer>
             </div>
         </form>
@@ -138,7 +138,7 @@
         <script type="text/javascript">
             $(window).load(function () {
                 $('head').prepend("<link rel='stylesheet' href='<%= global_asax.APPLICATION_URL %>/Content/bootstrap.noconflict.css' />");
-                $('#top').removeAttr('style');
+                $('#main_asp_form').removeAttr('style');
             });
 
             //$(document).ready(function () {
