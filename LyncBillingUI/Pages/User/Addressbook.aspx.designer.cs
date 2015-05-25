@@ -22,13 +22,13 @@ namespace LyncBillingUI.Pages.User {
         protected global::Ext.Net.TabPanel AddressbookTabsPanel;
         
         /// <summary>
-        /// EditAddressBookContactForm control.
+        /// ManageMyAddressBookFormPanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.FormPanel EditAddressBookContactForm;
+        protected global::Ext.Net.FormPanel ManageMyAddressBookFormPanel;
         
         /// <summary>
         /// Toolbar1 control.
@@ -211,22 +211,22 @@ namespace LyncBillingUI.Pages.User {
         protected global::Ext.Net.Button DeleteContactButton;
         
         /// <summary>
-        /// ImportContactsGrid control.
+        /// ImportContactsFromHistoryGrid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.GridPanel ImportContactsGrid;
+        protected global::Ext.Net.GridPanel ImportContactsFromHistoryGrid;
         
         /// <summary>
-        /// ImportContactsStore control.
+        /// ImportContactsFromHistoryStore control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Store ImportContactsStore;
+        protected global::Ext.Net.Store ImportContactsFromHistoryStore;
         
         /// <summary>
         /// ImportContactsStoreModel control.
@@ -373,22 +373,22 @@ namespace LyncBillingUI.Pages.User {
         protected global::Ext.Net.PagingToolbar ImportContactsPagingBottomBar;
         
         /// <summary>
-        /// OutlookContactsGrid control.
+        /// ImportContactsFromOutlookGrid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.GridPanel OutlookContactsGrid;
+        protected global::Ext.Net.GridPanel ImportContactsFromOutlookGrid;
         
         /// <summary>
-        /// OutlookContactsStore control.
+        /// ImportContactsFromOutlookStore control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Store OutlookContactsStore;
+        protected global::Ext.Net.Store ImportContactsFromOutlookStore;
         
         /// <summary>
         /// Model1 control.

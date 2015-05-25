@@ -176,9 +176,11 @@
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
     <Content Include="App_Readme\Ext.NET\Sample.Web.config" />
+    <Content Include="Content\bootstrap.config.json" />
     <None Include="Project_Readme.html" />
     <Content Include="Site.Mobile.Master" />
     <Content Include="Scripts\jquery-1.11.2.min.map" />
+    <Content Include="Scripts\bootstrap.config.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
