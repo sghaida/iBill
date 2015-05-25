@@ -19,6 +19,22 @@ namespace LyncBillingUI.Pages.User
 {
     public partial class Statistics : System.Web.UI.Page
     {
+        /// <summary>
+        /// Used in exporting customized reports to the line chart.
+        /// Check the GetDurationChartReport method.
+        /// </summary>
+        internal class DurationChartDataRecord
+        {
+            public DateTime Date { get; set; }
+            public long BusinessCallsDuration { get; set; }
+            public long PersonalCallsDuration { get; set; }
+            public long TotalCallsDuration { get; set; }
+            public decimal BusinessCallsCost { get; set; }
+            public decimal PersonalCallsCost { get; set; }
+            public decimal TotalCallsCost { get; set; }
+        }
+
+
         private string sipAccount = string.Empty;
 
         // This actually takes a copy of the current session for some uses on the frontend.
@@ -49,6 +65,28 @@ namespace LyncBillingUI.Pages.User
             sipAccount = CurrentSession.GetEffectiveSipAccount();
         }
 
+
+        private List<DurationChartDataRecord> GetDurationChartData(DateTime startDate, DateTime endDate)
+        {
+            // Get chart data from the database for this user
+            var chartData = Global.DATABASE.UsersCallsSummaries.GetBySipAccount(sipAccount, startDate, endDate);
+
+            var report = (from dataRecord in chartData
+                          group dataRecord by new { dataRecord.Date }
+                              into result
+                              select new DurationChartDataRecord
+                              {
+                                  Date = result.Key.Date,
+                                  BusinessCallsCost = result.Sum(x => x.BusinessCallsCost),
+                                  PersonalCallsCost = result.Sum(x => x.PersonalCallsCost),
+                                  BusinessCallsDuration = result.Sum(x => x.BusinessCallsDuration),
+                                  PersonalCallsDuration = result.Sum(x => x.PersonalCallsDuration),
+                                  TotalCallsCost = result.Sum(x => x.BusinessCallsCost) + result.Sum(x => x.PersonalCallsCost),
+                                  TotalCallsDuration = result.Sum(x => x.BusinessCallsDuration) + result.Sum(x => x.PersonalCallsDuration)
+                              }).ToList<DurationChartDataRecord>();
+
+            return report;
+        }
 
         private List<ChartReport> GetChartData()
         {
@@ -83,8 +121,11 @@ namespace LyncBillingUI.Pages.User
                 DateTime fromDate = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
                 DateTime toDate = DateTime.Now;
 
-                DurationCostChartStore.DataSource = Global.DATABASE.UsersCallsSummaries.GetBySipAccount(sipAccount, fromDate, toDate);
-                DurationCostChartStore.DataBind();
+                var chartData = GetDurationChartData(fromDate, toDate);
+
+                // Bind the "report" to to the Chart's store.
+                DurationCostChart.GetStore().DataSource = chartData;
+                DurationCostChart.GetStore().DataBind();
             }
         }
 
@@ -152,7 +193,7 @@ namespace LyncBillingUI.Pages.User
                 titleText = SpecialDateTime.ConstructDateRange(filterYear, filterQuater, out startingDate, out endingDate);
 
                 //Re-bind DurationCostChart to match the filter dates criteria
-                DurationCostChart.GetStore().LoadData(Global.DATABASE.UsersCallsSummaries.GetBySipAccount(sipAccount, startingDate, endingDate));
+                DurationCostChart.GetStore().LoadData(this.GetDurationChartData(startingDate, endingDate));
                 DurationCostChartPanel.Title = String.Format("Business/Personal Calls - {0}", titleText);
 
                 var chartData = Global.DATABASE.ChartsReports.GetByUser(sipAccount, startingDate, endingDate);

@@ -91,7 +91,7 @@ namespace LyncBillingUI.Pages.User {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Column SessionIdTime;
+        protected global::Ext.Net.DateColumn SessionIdTime;
         
         /// <summary>
         /// MarkerCallToCountry control.
@@ -280,7 +280,7 @@ namespace LyncBillingUI.Pages.User {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Column DepartmentPhoneCallsSessionIdTime;
+        protected global::Ext.Net.DateColumn DepartmentPhoneCallsSessionIdTime;
         
         /// <summary>
         /// DepartmentPhoneCallsMarkerCallToCountry control.

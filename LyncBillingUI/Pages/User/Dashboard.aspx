@@ -115,14 +115,12 @@
                         </Store>
 
                         <Axes>
-                            <ext:CategoryAxis
+                            <ext:TimeAxis
                                 Position="Bottom"
                                 Fields="Date"
-                                Title="Month">
-                                <Label>
-                                    <Renderer Handler="return Ext.util.Format.date(value, 'M');" />
-                                </Label>
-                            </ext:CategoryAxis>
+                                Title="Month"
+                                DateFormat="MMM YY">
+                            </ext:TimeAxis>
 
                             <ext:NumericAxis
                                 Title="Cost in Local Currency"
