@@ -147,6 +147,7 @@
     <Content Include="Pages\SiteAdministration\Dashboard.aspx" />
     <Content Include="Pages\SiteAdministration\DelegeeRoles.aspx" />
     <Content Include="Pages\SiteAdministration\DIDs.aspx" />
+    <Content Include="Pages\SiteAdministration\ExclusionsList.aspx" />
     <Content Include="Pages\SiteAdministration\NgnRates.aspx" />
     <Content Include="Pages\SiteAdministration\SystemRoles.aspx" />
     <Content Include="Pages\SiteAdministration\TelephonyRates.aspx" />
@@ -323,6 +324,13 @@
     </Compile>
     <Compile Include="Pages\SiteAdministration\DIDs.aspx.designer.cs">
       <DependentUpon>DIDs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\ExclusionsList.aspx.cs">
+      <DependentUpon>ExclusionsList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SiteAdministration\ExclusionsList.aspx.designer.cs">
+      <DependentUpon>ExclusionsList.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\SiteAdministration\NgnRates.aspx.cs">
       <DependentUpon>NgnRates.aspx</DependentUpon>
