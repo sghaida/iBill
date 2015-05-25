@@ -33,7 +33,6 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBilli
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.csprojResolveAssemblyReference.cache
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.pdb
-D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.csprojResolveAssemblyReference.cache
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\CCC.ORM.dll.config
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingBase.dll.config
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.dll.config
@@ -69,5 +68,6 @@ D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.AspNet.F
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Transformer.NET.xml
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\MongoDB.Driver.xml
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\MongoDB.Bson.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.csprojResolveAssemblyReference.cache
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.dll
 D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.pdb
