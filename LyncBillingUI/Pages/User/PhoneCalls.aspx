@@ -69,12 +69,18 @@
         <div class="col-md-12">
 
             <ext:TabPanel
-                ID="ManagePhoneCallsTabsPanel"
+                ID="PhoneCallsTabsPanel"
                 runat="server"
                 Title="Phone Calls Allocation"
                 MaxWidth="955"
                 MinHeight="500"
                 Plain="false">
+
+                <DirectEvents>
+                    <TabChange OnEvent="PhoneCallsTabsPanel_TabChange"></TabChange>
+                </DirectEvents>
+
+
                 <Items>
                     <%-- 
                         ==========================================
@@ -82,7 +88,7 @@
                         ==========================================
                     --%>
                     <ext:GridPanel
-                        ID="ManagePhoneCallsGrid"
+                        ID="MyPhoneCallsGrid"
                         runat="server"
                         Border="true"
                         AutoScroll="true"
@@ -96,11 +102,11 @@
 
                         <Store>
                             <ext:Store
-                                ID="PhoneCallsStore"
+                                ID="MyPhoneCallsStore"
                                 runat="server"
                                 PageSize="25"
                                 IsPagingStore="true"
-                                OnLoad="PhoneCallsStore_Load">
+                                OnLoad="MyPhoneCallsStore_Load">
 
                                 <Model>
                                     <ext:Model ID="PhoneCallsStoreModel" runat="server" IDProperty="SessionIdTime">
@@ -350,9 +356,9 @@
                         Border="true"
                         AutoScroll="true"
                         Scroll="Both"
-                        Layout="TableLayout"
+                        Layout="FitLayout"
                         MaxWidth="955"
-                        Height="620"
+                        MinHeight="580"
                         Header="true"
                         Title="My Department's Calls"
                         ContextMenuID="DepartmentPhonecallsAllocationMenu">
@@ -381,6 +387,7 @@
                                             <ext:ModelField Name="UiAssignedOn" Type="Date" />
                                             <ext:ModelField Name="UiCallType" Type="String" />
                                             <ext:ModelField Name="UiMarkedOn" Type="Date" />
+                                            <ext:ModelField Name="PhoneBookName" Type="String" />
                                             <ext:ModelField Name="PhoneCallsTableName" Type="String" />
                                         </Fields>
                                     </ext:Model>

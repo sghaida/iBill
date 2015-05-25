@@ -26,6 +26,8 @@ namespace LyncBillingUI.Pages.User
         // This actually takes a copy of the current session for some uses on the frontend.
         public UserSession CurrentSession { get; set; }
 
+        private static List<PhoneCall> departmentPhoneCalls { get; set; }
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -51,13 +53,34 @@ namespace LyncBillingUI.Pages.User
         }
 
 
+        private void DepartmentPhoneCallsGridManager(bool GetFreshData = true, bool BindData = true)
+        {
+            if(GetFreshData == true || departmentPhoneCalls == null)
+            {
+                //string SiteDepartment = session.NormalUserInfo.SiteName + "_" + session.NormalUserInfo.Departments;
+                string SiteDepartment =
+                    (CurrentSession.ActiveRoleName == Functions.UserDelegeeRoleName) ?
+                    CurrentSession.DelegeeUserAccount.User.SiteName + "-" + CurrentSession.DelegeeUserAccount.User.DepartmentName :
+                    CurrentSession.User.SiteName + "-" + CurrentSession.User.DepartmentName;
+
+                departmentPhoneCalls = Global.DATABASE.PhoneCalls.GetChargeableCallsBySipAccount(SiteDepartment).ToList();
+            }
+
+            if(BindData == true)
+            {
+                DepartmentPhoneCallsGrid.GetStore().DataSource = departmentPhoneCalls;
+                DepartmentPhoneCallsGrid.GetStore().DataBind();
+            }
+        }
+
+
         //
         // Data Binding/Re-binding function
         private void RebindDataToStore(List<PhoneCall> phoneCallsData)
         {
-            ManagePhoneCallsGrid.GetSelectionModel().DeselectAll();
+            MyPhoneCallsGrid.GetSelectionModel().DeselectAll();
 
-            ManagePhoneCallsGrid.GetStore().RemoveAll();
+            MyPhoneCallsGrid.GetStore().RemoveAll();
 
             //
             // Trigger the PhoneCallsTypeFilter OnSelect Event
@@ -67,7 +90,7 @@ namespace LyncBillingUI.Pages.User
 
         //
         // STORE LOADERS
-        protected void PhoneCallsStore_Load(object sender, EventArgs e)
+        protected void MyPhoneCallsStore_Load(object sender, EventArgs e)
         {
             if (!Ext.Net.X.IsAjaxRequest)
             {
@@ -77,26 +100,22 @@ namespace LyncBillingUI.Pages.User
                 //Get user session phonecalls; handle normal user mode and delegee mode
                 List<PhoneCall> userSessionPhoneCalls = CurrentSession.GetUserSessionPhoneCalls().Where(phoneCall => string.IsNullOrEmpty(phoneCall.UiCallType) == true).ToList();
 
-                ManagePhoneCallsGrid.GetStore().DataSource = userSessionPhoneCalls;
-                ManagePhoneCallsGrid.GetStore().DataBind();
+                MyPhoneCallsGrid.GetStore().DataSource = userSessionPhoneCalls;
+                MyPhoneCallsGrid.GetStore().DataBind();
             }
         }
 
         protected void DepartmentPhoneCallsStore_Load(object sender, EventArgs e)
         {
-            if (!Ext.Net.X.IsAjaxRequest)
-            {
-                //string SiteDepartment = session.NormalUserInfo.SiteName + "_" + session.NormalUserInfo.Departments;
-                string SiteDepartment =
-                    (CurrentSession.ActiveRoleName == Functions.UserDelegeeRoleName) ?
-                    CurrentSession.DelegeeUserAccount.User.SiteName + "-" + CurrentSession.DelegeeUserAccount.User.DepartmentName :
-                    CurrentSession.User.SiteName + "-" + CurrentSession.User.DepartmentName;
-
-                DepartmentPhoneCallsGrid.GetStore().DataSource = Global.DATABASE.PhoneCalls.GetChargeableCallsBySipAccount(SiteDepartment);
-                DepartmentPhoneCallsGrid.GetStore().DataBind();
-            }
+            DepartmentPhoneCallsGridManager(GetFreshData: false == X.IsAjaxRequest);
         }
 
+        [DirectMethod]
+        protected void PhoneCallsTabsPanel_TabChange(object sender, DirectEventArgs e)
+        {
+            MyPhoneCallsGrid.GetStore().Reload();
+            DepartmentPhoneCallsGrid.GetStore().Reload();
+        }
 
         //
         // User Controls
@@ -116,8 +135,8 @@ namespace LyncBillingUI.Pages.User
                 userSessionPhoneCalls = CurrentSession.GetUserSessionPhoneCalls().Where(phoneCall => phoneCall.UiCallType == phoneCallsTypeFilter).ToList();
 
                 //Bind them to the Grid
-                ManagePhoneCallsGrid.GetStore().DataSource = userSessionPhoneCalls;
-                ManagePhoneCallsGrid.GetStore().DataBind();
+                MyPhoneCallsGrid.GetStore().DataSource = userSessionPhoneCalls;
+                MyPhoneCallsGrid.GetStore().DataBind();
 
                 //Enable/Disable the context menu items
                 PhoneBookNameEditorTextbox.ReadOnly = true;
@@ -158,8 +177,8 @@ namespace LyncBillingUI.Pages.User
                 userSessionPhoneCalls = CurrentSession.GetUserSessionPhoneCalls().Where(phoneCall => string.IsNullOrEmpty(phoneCall.UiCallType)).ToList();
 
                 //Bind them to the Grid
-                ManagePhoneCallsGrid.GetStore().DataSource = userSessionPhoneCalls;
-                ManagePhoneCallsGrid.GetStore().DataBind();
+                MyPhoneCallsGrid.GetStore().DataSource = userSessionPhoneCalls;
+                MyPhoneCallsGrid.GetStore().DataBind();
 
                 //Enable/Disable the context menu items
                 PhoneBookNameEditorTextbox.ReadOnly = false;
@@ -230,7 +249,7 @@ namespace LyncBillingUI.Pages.User
 
                             Global.DATABASE.PhoneCalls.Update(phoneCall, phoneCall.PhoneCallsTableName);
 
-                            ModelProxy model = PhoneCallsStore.Find("SessionIdTime", phoneCall.SessionIdTime.ToString());
+                            ModelProxy model = MyPhoneCallsGrid.GetStore().Find("SessionIdTime", phoneCall.SessionIdTime.ToString());
                             model.Set(phoneCall);
                             model.Commit();
                         }
@@ -238,8 +257,8 @@ namespace LyncBillingUI.Pages.User
                 }
             }
 
-            ManagePhoneCallsGrid.GetSelectionModel().DeselectAll();
-            PhoneCallsStore.LoadPage(1);
+            MyPhoneCallsGrid.GetSelectionModel().DeselectAll();
+            MyPhoneCallsGrid.GetStore().LoadPage(1);
 
             CurrentSession.AssignSessionPhonecallsAndAddressbookData(userSessionPhoneCalls, userSessionAddressbook);
         }
@@ -250,7 +269,7 @@ namespace LyncBillingUI.Pages.User
         [DirectMethod]
         protected void RejectChanges_DirectEvent(object sender, DirectEventArgs e)
         {
-            ManagePhoneCallsGrid.GetStore().RejectChanges();
+            MyPhoneCallsGrid.GetStore().RejectChanges();
         }
 
         [DirectMethod]
@@ -442,7 +461,7 @@ namespace LyncBillingUI.Pages.User
             //Get the submitted grid data
             json = e.ExtraParams["Values"];
             settings.NullValueHandling = NullValueHandling.Ignore;
-            selectiomModel = this.ManagePhoneCallsGrid.GetSelectionModel() as RowSelectionModel;
+            selectiomModel = this.MyPhoneCallsGrid.GetSelectionModel() as RowSelectionModel;
             submittedPhoneCalls = serializer.Deserialize<List<PhoneCall>>(json);
             
             //Start allocating the submitted phone calls
@@ -527,7 +546,7 @@ namespace LyncBillingUI.Pages.User
             //Get the submitted grid data
             json = e.ExtraParams["Values"];
             settings.NullValueHandling = NullValueHandling.Ignore;
-            selectiomModel = this.ManagePhoneCallsGrid.GetSelectionModel() as RowSelectionModel;
+            selectiomModel = this.MyPhoneCallsGrid.GetSelectionModel() as RowSelectionModel;
             submittedPhoneCalls = serializer.Deserialize<List<PhoneCall>>(json);
 
             //Start allocating the submitted phone calls
@@ -630,10 +649,10 @@ namespace LyncBillingUI.Pages.User
 
                     Global.DATABASE.PhoneCalls.Update(sessionPhoneCallRecord, sessionPhoneCallRecord.PhoneCallsTableName);
 
-                    ModelProxy model = PhoneCallsStore.Find("SessionIdTime", sessionPhoneCallRecord.SessionIdTime.ToString());
+                    ModelProxy model = MyPhoneCallsGrid.GetStore().Find("SessionIdTime", sessionPhoneCallRecord.SessionIdTime.ToString());
 
-                    //Remove it from the PhoneCallsStore
-                    PhoneCallsStore.Remove(model);
+                    //Remove it from the MyPhoneCallsGrid.GetStore()
+                    MyPhoneCallsGrid.GetStore().Remove(model);
 
                     //Add it to the Departments's phoneCalls Store
                     DepartmentPhoneCallsStore.Add(phoneCall);
@@ -648,7 +667,7 @@ namespace LyncBillingUI.Pages.User
             }
 
             //Deselect all the grid's records
-            ManagePhoneCallsGrid.GetSelectionModel().DeselectAll();
+            MyPhoneCallsGrid.GetSelectionModel().DeselectAll();
 
             //Reassign the user session data
             //Handle the normal user mode and user delegee mode
@@ -695,7 +714,7 @@ namespace LyncBillingUI.Pages.User
                 DepartmentPhoneCallsStore.Remove(model);
 
                 //Add it to the phonecalls store
-                PhoneCallsStore.Add(phoneCall);
+                MyPhoneCallsGrid.GetStore().Add(phoneCall);
 
                 //Add this new phonecall to the user session
                 userSessionPhoneCalls.Add(phoneCall);
