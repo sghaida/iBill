@@ -149,14 +149,14 @@
                                     runat="server"
                                     MinWidth="40" />
 
-                                <ext:Column
+                                <ext:DateColumn
                                     ID="SessionIdTime"
                                     runat="server"
                                     Text="Date"
                                     MinWidth="130"
-                                    DataIndex="SessionIdTime">
-                                    <Renderer Fn="formatDate" />
-                                </ext:Column>
+                                    DataIndex="SessionIdTime"
+                                    Format="yyyy-MM-dd HH:mm:ss">
+                                </ext:DateColumn>
 
                                 <ext:Column
                                     ID="MarkerCallToCountry"
@@ -404,14 +404,14 @@
                                     runat="server"
                                     Width="25" />
 
-                                <ext:Column
+                                <ext:DateColumn
                                     ID="DepartmentPhoneCallsSessionIdTime"
                                     runat="server"
                                     Text="Date"
                                     Width="140"
-                                    DataIndex="SessionIdTime">
-                                    <Renderer Fn="DateRenderer" />
-                                </ext:Column>
+                                    DataIndex="SessionIdTime"
+                                    Format="yyyy-MM-dd HH:mm:ss">
+                                </ext:DateColumn>
 
                                 <ext:Column
                                     ID="DepartmentPhoneCallsMarkerCallToCountry"

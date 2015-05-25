@@ -132,10 +132,12 @@
                                     <ext:Model ID="DurationCostChartModel" runat="server">
                                         <Fields>
                                             <ext:ModelField Name="Date" Type="Date" />
-                                            <ext:ModelField Name="PersonalCallsDuration" />
+                                            <ext:ModelField Name="BusinessCallsCost" />
                                             <ext:ModelField Name="PersonalCallsCost" />
                                             <ext:ModelField Name="BusinessCallsDuration" />
-                                            <ext:ModelField Name="BusinessCallsCost" />
+                                            <ext:ModelField Name="PersonalCallsDuration" />
+                                            <ext:ModelField Name="TotalCallsCost" />
+                                            <ext:ModelField Name="TotalCallsDuration" />
                                         </Fields>
                                     </ext:Model>
                                 </Model>
@@ -143,18 +145,16 @@
                         </Store>
 
                         <Axes>
-                            <ext:CategoryAxis
+                            <ext:TimeAxis
                                 Position="Bottom"
                                 Fields="Date"
-                                Title="Current Year">
-                                <Label>
-                                    <Renderer Handler="return Ext.util.Format.date(value, 'M');" />
-                                </Label>
-                            </ext:CategoryAxis>
+                                Title="Current Year"
+                                DateFormat="MMM YY">
+                            </ext:TimeAxis>
 
                             <ext:NumericAxis
                                 Title="Duration in Seconds"
-                                Fields="PersonalCallsDuration,BusinessCallsDuration"
+                                Fields="TotalCallsDuration"
                                 Position="Left">
                                 <Label FillStyle="#115fa6" />
                                 <Label>
@@ -164,7 +164,7 @@
 
                             <ext:NumericAxis
                                 Title="Cost in Local Currency"
-                                Fields="PersonalCallsCost,BusinessCallsCost"
+                                Fields="TotalCallsCost"
                                 Position="Right">
                                 <Label FillStyle="#94ae0a" />
                             </ext:NumericAxis>
@@ -190,23 +190,23 @@
                                 YField="PersonalCallsCost"
                                 Smooth="3">
                                 <HighlightConfig>
-                                    <ext:CircleSprite Width="7" Radius="7" />
+                                    <ext:CircleSprite Radius="7" />
                                 </HighlightConfig>
                                 <Marker>
-                                    <ext:CircleSprite Width="4" Radius="4" />
+                                    <ext:CircleSprite Radius="4" LineWidth="0" />
                                 </Marker>
                             </ext:LineSeries>
 
-                                <ext:LineSeries
+                            <ext:LineSeries
                                 Titles="Business Duartion"
                                 XField="Date"
                                 YField="BusinessCallsDuration"
                                 Smooth="3">
                                 <HighlightConfig>
-                                    <ext:CircleSprite Width="7" Radius="7" />
+                                    <ext:CircleSprite Radius="7" />
                                 </HighlightConfig>
                                 <Marker>
-                                    <ext:CircleSprite Width="4" Radius="4" />
+                                    <ext:CircleSprite Radius="4" LineWidth="0" />
                                 </Marker>
                             </ext:LineSeries>
 
@@ -216,10 +216,10 @@
                                 YField="BusinessCallsCost"
                                 Smooth="3">
                                 <HighlightConfig>
-                                    <ext:CircleSprite Width="7" Radius="7" />
+                                    <ext:CircleSprite Radius="7" />
                                 </HighlightConfig>
                                 <Marker>
-                                    <ext:CircleSprite Width="4" Radius="4" />
+                                    <ext:CircleSprite Radius="4" LineWidth="0" />
                                 </Marker>
                             </ext:LineSeries>
 
@@ -227,12 +227,11 @@
 
                         <Plugins>
                             <ext:VerticalMarker ID="VerticalMarker1" runat="server">
-                                <XLabelRenderer Handler="return Ext.util.Format.date(value, 'Y M');" />
-                                <YLabelRenderer FormatHandler="true"></YLabelRenderer>
+                                <XLabelRenderer Handler="return Ext.util.Format.date(value, 'M d');" />
                             </ext:VerticalMarker>
                         </Plugins>
 
-                        <LegendConfig runat="server" Position="Bottom" />
+                        <LegendConfig runat="server" Dock="Bottom" />
                     </ext:CartesianChart>
                 </Items>
             </ext:Panel>
@@ -387,6 +386,12 @@
                 event.preventDefault();
             });
         });
+
+
+        function thisDateHandler(value)
+        {
+            debugger;
+        }
 
 
         //Pie Chart Data-Lable Renderer for Personal Calls
