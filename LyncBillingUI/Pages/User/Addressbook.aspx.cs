@@ -29,6 +29,7 @@ namespace LyncBillingUI.Pages.User
 
         private static List<PhoneBookContact> AddressBookData = new List<PhoneBookContact>();
         private static List<PhoneBookContact> HistoryDestinationNumbers = new List<PhoneBookContact>();
+        private static List<PhoneBookContact> outlookImportedContacts { get; set; }
 
         // This actually takes a copy of the current CurrentSession for some uses on the frontend.
         public UserSession CurrentSession { get; set; }
@@ -55,8 +56,124 @@ namespace LyncBillingUI.Pages.User
             }
 
             sipAccount = CurrentSession.GetEffectiveSipAccount();
+
+            OutLookContactsGridManager();
         }
 
+
+        private void OutLookContactsGridManager(bool GetFreshData = false, bool BindDataToGrid = true)
+        {
+            ExchangeWebServices exchangeWebService;
+            List<OutlookContact> outlookContacts;
+
+            //
+            // If it's the first time of requesting outlook contacts or a new refreshed version is requested.
+            if (GetFreshData == true || outlookImportedContacts == null)
+            {
+                var adlib = new CCC.UTILS.Libs.AdLib();
+                var attr = adlib.GetUserAttributes(sipAccount);
+                var upn = attr.Upn.Split('@').ToList();
+                var username = sipAccount.Split('@').ToList().First().ToLower();
+                //var password = encryptionLib.DecryptRijndael(CurrentSession.EncryptedPassword);
+                outlookImportedContacts = new List<PhoneBookContact>();
+
+                if (upn.Count > 1)
+                {
+                    exchangeWebService = new ExchangeWebServices(
+                        username,
+                        encryptionLib.DecryptRijndael(CurrentSession.EncryptedPassword),
+                        upn[1].ToLower()
+                    );
+
+                    outlookContacts = exchangeWebService.OutlookContacts;
+                    outlookImportedContacts = new List<PhoneBookContact>();
+
+                    foreach (var outlookContact in outlookContacts)
+                    {
+                        //Add the business phone 1
+                        if (!string.IsNullOrEmpty(outlookContact.BusinessPhone1))
+                            outlookImportedContacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.BusinessPhone1, "N/A")));
+
+                        //Add the business phone 2
+                        if (!string.IsNullOrEmpty(outlookContact.BusinessPhone2))
+                            outlookImportedContacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.BusinessPhone2, "N/A")));
+
+                        //Add the home phone 1
+                        if (!string.IsNullOrEmpty(outlookContact.HomePhone1))
+                            outlookImportedContacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.HomePhone1, "N/A")));
+
+                        //Add the home phone 2
+                        if (!string.IsNullOrEmpty(outlookContact.HomePhone2))
+                            outlookImportedContacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.HomePhone2, "N/A")));
+
+                        //Add the mobile phone
+                        if (!string.IsNullOrEmpty(outlookContact.MobilePhone))
+                            outlookImportedContacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.MobilePhone, "N/A")));
+                    }
+                }//end-if-upn
+            }//end-if-refresh-is-true
+
+
+            if(BindDataToGrid == true)
+            {
+                ImportContactsFromOutlookGrid.GetStore().DataSource = outlookImportedContacts;
+                ImportContactsFromOutlookGrid.GetStore().DataBind();
+            }
+        }
+
+        private void GridsDataManager(bool GetFreshData = false, bool BindData = true)
+        {
+            sipAccount = CurrentSession.GetEffectiveSipAccount();
+
+            if (GetFreshData == true)
+            {
+                List<PhoneBookContact> TempHistoryData = new List<PhoneBookContact>();
+                Dictionary<string, PhoneBookContact> TempAddressBookData = new Dictionary<string, PhoneBookContact>();
+
+                TempAddressBookData = Global.DATABASE.PhoneBooks.GetAddressBook(sipAccount);
+                TempHistoryData = Global.DATABASE.TopDestinationNumbers.GetBySipAccount(sipAccount, 200).Select(
+                    number =>
+                    {
+                        return new PhoneBookContact()
+                        {
+                            DestinationNumber = number.PhoneNumber,
+                            DestinationCountry = number.Country
+                        };
+                    })
+                    .ToList();
+
+                //Always clear the contents of the data containers
+                AddressBookData.Clear();
+                HistoryDestinationNumbers.Clear();
+
+                //Normalize the Address Book Data: Convert it from Dictionary to List.
+                foreach (KeyValuePair<string, PhoneBookContact> entry in TempAddressBookData)
+                {
+                    AddressBookData.Add(entry.Value);
+                }
+
+                //Normalize the History: Remove AddressBooks entries.
+                foreach (PhoneBookContact entry in TempHistoryData)
+                {
+                    if (!TempAddressBookData.ContainsKey(entry.DestinationNumber))
+                    {
+                        HistoryDestinationNumbers.Add(entry);
+                    }
+                }
+
+                TempHistoryData.Clear();
+                TempAddressBookData.Clear();
+            }
+
+            if (BindData == true)
+            {
+                AddressBookGrid.GetStore().DataSource = AddressBookData;
+                AddressBookGrid.GetStore().DataBind();
+
+                ImportContactsFromHistoryGrid.GetStore().DataSource = HistoryDestinationNumbers;
+                ImportContactsFromHistoryGrid.GetStore().DataBind();
+            }
+        }
 
         private void UpdateSessionRelatedInformation(PhoneBookContact phoneBookObj = null)
         {
@@ -112,58 +229,6 @@ namespace LyncBillingUI.Pages.User
 
         }
 
-        private void GridsDataManager(bool GetFreshData = false, bool BindData = true)
-        {
-            sipAccount = CurrentSession.GetEffectiveSipAccount();
-
-            if (GetFreshData == true)
-            {
-                List<PhoneBookContact> TempHistoryData = new List<PhoneBookContact>();
-                Dictionary<string, PhoneBookContact> TempAddressBookData = new Dictionary<string, PhoneBookContact>();
-
-                TempAddressBookData = Global.DATABASE.PhoneBooks.GetAddressBook(sipAccount);
-                TempHistoryData = Global.DATABASE.TopDestinationNumbers.GetBySipAccount(sipAccount, 200).Select(
-                    number => {
-                        return new PhoneBookContact() {
-                            DestinationNumber = number.PhoneNumber,
-                            DestinationCountry = number.Country
-                        };
-                    })
-                    .ToList();
-
-                //Always clear the contents of the data containers
-                AddressBookData.Clear();
-                HistoryDestinationNumbers.Clear();
-
-                //Normalize the Address Book Data: Convert it from Dictionary to List.
-                foreach (KeyValuePair<string, PhoneBookContact> entry in TempAddressBookData)
-                {
-                    AddressBookData.Add(entry.Value);
-                }
-
-                //Normalize the History: Remove AddressBooks entries.
-                foreach (PhoneBookContact entry in TempHistoryData)
-                {
-                    if (!TempAddressBookData.ContainsKey(entry.DestinationNumber))
-                    {
-                        HistoryDestinationNumbers.Add(entry);
-                    }
-                }
-
-                TempHistoryData.Clear();
-                TempAddressBookData.Clear();
-            }
-
-            if (BindData == true)
-            {
-                AddressBookStore.DataSource = AddressBookData;
-                AddressBookStore.DataBind();
-
-                ImportContactsStore.DataSource = HistoryDestinationNumbers;
-                ImportContactsStore.DataBind();
-            }
-        }
-
         /// <summary>
         /// Reset the Form's Values.
         /// </summary>
@@ -207,109 +272,38 @@ namespace LyncBillingUI.Pages.User
             };
         }
 
-        /*
-         * AddressBook Data Binding
-         */
+
+        /// <summary>
+        /// Address Book (Grid) Data Binding
+        /// </summary>
         protected void AddressBookStore_Load(object sender, EventArgs e)
         {
-            bool getFreshData = false;
-
-            if (!X.IsAjaxRequest)
-            {
-                getFreshData = true;
-            }
-
-            GridsDataManager(getFreshData);
-            
+            GridsDataManager(GetFreshData: X.IsAjaxRequest == false);
         }
 
-        protected void AddressBookStore_Refresh(object sender, StoreReadDataEventArgs e)
+        /// <summary>
+        /// Import Contacts From History (Grid) Data Binding
+        /// </summary>
+        protected void ImportContactsFromHistoryStore_Load(object sender, EventArgs e)
         {
-            this.AddressBookStore.DataBind();
+            GridsDataManager(GetFreshData: X.IsAjaxRequest == false);
         }
 
-        protected void OutlookContactsStore_Load(object sender, EventArgs e)
+        /// <summary>
+        /// Import Contacts From Outlook (Grid) Data Binding
+        /// </summary>
+        protected void ImportContactsFromOutlookStore_Load(object sender, EventArgs e)
         {
-            ExchangeWebServices exchangeWebService;
-            List<PhoneBookContact> contacts;
-            List<OutlookContact> outlookContacts;
-
-            if (!X.IsAjaxRequest)
-            {
-                try
-                {
-                    var adlib = new CCC.UTILS.Libs.AdLib();
-                    var attr = adlib.GetUserAttributes(sipAccount);
-                    var upn = attr.Upn.Split('@').ToList();
-                    var username = sipAccount.Split('@').ToList().First().ToLower();
-                    //var password = encryptionLib.DecryptRijndael(CurrentSession.EncryptedPassword);
-
-                    if (upn.Count > 1)
-                    {
-                        exchangeWebService = new ExchangeWebServices(
-                            username, 
-                            encryptionLib.DecryptRijndael(CurrentSession.EncryptedPassword), 
-                            upn[1].ToLower()
-                        );
-
-                        outlookContacts = exchangeWebService.OutlookContacts;
-                        contacts = new List<PhoneBookContact>();
-
-                        foreach (var outlookContact in outlookContacts)
-                        {
-                            //Add the business phone 1
-                            if (!string.IsNullOrEmpty(outlookContact.BusinessPhone1))
-                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.BusinessPhone1, "N/A")));
-
-                            //Add the business phone 2
-                            if (!string.IsNullOrEmpty(outlookContact.BusinessPhone2))
-                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.BusinessPhone2, "N/A")));
-
-                            //Add the home phone 1
-                            if (!string.IsNullOrEmpty(outlookContact.HomePhone1))
-                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.HomePhone1, "N/A")));
-
-                            //Add the home phone 2
-                            if (!string.IsNullOrEmpty(outlookContact.HomePhone2))
-                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.HomePhone2, "N/A")));
-
-                            //Add the mobile phone
-                            if (!string.IsNullOrEmpty(outlookContact.MobilePhone))
-                                contacts.Add((new PhoneBookContact(0, sipAccount, "Personal", outlookContact.Name, outlookContact.MobilePhone, "N/A")));
-                        }
-
-                        if (contacts != null && contacts.Count > 0)
-                        {
-                            this.OutlookContactsStore.DataSource = contacts;
-                            this.OutlookContactsStore.DataBind();
-                        }
-                    }//end-outer-if
-                }//end-try
-                catch(Exception)
-                {
-                    //do nothing
-                }
-            }
+            OutLookContactsGridManager(GetFreshData: X.IsAjaxRequest == false);
         }
 
-        protected void OutlookContactsStore_Refresh(object sender, StoreReadDataEventArgs e)
+
+        [DirectMethod]
+        protected void AddressbookTabsPanel_TabChange(object send, DirectEventArgs e)
         {
-            this.OutlookContactsGrid.GetStore().DataBind();
-        }
-
-        /*
-         * ImportContacts Data Binding
-         */
-        protected void ImportContactsStore_Load(object sender, EventArgs e)
-        {
-            bool getFreshData = false;
-
-            if (!X.IsAjaxRequest)
-            {
-                getFreshData = true;
-            }
-
-            GridsDataManager(getFreshData);
+            AddressBookGrid.GetStore().Reload();
+            ImportContactsFromHistoryGrid.GetStore().Reload();
+            ImportContactsFromOutlookGrid.GetStore().Reload();
         }
 
         [DirectMethod]
@@ -333,7 +327,7 @@ namespace LyncBillingUI.Pages.User
         [DirectMethod]
         protected void RejectImportChanges_DirectEvent(object sender, DirectEventArgs e)
         {
-            ImportContactsGrid.GetStore().RejectChanges();
+            ImportContactsFromHistoryGrid.GetStore().RejectChanges();
         }
 
         [DirectMethod]
@@ -364,7 +358,7 @@ namespace LyncBillingUI.Pages.User
                 GridsDataManager(true);
 
                 AddressBookGrid.GetStore().Reload();
-                ImportContactsGrid.GetStore().Reload();
+                ImportContactsFromHistoryGrid.GetStore().Reload();
 
                 //Update the session's phonebook dictionary and phonecalls list.
                 UpdateSessionRelatedInformation();
@@ -408,7 +402,7 @@ namespace LyncBillingUI.Pages.User
                     GridsDataManager(true);
 
                     AddressBookGrid.GetStore().Reload();
-                    ImportContactsGrid.GetStore().Reload();
+                    ImportContactsFromHistoryGrid.GetStore().Reload();
                 }
             }
 
@@ -418,7 +412,7 @@ namespace LyncBillingUI.Pages.User
                 GridsDataManager(true);
 
                 AddressBookGrid.GetStore().Reload();
-                ImportContactsGrid.GetStore().Reload();
+                ImportContactsFromHistoryGrid.GetStore().Reload();
             }
 
             //Update the session's phonebook dictionary and phonecalls list.
@@ -451,7 +445,7 @@ namespace LyncBillingUI.Pages.User
                         GridsDataManager(true);
 
                         AddressBookGrid.GetStore().Reload();
-                        ImportContactsGrid.GetStore().Reload();
+                        ImportContactsFromHistoryGrid.GetStore().Reload();
                     }
                 }
 
@@ -497,7 +491,7 @@ namespace LyncBillingUI.Pages.User
                      GridsDataManager(true);
 
                      AddressBookGrid.GetStore().Reload();
-                     ImportContactsGrid.GetStore().Reload();
+                     ImportContactsFromHistoryGrid.GetStore().Reload();
                  }
 
                  //Reset the form fields.

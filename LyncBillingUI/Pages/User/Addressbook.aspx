@@ -20,6 +20,10 @@
                     <ext:Parameter Name="autoScroll" Value="true" Mode="Raw" />
                 </Defaults>
 
+                <DirectEvents>
+                    <TabChange OnEvent="AddressbookTabsPanel_TabChange"></TabChange>
+                </DirectEvents>
+
                 <Items>
                     <%---  
                         ===========================================
@@ -27,7 +31,7 @@
                         ===========================================
                     ---%>
                     <ext:FormPanel 
-                        ID="EditAddressBookContactForm" 
+                        ID="ManageMyAddressBookFormPanel" 
                         runat="server"
                         Split="true"
                         Border="true"
@@ -71,8 +75,7 @@
                                     <ext:Store
                                         ID="AddressBookStore"
                                         runat="server"
-                                        OnLoad="AddressBookStore_Load"
-                                        OnReadData="AddressBookStore_Refresh">
+                                        OnLoad="AddressBookStore_Load">
                                         <Model>
                                             <ext:Model ID="AddressBookStoreModel" runat="server" IDProperty="DestinationNumber">
                                                 <Fields>
@@ -298,7 +301,7 @@
                         ===========================================
                     ---%>
                     <ext:GridPanel
-                        ID="ImportContactsGrid"
+                        ID="ImportContactsFromHistoryGrid"
                         runat="server"
                         Header="true"
                         Title="Import from History"
@@ -310,11 +313,11 @@
                         Icon="BookEdit">
                         <Store>
                             <ext:Store
-                                ID="ImportContactsStore"
+                                ID="ImportContactsFromHistoryStore"
                                 runat="server"
                                 IsPagingStore="true"
                                 PageSize="25"
-                                OnLoad="ImportContactsStore_Load">
+                                OnLoad="ImportContactsFromHistoryStore_Load">
                                 <Model>
                                     <ext:Model ID="ImportContactsStoreModel" runat="server" IDProperty="DestinationNumber">
                                         <Fields>
@@ -512,7 +515,7 @@
                         ===========================================
                     ---%>
                     <ext:GridPanel
-                        ID="OutlookContactsGrid"
+                        ID="ImportContactsFromOutlookGrid"
                         runat="server"
                         Layout="FitLayout"
                         Border="true"
@@ -522,11 +525,11 @@
                         Icon="Mail">
                         <Store>
                             <ext:Store
-                                ID="OutlookContactsStore"
+                                ID="ImportContactsFromOutlookStore"
                                 runat="server"
                                 IsPagingStore="true"
                                 PageSize="25"
-                                OnLoad="OutlookContactsStore_Load">
+                                OnLoad="ImportContactsFromOutlookStore_Load">
                                 <Model>
                                     <ext:Model ID="Model1" runat="server" IDProperty="DestinationNumber">
                                         <Fields>
