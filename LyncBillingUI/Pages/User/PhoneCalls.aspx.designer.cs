@@ -31,31 +31,31 @@ namespace LyncBillingUI.Pages.User {
         protected global::Ext.Net.Hidden FormatType;
         
         /// <summary>
-        /// ManagePhoneCallsTabsPanel control.
+        /// PhoneCallsTabsPanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.TabPanel ManagePhoneCallsTabsPanel;
+        protected global::Ext.Net.TabPanel PhoneCallsTabsPanel;
         
         /// <summary>
-        /// ManagePhoneCallsGrid control.
+        /// MyPhoneCallsGrid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.GridPanel ManagePhoneCallsGrid;
+        protected global::Ext.Net.GridPanel MyPhoneCallsGrid;
         
         /// <summary>
-        /// PhoneCallsStore control.
+        /// MyPhoneCallsStore control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Ext.Net.Store PhoneCallsStore;
+        protected global::Ext.Net.Store MyPhoneCallsStore;
         
         /// <summary>
         /// PhoneCallsStoreModel control.
