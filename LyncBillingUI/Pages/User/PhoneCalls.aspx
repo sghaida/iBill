@@ -1,66 +1,8 @@
 ﻿<%@ Page Title="My Phone Calls" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PhoneCalls.aspx.cs" Inherits="LyncBillingUI.Pages.User.PhoneCalls" %>
 
-<asp:Content ID="HeaderScripts" ContentPlaceHolderID="HeaderContent" runat="server">
-    <ext:XScript ID="XScript1" runat="server">
-        <script>       
-            var applyFilter = function (field) {                
-                var store = #{ManagePhoneCallsGrid}.getStore();
-                store.filterBy(getRecordFilter());                                                
-            };
-             
-            var clearFilter = function () {
-                //#{CountryCodeFilter}.reset();
-                //#{DestinationNumberFilter}.reset();
-                //#{PhoneBookNameFilter}.reset();
-
-                #{PhoneCallsStore}.clearFilter();
-            }
- 
-            var filterString = function (value, dataIndex, record) {
-                var val = record.get(dataIndex);
-                
-                if (typeof val != "string") {
-                    return value.length == 0;
-                }
-                
-                return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
-            };
- 
-            var getRecordFilter = function () {
-                var f = [];
- 
-                f.push({
-                    filter: function (record) {                         
-                        return filterString(#{CountryCodeFilter}.getValue(), "Marker_CallToCountry", record);
-                    }
-                });
-                 
-                f.push({
-                    filter: function (record) {                         
-                        return filterString(#{DestinationNumberFilter}.getValue(), "DestinationNumberUri", record);
-                    }
-                });
-
-                f.push({
-                    filter: function (record) {                         
-                        return filterString(#{PhoneBookNameFilter}.getValue(), "PhoneBookName", record);
-                    }
-                });
-
-                var len = f.length;
-                 
-                return function (record) {
-                    for (var i = 0; i < len; i++) {
-                        if (!f[i].filter(record)) {
-                            return false;
-                        }
-                    }
-                    return true;
-                };
-            };
-        </script>
-    </ext:XScript>
+<asp:Content ID="HeaderScripts" ContentPlaceHolderID="HeaderContent" runat="server">    
 </asp:Content>
+
 
 <asp:Content ID="BodyContents" ContentPlaceHolderID="MainContent" runat="server">
     <ext:Hidden ID="FormatType" runat="server" />
@@ -73,7 +15,7 @@
                 runat="server"
                 Title="Phone Calls Allocation"
                 MaxWidth="955"
-                MinHeight="500"
+                MinHeight="600"
                 Plain="false">
 
                 <DirectEvents>
@@ -153,7 +95,8 @@
                                     ID="SessionIdTime"
                                     runat="server"
                                     Text="Date"
-                                    MinWidth="130"
+                                    MinWidth="150"
+                                    MaxWidth="160"
                                     DataIndex="SessionIdTime"
                                     Format="yyyy-MM-dd HH:mm:ss">
                                 </ext:DateColumn>
@@ -162,7 +105,7 @@
                                     ID="MarkerCallToCountry"
                                     runat="server"
                                     Text="Country"
-                                    MinWidth="120"
+                                    Width="80"
                                     DataIndex="MarkerCallToCountry">
                                 </ext:Column>
 
@@ -170,14 +113,16 @@
                                     ID="DestinationNumberUri"
                                     runat="server"
                                     Text="Destination"
-                                    MinWidth="110"
+                                    MinWidth="140"
+                                    MaxWidth="160"
                                     DataIndex="DestinationNumberUri">
                                 </ext:Column>
 
                                 <ext:Column ID="PhoneBookNameCol"
                                     runat="server"
                                     Text="Contact Name"
-                                    MinWidth="150"
+                                    MinWidth="220"
+                                    MaxWidth="240"
                                     DataIndex="PhoneBookName">
                                     <Editor>
                                         <ext:TextField
@@ -193,7 +138,7 @@
                                     ID="Duration"
                                     runat="server"
                                     Text="Duration"
-                                    MinWidth="80"
+                                    MinWidth="60"
                                     DataIndex="Duration">
                                     <Renderer Fn="GetMinutes" />
                                 </ext:Column>
@@ -202,7 +147,7 @@
                                     ID="MarkerCallCost"
                                     runat="server"
                                     Text="Cost"
-                                    MinWidth="80"
+                                    MinWidth="60"
                                     DataIndex="MarkerCallCost">
                                     <Renderer Fn="RoundCost" />
                                 </ext:Column>
@@ -210,9 +155,10 @@
                                 <ext:Column
                                     ID="MarkerCallTypeCol"
                                     runat="server"
-                                    Text="MarkerCallType"
-                                    MinWidth="150"
+                                    Text="Call Type"
+                                    MinWidth="60"
                                     DataIndex="MarkerCallType">
+                                    <Renderer Fn="markerCallTypeHandler" />
                                 </ext:Column>
                             </Columns>
                         </ColumnModel>
@@ -259,9 +205,9 @@
                                             <Select OnEvent="PhoneCallsTypeFilter" Timeout="500000" />
                                         </DirectEvents>
 
-                                        <Listeners>
+                                        <%--<Listeners>
                                             <BeforeSelect Fn="clearFilter" />
-                                        </Listeners>
+                                        </Listeners>--%>
                                     </ext:ComboBox>
 
                                     <ext:Button
@@ -358,7 +304,7 @@
                         Scroll="Both"
                         Layout="FitLayout"
                         MaxWidth="955"
-                        MinHeight="580"
+                        MinHeight="600"
                         Header="true"
                         Title="My Department's Calls"
                         ContextMenuID="DepartmentPhonecallsAllocationMenu">
@@ -731,33 +677,21 @@
 
 <asp:Content runat="server" ID="Scripts" ContentPlaceHolderID="EndOfBodyScripts">
     <script type="text/javascript">
-        $(document).ready(function() {
-            //
-            // my-phone-calls-tab-link
-            $("#my-phone-calls-tab-link").click(function() {
+        function markerCallTypeHandler(value)
+        {
+            var type = "N/A";
+            
+            if(value == undefined || value == null)
+                return type;
 
-                $("#phone-calls-tabs li").each(function() {
-                    $(this).removeClass("active");
-                });
+            value = value.toLowerCase();
 
-                $("#my-department-phone-calls-tab-body").addClass("hidden");
-                $("#my-phone-calls-tab").addClass("active");
-                $("#my-phone-calls-tab-body").removeClass("hidden");
-            });
-
-
-            //
-            // my-department-phone-calls-tab-link
-            $("#my-department-phone-calls-tab-link").click(function() {
-
-                $("#phone-calls-tabs li").each(function() {
-                    $(this).removeClass("active");
-                });
-
-                $("#my-phone-calls-tab-body").addClass("hidden");
-                $("#my-department-phone-calls-tab").addClass("active");
-                $("#my-department-phone-calls-tab-body").removeClass("hidden");
-            });
-        });
+            if(value.includes("fixedline"))
+                type = "Fixedline";
+            else if(value.includes("mobile"))
+                type = "Mobile";
+            
+            return type;
+        }
     </script>
 </asp:Content>

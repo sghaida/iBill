@@ -226,9 +226,9 @@
                         </Series>
 
                         <Plugins>
-                            <ext:VerticalMarker ID="VerticalMarker1" runat="server">
-                                <XLabelRenderer Handler="return Ext.util.Format.date(value, 'M d');" />
-                            </ext:VerticalMarker>
+                            <%--<ext:VerticalMarker ID="VerticalMarker1" runat="server">
+                                <XLabelRenderer Handler="return Ext.util.Format.date(value, 'MMM');" />
+                            </ext:VerticalMarker>--%>
                         </Plugins>
 
                         <LegendConfig runat="server" Dock="Bottom" />
