@@ -33,3 +33,41 @@ C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBilli
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.csprojResolveAssemblyReference.cache
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.dll
 C:\Users\sghaida\Documents\Visual Studio 2013\Projects\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\CCC.ORM.dll.config
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingBase.dll.config
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.dll.config
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingUI.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Antlr3.Runtime.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\CCC.ORM.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\CCC.UTILS.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.Utilities.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\itextsharp.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\itextsharp.xmlworker.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingBase.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.AspNet.FriendlyUrls.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.Web.Infrastructure.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Newtonsoft.Json.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\System.Web.Optimization.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Transformer.NET.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\WebActivatorEx.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\WebGrease.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\MongoDB.Driver.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\MongoDB.Bson.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\CCC.ORM.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\CCC.UTILS.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\LyncBillingBase.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Antlr3.Runtime.pdb
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Ext.Net.Utilities.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\itextsharp.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Newtonsoft.Json.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\System.Web.Optimization.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Microsoft.AspNet.FriendlyUrls.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\Transformer.NET.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\MongoDB.Driver.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\bin\MongoDB.Bson.xml
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.csprojResolveAssemblyReference.cache
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.dll
+D:\Development\GIT-PROJECTS\Lync-Billing-V2\LyncBillingUI\obj\Debug\LyncBillingUI.pdb

@@ -13,15 +13,6 @@ namespace LyncBillingUI.Pages.User {
     public partial class TelephonyRates {
         
         /// <summary>
-        /// XScript1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.XScript XScript1;
-        
-        /// <summary>
         /// ViewRatesGrid control.
         /// </summary>
         /// <remarks>

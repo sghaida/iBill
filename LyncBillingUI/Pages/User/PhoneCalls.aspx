@@ -81,6 +81,7 @@
                         </Store>
 
                         <Plugins>
+                            <ext:FilterHeader runat="server" CaseSensitive="false" DateFormat="yyyy-mm-dd" />
                             <ext:CellEditing ID="CellEditingPlugin" runat="server" ClicksToEdit="2" />
                         </Plugins>
 
@@ -187,8 +188,8 @@
                                         DisplayField="TypeName"
                                         ValueField="TypeValue"
                                         FieldLabel="View Calls:"
-                                        LabelWidth="60"
-                                        Width="200"
+                                        LabelWidth="70"
+                                        Width="220"
                                         MarginSpec="5 5 5 5">
                                         <Items>
                                             <ext:ListItem Text="Unallocated" Value="Unallocated" />
@@ -343,6 +344,10 @@
                                 </Sorters>
                             </ext:Store>
                         </Store>
+
+                        <Plugins>
+                            <ext:FilterHeader runat="server" />
+                        </Plugins>
 
                         <ColumnModel ID="ColumnModel2" runat="server" Flex="1">
                             <Columns>

@@ -91,6 +91,10 @@
                                     </ext:Store>
                                 </Store>
 
+                                <Plugins>
+                                    <ext:FilterHeader runat="server" />
+                                </Plugins>
+
                                 <Listeners>
                                     <SelectionChange Handler="if (selected[0]) { this.up('form').getForm().loadRecord(selected[0]); }" />
                                 </Listeners>
@@ -334,6 +338,7 @@
                         </Store>
 
                         <Plugins>
+                            <ext:FilterHeader runat="server" />
                             <ext:CellEditing ID="CellEditing1" runat="server" ClicksToEdit="2" />
                         </Plugins>
 
@@ -544,6 +549,10 @@
                                 </Model>
                             </ext:Store>
                         </Store>
+
+                        <Plugins>
+                            <ext:FilterHeader runat="server" />
+                        </Plugins>
 
                         <%--<Listeners>
                             <SelectionChange Handler="if (selected[0]) { this.up('form').getForm().loadRecord(selected[0]); }" />
