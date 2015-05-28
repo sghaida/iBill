@@ -179,6 +179,28 @@ namespace LyncBillingUI.Pages.User
         //}
 
 
+        protected string GetMailStatisticsHtml()
+        {
+            string statistics = string.Empty;
+
+            statistics = String.Format(
+                "<div class='row'>" + 
+                    "<br/><br/>" + 
+                    "<div class='col-md-1'></div>" + 
+                    "<div class='col-md-5'>{0}{1}{2}</div>" +
+                    "<div class='col-md-5'>{3}{4}{5}</div>" +
+                    "<div class='col-md-1'></div>" + 
+                "</div>"
+                , "<h4><strong>Received Mails:</strong></h4>"
+                , "<p style='margin-left: 10px;'>Number:&nbsp;<span class='bold red-color'>" + userMailStatistics.ReceivedCount.ToString() + "</span></p>"
+                , "<p style='margin-left: 10px;'>Size:&nbsp;<span class='bold red-color'>" + userMailStatistics.ReceivedSize.ToString() + "&nbsp;(in MB)</span></p>"
+                , "<h4><strong>Sent Mails:</strong></h4>"
+                , "<p>Number:&nbsp;<span class='bold blue-color'>" + userMailStatistics.SentCount.ToString() + "</span></p>"
+                , "<p>Size:&nbsp;<span class='bold blue-color'>" + userMailStatistics.SentSize.ToString() + "&nbsp;(in MB)</p>");
+
+            return statistics;
+        }
+
         protected void CallsCostsChartStore_Load(object sender, EventArgs e)
         {
             if (!Ext.Net.X.IsAjaxRequest)
@@ -291,7 +313,7 @@ namespace LyncBillingUI.Pages.User
 
             //    //Re-bind TopDestinationCountries to match the filter dates criteria
             //    var topDestinationCountries_DATA = TopDestinationCountries.GetTopDestinationCountriesForUser(sipAccount, session.BundledAccountsList, 5, startingDate, endingDate);
-                
+
             //    if (topDestinationCountries_DATA.Count > 0) 
             //        TopDestinationCountriesChart.GetStore().LoadData(topDestinationCountries_DATA);
             //    else

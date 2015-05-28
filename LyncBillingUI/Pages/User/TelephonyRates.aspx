@@ -1,59 +1,8 @@
 ﻿<%@ Page Title="Telephony Rates" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TelephonyRates.aspx.cs" Inherits="LyncBillingUI.Pages.User.TelephonyRates" %>
 
 <asp:Content ID="Header" ContentPlaceHolderID="HeaderContent" runat="server">
-    <ext:XScript ID="XScript1" runat="server">
-        <script>       
-            var applyFilter = function (field) {                
-                var store = #{ViewRatesGrid}.getStore();
-                store.filterBy(getRecordFilter());                                                
-            };
-             
-            var clearFilter = function () {
-                #{CountryCodeFilter}.reset();
-                #{CountryNameFilter}.reset();
-                
-                #{ViewRatesStore}.clearFilter();
-            }
- 
-            var filterString = function (value, dataIndex, record) {
-                var val = record.get(dataIndex);
-                
-                if (typeof val != "string") {
-                    return value.length == 0;
-                }
-                
-                return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
-            };
- 
-            var getRecordFilter = function () {
-                var f = [];
- 
-                f.push({
-                    filter: function (record) {                         
-                        return filterString(#{CountryCodeFilter}.getValue(), "CountryCode", record);
-                    }
-                });
-                 
-                f.push({
-                    filter: function (record) {                         
-                        return filterString(#{CountryNameFilter}.getValue(), "CountryName", record);
-                    }
-                });
- 
-                var len = f.length;
-                 
-                return function (record) {
-                    for (var i = 0; i < len; i++) {
-                        if (!f[i].filter(record)) {
-                            return false;
-                        }
-                    }
-                    return true;
-                };
-            };
-        </script>
-    </ext:XScript>
 </asp:Content>
+
 
 <asp:Content ID="Body" ContentPlaceHolderID="MainContent" runat="server">
     <div class="row">
@@ -95,6 +44,10 @@
                     </ext:Store>
                 </Store>
 
+                <Plugins>
+                    <ext:FilterHeader runat="server" />
+                </Plugins>
+
                 <ColumnModel ID="ViewRatesColumnModel" runat="server" Flex="1">
                     <Columns>
                         <ext:RowNumbererColumn
@@ -102,7 +55,7 @@
                             runat="server"
                             Width="45" />
 
-                        <ext:Column 
+                        <ext:Column
                             runat="server"
                             Text="Country"
                             Width="240"

@@ -257,26 +257,42 @@
                 Title="Mail Statistics (Previous Month)"
                 Layout="FitLayout"
                 Border="true"
-                Frame="true">
-                <Content>
-                    <h5><strong>Received Mails:</strong></h5>
-                    <ul>
-                        <li><h5>Number:&nbsp;<span class="bold red-color"><%= userMailStatistics.ReceivedCount %></span></h5></li>
-                        <li><h5>Size:&nbsp;<span class="bold red-color"><%= userMailStatistics.ReceivedSize %> (in MB)</span></h5></li>
-                    </ul>
-                    
-                    <br />
-                    
-                    <h5><strong>Sent Mails:</strong></h5>
-                    <ul>
-                        <li><h5>Number:&nbsp;<span class="bold blue-color"><%= userMailStatistics.SentCount %></span></h5></li>
-                        <li><h5>Size:&nbsp;<span class="bold blue-color"><%= userMailStatistics.SentSize %> (in MB)</span></h5></li>
-                    </ul>
-                </Content>
+                Frame="true"
+                Html="<%# GetMailStatisticsHtml() %>"
+                AutoDataBind="true">
             </ext:Panel>
         </div>
     </div><!-- ./row -->
 </asp:Content>
+
+<%--
+<ext:Panel
+    ID="MailStatisticsPanel"
+    runat="server"
+    Width="470"
+    Height="200"
+    Header="True"
+    Title="Mail Statistics (Previous Month)"
+    Layout="FitLayout"
+    Border="true"
+    Frame="true">
+    <Content>
+        <h5><strong>Received Mails:</strong></h5>
+        <ul>
+            <li><h5>Number:&nbsp;<span class="bold red-color"><%= userMailStatistics.ReceivedCount %></span></h5></li>
+            <li><h5>Size:&nbsp;<span class="bold red-color"><%= userMailStatistics.ReceivedSize %> (in MB)</span></h5></li>
+        </ul>
+                    
+        <br />
+                    
+        <h5><strong>Sent Mails:</strong></h5>
+        <ul>
+            <li><h5>Number:&nbsp;<span class="bold blue-color"><%= userMailStatistics.SentCount %></span></h5></li>
+            <li><h5>Size:&nbsp;<span class="bold blue-color"><%= userMailStatistics.SentSize %> (in MB)</span></h5></li>
+        </ul>
+    </Content>
+</...>
+--%>
 
 
 <asp:Content ID="DashboardScripts" ContentPlaceHolderID="EndOfBodyScripts" runat="server">

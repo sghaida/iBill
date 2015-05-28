@@ -6,60 +6,8 @@
         .x-grid-rowbody div { margin: 2px 5px 20px 5px !important; width: 99%; color: Gray; }
         .x-grid-row-expanded td.x-grid-cell { border-bottom-width: 0px; }
     </style>
-
-    <ext:XScript ID="XScript1" runat="server">
-        <script>       
-            var applyFilter = function (field) {                
-                var store = #{PhoneCallsHistoryGrid}.getStore();
-                store.filterBy(getRecordFilter());                                                
-            };
-             
-            var clearFilter = function () {
-                #{CountryCodeFilter}.reset();
-                #{DestinationNumberFilter}.reset();
-                
-                #{PhoneCallStore}.clearFilter();
-            }
- 
-            var filterString = function (value, dataIndex, record) {
-                var val = record.get(dataIndex);
-                
-                if (typeof val != "string") {
-                    return value.length == 0;
-                }
-                
-                return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
-            };
- 
-            var getRecordFilter = function () {
-                var f = [];
- 
-                f.push({
-                    filter: function (record) {                         
-                        return filterString(#{CountryCodeFilter}.getValue(), "Marker_CallToCountry", record);
-                    }
-                });
-                 
-                f.push({
-                    filter: function (record) {                         
-                        return filterString(#{DestinationNumberFilter}.getValue(), "DestinationNumberUri", record);
-                    }
-                });
- 
-                var len = f.length;
-                 
-                return function (record) {
-                    for (var i = 0; i < len; i++) {
-                        if (!f[i].filter(record)) {
-                            return false;
-                        }
-                    }
-                    return true;
-                };
-            };
-        </script>
-    </ext:XScript>
 </asp:Content>
+
 
 <asp:Content ID="Body" ContentPlaceHolderID="MainContent" runat="server">
     <div class="row">
@@ -107,6 +55,10 @@
                         </Model>
                     </ext:Store>
                 </Store>
+
+                <Plugins>
+                    <ext:FilterHeader runat="server" />
+                </Plugins>
 
                 <ColumnModel ID="PhoneCallsColumnModel" runat="server" Flex="1">
 		            <Columns>

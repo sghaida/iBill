@@ -51,6 +51,10 @@
                         StartCollapsed="false" />
                 </Features>
 
+                <Plugins>
+                    <ext:FilterHeader runat="server" />
+                </Plugins>
+
                 <ColumnModel ID="BillsColumnModel" runat="server">
 		            <Columns>
                         <ext:Column ID="BillMonthColumn" 

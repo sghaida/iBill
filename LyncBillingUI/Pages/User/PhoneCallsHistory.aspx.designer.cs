@@ -13,15 +13,6 @@ namespace LyncBillingUI.Pages.User {
     public partial class PhoneCallsHistory {
         
         /// <summary>
-        /// XScript1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Ext.Net.XScript XScript1;
-        
-        /// <summary>
         /// FormatType control.
         /// </summary>
         /// <remarks>
