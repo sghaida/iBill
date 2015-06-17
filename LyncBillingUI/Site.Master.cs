@@ -464,7 +464,7 @@ namespace LyncBillingUI
                             "<li><a href='{0}/Site/Administration/Reports/DepartmentsUsage'>Departments Usage</a></li> " +
                             "<li class='divider'></li> " +
                             "<li><a href='{0}/Site/Administration/DIDS'>DIDs</a></li> " +
-                            "<li><a href='{0}/Site/Administration/Exclusions'>Exclusions List</a></li> " +
+                            "<li><a href='{0}/Site/Administration/ExclusionsList'>Exclusions List</a></li> " +
                             "<li><a href='{0}/Site/Administration/NGNNumberingPlan'>NGN Numbering Plan</a></li> " +
                         "</ul> " +
                     "</li>"
