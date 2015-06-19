@@ -34,6 +34,8 @@ There are 3 other projects in iBill, they are responsible for providing plugins 
 
 #### TECHNOLOGIES
 
+  * C# 4.5
+  * .NET Framework 4.5
   * Antlr.3.5.0.2
   * Ext.NET.3.1.0
   * Ext.NET.Utilities.2.5.0
