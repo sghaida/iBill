@@ -62,3 +62,7 @@ There are 3 other projects in iBill, they are responsible for providing plugins 
   * [Saddam Abu Ghaida](https://github.com/sghaida)
   * [Ahmad Alhour](https://github.com/aalhour)
 
+
+#### LICENSE:
+
+iBill and all of it's sub-projects are licensed under the MIT License.
