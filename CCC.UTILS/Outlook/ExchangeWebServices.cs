@@ -8,11 +8,12 @@ namespace CCC.UTILS.Outlook
     {
         private List<OutlookContact> _outlookContacts;
 
-        private readonly Uri _uri = new Uri(@"https://internalmail.ccc.gr/EWS/Exchange.asmx");
+        private readonly Uri _uri = new Uri(@"https://mail.example.com/EWS/Exchange.asmx");
 
         public ExchangeService ExService { get; private  set; }
 
-        public List<OutlookContact> OutlookContacts {
+        public List<OutlookContact> OutlookContacts
+	{
             get
             {
                 _outlookContacts = new List<OutlookContact>();
