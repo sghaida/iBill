@@ -65,4 +65,4 @@ There are 3 other projects in iBill, they are responsible for providing plugins 
 
 #### LICENSE:
 
-iBill and all of it's sub-projects are licensed under the MIT License.
+iBill and all of it's sub-projects are licensed under the [MIT License](LICENSE).
