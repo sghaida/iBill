@@ -4,7 +4,7 @@ A multi-featured billing, invoicing and reporting application written in C# and 
 
 iBill is capable of billing and invoicing any multi-sites setup of Microsoft Lync, billing multiple telephony gateways across the whole system. Provides a hierarchy of system roles: Users, User Delegates, Site Accountants, Site Admins, and System Admins. Provides consumption statistics for users, sites and overall usage across all the setup. Provides utilities for accountants to export costs reports, and perform financial charging procedures.
 
-#### OVERVIEW
+## Overview
 
 iBill consists of the following sub-projects:
 
@@ -24,7 +24,7 @@ There are 3 other projects in iBill, they are responsible for providing plugins 
   * **[Lync 2013 Plugin](Lync2013Plugin/):** This is the plugin that imports data (phone calls, gateways, etc...) from MS Lync 2013 LcsCDR database into iBill, and then processes it.
 
 
-#### INSTALLATION
+## Installation
 
   * Dependencies:
     * Install all the NuGet packages listed in the Technologies section below. They are not included in the project.
@@ -32,7 +32,7 @@ There are 3 other projects in iBill, they are responsible for providing plugins 
     * Work in progress...
 
 
-#### TECHNOLOGIES
+## Technologies
 
   * C# 4.5
   * .NET Framework 4.5
@@ -57,12 +57,12 @@ There are 3 other projects in iBill, they are responsible for providing plugins 
   * WebGrease.1.6.0
 
 
-#### DEVELOPERS
+## Contributors
 
   * [Saddam Abu Ghaida](https://github.com/sghaida)
   * [Ahmad Alhour](https://github.com/aalhour)
 
 
-#### LICENSE:
+## License
 
 iBill and all of it's sub-projects are licensed under the [MIT License](LICENSE).
